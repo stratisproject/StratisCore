@@ -1,26 +1,38 @@
-<section id="breeze">
-  <div class="login d-flex align-items-center text-center">
-    <div class="container">
-      <h3 class="display-5">Secret words</h3>
-      <p class="lead">Please write down your secret words and password. <br>You will need <strong>both</strong> to recover your wallet in the future.</p>
-      <div class="row d-flex justify-content-center mt-4">
-        <ul class="list-inline list-unstyled col-6 mx-auto">
-          <li *ngFor="let word of mnemonicArray; let i=index" class="list-inline-item">
-            <span class="badge badge-default">{{ i + 1 }}. {{ word }}</span>
-          </li>
-        </ul>
-      </div>
-      <div class="form-control-feedback text-center mt-3 mb-5">Write down your secret words and password before you continue</div>
-      <!-- /row-->
-      <div class="row d-flex justify-content-center">
-        <!-- <button type="button" class="btn btn-linkgray btn-lg col-12">Save the list somewhere</button> -->
-        <button type="button" class="btn btn-linkgray mr-4" (click)="onCancelClicked()">Cancel</button>
-        <button type="button" class="btn btn-darkgray btn-lg" (click)="onContinueClicked()">Continue</button>
-      </div>
-      <!-- /row-->
+<section id="GUI" class="container-fluid light">
+  <div class="row">
+    <div class="col-4 left-login d-flex align-items-center">
+        <img src="../../../../assets/images/logo_white.svg" width="160px" height="auto" alt="Stratis Wallet">
     </div>
-    <!-- /container-->
+    <!-- /col -->
+    <div class="col-8 right-login d-flex align-content-center flex-wrap">
+      <form class="col-6 mx-auto d-flex align-content-center flex-wrap">
+        <div class="col-12 text-center">
+          <h3 class="display-4 mb-4">Mnemonics</h3>
+        </div>
+        <div class="col-12 mnemonics">
+          <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">Warning !</h4>
+            <p>Please write down your secret words and password.
+            <br>You will need <strong>both</strong> to recover your wallet in the future.</p>
+          </div>
+          <div class="row d-flex justify-content-center my-4">
+            <ul class="list-inline list-unstyled col">
+              <li *ngFor="let word of mnemonicArray; let i=index" class="list-inline-item">
+                <span class="badge-info badge">{{ i + 1 }}. {{ word }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- /form-group -->
+        <div class="modal-footer col-12">
+          <button type="button" class="btn btn-outline-light ml-4" (click)="onCancelClicked()">Cancel</button>
+          <button type="button" class="btn btn-primary btn-block" (click)="onContinueClicked()">Confirm</button>
+        </div>
+      </form>
+      <!-- /form -->
+    </div>
+    <!-- /col-8 -->
   </div>
-  <!-- /login-->
+  <!-- /row -->
 </section>
-<!-- /breeze-->
+<!-- /GUI-->

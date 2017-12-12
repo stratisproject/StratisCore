@@ -1,43 +1,44 @@
-<section id="breeze">
-  <div class="login d-flex align-items-center text-center">
-    <div class="container">
-      <p class="textback text-left mb-5 col-11 mx-auto">
-        <a (click)="onBackClicked()">
-          <span class="ico-arrow-left2"></span>
-        </a>
-      </p>
-      <h3 class="display-5">Create a new wallet</h3>
-      <div class="row d-flex justify-content-center">
-        <form class="col-8 mx-auto row text-left" [formGroup]="createWalletForm">
-          <!--<div class="form-group has-success">-->
-          <div class="form-group col-12">
-            <label class="text-left" for="walletName">Name</label>
-            <input type="text" class="form-control form-control-success" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
-            <div *ngIf="formErrors.walletName" class="text-danger mt-2">{{ formErrors.walletName }}</div>
-          </div>
-          <div class="form-group col-6">
-            <label class="text-left" for="walletPassword">Password</label>
-            <input type="password" class="form-control form-control-success" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password.">
-            <div *ngIf="formErrors.walletPassword" class="text-danger mt-2">{{ formErrors.walletPassword }}</div>
-          </div>
-          <div class="form-group col-6">
-            <label class="text-left" for="walletPasswordConfirmation">Confirm Password</label>
-            <input type="password" class="form-control form-control-success" formControlName="walletPasswordConfirmation" id="walletPasswordConfirmation" placeholder="Enter a password.">
-            <div *ngIf="formErrors.walletPasswordConfirmation" class="text-danger mt-2">{{ formErrors.walletPasswordConfirmation }}</div>
-          </div>
-          <div class="col-12">
-            <div class="form-control-feedback">Your password will be required to recover your wallet in the future. Keep it safe.</div>
-          </div>
-        </form>
-      </div>
-      <!-- /row-->
-      <div class="row d-flex justify-content-center">
-        <button type="button" class="btn btn-darkgray btn-lg" [disabled]="!createWalletForm.valid" (click)="onContinueClicked()">Continue</button>
-      </div>
-      <!-- /row-->
+<section id="GUI" class="container-fluid">
+  <div class="row">
+    <div class="col-4 left-login d-flex align-items-center">
+        <img src="../../../assets/images/logo_white.svg" width="160px" height="auto" alt="Stratis Wallet">
     </div>
-    <!-- /container-->
+    <!-- /col -->
+    <div class="col-8 right-login d-flex align-content-center flex-wrap">
+      <form class="col-6 mx-auto d-flex align-content-center flex-wrap" [formGroup]="createWalletForm">
+        <div class="col-12 text-center">
+          <h3 class="display-4 mb-4">Create a wallet</h3>
+        </div>
+        <div class="form-group col-12">
+          <label for="walletName">Name</label>
+          <input type="text" class="form-control" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
+          <div *ngIf="formErrors.walletName" class="text-danger mt-2">{{ formErrors.walletName }}</div>
+        </div>
+        <!-- /form-group -->
+        <div class="form-group col-12">
+          <label for="walletPassword">Password</label>
+          <input type="password" class="form-control form-control-success" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password.">
+          <div *ngIf="formErrors.walletPassword" class="text-danger mt-2">{{ formErrors.walletPassword }}</div>
+        </div>
+        <!-- /form-group -->
+        <div class="form-group col-12">
+          <label for="walletPasswordConfirmation">Confirm password</label>
+          <input type="password" class="form-control is-invalid" formControlName="walletPasswordConfirmation" id="walletPasswordConfirmation" placeholder="Enter a password.">
+          <div *ngIf="formErrors.walletPasswordConfirmation" class="text-danger mt-2">{{ formErrors.walletPasswordConfirmation }}</div>
+        </div>
+        <!-- /form-group -->
+        <div class="col-12">
+          <div class="form-control-feedback">Your password will be required to recover your wallet in the future. Keep it safe.</div>
+        </div>
+        <div class="modal-footer col-12">
+          <button type="button" class="btn btn-outline-light" (click)="onBackClicked()">Cancel</button>
+          <button type="button" class="btn btn-primary btn-block">Create a new wallet</button>
+        </div>
+      </form>
+      <!-- /form -->
+    </div>
+    <!-- /col-8 -->
   </div>
-  <!-- /login-->
+  <!-- /row -->
 </section>
-<!-- /breeze-->
+<!-- /GUI-->
