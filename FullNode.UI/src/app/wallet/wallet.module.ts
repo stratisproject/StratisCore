@@ -11,7 +11,6 @@ import { HistoryComponent } from './history/history.component';
 
 import { SharedModule } from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 
@@ -30,7 +29,6 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
     MenuComponent,
     DashboardComponent,
     HistoryComponent,
-    SidebarComponent,
     StatusBarComponent
   ],
   exports: []

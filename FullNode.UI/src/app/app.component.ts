@@ -23,11 +23,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.setTitle();
-    this.apiService.getWalletFiles().retryWhen(errors => errors.delay(2000)).subscribe(() => this.checkStratisDaemon());
-  }
-
-  private checkStratisDaemon() {
-    this.apiService.getStratisWalletFiles().retryWhen(errors => errors.delay(2000)).subscribe(() => this.startApp());
+    this.apiService.getWalletFiles().retryWhen(errors => errors.delay(2000)).subscribe(() => this.startApp());
   }
 
   private startApp() {
@@ -36,9 +32,9 @@ export class AppComponent implements OnInit {
   }
 
   private setTitle() {
-    let applicationName = "Breeze Wallet";
+    let applicationName = "Stratis Wallet";
     let applicationVersion = remote.app.getVersion();
-    let releaseCycle = "beta";
+    let releaseCycle = "alpha";
     let newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
     this.titleService.setTitle(newTitle);
   }

@@ -118,41 +118,17 @@ export class LoginComponent implements OnInit {
   private onDecryptClicked() {
     this.isDecrypting = true;
     this.globalService.setWalletName(this.openWalletForm.get("selectWallet").value);
+    this.globalService.setCoinName("TestStratis");
+    this.globalService.setCoinUnit("TSTRAT");
     this.getCurrentNetwork();
     let walletLoad = new WalletLoad(
       this.openWalletForm.get("selectWallet").value,
       this.openWalletForm.get("password").value
     );
-    this.loadWallets(walletLoad);
+    this.loadWallet(walletLoad);
   }
 
-  private loadWallets(walletLoad: WalletLoad) {
-    this.apiService.loadBitcoinWallet(walletLoad)
-      .subscribe(
-        response => {
-          if (response.status >= 200 && response.status < 400) {
-            this.globalService.setWalletName(walletLoad.name);
-          }
-        },
-        error => {
-          this.isDecrypting = false;
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
-          }
-        },
-        () => this.loadStratisWallet(walletLoad)
-      )
-    ;
-  }
-
-  private loadStratisWallet(walletLoad: WalletLoad) {
+  private loadWallet(walletLoad: WalletLoad) {
     this.apiService.loadStratisWallet(walletLoad)
       .subscribe(
         response => {
@@ -187,11 +163,11 @@ export class LoginComponent implements OnInit {
             let responseMessage = response.json();
             this.globalService.setNetwork(responseMessage.network);
             if (responseMessage.network === "Main") {
-              this.globalService.setCoinName("Bitcoin");
-              this.globalService.setCoinUnit("BTC");
+              this.globalService.setCoinName("Stratis");
+              this.globalService.setCoinUnit("STRAT");
             } else if (responseMessage.network === "TestNet") {
-              this.globalService.setCoinName("TestBitcoin");
-              this.globalService.setCoinUnit("TBTC");
+              this.globalService.setCoinName("TestStratis");
+              this.globalService.setCoinUnit("TSTRAT");
             }
           }
         },

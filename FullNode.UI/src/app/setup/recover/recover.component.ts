@@ -110,41 +110,10 @@ export class RecoverComponent implements OnInit {
       this.recoverWalletForm.get("walletPassword").value,
       recoveryDate
     );
-    this.recoverWallets(this.walletRecovery);
+    this.recoverWallet(this.walletRecovery);
   }
 
-  private recoverWallets(recoverWallet: WalletRecovery) {
-    let bitcoinErrorMessage = "";
-    this.apiService
-      .recoverBitcoinWallet(recoverWallet)
-      .subscribe(
-        response => {
-          if (response.status >= 200 && response.status < 400) {
-            //Bitcoin Wallet Recovered
-          }
-          this.recoverStratisWallet(recoverWallet, bitcoinErrorMessage);
-        },
-        error => {
-          this.isRecovering = false;
-          console.log(error);
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              bitcoinErrorMessage = error.json().errors[0].message;
-            }
-          }
-          this.recoverStratisWallet(recoverWallet, bitcoinErrorMessage);
-        }
-      )
-    ;
-  }
-
-  private recoverStratisWallet(recoverWallet: WalletRecovery, bitcoinErrorMessage: string){
-    let stratisErrorMessage = "";
+  private recoverWallet(recoverWallet: WalletRecovery) {
     this.apiService
       .recoverStratisWallet(recoverWallet)
       .subscribe(
@@ -154,7 +123,6 @@ export class RecoverComponent implements OnInit {
             this.genericModalService.openModal("Wallet Recovered", body);
             this.router.navigate([''])
           }
-            this.AlertIfNeeded(bitcoinErrorMessage, stratisErrorMessage);
         },
         error => {
           this.isRecovering = false;
@@ -166,19 +134,11 @@ export class RecoverComponent implements OnInit {
               console.log(error);
             }
             else {
-              stratisErrorMessage = error.json().errors[0].message;
+              this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
-          this.AlertIfNeeded(bitcoinErrorMessage, stratisErrorMessage);
         }
       )
     ;
-  }
-
-  private AlertIfNeeded(bitcoinErrorMessage: string, stratisErrorMessage: string) {
-        if(bitcoinErrorMessage !== "" || stratisErrorMessage !== "") {
-          let errorMessage = "<strong>Bitcoin wallet recovery:</strong><br>" + bitcoinErrorMessage + "<br><br><strong>Stratis wallet recovery:</strong><br>" + stratisErrorMessage;
-          this.genericModalService.openModal(null, errorMessage);
-    }
   }
 }

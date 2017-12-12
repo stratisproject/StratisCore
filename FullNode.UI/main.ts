@@ -42,7 +42,7 @@ function createWindow() {
     frame: true,
     minWidth: 1200,
     minHeight: 650,
-    title: "Breeze Wallet"
+    title: "Stratis Wallet"
   });
 
    // and load the index.html of the app.
@@ -74,10 +74,9 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', function () {
   if (serve) {
-    console.log("Breeze UI was started in development mode. This requires the user to be running the Breeze Daemon himself.")
+    console.log("Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.")
   }
   else {
-    startBitcoinApi();
     startStratisApi();
   }
   createTray();
@@ -88,7 +87,6 @@ app.on('ready', function () {
 });
 
 app.on('before-quit', function () {
-  closeBitcoinApi(),
   closeStratisApi();
 });
 
@@ -109,23 +107,6 @@ app.on('activate', function () {
   }
 });
 
-function closeBitcoinApi() {
-  // if (process.platform !== 'darwin' && !serve) {
-    if (!serve) {
-    var http1 = require('http');
-    const options1 = {
-      hostname: 'localhost',
-      port: 37220,
-      path: '/api/node/shutdown',
-      method: 'POST'
-  };
-
-  const req = http1.request(options1, (res) => {});
-  req.write('');
-  req.end();
-  }
-};
-
 function closeStratisApi() {
   // if (process.platform !== 'darwin' && !serve) {
     if (process.platform !== 'darwin' && !serve) {
@@ -143,49 +124,18 @@ function closeStratisApi() {
   }
 };
 
-function startBitcoinApi() {
-  var bitcoinProcess;
-  const spawnBitcoin = require('child_process').spawn;
-
-  //Start Breeze Bitcoin Daemon
-  let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
-  if (os.platform() === 'win32') {
-    apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.BreezeD.exe');
-  } else if(os.platform() === 'linux') {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
-  } else {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
-  }
-
-
-  if(!testnet) {
-    bitcoinProcess = spawnBitcoin(apiPath, {
-      detached: true
-    });
-  } else if (testnet) {
-    bitcoinProcess = spawnBitcoin(apiPath, ['-testnet'], {
-      detached: true
-    });
-  }
-
-
-  bitcoinProcess.stdout.on('data', (data) => {
-    writeLog(`Bitcoin: ${data}`);
-  });
-}
-
 function startStratisApi() {
   var stratisProcess;
   const spawnStratis = require('child_process').spawn;
 
-  //Start Breeze Stratis Daemon
-  let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
+  //Start Stratis Daemon
+  let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.StratisD');
   if (os.platform() === 'win32') {
-    apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.BreezeD.exe');
+    apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.StratisD.exe');
   } else if(os.platform() === 'linux') {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
   } else {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
   }
 
   if (!testnet) {
@@ -230,7 +180,7 @@ function createTray() {
       }
     }
   ]);
-  systemTray.setToolTip('Breeze Wallet');
+  systemTray.setToolTip('Stratis Wallet');
   systemTray.setContextMenu(contextMenu);
   systemTray.on('click', function() {
     if (!mainWindow.isVisible()) {

@@ -108,7 +108,6 @@ export class CreateComponent implements OnInit {
         this.createWalletForm.get("walletPassword").value,
       );
       this.router.navigate(['/setup/create/show-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password }});
-      //this.createWallets(this.newWallet);
     }
   }
 
