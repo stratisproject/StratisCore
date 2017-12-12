@@ -23,7 +23,7 @@ Write-Host "--> git submodule" -foregroundcolor "magenta"
 git submodule update --init --recursive
 
 Write-Host "--> npm install" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
+cd $env:APPVEYOR_BUILD_FOLDER/FullNode.UI
 npm install --verbose
 
 Write-Host "--> npm install npx" -foregroundcolor "magenta"
@@ -46,19 +46,19 @@ Write-Host "*--------------------------------*" -foregroundcolor "magenta"
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
     
 Write-Host "running 'dotnet publish'" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/Stratis.BreezeD
-dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\Breeze.UI\daemon
+cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/Stratis.StratisD
+dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\FullNode.UI\daemon
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
-Write-Host "building Breeze" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
+Write-Host "building FullNode.UI" -foregroundcolor "magenta"
+cd $env:APPVEYOR_BUILD_FOLDER/FullNode.UI
 npm run build:prod
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
-Write-Host "packaging breeze" -foregroundcolor "magenta"
+Write-Host "packaging FullNode.UI" -foregroundcolor "magenta"
 npx electron-builder build --windows --$env:arch
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
-Write-Host "[$env:configuration][$env:win_runtime] FINISHED Breeze packaging" -foregroundcolor "magenta"
+Write-Host "[$env:configuration][$env:win_runtime] FINISHED FullNode.UI packaging" -foregroundcolor "magenta"
 
 dir
 cd app-builds
