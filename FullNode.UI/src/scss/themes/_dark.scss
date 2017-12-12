@@ -1,0 +1,116 @@
+//
+//
+//  Dark theme for GUI Wallet
+//  #TeamStratis
+//
+//
+
+///// Variables
+$body-bg: #23272B;
+$body-color: #8C959D;
+$white: rgba($white,.85);
+
+///// BODY
+#GUI {
+  &.dark {
+    color: $body-color;
+    background-color: $body-bg !important;
+    .btn-outline-light {&:hover {color: $white;}}
+
+    ///// MENU
+    .navbar {
+      background: #16191C !important;
+      .navbar-text {color: $body-color;}
+    }
+
+    ///// JUMBOTRON
+    .jumbotron {
+      h5 {color: #A6AFB4;}
+      .lead {color:$white;}
+    }
+
+    ///// CONTENT
+    // Cards
+    .card {
+      border: $card-border-width solid rgba(255,255,255,.1);
+      border-radius: 0 !important;
+      &:hover {
+        border: $card-border-width solid #158BCF;
+        box-shadow: 0 5px 40px rgba(0,0,0,.25);
+        background-color: #3A4147;
+      }
+
+      .card-header {
+        background-color: #2E3439;
+        color: #A6AFB4;
+      }
+      .card-body {background-color: #2E3439;}
+    }
+    ///// TABLES
+    .table {
+      tr {border-top: 1px solid rgba(0,0,0,.15);}
+      strong {color: $white;}
+      .bubble {
+        &.bg-warning {
+          border-color: $yellow;
+          background-color: rgba($yellow,.3) !important;
+        }
+        &.bg-success {
+          border-color: $green;
+          background-color: rgba($green,.3) !important;
+        }
+      }
+      .link {
+        color: $primary;
+        text-decoration: none;
+        &:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
+    }
+    // Staking
+    #staking {
+      color: #A6AFB4;
+      strong {color: $black;}
+    }
+    // status box
+    .status {
+      background: $body-bg;
+      width: auto;
+      height: 36px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 80px;
+      position: fixed;
+      bottom: 2%;
+      right: 2%;
+      text-align: center;
+      ul {
+        transform: translateY(50%) translateX(0);
+        display: inline-block;
+        position: relative;
+        padding: 0 2em;
+      }
+      li {
+        font-size: .9em;
+        position: relative;
+        float: left;
+        margin-right: 4px;
+        &.pending {
+          i {
+            font-size: .9em;
+            color: $yellow;
+          }
+        }
+        &.statusOK {
+          i {
+            color: $green;
+            font-size: .9em;
+            position: absolute;
+          }
+        }
+      }
+    }
+
+  }
+}

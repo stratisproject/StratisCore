@@ -29,7 +29,7 @@
   // When fading in the modal, animate it to slide down
   &.fade .modal-dialog {
     @include transition($modal-transition);
-    transform: translate(0, 70%);
+    transform: translate(0, -25%);
   }
   &.show .modal-dialog { transform: translate(0, 0); }
 }
@@ -43,22 +43,24 @@
   position: relative;
   width: auto;
   margin: $modal-dialog-margin;
-}
-
-// Custom
-.modalBg {
-  background-color: $modal-content-bg;
-  border: $modal-content-border-width solid $modal-content-border-color;
+  // allow clicks to pass through for custom click handling to close modal
+  pointer-events: none;
 }
 
 // Actual modal
 .modal-content {
+  background-color: $modal-content-bg;
+  border: 1px solid #158BCF;
+  box-shadow: 0 5px 20px #BDDDF2;
+  padding: 2rem;
+  margin: 2rem;
   position: relative;
   display: flex;
   flex-direction: column;
+  // counteract the pointer-events: none; in the .modal-dialog
+  pointer-events: auto;
   background-clip: padding-box;
-  @include border-radius($border-radius-lg);
-  @include box-shadow($modal-content-xs-box-shadow);
+  @include box-shadow($modal-content-box-shadow-xs);
   // Remove focus outline from opened modal
   outline: 0;
 }
@@ -82,18 +84,22 @@
 // Top section of the modal w/ title and dismiss
 .modal-header {
   display: flex;
-  align-items: center; // vertically center it
-  justify-content: center; // Put modal header elements (title and dismiss) on opposite ends
-  padding: 0;
+  align-items: flex-start; // so the close btn always stays on the upper right corner
+  justify-content: space-between; // Put modal header elements (title and dismiss) on opposite ends
+  padding: $modal-header-padding;
+  @include border-top-radius($border-radius-lg);
+
+  .close {
+    padding: $modal-header-padding;
+    // auto on the left force icon to the right even when there is no .modal-title
+    margin: (-$modal-header-padding) (-$modal-header-padding) (-$modal-header-padding) auto;
+  }
 }
 
 // Title text within header
 .modal-title {
-  text-align: center;
+  margin-bottom: 0;
   line-height: $modal-title-line-height;
-  margin-bottom: 1em;
-  color: #7385A0;
-  font-size: 1em;
 }
 
 // Modal body
@@ -103,15 +109,15 @@
   // Enable `flex-grow: 1` so that the body take up as much space as possible
   // when should there be a fixed height on `.modal-dialog`.
   flex: 1 1 auto;
-  padding: 0 $modal-inner-padding;
+  padding: $modal-inner-padding;
 }
 
 // Footer (for actions)
 .modal-footer {
   display: flex;
   align-items: center; // vertically center
-  justify-content: center; // Right align buttons with flex property because text-align doesn't work on flex items
-  padding: 0;
+  justify-content: flex-end; // Right align buttons with flex property because text-align doesn't work on flex items
+  padding: $modal-inner-padding;
 
   // Easily place margin between footer elements
   > :not(:first-child) { margin-left: .25rem; }
@@ -132,11 +138,11 @@
   // Automatically set modal's width for larger viewports
   .modal-dialog {
     max-width: $modal-md;
-    margin: $modal-dialog-sm-up-margin-y auto;
+    margin: $modal-dialog-margin-y-sm-up auto;
   }
 
   .modal-content {
-    @include box-shadow($modal-content-sm-up-box-shadow);
+    @include box-shadow($modal-content-box-shadow-sm-up);
   }
 
   .modal-sm { max-width: $modal-sm; }

@@ -11,6 +11,7 @@ code {
   padding: $code-padding-y $code-padding-x;
   font-size: $code-font-size;
   color: $code-color;
+  font-weight: 600;
   background-color: $code-bg;
   @include border-radius($border-radius);
 
