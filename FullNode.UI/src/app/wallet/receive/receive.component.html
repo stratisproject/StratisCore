@@ -1,25 +1,33 @@
-<div id="modalReceive" tabindex="-1" role="dialog" aria-labelledby="modal_receive" aria-hidden="true">
-  <div class="modal-dialog modalBg" role="document">
-    <div>
+<!-- MODAL RECEIVE -->
+<div id="modalReceive" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
       <div class="modal-header">
-        <div class="bubble"><i class="icon-download"></i></div>
+        <h5 class="modal-title">Receive</h5>
+        <!-- button close -->
+        <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
+          <i class="lnr lnr-cross-circle"></i>
+        </button>
+        <!-- /button close -->
       </div>
       <div class="modal-body">
-        <h5 class="modal-title text-uppercase" id="modalReceive">Receive</h5>
         <form>
           <div class="form-group clearfix">
-            <label class="float-left" for="yourAddress">Your address</label>
-            <span class="float-right"><a ngxClipboard [cbContent]="address" (click)="onCopiedClick()">copy</a></span>
+            <label for="yourAddress">Your address</label>
           </div>
-          <div class="myAddress"><code>{{ address }}</code></div>
-          <div class="text-center" *ngIf="copied">
-            <span class="badge badge-success col">Your address has been copied to your clipboard.</span>
+          <div class="myAddress">
+            <code class="d-inline-block">{{ address }}</code>
+            <button type="button" class="btn btn-outline-light d-inline-block ml-2 btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()" title="copy to clipboard">
+              <i class="lnr lnr-file-add"></i>
+            </button>
           </div>
+          <div *ngIf="copied" class="alert alert-success alert-dismissible fade show mt-3" role="alert">Your address has been copied to your clipboard.</div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-lg btn-primary" data-dismiss="modal" aria-label="Close" (click)="activeModal.close('Close click')">OK</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
       </div>
     </div>
   </div>
 </div>
+<!-- /MODAL RECEIVE -->

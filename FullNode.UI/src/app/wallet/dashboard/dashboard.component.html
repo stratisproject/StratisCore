@@ -1,83 +1,116 @@
- <section id="breeze">
-  <!-- CONTENT -->
-  <section id="content" class="bitcoin">
-    <!-- JUMBOTRON-->
-    <div class="jumbotron jumbotron-fluid">
-      <div class="col-10 mx-auto">
-        <div class="col-xs-12 text-left">
-          <h5 class="text-capitalize walletName">{{ walletName }}</h5>
-        </div>
-        <div class="row d-flex align-items-center">
-          <div class="col-md-4 text-left">
-            <h5>Active balance</h5>
-            <p class="lead">
-              <!--<strong><span class="h2">29</span>.76500293</strong>-->
-              <strong>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
-              <small class="text-uppercase"> {{ coinUnit }}</small>
-            </p>
-          </div>
-          <!-- /col-->
-          <!--<div class="col-xs-12 col-md-4 text-left">
-            <h5>Current value</h5>
-            <p class="lead">
-              <i class="icon-coin-dollar"></i>
-              <strong><span class="h2">51,390</span></strong>
-              <small class="text-uppercase">usd</small>
-            </p>
-          </div>-->
-          <div class="col-md-4 text-left">
-            <h5>Unconfirmed balance</h5>
-            <p class="lead">
-              <strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
-              <small class="text-uppercase"> {{ coinUnit }}</small>
-            </p>
-          </div>
-          <!-- /col-->
-          <div class="col-md-4 text-right">
-            <p>
-              <a class="btn btn-secondary" data-toggle="modal" data-target="#modalReceive" role="button" (click)="openReceiveDialog()">Receive</a>
-              <a class="btn btn-primary ml-2" data-toggle="modal" data-target="#modalSend" role="button" (click)="openSendDialog()">Send</a>
-            </p>
-          </div>
-          <!-- /col-->
-        </div>
-        <!-- /row-->
-      </div>
-      <!-- /container-->
-    </div>
-    <!-- /JUMBOTRON-->
 
-    <!-- TRANSACTIONS -->
-    <section id="transaction" class="col-10 mx-auto">
-      <h5>Latest Transactions</h5>
-      <div *ngIf="transactionArray; else noTransactions">
-        <div *ngFor="let transaction of transactionArray; let i=index">
-          <div class="card" *ngIf="i<3" (click)="openTransactionDetailDialog(transaction)">
-            <div class="card-block text-nowrap">
-              <ul class="list-inline row">
-                <li class="list-inline-item hidden-xs-down col-3 text-uppercase align-bottom">{{ transaction.transactionType }}</li>
-                <li class="list-inline-item col-4 amount text-left align-baseline">
-                  <span *ngIf="transaction.transactionType == 'received'" class="text-success">+</span>
-                  <span *ngIf="transaction.transactionType == 'sent'" class="text-danger">-</span>
-                  {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}
-                  <small class="text-uppercase">{{ coinUnit }}</small>
-                </li>
-                <li class="list-inline-item col amount text-left align-baseline">
-                  <span *ngIf="transaction.transactionConfirmedInBlock" class="badge badge-success text-capitalize">Confirmed</span>
-                  <span *ngIf="!transaction.transactionConfirmedInBlock" class="badge badge-warning text-capitalize">Pending</span>
-                </li>
-                <li class="list-inline-item col text-right align-baseline transactionDate">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</li>
+ <section id="GUI" class="light">
+  <!-- CONTAINER -->
+  <section id="content" class="col-10 mx-auto">
+    <!-- JUMBOTRON-->
+      <div class="jumbotron jumbotron-fluid">
+        <div class="col-12">
+          <div class="row d-flex align-items-center">
+            <div class="col-9 text-left">
+              <h5>Spendable balance</h5>
+              <p class="lead">
+                <strong>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }} </strong>
+                <small class="text-uppercase">{{ coinUnit }}</small>
+              </p>
+              <ul class="list-unstyled">
+                <li><strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong><em> (unconfirmed)</em></li>
+                <!-- <li><strong>805.65900153</strong> <em>(staking)</em></li> -->
               </ul>
             </div>
+            <!-- /col-->
+            <div class="col text-right">
+              <p>
+                <a class="btn btn-lg btn-primary" (click)="openReceiveDialog()">
+                  <i class="icon lnr lnr-arrow-down-circle"></i>
+                  <span class="text-center text-uppercase">Receive</span>
+                </a>
+                <a class="btn btn-lg btn-secondary ml-2" (click)="openSendDialog()">
+                  <i class="icon lnr lnr-arrow-up-circle"></i>
+                  <span class="text-center text-uppercase">Send</span>
+                </a>
+              </p>
+            </div>
+            <!-- /col-->
           </div>
-          <!-- /card-->
+          <!-- /row-->
         </div>
+        <!-- /col-->
       </div>
-      <ng-template #noTransactions><em class="muted">Looks like you haven't made any transactions yet.</em></ng-template>
+      <!-- /JUMBOTRON-->
+
+      <!-- CONTENT -->
+      <section class="col-12">
+        <div class="row">
+          <!-- TRANSACTIONS -->
+          <div class="col-8">
+            <div class="card" *ngIf="transactionArray; else noTransactions">
+              <div class="card-header">Latest Transactions</div>
+              <div class="card-body">
+                <table class="table table-sm">
+                  <tbody>
+                    <tr *ngFor="let transaction of transactionArray; let i=index">
+                      <div *ngIf="i<5">
+                        <th class="text-center" *ngIf="!transaction.transactionConfirmedInBlock"><span class="bubble bg-warning"></span></th>
+                        <th class="text-center" *ngIf="transaction.transactionConfirmedInBlock"><span class="bubble bg-success"></span></th>
+                        <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
+                        <td class="text-center"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}</strong> {{ coinUnit }}</td>
+                        <td class="text-center">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
+                        <td class="text-right"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
+                      </div>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr>
+                <div class="text-center my-2">
+                  <a class="btn btn-outline-primary" (click)="goToHistory()">Go to History</a>
+                </div>
+              </div>
+            </div>
+            <ng-template #noTransactions><em class="muted">Looks like you haven't made any transactions yet.</em></ng-template>
+          </div>
+          <!-- /TRANSACTIONS -->
+          <!-- STAKING -->
+          <div id="staking" class="flip col-4">
+              <div class="card">
+                <div class="face front">
+                  <div class="card-header">Staking (not functional)</div>
+                    <div class="card-body">
+                      <div class="alert alert-info text-center" role="alert">Please first, unlock your wallet.</div>
+                      <form class="form-inline">
+                        <div class="form-group">
+                          <label for="inputPassword" class="sr-only">Password</label>
+                          <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                          <button type="button" id="flipcard" class="btn btn-outline-primary ml-2">Unlock</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="face back">
+                    <div class="card-header">
+                      <span class="d-inline-block col-10 row">Staking</span>
+                      <div class="toggle d-inline-block" id="switch">
+                        <div class='toggle-text-off'>OFF</div>
+                        <div class='glow-comp'></div>
+                        <div class='toggle-button'></div>
+                        <div class='toggle-text-on'>ON</div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-unstyled my-3">
+                      <li>Your weight is <strong>25,603</strong></li>
+                      <li>Network weight is <strong>24,239,023</strong></li>
+                      <li>Reward expected time is <strong>8 hours</strong></li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <!-- STAKING -->
+        </div>
+      <status-bar></status-bar>
     </section>
-    <!-- /TRANSACTIONS -->
-    <status-bar></status-bar>
+    <!-- /CONTENT -->
   </section>
-  <!-- /CONTENT-->
+  <!-- /CONTAINER-->
 </section>
-<!-- /breeze-->
+<!-- /GUI-->

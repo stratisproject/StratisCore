@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
@@ -20,7 +21,7 @@ import { TransactionDetailsComponent } from '../transaction-details/transaction-
 })
 
 export class HistoryComponent {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService) {}
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router) {}
 
   public transactions: TransactionInfo[];
   public coinUnit: string;
@@ -34,6 +35,10 @@ export class HistoryComponent {
 
   ngOnDestroy() {
     this.cancelSubscriptions();
+  }
+
+  onOverviewClicked() {
+    this.router.navigate(['/wallet']);
   }
 
   private openTransactionDetailDialog(transaction: any) {

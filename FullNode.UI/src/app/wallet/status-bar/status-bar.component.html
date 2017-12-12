@@ -1,8 +1,21 @@
+<!-- STATUSBAR -->
 <div class="status">
-  <ul class="list-inline align-self-center row" title="Total blocks: {{ chainTip }}&#013;Last block received: {{ lastBlockSyncedHeight }}&#013;Connections: {{ connectedNodes }}">
-    <li class="list-inline-item"><i class="icon-syncr text-success"></i></li>
-    <li class="list-inline-item">{{ percentSynced }}</li>
-    <li class="list-inline-item ml-2"><i class="icon-earth text-info"></i></li>
-    <li class="list-inline-item">{{ connectedNodes }}</li>
+  <ul class="list-inline align-self-center row">
+    <li *ngIf="!percentSynced == 100" class="list-inline-item mx-1" title="{{ percentSynced }}% synchronized">
+      <i class="lnr lnr-cloud-sync text-warning"> {{ percentSynced }}% </i>
+    </li>
+    <li *ngIf="percentSynced == 100" class="list-inline-item mx-1" title="{{ percentSynced }}% synchronized">
+      <i class="lnr lnr-cloud-check text-success"> {{ percentSynced }}% </i>
+    </li>
+    <li class="list-inline-item mx-1" title="{{ connectedNodes }} Connections">
+      <i class="lnr lnr-database text-mute"></i>
+    </li>
+    <!-- <li class="list-inline-item mx-1" title="Show when locked">
+      <i class="lnr lnr-lock text-danger"></i>
+    </li>
+    <li class="list-inline-item mx-1" title="Show when unlocked">
+      <i class="lnr lnr-lock text-success"></i>
+    </li> -->
   </ul>
 </div>
+<!-- /STATUSBAR -->

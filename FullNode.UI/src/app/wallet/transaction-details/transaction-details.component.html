@@ -1,14 +1,19 @@
- <div id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="modal_detail" aria-hidden="true">
-  <div class="modal-dialog modalBg" role="document">
-    <div>
+<!-- MODAL TRANSACTION DETAILS -->
+<div id="modalDetail">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
       <div class="modal-header">
-        <div class="bubble"><i class="icon-block"></i></div>
+        <h5 class="modal-title">Transaction details</h5>
+        <!-- button close -->
+        <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close">
+          <i class="lnr lnr-cross-circle"></i>
+        </button>
+        <!-- /button close -->
       </div>
       <div class="modal-body">
-        <h5 class="modal-title text-uppercase" id="modalDetail">Transaction Details</h5>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Type</li>
-          <li class="list-inline-item col-8 blockText text-capitalize">{{ transaction.transactionType }}</li>
+          <li class="list-inline-item col-8 blockText text-uppercase">{{ transaction.transactionType }}</li>
         </ul>
         <ul class="list-inline row">
           <li class="list-inline-item col blockLabel">Amount</li>
@@ -29,20 +34,23 @@
         </ul>
         <ul class="list-inline row">
             <li class="list-inline-item col blockLabel">Confirmations</li>
-            <li class="list-inline-item col-8 blockText">{{ confirmations }}</li>
+            <li class="list-inline-item col-8 blockText">
+              <span class="badge badge-warning">{{ confirmations }}</span>
+            </li>
         </ul>
         <ul class="list-inline row">
-          <li class="list-inline-item col blockLabel mb-3">Transaction ID</li>
-          <li class="list-inline-item col-10 blockID"><code>{{ transaction.transactionId }}</code></li>
-          <span class="float-right"><a ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()">copy</a></span>
-          <div class="col-12">
-            <span class="badge badge-success list-inline-item col" *ngIf="copied">The transaction ID has been copied to your clipboard.</span>
-          </div>
+          <li class="list-inline-item col-12 blockLabel mb-3">Transaction ID</li>
+          <li class="list-inline-item col-11 blockID"><code>{{ transaction.transactionId }}</code></li>
+          <button type="button" class="btn btn-outline-light btn-sm" ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()" title="copy to clipboard">
+            <i class="lnr lnr-file-add"></i>
+          </button>
         </ul>
+        <div class="alert alert-success alert-dismissible fade show mt-3 col-12" *ngIf="copied">The transaction ID has been copied to your clipboard.</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-lg btn-primary" data-dismiss="modal" aria-label="Close" (click)="activeModal.close('Close click')">OK</button>
+        <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
       </div>
     </div>
   </div>
 </div>
+<!-- /MODAL TRANSACTION DETAILS -->

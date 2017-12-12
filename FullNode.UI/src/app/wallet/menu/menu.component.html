@@ -1,23 +1,17 @@
-<section id="content" class="bitcoin">
-  <nav class="navbar fixed-top navbar-toggleable-xl navbar-inverse">
-    <div class="collapse navbar-collapse" id="navbarBreeze">
-      <ul class="navbar-nav ml-auto col-9" routerLinkActive="active">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="dashboard" [routerLinkActive]="['is-active']">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="history" [routerLinkActive]="['is-active']">History</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" (click)="logOut()">Logout (temporary)</a>
-        </li>
-      </ul>
-      <!-- /ul-->
-      <div class="ml-auto d-flex align-items-center">
-        <img src="../../../assets/images/logo.svg" width="113px" height="30px" alt="Breeze Logo">
-      </div>
-    </div>
-    <!-- /navbar-collapse-->
+<!-- MENU -->
+<section id="GUI" class="light">
+  <nav class="navbar navbar-light bg-light justify-content-between">
+    <span class="navbar-text">Stratis Wallet</span>
+    <span class="navbar-brand align-middle">
+      <a href="dashboard.html">
+        <img src="../../../assets/images/logo.svg" width="36" height="36" alt="Stratis">
+      </a>
+    </span>
+    <form class="form-inline">
+      <a data-toggle="modal" role="button" (click)="logOut()">
+        <i class="lnr lnr-exit"></i>
+      </a>
+    </form>
   </nav>
-  <!-- /nav-->
 </section>
+<!-- /MENU -->

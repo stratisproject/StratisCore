@@ -13,6 +13,7 @@ import { TransactionDetailsComponent } from '../transaction-details/transaction-
 
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'dashboard-component',
@@ -21,7 +22,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 
 export class DashboardComponent implements OnInit {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService) {}
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router) {}
 
   public walletName: string;
   public coinUnit: string;
@@ -40,6 +41,10 @@ export class DashboardComponent implements OnInit {
   ngOnDestroy() {
     this.cancelSubscriptions();
   };
+
+  public goToHistory() {
+    this.router.navigate(['/wallet/history']);
+  }
 
   public openSendDialog() {
     const modalRef = this.modalService.open(SendComponent);
