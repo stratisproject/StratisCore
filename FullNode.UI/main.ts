@@ -77,7 +77,6 @@ app.on('ready', function () {
     console.log("Breeze UI was started in development mode. This requires the user to be running the Breeze Daemon himself.")
   }
   else {
-    startBitcoinApi();
     startStratisApi();
   }
   createTray();
@@ -88,7 +87,6 @@ app.on('ready', function () {
 });
 
 app.on('before-quit', function () {
-  closeBitcoinApi(),
   closeStratisApi();
 });
 
@@ -109,23 +107,6 @@ app.on('activate', function () {
   }
 });
 
-function closeBitcoinApi() {
-  // if (process.platform !== 'darwin' && !serve) {
-    if (!serve) {
-    var http1 = require('http');
-    const options1 = {
-      hostname: 'localhost',
-      port: 37220,
-      path: '/api/node/shutdown',
-      method: 'POST'
-  };
-
-  const req = http1.request(options1, (res) => {});
-  req.write('');
-  req.end();
-  }
-};
-
 function closeStratisApi() {
   // if (process.platform !== 'darwin' && !serve) {
     if (process.platform !== 'darwin' && !serve) {
@@ -143,57 +124,26 @@ function closeStratisApi() {
   }
 };
 
-function startBitcoinApi() {
-  var bitcoinProcess;
-  const spawnBitcoin = require('child_process').spawn;
-
-  //Start Breeze Bitcoin Daemon
-  let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
-  if (os.platform() === 'win32') {
-    apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.BreezeD.exe');
-  } else if(os.platform() === 'linux') {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
-  } else {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
-  }
-
-
-  if(!testnet) {
-    bitcoinProcess = spawnBitcoin(apiPath, {
-      detached: true
-    });
-  } else if (testnet) {
-    bitcoinProcess = spawnBitcoin(apiPath, ['-testnet'], {
-      detached: true
-    });
-  }
-
-
-  bitcoinProcess.stdout.on('data', (data) => {
-    writeLog(`Bitcoin: ${data}`);
-  });
-}
-
 function startStratisApi() {
   var stratisProcess;
   const spawnStratis = require('child_process').spawn;
 
   //Start Breeze Stratis Daemon
-  let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.BreezeD');
+  let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.StratisD');
   if (os.platform() === 'win32') {
-    apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.BreezeD.exe');
+    apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.StratisD.exe');
   } else if(os.platform() === 'linux') {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+    apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
   } else {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.BreezeD');
+    apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
   }
 
   if (!testnet) {
-    stratisProcess = spawnStratis(apiPath, ['stratis'], {
+    stratisProcess = spawnStratis(apiPath, {
       detached: true
     });
   } else if (testnet) {
-    stratisProcess = spawnStratis(apiPath, ['stratis', '-testnet'], {
+    stratisProcess = spawnStratis(apiPath, ['-testnet'], {
       detached: true
     });
   }
@@ -210,9 +160,9 @@ function createTray() {
 
   let trayIcon;
   if (serve) {
-    trayIcon = nativeImage.createFromPath('./src/assets/images/breeze-logo-tray.png');
+    trayIcon = nativeImage.createFromPath('./src/assets/images/fullnodeui-logo-tray.png');
   } else {
-    trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/images/breeze-logo-tray.png'));
+    trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/images/fullnodeui-logo-tray.png'));
   }
 
   let systemTray = new Tray(trayIcon);

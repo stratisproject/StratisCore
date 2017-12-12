@@ -1,6 +1,6 @@
 {
   "appId": "com.stratisplatform.breeze",
-  "productName": "Breeze Wallet",
+  "productName": "FullNode.UI",
   "publish": null,
   "directories": {
     "app": "dist",
@@ -8,7 +8,7 @@
     "buildResources": "dist/assets/images"
   },
   "win": {
-    "icon": "dist/assets/images/",
+    "icon": "dist/assets/images/icon",
     "target": [
       "nsis"
     ],
@@ -20,7 +20,7 @@
       "deb",
       "tar.gz"
     ],
-    "synopsis": "Breeze Wallet: Stratis' dual-currency full block light wallet with a strong focus on privacy.",
+    "synopsis": "FullNode.UI: Stratis' staking wallet.",
     "category": "Utility",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
   },
@@ -36,17 +36,17 @@
     "perMachine": true,
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": true,
-    "guid": "ed20df62-ff5a-4b83-a5e3-a361357c6e51",
+    "guid": "ef77eb40-01cf-4516-9da6-f3c6ba6854aa",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "license": "../Licenses/breeze-license.txt"
+    "license": "../Licenses/FullNode.UI-license.txt"
   },
   "msi": {
     "warningsAsErrors": false
   },
   "extraResources": [
     "daemon/**/*",
-    "src/assets/images/breeze-logo-tray.png",
+    "src/assets/images/fullnodeui-logo-tray.png",
     "src/assets/images/license_en.txt"
   ]
 }

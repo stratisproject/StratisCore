@@ -290,10 +290,8 @@ Thumbs.db
 
 # DNX
 project.lock.json
-/Breeze/src/Breeze.Daemon/Wallets
-/Breeze/src/Breeze.Daemon/Logs
-/Breeze.UI/.vscode/.BROWSE.VC.DB-wal
-/Breeze.UI/.vscode/.BROWSE.VC.DB-shm
-/Breeze.UI/daemon
-/Breeze.UI/app-builds
-/Breeze.UI/dist
+/FullNode.UI/.vscode/.BROWSE.VC.DB-wal
+/FullNode.UI/.vscode/.BROWSE.VC.DB-shm
+/FullNode.UI/daemon
+/FullNode.UI/app-builds
+/FullNode.UI/dist
