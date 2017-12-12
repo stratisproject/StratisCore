@@ -18,7 +18,7 @@ branches:
 #---------------------------------#
 
 image: Visual Studio 2017
-clone_folder: c:\projects\breeze
+clone_folder: c:\projects\\fullnodeui
 configuration:
   - Release
 
@@ -36,7 +36,7 @@ environment:
 
 # build cache to preserve files/folders between builds
 cache:
-  - '%APPVEYOR_BUILD_FOLDER%\Breeze.UI\node_modules'
+  - '%APPVEYOR_BUILD_FOLDER%\FullNode.UI\node_modules'
   - '%USERPROFILE%\.nuget\packages'
   
 init:
@@ -58,7 +58,7 @@ install:
       npm config set unsafe-perm=true
       
       Write-Host "--> npm install" -foregroundcolor "magenta"
-      cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
+      cd $env:APPVEYOR_BUILD_FOLDER/FullNode.UI
       npm install
       
       Write-Host "--> npm install npx" -foregroundcolor "magenta"
@@ -89,19 +89,19 @@ before_build:
 build_script:
 - ps: |
       Write-Host "$env:log_prefix running 'dotnet publish'" -foregroundcolor "magenta"
-      cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/Stratis.BreezeD
-      dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\Breeze.UI\daemon
+      cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/Stratis.StratisD
+      dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\FullNode.UI\daemon
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
-      Write-Host "$env:log_prefix building Breeze" -foregroundcolor "magenta"
-      cd $env:APPVEYOR_BUILD_FOLDER/Breeze.UI
+      Write-Host "$env:log_prefix building FullNode.UI" -foregroundcolor "magenta"
+      cd $env:APPVEYOR_BUILD_FOLDER/FullNode.UI
       npm run build:prod
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
-      Write-Host "$env:log_prefix packaging breeze" -foregroundcolor "magenta"
+      Write-Host "$env:log_prefix packaging the FullNode.UI" -foregroundcolor "magenta"
       npx electron-builder build --windows --$env:arch
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
-      Write-Host "[$env:configuration][$env:win_runtime] FINISHED Breeze packaging" -foregroundcolor "magenta"
+      Write-Host "[$env:configuration][$env:win_runtime] Finished FullNode.UI packaging" -foregroundcolor "magenta"
       
       dir
       cd app-builds
@@ -121,8 +121,8 @@ test_script:
 
 # pushing all files in build directory recursively
 artifacts:
-- path: Breeze.UI\app-builds\*.exe
-  name: Breeze app
+- path: FullNode.UI\app-builds\*.exe
+  name: FullNode.UI app
   
 #----------------------------------#
 #      deployment configuration    #

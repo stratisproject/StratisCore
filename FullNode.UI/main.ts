@@ -139,11 +139,11 @@ function startStratisApi() {
   }
 
   if (!testnet) {
-    stratisProcess = spawnStratis(apiPath, ['stratis'], {
+    stratisProcess = spawnStratis(apiPath, {
       detached: true
     });
   } else if (testnet) {
-    stratisProcess = spawnStratis(apiPath, ['stratis', '-testnet'], {
+    stratisProcess = spawnStratis(apiPath, ['-testnet'], {
       detached: true
     });
   }
