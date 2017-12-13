@@ -13,14 +13,14 @@
       <div class="form-group clearfix">
       <label class="float-left" for="amount">Amount</label>
       <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
-      <input type="text" class="form-control" formControlName="amount" id="amount" placeholder="amount" placeholder="0.00 {{ coinUnit }}">
-      <div *ngIf="formErrors.amount" class="form-control-feedback">{{ formErrors.amount }}</div>
+      <input type="text" class="form-control" [class.is-invalid]="formErrors.amount" [class.is-valid]="!formErrors.amount && sendForm.get('amount').valid" formControlName="amount" id="amount" placeholder="amount" placeholder="0.00 {{ coinUnit }}">
+      <div *ngIf="formErrors.amount" class="invalid-feedback">{{ formErrors.amount }}</div>
     </div>
     <!--<div class="form-group has-success">-->
     <div class="form-group clearfix">
       <label for="destinationAddress">Destination address</label>
-      <input type="text" class="form-control" formControlName="address" id="destinationAddress" placeholder="Please enter the destination address here.">
-      <div *ngIf="formErrors.address" class="form-control-feedback">{{ formErrors.address }}</div>
+      <input type="text" class="form-control" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && sendForm.get('address').valid" formControlName="address" id="destinationAddress" placeholder="Please enter the destination address here.">
+      <div *ngIf="formErrors.address" class="invalid-feedback">{{ formErrors.address }}</div>
     </div>
     <div class="form-group clearfix">
       <label>Transaction Fee</label>
@@ -48,10 +48,10 @@
     </div>
     <div class="form-group clearfix">
       <label for="walletPassword">Wallet Password</label>
-      <input type="password" class="form-control" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
-      <div *ngIf="formErrors.password" class="form-control-feedback">{{formErrors.password}}</div>
+      <input type="password" class="form-control" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && sendForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
+      <div *ngIf="formErrors.password" class="invalid-feedback">{{formErrors.password}}</div>
     </div>
-    <div *ngIf="apiError" class="text-danger mt-2">{{ apiError }}</div>
+    <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
   </form>
   <!-- /form-->
 </div>
