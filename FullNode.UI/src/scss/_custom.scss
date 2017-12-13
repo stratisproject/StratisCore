@@ -12,9 +12,6 @@ button {&:hover {cursor: pointer;}}
 .valid-feedback {font-size: .8rem;}
 
 #GUI {
-  max-width: 1366px;
-  max-height: 768px;
-
   #content {padding-top: $jumbotron-padding;}
 
   ///// MNEMONICS
