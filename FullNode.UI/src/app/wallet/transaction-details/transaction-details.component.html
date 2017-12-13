@@ -32,7 +32,8 @@
   <ul class="list-inline row">
       <li class="list-inline-item col blockLabel">Confirmations</li>
       <li class="list-inline-item col-8 blockText">
-        <span class="badge badge-warning">{{ confirmations }}</span>
+        <span *ngIf="confirmations < 1" class="badge badge-warning">Unconfirmed</span>
+        <span *ngIf="confirmations >= 1" class="badge badge-success">{{ confirmations }}</span>
       </li>
   </ul>
   <ul class="list-inline row">
