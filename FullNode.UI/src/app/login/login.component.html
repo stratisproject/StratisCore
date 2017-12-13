@@ -7,17 +7,15 @@
     <div class="col-8 right-login d-flex align-content-center flex-wrap">
       <form class="col-6 mx-auto d-flex align-content-center flex-wrap  text-center">
         <div class="col-12">
-          <h3 class="display-4 mb-4">Welcome to the Stratis Wallet</h3>
+          <h3 class="display-4 mb-4">Welcome</h3>
         </div>
         <form *ngIf="hasWallet" class="form-group col-12" [formGroup]="openWalletForm">
-          <div>
-            <select class="custom-select col-12" formControlName="selectWallet">
-              <option selected>Choose a wallet</option>
-              <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
-            </select>
-          </div>
-          <div class="form-group col-12">
-            <input type="password" class="form-control" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
+          <select class="custom-select col-12" formControlName="selectWallet">
+            <option selected>Choose a wallet</option>
+            <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
+          </select>
+          <div class="form-group mt-3">
+            <input type="password" class="form-control" id="Password" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
             <div *ngIf="formErrors.password" class="invalid-feedback">{{ formErrors.password }}</div>
           </div>
         </form>
@@ -37,20 +35,13 @@
             </svg>
           </div>
           <!-- /SVG -->
-          <div class="row d-flex justify-content-center" *ngIf="hasWallet;else no_wallet">
-            <p class="lead">If you would like to create or restore a wallet please click the button below.
-              <span class="row d-flex justify-content-center">
-                <button type="button" class="btn btn-linkgray btn-lg" (click)="onCreateClicked()">Create or restore a wallet</button>
-              </span>
-            </p>
+          <div class="row d-flex justify-content-center mt-3" *ngIf="hasWallet;else no_wallet">
+              <button type="button" class="btn btn-block btn-link text-muted" (click)="onCreateClicked()">Create or restore a wallet</button>
+            <ng-template #no_wallet>
+              <button type="button" class="btn btn-block btn-link text-muted" (click)="onCreateClicked()">Create or restore a wallet</button>
+            </ng-template>
           </div>
-          <ng-template #no_wallet>
-            <p class="lead">Looks like you're new here. <br />Please create or restore a wallet.
-              <span class="row d-flex justify-content-center mt-2">
-                <button type="button" class="btn btn-linkgray btn-lg" (click)="onCreateClicked()">Create or restore a wallet</button>
-              </span>
-            </p>
-          </ng-template>
+
         </div>
       </form>
     </div>

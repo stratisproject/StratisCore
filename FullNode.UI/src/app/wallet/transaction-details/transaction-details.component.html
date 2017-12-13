@@ -7,7 +7,7 @@
   </button>
   <!-- /button close -->
 </div>
-<div class="modal-body">
+<div class="modal-body details">
   <ul class="list-inline row">
     <li class="list-inline-item col blockLabel">Type</li>
     <li class="list-inline-item col-8 blockText text-uppercase">{{ transaction.transactionType }}</li>
@@ -38,13 +38,13 @@
   <ul class="list-inline row">
     <li class="list-inline-item col-12 blockLabel mb-3">Transaction ID</li>
     <li class="list-inline-item col-11 blockID"><code>{{ transaction.transactionId }}</code></li>
-    <button type="button" class="btn btn-outline-light btn-sm" ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()" title="copy to clipboard">
+    <button type="button" class="btn btn-outline-secondary btn-sm" ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()" title="copy to clipboard">
       <i class="lnr lnr-file-add"></i>
     </button>
   </ul>
   <div class="alert alert-success alert-dismissible fade show mt-3 col-12" *ngIf="copied">The transaction ID has been copied to your clipboard.</div>
 </div>
-<div class="modal-footer">
+<div class="modal-footer details">
   <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
 </div>
 <!-- /MODAL TRANSACTION DETAILS -->

@@ -12,9 +12,6 @@ button {&:hover {cursor: pointer;}}
 .valid-feedback {font-size: .8rem;}
 
 #GUI {
-  max-width: 1366px;
-  max-height: 768px;
-
   #content {padding-top: $jumbotron-padding;}
 
   ///// MNEMONICS
@@ -354,11 +351,11 @@ button {&:hover {cursor: pointer;}}
     overflow: auto;
   }
   .myAddress {
-    .btn {
-      padding: .15rem .35rem;
-      &:hover {cursor: pointer;}
+    .btn {&:hover {cursor: pointer;}}
+    .lnr-file-add {
+      font-size: .8rem;
+      display: block;
     }
-    .lnr-file-add {font-size: .8rem;}
   }
   button {
     &.closemodal {
@@ -443,4 +440,14 @@ button {&:hover {cursor: pointer;}}
     transform: scale(2);
     opacity: 0;
   }
+}
+
+/// MODAL DETAILS
+.details {
+  .list-inline {margin-bottom: .35rem;}
+  .alert {
+    margin-bottom: 0;
+    padding: .75rem .4rem;
+  }
+  &.modal-footer {padding: 0 15px;}
 }

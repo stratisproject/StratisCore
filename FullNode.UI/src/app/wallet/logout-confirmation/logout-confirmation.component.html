@@ -12,9 +12,9 @@
     <div class="form-group clearfix">
       <p class="text-muted">Are you sure you want to log out?</p>
     </div>
-    <div>
-      <button type="button" class="btn btn-outline-light" data-dismiss="modal" aria-label="Close" (click)="activeModal.close('Close click')">Cancel</button>
-      <button type="button" class="btn btn-primary ml-2" data-dismiss="modal" aria-label="Logout" (click)="onLogout()">Yes</button>
+    <div class="modal-footer row">
+      <button type="button" class="btn btn-outline-light col" data-dismiss="modal" aria-label="Close" (click)="activeModal.close('Close click')">Cancel</button>
+      <button type="button" class="btn btn-primary ml-2 col" data-dismiss="modal" aria-label="Logout" (click)="onLogout()">Yes</button>
     </div>
     <br>
   </form>

@@ -8,7 +8,7 @@
           <div class="col text-left">
             <nav aria-label="breadcrumb" role="navigation">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a (click)="onDashboardClicked()">← Dashboard</a></li>
+                <li class="breadcrumb-item"><a (click)="onDashboardClicked()">&larr; Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">History</li>
               </ol>
             </nav>
@@ -34,9 +34,9 @@
                     <th class="text-center" *ngIf="!transaction.transactionConfirmedInBlock"><span class="bubble bg-warning"></span></th>
                     <th class="text-center" *ngIf="transaction.transactionConfirmedInBlock"><span class="bubble bg-success"></span></th>
                     <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
-                    <td class="text-center"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}</strong> {{ coinUnit }}</td>
-                    <td class="text-center">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-                    <td class="text-right"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
+                    <td class="text-left"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
+                    <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
+                    <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
                   </tr>
                 </tbody>
               </table>
