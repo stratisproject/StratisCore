@@ -8,12 +8,12 @@
   <!-- /button close -->
 </div>
 <div class="modal-body">
-  <form [formGroup]="sendForm" (ngSubmit)="send()">
+  <form [formGroup]="sendForm">
     <!--<div class="form-group has-danger clearfix">-->
       <div class="form-group clearfix">
-      <label class="float-left" for="Amount">Amount</label>
+      <label class="float-left" for="amount">Amount</label>
       <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
-      <input type="text" class="form-control" id="Amount" placeholder="Amount" placeholder="0.00 {{ coinUnit }}">
+      <input type="text" class="form-control" formControlName="amount" id="amount" placeholder="amount" placeholder="0.00 {{ coinUnit }}">
       <div *ngIf="formErrors.amount" class="form-control-feedback">{{ formErrors.amount }}</div>
     </div>
     <!--<div class="form-group has-success">-->
@@ -55,9 +55,9 @@
   </form>
   <!-- /form-->
 </div>
-<div class="modal-footer" *ngIf="!isSending">
+<div class="modal-footer">
   <button type="button" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
-  <button type="button" class="btn btn-primary btn-block" [disabled]="!sendForm.valid || isSending" (click)="send()">Send</button>
+  <button *ngIf="!isSending" type="button" class="btn btn-primary btn-block" [disabled]="!sendForm.valid || isSending" (click)="send()">Send</button>
 </div>
 <!-- SVG -->
 <div *ngIf="isSending" class="Loading">
