@@ -16,7 +16,7 @@
           </select>
           <div class="form-group mt-3">
             <input type="password" class="form-control" id="Password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
-            <div *ngIf="formErrors.password" class="form-control-feedback">{{ formErrors.password }}</div>
+            <div *ngIf="formErrors.password" class="invalid-feedback">{{ formErrors.password }}</div>
           </div>
         </form>
         <div class="col-12">
