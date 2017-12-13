@@ -37,7 +37,7 @@ export class HistoryComponent {
     this.cancelSubscriptions();
   }
 
-  onOverviewClicked() {
+  onDashboardClicked() {
     this.router.navigate(['/wallet']);
   }
 

@@ -8,7 +8,7 @@
           <div class="col text-left">
             <nav aria-label="breadcrumb" role="navigation">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a (click)="onOverviewClicked()">← Overview</a></li>
+                <li class="breadcrumb-item"><a (click)="onDashboardClicked()">← Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">History</li>
               </ol>
             </nav>
@@ -41,9 +41,6 @@
                 </tbody>
               </table>
               <hr>
-              <div class="text-center my-2">
-                <a class="btn btn-outline-primary" (click)="goToHistory()">Go to History</a>
-              </div>
             </div>
           </div>
           <ng-template #noTransactions><em class="muted">Looks like you haven't made any transactions yet.</em></ng-template>
