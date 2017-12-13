@@ -23,7 +23,7 @@
         <!-- /form-group -->
         <div class="form-group col-12">
           <label for="walletPasswordConfirmation">Confirm password</label>
-          <input type="password" class="form-control is-invalid" formControlName="walletPasswordConfirmation" id="walletPasswordConfirmation" placeholder="Enter a password.">
+          <input type="password" class="form-control" formControlName="walletPasswordConfirmation" id="walletPasswordConfirmation" placeholder="Enter a password.">
           <div *ngIf="formErrors.walletPasswordConfirmation" class="text-danger mt-2">{{ formErrors.walletPasswordConfirmation }}</div>
         </div>
         <!-- /form-group -->
@@ -32,7 +32,7 @@
         </div>
         <div class="modal-footer col-12">
           <button type="button" class="btn btn-outline-light" (click)="onBackClicked()">Cancel</button>
-          <button type="button" class="btn btn-primary btn-block">Create a new wallet</button>
+          <button type="button" class="btn btn-primary btn-block" [disabled]="!createWalletForm.valid" (click)="onContinueClicked()">Create a new wallet</button>
         </div>
       </form>
       <!-- /form -->
