@@ -351,11 +351,11 @@ button {&:hover {cursor: pointer;}}
     overflow: auto;
   }
   .myAddress {
-    .btn {
-      padding: .15rem .35rem;
-      &:hover {cursor: pointer;}
+    .btn {&:hover {cursor: pointer;}}
+    .lnr-file-add {
+      font-size: .8rem;
+      display: block;
     }
-    .lnr-file-add {font-size: .8rem;}
   }
   button {
     &.closemodal {

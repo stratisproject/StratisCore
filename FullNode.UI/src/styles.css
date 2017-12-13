@@ -3986,6 +3986,15 @@ tbody.collapse.show {
   border-radius: 0.25rem;
 }
 
+.breadcrumb-item {
+  color: #158BCF;
+}
+
+.breadcrumb-item:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .breadcrumb-item + .breadcrumb-item::before {
   display: inline-block;
   padding-right: 0.5rem;
@@ -8252,16 +8261,13 @@ button:hover {
   overflow: auto;
 }
 
-.modal .myAddress .btn {
-  padding: .15rem .35rem;
-}
-
 .modal .myAddress .btn:hover {
   cursor: pointer;
 }
 
 .modal .myAddress .lnr-file-add {
   font-size: .8rem;
+  display: block;
 }
 
 .modal button.closemodal {
