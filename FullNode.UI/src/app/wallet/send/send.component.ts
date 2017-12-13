@@ -183,7 +183,8 @@ export class SendComponent implements OnInit {
       this.sendForm.get("address").value.trim(),
       this.sendForm.get("amount").value,
       this.sendForm.get("fee").value,
-      true
+      true,
+      false
     );
 
     let transactionData;
