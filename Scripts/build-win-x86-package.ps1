@@ -46,7 +46,7 @@ Write-Host "*--------------------------------*" -foregroundcolor "magenta"
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
     
 Write-Host "running 'dotnet publish'" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/Stratis.StratisD
+cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/src/Stratis.StratisD
 dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\FullNode.UI\daemon
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 

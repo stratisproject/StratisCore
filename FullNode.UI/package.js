@@ -14,7 +14,7 @@ const path = argv.path || 'app-builds';
 
 const DEFAULT_OPTS = {
     dir: './dist',
-    name: "Breeze",
+    name: "FullNode",
     asar: shouldUseAsar,
     buildVersion: buildVersion
 };

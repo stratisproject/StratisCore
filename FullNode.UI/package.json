@@ -1,5 +1,5 @@
 {
-  "name": "FullNode",
+  "name": "stratis-fullnode",
   "description": "Full Node Wallet",
   "version": "0.1.0",
   "author": {
