@@ -451,3 +451,53 @@ button {&:hover {cursor: pointer;}}
   }
   &.modal-footer {padding: 0 15px;}
 }
+
+/// LOADING ANIM
+.login {
+  height: 100vh;
+  .row {margin: 0 !important;}
+}
+.loadingText {
+  font-size: $font-size-base;
+  color: $gray-500;
+}
+#logoAnim {width: auto;}
+.path {
+  stroke-dasharray: 4000;
+  stroke-dashoffset: 1000;
+  stroke-width:2;
+  stroke-linecap:round;
+  animation: dash 4s linear infinite;
+  fill-opacity:1;
+  fill:#1794C8;
+  stroke:#1794C8;
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 4500;
+    opacity:1;
+    stroke:#1794C8;
+    fill-opacity:0;
+  }
+  15%{
+    opacity:1;
+    stroke:#1794C8;
+    fill-opacity:0;
+  }
+  70%{
+    opacity:1;
+    stroke:#1794C8;
+    fill-opacity:0;
+  }
+  95%{
+    opacity:1;
+    stroke:#1794C8;
+    fill-opacity:1;
+  }
+  100%{
+    opacity:1;
+    stroke:#1794C8;
+    fill-opacity:1;
+  }
+}
