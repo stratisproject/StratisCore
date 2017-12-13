@@ -1789,7 +1789,7 @@ select.form-control:focus::-ms-value {
 select.form-control-sm:not([size]):not([multiple]), .input-group-sm > select.form-control:not([size]):not([multiple]),
 .input-group-sm > select.input-group-addon:not([size]):not([multiple]),
 .input-group-sm > .input-group-btn > select.btn:not([size]):not([multiple]) {
-  height: calc(1.414063rem + 2px);
+  height: calc(1.414062rem + 2px);
 }
 
 .form-control-lg, .input-group-lg > .form-control,
@@ -3204,7 +3204,7 @@ tbody.collapse.show {
 }
 
 .custom-select-sm {
-  height: calc(1.414063rem + 2px);
+  height: calc(1.414062rem + 2px);
   padding-top: 0.375rem;
   padding-bottom: 0.375rem;
   font-size: 75%;
@@ -4743,7 +4743,7 @@ button.close {
   bottom: 0;
   left: 0;
   z-index: 1040;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.95);
 }
 
 .modal-backdrop.fade {
