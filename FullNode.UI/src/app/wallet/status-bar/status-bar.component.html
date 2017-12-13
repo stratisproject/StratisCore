@@ -2,10 +2,10 @@
 <div class="status">
   <ul class="list-inline align-self-center row">
     <li *ngIf="!(percentSynced == 100)" class="list-inline-item mx-1" title="{{ percentSynced }}% synchronized">
-      <i class="lnr lnr-cloud-sync text-warning"> {{ percentSynced }}% </i>
+      <i class="lnr lnr-cloud-sync text-warning"></i>
     </li>
     <li *ngIf="percentSynced == 100" class="list-inline-item mx-1" title="{{ percentSynced }}% synchronized">
-      <i class="lnr lnr-cloud-check text-success"> {{ percentSynced }}% </i>
+      <i class="lnr lnr-cloud-check text-success"></i>
     </li>
     <li class="list-inline-item mx-1" title="{{ connectedNodes }} Connections">
       <i class="lnr lnr-database text-mute"></i>
