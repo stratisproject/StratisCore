@@ -53,7 +53,7 @@
                         <th class="text-center" *ngIf="!transaction.transactionConfirmedInBlock"><span class="bubble bg-warning"></span></th>
                         <th class="text-center" *ngIf="transaction.transactionConfirmedInBlock"><span class="bubble bg-success"></span></th>
                         <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
-                        <td class="text-center"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}</strong> {{ coinUnit }}</td>
+                        <td class="text-center"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
                         <td class="text-center">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
                         <td class="text-right"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
                       </div>
@@ -62,7 +62,7 @@
                 </table>
                 <hr>
                 <div class="text-center my-2">
-                  <a class="btn btn-outline-primary" (click)="goToHistory()">Go to History</a>
+                  <button type="button" class="btn btn-outline-primary" (click)="goToHistory()">Go to History</button>
                 </div>
               </div>
             </div>
