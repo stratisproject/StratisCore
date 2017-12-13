@@ -52,7 +52,8 @@
                       <th class="text-center" *ngIf="!transaction.transactionConfirmedInBlock"><span class="bubble bg-warning"></span></th>
                       <th class="text-center" *ngIf="transaction.transactionConfirmedInBlock"><span class="bubble bg-success"></span></th>
                       <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
-                      <td class="text-left"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
+                      <td class="text-left" *ngIf="transaction.transactionType == 'sent'"><strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
+                      <td class="text-left" *ngIf="transaction.transactionType == 'received'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
                       <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
                       <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
                     </tr>
