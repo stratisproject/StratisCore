@@ -1,33 +1,27 @@
 <!-- MODAL RECEIVE -->
-<div id="modalReceive" tabindex="-1">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Receive</h5>
-        <!-- button close -->
-        <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
-          <i class="lnr lnr-cross-circle"></i>
-        </button>
-        <!-- /button close -->
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group clearfix">
-            <label for="yourAddress">Your address</label>
-          </div>
-          <div class="myAddress">
-            <code class="d-inline-block">{{ address }}</code>
-            <button type="button" class="btn btn-outline-light d-inline-block ml-2 btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()" title="copy to clipboard">
-              <i class="lnr lnr-file-add"></i>
-            </button>
-          </div>
-          <div *ngIf="copied" class="alert alert-success alert-dismissible fade show mt-3" role="alert">Your address has been copied to your clipboard.</div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
-      </div>
+<div class="modal-header">
+  <h5 class="modal-title">Receive</h5>
+  <!-- button close -->
+  <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
+    <i class="lnr lnr-cross-circle"></i>
+  </button>
+  <!-- /button close -->
+</div>
+<div class="modal-body">
+  <form>
+    <div class="form-group clearfix">
+      <label for="yourAddress">Your address</label>
     </div>
-  </div>
+    <div class="myAddress">
+      <code class="d-inline-block">{{ address }}</code>
+      <button type="button" class="btn btn-outline-light d-inline-block ml-2 btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()" title="copy to clipboard">
+        <i class="lnr lnr-file-add"></i>
+      </button>
+    </div>
+    <div *ngIf="copied" class="alert alert-success alert-dismissible fade show mt-3" role="alert">Your address has been copied to your clipboard.</div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
 </div>
 <!-- /MODAL RECEIVE -->

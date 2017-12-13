@@ -1,56 +1,50 @@
 <!-- MODAL TRANSACTION DETAILS -->
-<div id="modalDetail">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Transaction details</h5>
-        <!-- button close -->
-        <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close">
-          <i class="lnr lnr-cross-circle"></i>
-        </button>
-        <!-- /button close -->
-      </div>
-      <div class="modal-body">
-        <ul class="list-inline row">
-          <li class="list-inline-item col blockLabel">Type</li>
-          <li class="list-inline-item col-8 blockText text-uppercase">{{ transaction.transactionType }}</li>
-        </ul>
-        <ul class="list-inline row">
-          <li class="list-inline-item col blockLabel">Amount</li>
-          <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col-8 blockText text-success">{{ transaction.transactionAmount | coinNotation }} {{ coinUnit }}</li>
-          <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger">-{{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}  {{ coinUnit }}</li>
-        </ul>
-        <ul class="list-inline row" *ngIf="transaction.transactionType == 'sent'">
-            <li class="list-inline-item col blockLabel">Fee</li>
-            <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger">{{ transaction.transactionFee | coinNotation }}  {{ coinUnit }}</li>
-        </ul>
-        <ul class="list-inline row">
-          <li class="list-inline-item col blockLabel">Date</li>
-          <li class="list-inline-item col-8 blockText">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</li>
-        </ul>
-        <ul *ngIf="transaction.transactionConfirmedInBlock" class="list-inline row">
-          <li class="list-inline-item col blockLabel">Block</li>
-          <li class="list-inline-item col-8 blockText">#{{ transaction.transactionConfirmedInBlock }}</li>
-        </ul>
-        <ul class="list-inline row">
-            <li class="list-inline-item col blockLabel">Confirmations</li>
-            <li class="list-inline-item col-8 blockText">
-              <span class="badge badge-warning">{{ confirmations }}</span>
-            </li>
-        </ul>
-        <ul class="list-inline row">
-          <li class="list-inline-item col-12 blockLabel mb-3">Transaction ID</li>
-          <li class="list-inline-item col-11 blockID"><code>{{ transaction.transactionId }}</code></li>
-          <button type="button" class="btn btn-outline-light btn-sm" ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()" title="copy to clipboard">
-            <i class="lnr lnr-file-add"></i>
-          </button>
-        </ul>
-        <div class="alert alert-success alert-dismissible fade show mt-3 col-12" *ngIf="copied">The transaction ID has been copied to your clipboard.</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
-      </div>
-    </div>
-  </div>
+<div class="modal-header">
+  <h5 class="modal-title">Transaction details</h5>
+  <!-- button close -->
+  <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close">
+    <i class="lnr lnr-cross-circle"></i>
+  </button>
+  <!-- /button close -->
+</div>
+<div class="modal-body">
+  <ul class="list-inline row">
+    <li class="list-inline-item col blockLabel">Type</li>
+    <li class="list-inline-item col-8 blockText text-uppercase">{{ transaction.transactionType }}</li>
+  </ul>
+  <ul class="list-inline row">
+    <li class="list-inline-item col blockLabel">Amount</li>
+    <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col-8 blockText text-success">{{ transaction.transactionAmount | coinNotation }} {{ coinUnit }}</li>
+    <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger">-{{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}  {{ coinUnit }}</li>
+  </ul>
+  <ul class="list-inline row" *ngIf="transaction.transactionType == 'sent'">
+      <li class="list-inline-item col blockLabel">Fee</li>
+      <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger">{{ transaction.transactionFee | coinNotation }}  {{ coinUnit }}</li>
+  </ul>
+  <ul class="list-inline row">
+    <li class="list-inline-item col blockLabel">Date</li>
+    <li class="list-inline-item col-8 blockText">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</li>
+  </ul>
+  <ul *ngIf="transaction.transactionConfirmedInBlock" class="list-inline row">
+    <li class="list-inline-item col blockLabel">Block</li>
+    <li class="list-inline-item col-8 blockText">#{{ transaction.transactionConfirmedInBlock }}</li>
+  </ul>
+  <ul class="list-inline row">
+      <li class="list-inline-item col blockLabel">Confirmations</li>
+      <li class="list-inline-item col-8 blockText">
+        <span class="badge badge-warning">{{ confirmations }}</span>
+      </li>
+  </ul>
+  <ul class="list-inline row">
+    <li class="list-inline-item col-12 blockLabel mb-3">Transaction ID</li>
+    <li class="list-inline-item col-11 blockID"><code>{{ transaction.transactionId }}</code></li>
+    <button type="button" class="btn btn-outline-light btn-sm" ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()" title="copy to clipboard">
+      <i class="lnr lnr-file-add"></i>
+    </button>
+  </ul>
+  <div class="alert alert-success alert-dismissible fade show mt-3 col-12" *ngIf="copied">The transaction ID has been copied to your clipboard.</div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
 </div>
 <!-- /MODAL TRANSACTION DETAILS -->
