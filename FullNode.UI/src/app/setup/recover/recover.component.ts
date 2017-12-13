@@ -41,7 +41,6 @@ export class RecoverComponent implements OnInit {
         ]
       ],
       "walletMnemonic": ["", Validators.required],
-      "walletDate": ["", Validators.required],
       "walletPassword": ["", Validators.required],
       "selectNetwork": ["test", Validators.required]
     });
@@ -70,7 +69,6 @@ export class RecoverComponent implements OnInit {
   formErrors = {
     'walletName': '',
     'walletMnemonic': '',
-    'walletDate': '',
     'walletPassword': '',
 
   };
@@ -85,9 +83,6 @@ export class RecoverComponent implements OnInit {
     'walletMnemonic': {
       'required': 'Please enter your 12 word phrase.'
     },
-    'walletDate': {
-      'required': 'Please choose the date the wallet should sync from.'
-    },
     'walletPassword': {
       'required': 'A password is required.'
     },
@@ -101,14 +96,10 @@ export class RecoverComponent implements OnInit {
   public onRecoverClicked(){
     this.isRecovering = true;
 
-    let recoveryDate = new Date(this.recoverWalletForm.get("walletDate").value);
-    recoveryDate.setDate(recoveryDate.getDate() - 1);
-
     this.walletRecovery = new WalletRecovery(
       this.recoverWalletForm.get("walletName").value,
       this.recoverWalletForm.get("walletMnemonic").value,
-      this.recoverWalletForm.get("walletPassword").value,
-      recoveryDate
+      this.recoverWalletForm.get("walletPassword").value
     );
     this.recoverWallet(this.walletRecovery);
   }
