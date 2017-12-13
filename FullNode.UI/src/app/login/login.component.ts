@@ -79,7 +79,6 @@ export class LoginComponent implements OnInit {
               for (let wallet in this.wallets) {
                 this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
               }
-              this.updateWalletFileDisplay(this.wallets[0]);
             } else {
               this.hasWallet = false;
             }
@@ -99,10 +98,6 @@ export class LoginComponent implements OnInit {
         }
       )
     ;
-  }
-
-  private updateWalletFileDisplay(walletName: string) {
-    this.openWalletForm.patchValue({selectWallet: walletName})
   }
 
   private onCreateClicked() {

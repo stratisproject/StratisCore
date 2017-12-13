@@ -11,7 +11,7 @@
         </div>
         <form *ngIf="hasWallet" class="form-group col-12" [formGroup]="openWalletForm">
           <select class="custom-select col-12" formControlName="selectWallet">
-            <option selected>Choose a wallet</option>
+            <option value="" disabled selected>Choose a wallet</option>
             <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
           </select>
           <div class="form-group mt-3">
