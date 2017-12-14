@@ -4735,8 +4735,8 @@ button.close {
   background-color: #fff;
   border: 1px solid #158BCF;
   box-shadow: 0 5px 20px #BDDDF2;
-  padding: 2rem;
-  margin: 2rem;
+  padding: 1rem;
+  margin: 0;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -8285,7 +8285,8 @@ button:hover {
 }
 
 .modal #checkmark {
-  stroke: #28a745;
+  stroke: #28a745 !important;
+  fill: #28a745 !important;
   stroke-dashoffset: 745.74853515625;
   stroke-dasharray: 745.74853515625;
   animation: dash 4s ease-out forwards;
@@ -8372,7 +8373,7 @@ button:hover {
 }
 
 .details .list-inline {
-  margin-bottom: .35rem;
+  margin-bottom: .5rem;
 }
 
 .details .alert {
