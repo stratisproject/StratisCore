@@ -3,7 +3,9 @@
   <nav class="navbar navbar-light bg-light justify-content-between">
     <span class="navbar-text">{{ walletName }}</span>
     <span class="navbar-brand align-middle">
-      <img src="../../../assets/images/logo.svg" width="36" height="36" alt="Stratis">
+      <a (click)="goToDashboard()">
+        <img src="../../../assets/images/logo.svg" width="36" height="36" alt="Stratis">
+      </a>
     </span>
     <form class="form-inline">
       <a data-toggle="modal" role="button" (click)="logOut()">

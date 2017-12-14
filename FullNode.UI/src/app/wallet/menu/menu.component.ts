@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 
@@ -12,7 +13,7 @@ import { GlobalService } from '../../shared/services/global.service';
   styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent implements OnInit {
-  constructor(private modalService: NgbModal, private globalService: GlobalService) {}
+  constructor(private modalService: NgbModal, private globalService: GlobalService, private router: Router) {}
   public walletName: string;
 
   ngOnInit() {
@@ -21,5 +22,9 @@ export class MenuComponent implements OnInit {
 
   public logOut() {
     const modalRef = this.modalService.open(LogoutConfirmationComponent, { backdrop: "static" });
+  }
+
+  public goToDashboard() {
+    this.router.navigate(['/wallet/']);
   }
 }
