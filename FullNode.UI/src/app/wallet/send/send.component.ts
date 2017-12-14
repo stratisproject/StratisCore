@@ -256,7 +256,7 @@ export class SendComponent implements OnInit {
             }
           }
         },
-        ()=>this.openConfirmationModal()
+        // ()=>this.openConfirmationModal()
       )
     ;
   }
