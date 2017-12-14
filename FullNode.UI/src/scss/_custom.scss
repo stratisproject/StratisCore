@@ -288,6 +288,7 @@ button {&:hover {cursor: pointer;}}
     bottom: 2%;
     right: 2%;
     text-align: center;
+    .lnr {font-weight: bold;}
     ul {
       transform: translateY(50%) translateX(0);
       display: inline-block;
