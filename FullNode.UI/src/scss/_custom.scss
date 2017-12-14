@@ -7,6 +7,7 @@
 //
 
 // basics
+body {background: #FAFBFC !important;}
 button {&:hover {cursor: pointer;}}
 .invalid-feedback,
 .valid-feedback {font-size: .8rem;}
@@ -370,7 +371,8 @@ button {&:hover {cursor: pointer;}}
   }
   // Checkmark
   #checkmark {
-    stroke: $green;
+    stroke: $green !important;
+    fill: $green !important;
     stroke-dashoffset: 745.74853515625;
     stroke-dasharray: 745.74853515625;
     animation: dash 4s ease-out forwards;
@@ -444,7 +446,7 @@ button {&:hover {cursor: pointer;}}
 
 /// MODAL DETAILS
 .details {
-  .list-inline {margin-bottom: .35rem;}
+  .list-inline {margin-bottom: .5rem;}
   .alert {
     margin-bottom: 0;
     padding: .75rem .4rem;
