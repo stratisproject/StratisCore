@@ -7,6 +7,7 @@
 //
 
 // basics
+body {background: #FAFBFC !important;}
 button {&:hover {cursor: pointer;}}
 .invalid-feedback,
 .valid-feedback {font-size: .8rem;}

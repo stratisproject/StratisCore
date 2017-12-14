@@ -7870,6 +7870,10 @@ a.text-dark:focus, a.text-dark:hover {
   visibility: hidden !important;
 }
 
+body {
+  background: #FAFBFC !important;
+}
+
 button:hover {
   cursor: pointer;
 }
