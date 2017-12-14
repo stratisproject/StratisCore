@@ -40,10 +40,10 @@
       </div>
       <!-- /fee buttons -->
     <div class="form-group clearfix">
-      <div *ngIf="estimatedFee">
+      <em class="text-info" *ngIf="estimatedFee">
         <label>Estimated Fee: </label>
-        <label>{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
-      </div>
+        <label> {{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+      </em>
     </div>
     </div>
     <div class="form-group clearfix">
