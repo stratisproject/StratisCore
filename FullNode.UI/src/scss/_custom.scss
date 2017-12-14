@@ -324,6 +324,7 @@ button {&:hover {cursor: pointer;}}
 /// MODALS
 .modal {
   label {color: $gray-600;}
+  .alert {text-align: center !important;}
   .blockID {
     word-wrap: break-word;
     margin-right: 0 !important;
