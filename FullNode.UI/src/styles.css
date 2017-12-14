@@ -8290,7 +8290,6 @@ button:hover {
 
 .modal #checkmark {
   stroke: #28a745 !important;
-  fill: #28a745 !important;
   stroke-dashoffset: 745.74853515625;
   stroke-dasharray: 745.74853515625;
   animation: dash 4s ease-out forwards;
@@ -8411,13 +8410,13 @@ button:hover {
   stroke-dashoffset: 1000;
   stroke-width: 2;
   stroke-linecap: round;
-  animation: dash 4s linear infinite;
+  animation: log 4s linear infinite;
   fill-opacity: 1;
   fill: #1794C8;
   stroke: #1794C8;
 }
 
-@keyframes dash {
+@keyframes log {
   0% {
     stroke-dashoffset: 4500;
     opacity: 1;
