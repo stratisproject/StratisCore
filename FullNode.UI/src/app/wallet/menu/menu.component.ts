@@ -20,6 +20,6 @@ export class MenuComponent implements OnInit {
   }
 
   public logOut() {
-    const modalRef = this.modalService.open(LogoutConfirmationComponent);
+    const modalRef = this.modalService.open(LogoutConfirmationComponent, { backdrop: "static" });
   }
 }

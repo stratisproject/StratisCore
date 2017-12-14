@@ -47,15 +47,15 @@ export class DashboardComponent implements OnInit {
   }
 
   public openSendDialog() {
-    const modalRef = this.modalService.open(SendComponent);
+    const modalRef = this.modalService.open(SendComponent, { backdrop: "static" });
   };
 
   public openReceiveDialog() {
-    const modalRef = this.modalService.open(ReceiveComponent);
+    const modalRef = this.modalService.open(ReceiveComponent, { backdrop: "static" });
   };
 
   public openTransactionDetailDialog(transaction: TransactionInfo) {
-    const modalRef = this.modalService.open(TransactionDetailsComponent);
+    const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: "static" });
     modalRef.componentInstance.transaction = transaction;
   }
 

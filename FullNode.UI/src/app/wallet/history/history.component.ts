@@ -42,7 +42,7 @@ export class HistoryComponent {
   }
 
   private openTransactionDetailDialog(transaction: any) {
-    const modalRef = this.modalService.open(TransactionDetailsComponent);
+    const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: "static" });
     modalRef.componentInstance.transaction = transaction;
   }
 

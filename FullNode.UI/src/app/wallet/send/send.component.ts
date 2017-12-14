@@ -256,13 +256,13 @@ export class SendComponent implements OnInit {
             }
           }
         },
-        // ()=>this.openConfirmationModal()
+        ()=>this.openConfirmationModal()
       )
     ;
   }
 
   private openConfirmationModal() {
-    const modalRef = this.modalService.open(SendConfirmationComponent);
+    const modalRef = this.modalService.open(SendConfirmationComponent, { backdrop: "static" });
     modalRef.componentInstance.transaction = this.transaction;
     modalRef.componentInstance.transactionFee = this.estimatedFee;
   }
