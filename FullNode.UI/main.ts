@@ -160,9 +160,9 @@ function createTray() {
 
   let trayIcon;
   if (serve) {
-    trayIcon = nativeImage.createFromPath('./src/assets/images/breeze-logo-tray.png');
+    trayIcon = nativeImage.createFromPath('./src/assets/images/icon-tray.png');
   } else {
-    trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/images/breeze-logo-tray.png'));
+    trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/images/icon-tray.png'));
   }
 
   let systemTray = new Tray(trayIcon);
