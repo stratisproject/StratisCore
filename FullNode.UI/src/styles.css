@@ -8188,6 +8188,10 @@ button:hover {
   text-align: center;
 }
 
+#GUI .status .lnr {
+  font-weight: bold;
+}
+
 #GUI .status ul {
   transform: translateY(50%) translateX(0);
   display: inline-block;
