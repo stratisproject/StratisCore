@@ -1,17 +1,17 @@
 <!-- STATUSBAR -->
 <div class="status">
   <ul class="list-inline align-self-center row">
-    <li *ngIf="!(percentSynced == 100)" class="list-inline-item mx-1" title="{{ percentSynced }}% synchronized">
+    <li *ngIf="!(percentSynced == '100%')" class="list-inline-item mx-1" title="{{ percentSynced }}">
       <i class="lnr lnr-cloud-sync text-warning"></i>
-      <small class="text-warning">70%</small>
+      <small class="text-warning">{{ percentSynced }}</small>
     </li>
-    <li *ngIf="percentSynced == 100" class="list-inline-item mx-1" title="{{ percentSynced }}% synchronized">
+    <li *ngIf="percentSynced == '100%'" class="list-inline-item mx-1" title="{{ percentSynced }}">
       <i class="lnr lnr-cloud-check text-success"></i>
-      <small class="text-success">100%</small>
+      <small class="text-success">{{ percentSynced }}</small>
     </li>
     <li class="list-inline-item mx-1" title="{{ connectedNodes }} Connections">
       <i class="lnr lnr-database text-black"></i>
-      <small class="text-black">1200</small>
+      <small class="text-black">{{ connectedNodes }}</small>
     </li>
     <!-- <li class="list-inline-item mx-1" title="Show when locked">
       <i class="lnr lnr-lock text-danger"></i>

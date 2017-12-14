@@ -55,7 +55,7 @@ export class StatusBarComponent implements OnInit {
                 this.percentSyncedNumber = 99;
               }
 
-              this.percentSynced = this.percentSyncedNumber.toFixed(0);
+              this.percentSynced = this.percentSyncedNumber.toFixed(0) + '%';
             }
           }
         },
