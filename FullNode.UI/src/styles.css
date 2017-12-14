@@ -8190,6 +8190,7 @@ button:hover {
 
 #GUI .status .lnr {
   font-weight: bold;
+  font-size: 90%;
 }
 
 #GUI .status ul {
@@ -8217,8 +8218,16 @@ button:hover {
   position: absolute;
 }
 
+#GUI .status li small {
+  margin-left: 5px;
+}
+
 .modal label {
   color: #868e96;
+}
+
+.modal .alert {
+  text-align: center !important;
 }
 
 .modal .blockID {

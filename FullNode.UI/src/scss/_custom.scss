@@ -288,7 +288,10 @@ button {&:hover {cursor: pointer;}}
     bottom: 2%;
     right: 2%;
     text-align: center;
-    .lnr {font-weight: bold;}
+    .lnr {
+      font-weight: bold;
+      font-size: 90%;
+    }
     ul {
       transform: translateY(50%) translateX(0);
       display: inline-block;
@@ -313,6 +316,7 @@ button {&:hover {cursor: pointer;}}
           position: absolute;
         }
       }
+      small {margin-left: 5px;}
     }
   }
 }
@@ -320,6 +324,7 @@ button {&:hover {cursor: pointer;}}
 /// MODALS
 .modal {
   label {color: $gray-600;}
+  .alert {text-align: center !important;}
   .blockID {
     word-wrap: break-word;
     margin-right: 0 !important;
