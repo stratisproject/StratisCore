@@ -8339,6 +8339,10 @@ button:hover {
   position: relative;
 }
 
+.Loading.LoadingSend {
+  padding: 0 !important;
+}
+
 .Loading:before {
   content: '';
   position: absolute;

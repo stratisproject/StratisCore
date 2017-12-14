@@ -408,6 +408,7 @@ button {&:hover {cursor: pointer;}}
   padding: 30px;
   text-align: center;
   position: relative;
+  &.LoadingSend {padding: 0 !important;}
 }
 .Loading:before {
   content: '';
