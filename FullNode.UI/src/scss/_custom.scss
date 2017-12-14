@@ -372,7 +372,6 @@ button {&:hover {cursor: pointer;}}
   // Checkmark
   #checkmark {
     stroke: $green !important;
-    fill: $green !important;
     stroke-dashoffset: 745.74853515625;
     stroke-dasharray: 745.74853515625;
     animation: dash 4s ease-out forwards;
@@ -409,6 +408,7 @@ button {&:hover {cursor: pointer;}}
   padding: 30px;
   text-align: center;
   position: relative;
+  &.LoadingSend {padding: 0 !important;}
 }
 .Loading:before {
   content: '';
@@ -469,13 +469,13 @@ button {&:hover {cursor: pointer;}}
   stroke-dashoffset: 1000;
   stroke-width:2;
   stroke-linecap:round;
-  animation: dash 4s linear infinite;
+  animation: log 4s linear infinite;
   fill-opacity:1;
   fill:#1794C8;
   stroke:#1794C8;
 }
 
-@keyframes dash {
+@keyframes log {
   0% {
     stroke-dashoffset: 4500;
     opacity:1;
