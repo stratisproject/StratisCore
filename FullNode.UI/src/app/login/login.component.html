@@ -23,14 +23,9 @@
           <div *ngIf="!isDecrypting && hasWallet">
             <button type="submit" class="btn btn-block btn-lg btn-primary" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
           </div>
-          <div class="row d-flex justify-content-center mt-3" *ngIf="hasWallet;else no_wallet">
+          <div class="row d-flex justify-content-center mt-3">
               <button type="button" class="btn btn-block btn-link text-muted" (click)="onCreateClicked()">Create or restore a wallet</button>
           </div>
-          <ng-template #no_wallet>
-            <div class="row d-flex justify-content-center mt-3">
-              <button type="button" class="btn btn-block btn-link text-muted" (click)="onCreateClicked()">Create or restore a wallet</button>
-            </div>
-          </ng-template>
           <!-- SVG -->
           <div *ngIf="isDecrypting" class="Loading">
               <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
