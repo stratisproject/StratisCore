@@ -3,12 +3,15 @@
   <ul class="list-inline align-self-center row">
     <li *ngIf="!(percentSynced == 100)" class="list-inline-item mx-1" title="{{ percentSynced }}% synchronized">
       <i class="lnr lnr-cloud-sync text-warning"></i>
+      <small class="text-warning">70%</small>
     </li>
     <li *ngIf="percentSynced == 100" class="list-inline-item mx-1" title="{{ percentSynced }}% synchronized">
       <i class="lnr lnr-cloud-check text-success"></i>
+      <small class="text-success">100%</small>
     </li>
     <li class="list-inline-item mx-1" title="{{ connectedNodes }} Connections">
-      <i class="lnr lnr-database text-mute"></i>
+      <i class="lnr lnr-database text-black"></i>
+      <small class="text-black">1200</small>
     </li>
     <!-- <li class="list-inline-item mx-1" title="Show when locked">
       <i class="lnr lnr-lock text-danger"></i>

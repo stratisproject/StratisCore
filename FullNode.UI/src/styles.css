@@ -8217,6 +8217,10 @@ button:hover {
   position: absolute;
 }
 
+#GUI .status li small {
+  margin-left: 5px;
+}
+
 .modal label {
   color: #868e96;
 }
