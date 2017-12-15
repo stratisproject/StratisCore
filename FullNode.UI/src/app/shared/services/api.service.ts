@@ -206,11 +206,40 @@ export class ApiService {
     }
 
     /**
+     * Start staking
+     */
+    startStaking(data: any): Observable<any> {
+      return this.http
+        .post(this.stratisApiUrl + '/miner/startstaking', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Get staking info
+     */
+    getStakingInfo(): Observable<any> {
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/miner/getstakinginfo'))
+        .map((response: Response) => response);
+    }
+
+    /**
+      * Stop staking
+      */
+    stopStaking(): Observable<any> {
+      return this.http
+        .post(this.stratisApiUrl + '/miner/stopstaking', {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /**
      * Send shutdown signal to the daemon
      */
     shutdownNode(): Observable<any> {
       return this.http
-        .post(this.stratisApiUrl + '/node/shutdown', '')
+        .post(this.stratisApiUrl + '/node/shutdown', {headers: this.headers})
         .map((response: Response) => response);
     }
 }

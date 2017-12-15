@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
@@ -22,15 +23,24 @@ import { Router } from '@angular/router';
 })
 
 export class DashboardComponent implements OnInit {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router) {}
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
+    this.buildStakingForm();
+  }
 
   public walletName: string;
   public coinUnit: string;
   public confirmedBalance: number;
   public unconfirmedBalance: number;
   public transactionArray: TransactionInfo[];
+  private stakingForm: FormGroup;
   private walletBalanceSubscription: Subscription;
   private walletHistorySubscription: Subscription;
+  private stakingInfoSubscription: Subscription;
+  public stakingEnabled: boolean;
+  public stakingActive: boolean;
+  public stakingWeight: string;
+  public netStakingWeight: string;
+  public expectedTime: string;
 
   ngOnInit() {
     this.startSubscriptions();
@@ -41,6 +51,12 @@ export class DashboardComponent implements OnInit {
   ngOnDestroy() {
     this.cancelSubscriptions();
   };
+
+  private buildStakingForm(): void {
+    this.stakingForm = this.fb.group({
+      "walletPassword": ["", Validators.required]
+    });
+  }
 
   public goToHistory() {
     this.router.navigate(['/wallet/history']);
@@ -156,6 +172,87 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  startStaking() {
+    let walletData = {
+      name: this.globalService.getWalletName(),
+      password: this.stakingForm.get('walletPassword').value
+    }
+    this.apiService.startStaking(walletData)
+      .subscribe(
+        response =>  {
+          if (response.status >= 200 && response.status < 400) {
+
+          }
+        },
+        error => {
+          if (error.status === 0) {
+            this.genericModalService.openModal(null, null);
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              this.genericModalService.openModal(null, error.json().errors[0].message);
+            }
+          }
+        }
+      )
+    ;
+  }
+
+  stopStaking() {
+    let walletInfo = new WalletInfo(this.globalService.getWalletName())
+    this.apiService.stopStaking()
+      .subscribe(
+        response =>  {
+          if (response.status >= 200 && response.status < 400) {
+          }
+        },
+        error => {
+          if (error.status === 0) {
+            this.genericModalService.openModal(null, null);
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              this.genericModalService.openModal(null, error.json().errors[0].message);
+            }
+          }
+        }
+      )
+    ;
+  }
+
+  getStakingInfo() {
+    this.apiService.getStakingInfo()
+      .subscribe(
+        response =>  {
+          if (response.status >= 200 && response.status < 400) {
+            let stakingResponse = response.json()
+            this.stakingEnabled = stakingResponse.enabled;
+            this.stakingActive = stakingResponse.staking;
+            this.stakingWeight = stakingResponse.weight;
+            this.netStakingWeight = stakingResponse.netstakeweight;
+            this.expectedTime = stakingResponse.expectedtime;
+          }
+        },
+        error => {
+          if (error.status === 0) {
+            this.genericModalService.openModal(null, null);
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              this.genericModalService.openModal(null, error.json().errors[0].message);
+            }
+          }
+        }
+      )
+    ;
+  }
+
   private cancelSubscriptions() {
     if (this.walletBalanceSubscription) {
       this.walletBalanceSubscription.unsubscribe();
@@ -164,10 +261,15 @@ export class DashboardComponent implements OnInit {
     if(this.walletHistorySubscription) {
       this.walletHistorySubscription.unsubscribe();
     }
+
+    if (this.getStakingInfo) {
+      this.stakingInfoSubscription.unsubscribe();
+    }
   };
 
   private startSubscriptions() {
     this.getWalletBalance();
     this.getHistory();
+    this.getStakingInfo();
   }
 }

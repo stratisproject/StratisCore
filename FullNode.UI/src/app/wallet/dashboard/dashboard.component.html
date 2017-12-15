@@ -1,5 +1,4 @@
-
- <section id="GUI" class="light">
+<section id="GUI" class="light">
   <!-- CONTAINER -->
   <section id="content" class="col-10 mx-auto">
     <!-- JUMBOTRON-->
@@ -68,41 +67,74 @@
           </div>
           <!-- /TRANSACTIONS -->
           <!-- STAKING -->
-          <div id="staking" class="flip col-4">
-              <div class="card">
-                <div class="face front">
-                  <div class="card-header">Staking (not functional)</div>
-                    <div class="card-body">
-                      <div class="alert alert-info text-center" role="alert">Please first, unlock your wallet.</div>
-                      <form class="form-inline">
-                        <div class="form-group">
-                          <label for="inputPassword" class="sr-only">Password</label>
-                          <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-                          <button type="button" id="flipcard" class="btn btn-outline-primary ml-2">Unlock</button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                  <div class="face back">
-                    <div class="card-header">
-                      <span class="d-inline-block col-10 row">Staking</span>
-                      <div class="toggle d-inline-block" id="switch">
-                        <div class='toggle-text-off'>OFF</div>
-                        <div class='glow-comp'></div>
-                        <div class='toggle-button'></div>
-                        <div class='toggle-text-on'>ON</div>
-                    </div>
-                  </div>
+          <!-- <div id="staking" class="flip col-4">
+            <div class="card">
+              <div class="face front">
+                <div class="card-header">Staking</div>
                   <div class="card-body">
-                    <ul class="list-unstyled my-3">
-                      <li>Your weight is <strong>25,603</strong></li>
-                      <li>Network weight is <strong>24,239,023</strong></li>
-                      <li>Reward expected time is <strong>8 hours</strong></li>
-                    </ul>
+                    <div class="alert alert-info text-center" role="alert">Please first, unlock your wallet.</div>
+                    <form class="form-inline">
+                      <div class="form-group">
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                        <button type="button" id="flipcard" class="btn btn-outline-primary ml-2">Unlock</button>
+                      </div>
+                    </form>
                   </div>
                 </div>
+                <div class="face back">
+                  <div class="card-header">
+                    <span class="d-inline-block col-10 row">Staking</span>
+                    <div class="toggle d-inline-block" id="switch">
+                      <div class='toggle-text-off'>OFF</div>
+                      <div class='glow-comp'></div>
+                      <div class='toggle-button'></div>
+                      <div class='toggle-text-on'>ON</div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <ul class="list-unstyled my-3">
+                    <li>Your weight is <strong>25,603</strong></li>
+                    <li>Network weight is <strong>24,239,023</strong></li>
+                    <li>Reward expected time is <strong>8 hours</strong></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="card" *ngIf="!stakingEnabled">
+            <div class="card-header">Staking</div>
+            <div class="card-body">
+              <div class="alert alert-info text-center" role="alert">Please first, unlock your wallet.</div>
+              <form class="form-inline" [formGroup]="stakingForm">
+                <div class="form-group">
+                  <label for="inputPassword" class="sr-only">Password</label>
+                  <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword" placeholder="Password">
+                  <button type="button" id="flipcard" class="btn btn-outline-primary ml-2" (click)="startStaking()">Unlock</button>
+                </div>
+              </form>
             </div>
           </div>
+          <div class="card" *ngIf="stakingEnabled">
+            <div class="card-header">
+              <span class="d-inline-block col-10 row">Staking</span>
+              <!-- <div class="toggle d-inline-block" id="switch">
+                <div class='toggle-text-off'>OFF</div>
+                <div class='glow-comp'></div>
+                <div class='toggle-button'></div>
+                <div class='toggle-text-on'>ON</div>
+              </div> -->
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled my-3">
+                <li>Your weight is <strong>{{ stakingWeight }}</strong></li>
+                <li>Network weight is <strong>{{ netStakingWeight }}</strong></li>
+                <li>Expected reward time is <strong>{{ expectedTime }}</strong></li>
+              </ul>
+              <button type="button" class="btn btn-outline-primary ml-2" (click)="stopStaking()">Stop Staking</button>
+            </div>
+          </div>
+
           <!-- STAKING -->
         </div>
       <status-bar></status-bar>
