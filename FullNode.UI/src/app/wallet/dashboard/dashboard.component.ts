@@ -174,7 +174,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  startStaking() {
+  private startStaking() {
     let walletData = {
       name: this.globalService.getWalletName(),
       password: this.stakingForm.get('walletPassword').value
@@ -202,7 +202,7 @@ export class DashboardComponent implements OnInit {
     ;
   }
 
-  stopStaking() {
+  private stopStaking() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName())
     this.apiService.stopStaking()
       .subscribe(
@@ -226,8 +226,8 @@ export class DashboardComponent implements OnInit {
     ;
   }
 
-  getStakingInfo() {
-    this.apiService.getStakingInfo()
+  private getStakingInfo() {
+    this.stakingInfoSubscription = this.apiService.getStakingInfo()
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
