@@ -129,7 +129,7 @@
               </div>
               <div class="card-body">
                 <ul class="list-unstyled mb-3">
-                  <li *ngIf="isStarting">Starting the staking protocol...</li>
+                  <li *ngIf="isStarting">Waiting for staking to start...</li>
                   <li>Your weight is <strong>{{ stakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
                   <li>Network weight is <strong>{{ netStakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
                   <li class="mt-2">Expected reward time is:</li>
