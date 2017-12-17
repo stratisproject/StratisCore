@@ -13,12 +13,12 @@
       <i class="lnr lnr-database text-black"></i>
       <small class="text-black">{{ connectedNodes }}</small>
     </li>
-    <!-- <li class="list-inline-item mx-1" title="Show when locked">
+    <li *ngIf="!stakingEnabled" class="list-inline-item mx-1" title="Not staking">
       <i class="lnr lnr-lock text-danger"></i>
     </li>
-    <li class="list-inline-item mx-1" title="Show when unlocked">
+    <li *ngIf="stakingEnabled" class="list-inline-item mx-1" title="Staking">
       <i class="lnr lnr-lock text-success"></i>
-    </li> -->
+    </li>
   </ul>
 </div>
 <!-- /STATUSBAR -->

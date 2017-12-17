@@ -17,12 +17,14 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 export class StatusBarComponent implements OnInit {
 
   private generalWalletInfoSubscription: Subscription;
+  private stakingInfoSubscription: Subscription;
   public lastBlockSyncedHeight: number;
   public chainTip: number;
   private isChainSynced: boolean;
   public connectedNodes: number = 0;
   private percentSyncedNumber: number = 0;
   public percentSynced: string;
+  public stakingEnabled: boolean;
 
   constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService) { }
 
@@ -82,13 +84,43 @@ export class StatusBarComponent implements OnInit {
     ;
   };
 
+  private getStakingInfo() {
+    this.apiService.getStakingInfo()
+      .subscribe(
+        response =>  {
+          if (response.status >= 200 && response.status < 400) {
+            let stakingResponse = response.json()
+            this.stakingEnabled = stakingResponse.enabled;
+          }
+        },
+        error => {
+          if (error.status === 0) {
+            this.genericModalService.openModal(null, null);
+          } else if (error.status >= 400) {
+            if (!error.json().errors[0]) {
+              console.log(error);
+            }
+            else {
+              this.genericModalService.openModal(null, error.json().errors[0].message);
+            }
+          }
+        }
+      )
+    ;
+  }
+
   private cancelSubscriptions() {
     if(this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
+    }
+    
+    if (this.stakingInfoSubscription) {
+      this.stakingInfoSubscription.unsubscribe();
     }
   };
 
   private startSubscriptions() {
     this.getGeneralWalletInfo();
+    this.getStakingInfo();
   }
 }
