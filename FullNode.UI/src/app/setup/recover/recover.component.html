@@ -14,6 +14,11 @@
           <input type="text" class="form-control form-control-success" [class.is-invalid]="formErrors.walletName" [class.is-valid]="!formErrors.walletName && recoverWalletForm.get('walletName').valid" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
           <div *ngIf="formErrors.walletName" class="invalid-feedback">{{ formErrors.walletName }}</div>
         </div>
+        <div class="form-group col-12">		
+          <label class="text-left" for="creationDate">Earliest Possible Creation Date</label>		
+          <input type="text" class="form-control" bsDatepicker formControlName="walletDate" placeholder="Select the date your wallet was created." [bsConfig]="bsConfig" [maxDate]="maxDate"/>		
+          <div *ngIf="formErrors.walletDate" class="text-danger mt-2">{{ formErrors.walletDate }}</div>		
+        </div>
         <div class="form-group col-12">
           <label class="text-left" for="walletMnemonic">Secret Words</label>
           <input type="text" class="form-control form-control-success" [class.is-invalid]="formErrors.walletMnemonic" [class.is-valid]="!formErrors.walletMnemonic && recoverWalletForm.get('walletMnemonic').valid" formControlName="walletMnemonic" id="walletName" placeholder="Enter your secret words.">
@@ -25,7 +30,7 @@
           <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
         </div>
         <div class="modal-footer col-12">
-          <button type="button" class="btn btn-outline-light" (click)="onBackClicked()">Cancel</button>
+          <button *ngIf="!isRecovering" type="button" class="btn btn-outline-light" (click)="onBackClicked()">Cancel</button>
           <button *ngIf="!isRecovering" type="button" class="btn btn-primary btn-block" [disabled]="!recoverWalletForm.valid || isRecovering" (click)="onRecoverClicked()">Restore</button>
           <!-- SVG -->
           <div *ngIf="isRecovering" class="Loading">
