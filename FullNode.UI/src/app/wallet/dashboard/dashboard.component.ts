@@ -38,9 +38,10 @@ export class DashboardComponent implements OnInit {
   private stakingInfoSubscription: Subscription;
   public stakingEnabled: boolean;
   public stakingActive: boolean;
-  public stakingWeight: string;
-  public netStakingWeight: string;
-  public expectedTime: string;
+  public stakingWeight: number;
+  public netStakingWeight: number;
+  public expectedTime: number;
+  public dateTime: string;
 
   ngOnInit() {
     this.startSubscriptions();
@@ -237,6 +238,7 @@ export class DashboardComponent implements OnInit {
             this.stakingWeight = stakingResponse.weight;
             this.netStakingWeight = stakingResponse.netstakeweight;
             this.expectedTime = stakingResponse.expectedtime;
+            this.dateTime = this.secondsToString(this.expectedTime);
           }
         },
         error => {
@@ -253,6 +255,41 @@ export class DashboardComponent implements OnInit {
         }
       )
     ;
+  }
+
+  private secondsToString(seconds: number)
+  {
+    let numDays = Math.floor(seconds / 86400);
+    let numHours = Math.floor((seconds % 86400) / 3600);
+    let numMinutes = Math.floor(((seconds % 86400) % 3600) / 60);
+    let numSeconds = ((seconds % 86400) % 3600) % 60;
+    let dateString = "";
+
+    if (numDays > 0) {
+      if (numDays > 1) {
+        dateString += numDays + " days ";
+      } else {
+        dateString += numDays + " day ";
+      }
+    }
+
+    if (numHours > 0) {
+      if (numHours > 1) {
+        dateString += numHours + " hours ";
+      } else {
+        dateString += numHours + " hour ";
+      }
+    }
+
+    if (numMinutes > 0) {
+      if (numMinutes > 1) {
+        dateString += numMinutes + " minutes ";
+      } else {
+        dateString += numMinutes + " minute ";
+      }
+    }
+
+    return dateString;
   }
 
   private cancelSubscriptions() {
