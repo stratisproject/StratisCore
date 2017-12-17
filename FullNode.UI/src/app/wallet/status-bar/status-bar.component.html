@@ -1,12 +1,12 @@
 <!-- STATUSBAR -->
 <div class="status">
   <ul class="list-inline align-self-center row">
-    <li *ngIf="!(percentSynced == '100%')" class="list-inline-item mx-1">
-      <i class="lnr lnr-cloud-sync text-warning" placement="top" ngbTooltip="Sync ..."></i>
+    <li *ngIf="!(percentSynced == '100%')" class="list-inline-item mx-1" placement="top" ngbTooltip="Sync ...">
+      <i class="lnr lnr-cloud-sync text-warning"></i>
       <small class="text-warning">{{ percentSynced }}</small>
     </li>
-    <li *ngIf="percentSynced == '100%'" class="list-inline-item mx-1">
-      <i class="lnr lnr-cloud-check text-success" placement="top" ngbTooltip="Synchronized"></i>
+    <li *ngIf="percentSynced == '100%'" class="list-inline-item mx-1" placement="top" ngbTooltip="Synchronized">
+      <i class="lnr lnr-cloud-check text-success"></i>
       <small class="text-success">{{ percentSynced }}</small>
     </li>
     <li class="list-inline-item mx-1" placement="top" ngbTooltip="{{ connectedNodes }} connections">
