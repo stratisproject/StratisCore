@@ -39,7 +39,7 @@
   <ul class="list-inline row">
     <li class="list-inline-item col-12 blockLabel my-3">Transaction ID</li>
     <li class="list-inline-item col-10 blockID"><code>{{ transaction.transactionId }}</code></li>
-    <button type="button" class="btn btn-outline-secondary col-1 btn-sm" ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()" title="copy to clipboard">
+    <button type="button" class="btn btn-outline-secondary col-1 btn-sm" placement="top" ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="transaction.transactionId" (click)="onCopiedClick()">
       <i class="lnr lnr-file-add"></i>
     </button>
   </ul>

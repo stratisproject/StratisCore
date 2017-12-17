@@ -103,40 +103,41 @@
               </div>
             </div>
           </div> -->
-          <div class="card" *ngIf="!stakingEnabled">
-            <div class="card-header">Staking</div>
-            <div class="card-body">
-              <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
-              <form class="form-inline" [formGroup]="stakingForm">
-                <div class="form-group">
-                  <label for="inputPassword" class="sr-only">Password</label>
-                  <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword" placeholder="Password">
-                  <button type="button" id="flipcard" class="btn btn-outline-primary ml-2" (click)="startStaking()">Unlock</button>
-                </div>
-              </form>
+          <section class="col-4">
+            <div class="card" *ngIf="!stakingEnabled">
+              <div class="card-header">Staking</div>
+              <div class="card-body">
+                <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
+                <form class="form-inline mb-3" [formGroup]="stakingForm">
+                  <div class="form-group">
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword" placeholder="Password">
+                    <button type="button" id="flipcard" class="btn btn-outline-primary ml-2" (click)="startStaking()">Unlock</button>
+                  </div>
+                </form>
+              </div>
             </div>
-          </div>
-          <div class="card" *ngIf="stakingEnabled">
-            <div class="card-header">
-              <span class="d-inline-block col-10 row">Staking</span>
-              <!-- <div class="toggle d-inline-block" id="switch">
-                <div class='toggle-text-off'>OFF</div>
-                <div class='glow-comp'></div>
-                <div class='toggle-button'></div>
-                <div class='toggle-text-on'>ON</div>
-              </div> -->
+            <div class="card" *ngIf="stakingEnabled">
+              <div class="card-header">
+                <span class="d-inline-block col-10 row">Staking</span>
+                <!-- <div class="toggle d-inline-block" id="switch">
+                  <div class='toggle-text-off'>OFF</div>
+                  <div class='glow-comp'></div>
+                  <div class='toggle-button'></div>
+                  <div class='toggle-text-on'>ON</div>
+                </div> -->
+              </div>
+              <div class="card-body">
+                <ul class="list-unstyled mb-3">
+                  <li>Your weight is <strong>{{ stakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
+                  <li>Network weight is <strong>{{ netStakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
+                  <li class="mt-2">Expected reward time is :</li>
+                  <li><strong>{{ dateTime }}</strong></li>
+                </ul>
+                <button type="button" class="btn btn-outline-light mb-3" (click)="stopStaking()">Stop Staking</button>
+              </div>
             </div>
-            <div class="card-body">
-              <ul class="list-unstyled my-3">
-                <li>Your weight is <strong>{{ stakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
-                <li>Network weight is <strong>{{ netStakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
-                <li>Expected reward time is</li>
-                <li><strong>{{ dateTime }}</strong></li>
-              </ul>
-              <button type="button" class="btn btn-outline-primary ml-2" (click)="stopStaking()">Stop Staking</button>
-            </div>
-          </div>
-
+          </section>
           <!-- STAKING -->
         </div>
       <status-bar></status-bar>
