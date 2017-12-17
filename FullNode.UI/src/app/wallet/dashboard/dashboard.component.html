@@ -53,6 +53,7 @@
                       <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
                       <td class="text-left" *ngIf="transaction.transactionType == 'sent'"><strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
                       <td class="text-left" *ngIf="transaction.transactionType == 'received'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
+                      <td class="text-left" *ngIf="transaction.transactionType == 'staked'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
                       <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
                       <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
                     </tr>
@@ -105,7 +106,7 @@
           <div class="card" *ngIf="!stakingEnabled">
             <div class="card-header">Staking</div>
             <div class="card-body">
-              <div class="alert alert-info text-center" role="alert">Please first, unlock your wallet.</div>
+              <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
               <form class="form-inline" [formGroup]="stakingForm">
                 <div class="form-group">
                   <label for="inputPassword" class="sr-only">Password</label>

@@ -155,6 +155,8 @@ export class DashboardComponent implements OnInit {
         transactionType = "sent";
       } else if (transaction.type === "received") {
         transactionType = "received";
+      } else if (transaction.type === "staked") {
+        transactionType = "staked";
       }
       let transactionId = transaction.id;
       let transactionAmount = transaction.amount;
@@ -262,7 +264,7 @@ export class DashboardComponent implements OnInit {
       this.walletHistorySubscription.unsubscribe();
     }
 
-    if (this.getStakingInfo) {
+    if (this.stakingInfoSubscription) {
       this.stakingInfoSubscription.unsubscribe();
     }
   };

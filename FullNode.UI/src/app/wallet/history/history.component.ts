@@ -92,6 +92,8 @@ export class HistoryComponent {
         transactionType = "sent";
       } else if (transaction.type === "received") {
         transactionType = "received";
+      } else if (transaction.type === "staked") {
+        transactionType = "staked";
       }
       let transactionId = transaction.id;
       let transactionAmount = transaction.amount;
