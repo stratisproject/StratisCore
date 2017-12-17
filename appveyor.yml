@@ -18,7 +18,7 @@ branches:
 #---------------------------------#
 
 image: Visual Studio 2017
-clone_folder: c:\projects\\fullnodeui
+clone_folder: c:\projects\fullnodeui
 configuration:
   - Release
 
