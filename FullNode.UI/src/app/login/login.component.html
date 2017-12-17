@@ -24,7 +24,7 @@
             <button type="submit" class="btn btn-block btn-lg btn-primary" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
           </div>
           <div class="row d-flex justify-content-center mt-3">
-              <button type="button" class="btn btn-block btn-link text-muted" (click)="onCreateClicked()">Create or restore a wallet</button>
+              <button type="button" class="btn btn-block btn-link text-dark" (click)="onCreateClicked()">Create or restore a wallet</button>
           </div>
           <!-- SVG -->
           <div *ngIf="isDecrypting" class="Loading">
