@@ -42,6 +42,8 @@ export class DashboardComponent implements OnInit {
   public netStakingWeight: number;
   public expectedTime: number;
   public dateTime: string;
+  public isStarting: boolean;
+  public isStopping: boolean;
 
   ngOnInit() {
     this.startSubscriptions();
@@ -176,6 +178,8 @@ export class DashboardComponent implements OnInit {
   }
 
   private startStaking() {
+    this.isStarting = true;
+    this.isStopping = false;
     let walletData = {
       name: this.globalService.getWalletName(),
       password: this.stakingForm.get('walletPassword').value
@@ -188,6 +192,7 @@ export class DashboardComponent implements OnInit {
           }
         },
         error => {
+          this.isStarting = false;
           this.stakingEnabled = false;
           if (error.status === 0) {
             this.genericModalService.openModal(null, null);
@@ -205,6 +210,9 @@ export class DashboardComponent implements OnInit {
   }
 
   private stopStaking() {
+    this.isStopping = true;
+    this.isStarting = false;
+    this.stakingForm.get("walletPassword").patchValue("");
     let walletInfo = new WalletInfo(this.globalService.getWalletName())
     this.apiService.stopStaking()
       .subscribe(
@@ -241,6 +249,9 @@ export class DashboardComponent implements OnInit {
             this.netStakingWeight = stakingResponse.netstakeweight;
             this.expectedTime = stakingResponse.expectedtime;
             this.dateTime = this.secondsToString(this.expectedTime);
+            if (this.stakingActive) {
+              this.isStarting = false;
+            }
           }
         },
         error => {
