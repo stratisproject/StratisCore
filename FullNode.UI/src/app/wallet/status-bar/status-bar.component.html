@@ -1,22 +1,22 @@
 <!-- STATUSBAR -->
 <div class="status">
   <ul class="list-inline align-self-center row">
-    <li *ngIf="!(percentSynced == '100%')" class="list-inline-item mx-1" title="{{ percentSynced }}">
+    <li *ngIf="!(percentSynced == '100%')" class="list-inline-item mx-1" placement="top" ngbTooltip="{{ percentSynced }}">
       <i class="lnr lnr-cloud-sync text-warning"></i>
       <small class="text-warning">{{ percentSynced }}</small>
     </li>
-    <li *ngIf="percentSynced == '100%'" class="list-inline-item mx-1" title="{{ percentSynced }}">
+    <li *ngIf="percentSynced == '100%'" class="list-inline-item mx-1" placement="top" ngbTooltip="{{ percentSynced }}">
       <i class="lnr lnr-cloud-check text-success"></i>
       <small class="text-success">{{ percentSynced }}</small>
     </li>
-    <li class="list-inline-item mx-1" title="{{ connectedNodes }} connections">
+    <li class="list-inline-item mx-1" placement="top" ngbTooltip="{{ connectedNodes }} connections">
       <i class="lnr lnr-database text-black"></i>
       <small class="text-black">{{ connectedNodes }}</small>
     </li>
-    <li *ngIf="!stakingEnabled" class="list-inline-item mx-1" title="Not staking">
+    <li *ngIf="!stakingEnabled" class="list-inline-item mx-1" placement="top" ngbTooltip="Not staking">
       <i class="lnr lnr-lock text-danger"></i>
     </li>
-    <li *ngIf="stakingEnabled" class="list-inline-item mx-1" title="Staking">
+    <li *ngIf="stakingEnabled" class="list-inline-item mx-1" placement="top" ngbTooltip="Staking">
       <i class="lnr lnr-lock text-success"></i>
     </li>
   </ul>
