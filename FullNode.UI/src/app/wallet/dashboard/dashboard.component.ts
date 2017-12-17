@@ -184,10 +184,11 @@ export class DashboardComponent implements OnInit {
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
-
+            this.stakingEnabled = true;
           }
         },
         error => {
+          this.stakingEnabled = false;
           if (error.status === 0) {
             this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
@@ -209,6 +210,7 @@ export class DashboardComponent implements OnInit {
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
+            this.stakingEnabled = false;
           }
         },
         error => {
@@ -287,6 +289,10 @@ export class DashboardComponent implements OnInit {
       } else {
         dateString += numMinutes + " minute ";
       }
+    }
+
+    if (dateString === "") {
+      dateString = "Unknown";
     }
 
     return dateString;
