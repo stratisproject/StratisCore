@@ -131,7 +131,7 @@
                 <ul class="list-unstyled mb-3">
                   <li>Your weight is <strong>{{ stakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
                   <li>Network weight is <strong>{{ netStakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
-                  <li class="mt-2">Expected reward time is</li>
+                  <li class="mt-2">Expected reward time is :</li>
                   <li><strong>{{ dateTime }}</strong></li>
                 </ul>
                 <button type="button" class="btn btn-outline-light mb-3" (click)="stopStaking()">Stop Staking</button>
