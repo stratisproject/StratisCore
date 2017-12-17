@@ -143,7 +143,7 @@ function startStratisApi() {
       detached: true
     });
   } else if (testnet) {
-    stratisProcess = spawnStratis(apiPath, ['-testnet', '-addnode=51.141.28.47'], {
+    stratisProcess = spawnStratis(apiPath, ['-testnet'], {
       detached: true
     });
   }
