@@ -10,35 +10,31 @@
 [6]: https://travis-ci.org/stratisproject/Breeze
 
 
-# Breeze
+# Stratis Wallet (codename 'Storm')
 
-__Warning: We're still in beta, so use at your own risk.__
-This is the repository of the Breeze Wallet, the first full-block SPV bitcoin wallet using Angular and Electron at the front-end and C# with .NET Core in the back-end.
+__Warning: We're still in alpha, so use at your own risk.__
+This is the repository of the Stratis Wallet, a full node staking wallet using Angular and Electron at the front-end and C# with .NET Core in the back-end.
 
 ## Daemon Build
 
-Breeze daemon is the backend REST service, hosting a Bitcoin node upon which Breeze UI depends:
+The StratisD daemon is the backend REST service, hosting a Stratis node upon which FullNode UI depends:
 
 ```
 # Clone and go in the directory
-git clone https://github.com/stratisproject/Breeze
-cd Breeze
+git clone https://github.com/stratisproject/FullNode.UI
+cd FullNodeUI
 
 # Initialize dependencies
 git submodule update --init --recursive
 
-# Go in the Breeze deamon folder
-cd StratisBitcoinFullNode/Stratis.BreezeD
-dotnet build
-
-# Run the Bitcoin and Stratis full-SPV daemons on testnet in separate terminals
+# Run the StratisD daemon
+cd StratisBitcoinFullNode/src/Stratis.StratisD
 dotnet run -testnet
-dotnet run stratis -testnet
 ```
 
 ## UI Build
 
-[Read more...](https://github.com/stratisproject/Breeze/blob/master/Breeze.UI/README.md)
+[Read more...](https://github.com/stratisproject/FullNodeUI/tree/master/FullNode.UI/README.md)
 
 ## CI Build
 -----------
@@ -48,7 +44,7 @@ Every time someone pushes to the master branch or create a pull request on it, a
 
 To skip a build, for example if you've made very minor changes, include the text **[skip ci]** or **[ci skip]** in your commits' comment (with the squared brackets).
 
-If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the Breeze app, you can get it here: 
+If you want the :sparkles: latest :sparkles: (unstable :bomb:) version of the wallet app, you can get it here: 
 
 |    | x86 Release | x64 Release | Notes |
 |:---|----------------:|------------------:|------------------:|
