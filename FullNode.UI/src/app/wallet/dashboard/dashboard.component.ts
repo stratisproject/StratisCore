@@ -212,8 +212,6 @@ export class DashboardComponent implements OnInit {
   private stopStaking() {
     this.isStopping = true;
     this.isStarting = false;
-    this.stakingForm.get("walletPassword").patchValue("");
-    let walletInfo = new WalletInfo(this.globalService.getWalletName())
     this.apiService.stopStaking()
       .subscribe(
         response =>  {
