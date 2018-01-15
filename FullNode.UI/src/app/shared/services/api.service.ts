@@ -173,10 +173,11 @@ export class ApiService {
     /**
      * Get multiple unused receive addresses for a certain wallet from the API.
      */
-    getUnusedReceiveAddresses(data: WalletInfo): Observable<any> {
+    getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
       params.set('accountName', "account 0"); //temporary
+      params.set('count', count);
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/unusedaddresses', new RequestOptions({headers: this.headers, search: params}))
