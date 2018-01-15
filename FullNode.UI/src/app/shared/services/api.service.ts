@@ -158,7 +158,7 @@ export class ApiService {
     }
 
     /**
-     * Get unused receive addresses for a certain wallet from the API.
+     * Get an unused receive address for a certain wallet from the API.
      */
     getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
@@ -166,7 +166,33 @@ export class ApiService {
       params.set('accountName', "account 0"); //temporary
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/address', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.stratisApiUrl + '/wallet/unusedaddress', new RequestOptions({headers: this.headers, search: params}))
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Get multiple unused receive addresses for a certain wallet from the API.
+     */
+    getUnusedReceiveAddresses(data: WalletInfo): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', "account 0"); //temporary
+
+      return this.http
+        .get(this.stratisApiUrl + '/wallet/unusedaddresses', new RequestOptions({headers: this.headers, search: params}))
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Get get all receive addresses for an account of a wallet from the API.
+     */
+    getAllReceiveAddresses(data: WalletInfo): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', "account 0"); //temporary
+
+      return this.http
+        .get(this.stratisApiUrl + '/wallet/addresses', new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 

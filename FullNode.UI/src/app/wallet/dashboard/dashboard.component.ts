@@ -244,8 +244,8 @@ export class DashboardComponent implements OnInit {
             this.stakingEnabled = stakingResponse.enabled;
             this.stakingActive = stakingResponse.staking;
             this.stakingWeight = stakingResponse.weight;
-            this.netStakingWeight = stakingResponse.netstakeweight;
-            this.expectedTime = stakingResponse.expectedtime;
+            this.netStakingWeight = stakingResponse.netStakeWeight;
+            this.expectedTime = stakingResponse.expectedTime;
             this.dateTime = this.secondsToString(this.expectedTime);
             if (this.stakingActive) {
               this.isStarting = false;
