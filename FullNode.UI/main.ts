@@ -109,20 +109,33 @@ app.on('activate', function () {
 
 function closeStratisApi() {
   // if (process.platform !== 'darwin' && !serve) {
-    if (process.platform !== 'darwin' && !serve) {
+    if (process.platform !== 'darwin' && !serve && !testnet) {
     var http2 = require('http');
-    const options2 = {
+    const options1 = {
       hostname: 'localhost',
       port: 37221,
       path: '/api/node/shutdown',
       method: 'POST'
     };
 
-  const req = http2.request(options2, (res) => {});
-  req.write('');
-  req.end();
-  }
-};
+   const req = http2.request(options1, (res) => {});
+   req.write('');
+   req.end();
+   
+   } else if (process.platform !== 'darwin' && !serve && testnet) {
+     var http2 = require('http');
+     const options2 = {
+       hostname: 'localhost',
+       port: 38221,
+       path: '/api/node/shutdown',
+       method: 'POST'
+     }; 
+   
+   const req = http2.request(options2, (res) => {});
+   req.write('');
+   req.end();
+   }
+}; 
 
 function startStratisApi() {
   var stratisProcess;
