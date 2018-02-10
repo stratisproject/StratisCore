@@ -9,7 +9,7 @@ The StratisD daemon is the backend REST service, hosting a Stratis node upon whi
 
 ```
 # Clone and go in the directory
-git clone https://github.com/stratisproject/FullNode.UI
+git clone https://github.com/stratisproject/FullNodeUI
 cd FullNodeUI
 
 # Initialize dependencies
