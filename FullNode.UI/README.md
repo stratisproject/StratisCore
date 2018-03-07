@@ -38,7 +38,7 @@ If you have already installed a previous version of `angular-cli`, follow [Angul
 [Run the daemon](https://github.com/stratisproject/StratisBitcoinFullNode/blob/master/README.md#daemon-build)  
 
 #### Terminal Window 2
-`npm start`  
+`npm start` or `npm start -testnet`
 This will compile the Angular code and spawn the Electron process in parallel.
 After compilation has completed the Electron UI will refresh.
 
