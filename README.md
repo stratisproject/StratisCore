@@ -15,8 +15,13 @@ cd FullNodeUI
 # Initialize dependencies
 git submodule update --init --recursive
 
-# Run the StratisD daemon
-cd StratisBitcoinFullNode/src/Stratis.StratisD
+#Navigate to the src folder and build the stratisD daemon
+cd StratisBitcoinFullNode/src
+dotnet restore
+dotnet build
+
+# Run the StratisD daemon from within the src folder:
+cd Stratis.StratisD
 dotnet run -testnet
 ```
 
