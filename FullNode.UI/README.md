@@ -1,18 +1,18 @@
-# Breeze.UI
+# FullNode.UI
 
-Graphical User Interface for Stratis Breeze Wallet.
+Graphical User Interface for Stratis FullNode Wallet.
 
 ## Getting Started
 
 Clone this repository locally:
 
 ``` bash
-git clone https://www.github.com/stratisproject/breeze.git
+git clone https://www.github.com/stratisproject/FullNodeUI
 ```
 
-Navigate to the Breeze UI in a terminal:
+Navigate to the FullNodeUI UI in a terminal:
 ``` bash
-cd ./Breeze/Breeze.UI
+cd ./FullNodeUI/FullNodeUI.UI
 ```
 
 ## Install NodeJS:
@@ -21,7 +21,7 @@ Download and install the latest Long Term Support (LTS) version of NodeJS at: ht
 
 ## Install dependencies with npm:
 
-From within Breeze.UI directory run:
+From within FullNodeUI.UI directory run:
 
 ``` bash
 npm install
@@ -35,10 +35,10 @@ If you have already installed a previous version of `angular-cli`, follow [Angul
 ## To build for development
 
 #### Terminal Window 1
-[Run the daemon](https://github.com/stratisproject/Breeze/blob/master/README.md#daemon-build)  
+[Run the daemon](https://github.com/stratisproject/StratisBitcoinFullNode/blob/master/README.md#daemon-build)  
 
 #### Terminal Window 2
-`npm start`  
+`npm start` or `npm start -testnet`
 This will compile the Angular code and spawn the Electron process in parallel.
 After compilation has completed the Electron UI will refresh.
 
