@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
+import { NgxElectronModule } from 'ngx-electron';
 
 import { SharedModule } from './shared/shared.module';
 
@@ -35,6 +36,7 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     FormsModule,
     HttpModule,
     NgbModule.forRoot(),
+    NgxElectronModule,
     SharedModule.forRoot()
   ],
   declarations: [
