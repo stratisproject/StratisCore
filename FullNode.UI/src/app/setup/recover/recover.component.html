@@ -1,7 +1,7 @@
 <section id="GUI" class="container-fluid light">
   <div class="row">
     <div class="col-4 left-login d-flex align-items-center">
-        <img src="../../../assets/images/logo_white.svg" width="160px" height="auto" alt="Stratis Wallet">
+        <img src="./assets/images/logo_white.svg" width="160px" height="auto" alt="Stratis Wallet">
     </div>
     <!-- /col -->
     <div class="col-8 right-login d-flex align-content-center flex-wrap">
@@ -14,10 +14,10 @@
           <input type="text" class="form-control form-control-success" [class.is-invalid]="formErrors.walletName" [class.is-valid]="!formErrors.walletName && recoverWalletForm.get('walletName').valid" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
           <div *ngIf="formErrors.walletName" class="invalid-feedback">{{ formErrors.walletName }}</div>
         </div>
-        <div class="form-group col-12">		
-          <label class="text-left" for="creationDate">Earliest Possible Creation Date</label>		
-          <input type="text" class="form-control" bsDatepicker formControlName="walletDate" placeholder="Select the date your wallet was created." [bsConfig]="bsConfig" [maxDate]="maxDate"/>		
-          <div *ngIf="formErrors.walletDate" class="text-danger mt-2">{{ formErrors.walletDate }}</div>		
+        <div class="form-group col-12">
+          <label class="text-left" for="creationDate">Earliest Possible Creation Date</label>
+          <input type="text" class="form-control" bsDatepicker formControlName="walletDate" placeholder="Select the date your wallet was created." [bsConfig]="bsConfig" [maxDate]="maxDate"/>
+          <div *ngIf="formErrors.walletDate" class="text-danger mt-2">{{ formErrors.walletDate }}</div>
         </div>
         <div class="form-group col-12">
           <label class="text-left" for="walletMnemonic">Secret Words</label>

@@ -27,7 +27,7 @@ export class ApiService {
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private pollingInterval = 3000;
-    private stratisApiUrl = 'http://localhost:37221/api';
+    private stratisApiUrl = 'http://localhost:38221/api';
 
     /**
      * Gets available wallets at the default path

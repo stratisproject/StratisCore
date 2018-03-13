@@ -3,16 +3,14 @@
   "productName": "Stratis Wallet",
   "publish": null,
   "directories": {
-    "app": "dist",
-    "output": "app-builds",
-    "buildResources": "dist/assets/images"
+    "output": "app-builds"
   },
   "win": {
     "icon": "dist/assets/images/icon",
     "target": [
       "nsis"
     ],
-    "artifactName": "${productName}-v${version}-setup-${os}-${env.arch}.${ext}"
+    "artifactName": "${productName}-v${version}-setup-${os}-${arch}.${ext}"
   },
   "linux": {
     "icon": "dist/assets/images/",

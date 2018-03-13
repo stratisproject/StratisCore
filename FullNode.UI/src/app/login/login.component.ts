@@ -100,17 +100,17 @@ export class LoginComponent implements OnInit {
     ;
   }
 
-  private onCreateClicked() {
+  public onCreateClicked() {
     this.router.navigate(['/setup']);
   }
 
-  private onEnter() {
+  public onEnter() {
     if (this.openWalletForm.valid) {
       this.onDecryptClicked();
     }
   }
 
-  private onDecryptClicked() {
+  public onDecryptClicked() {
     this.isDecrypting = true;
     this.globalService.setWalletName(this.openWalletForm.get("selectWallet").value);
     this.globalService.setCoinName("TestStratis");

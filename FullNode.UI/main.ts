@@ -1,29 +1,18 @@
-const electron = require('electron');
-
-// Module to control application life.
-const app = electron.app;
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
-const nativeImage = require('electron').nativeImage
-
-const path = require('path');
-const url = require('url');
-const os = require('os');
+import { app, BrowserWindow, Menu, nativeImage, screen, Tray } from 'electron';
+import * as path from 'path';
+import * as url from 'url';
+import * as os from 'os';
 
 let serve;
 let testnet;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve" || val === "-serve");
-testnet = !args.some(val => val === "--testnet" || val === "-testnet");
+testnet = args.some(val => val === "--testnet" || val === "-testnet");
 
-if (args.some(val => val === "--mainnet" || val === "-mainnet")) {
-  testnet = false;
-}
-
-if (serve) {
-  require('electron-reload')(__dirname, {
-    electron: require('${__dirname}/../../node_modules/electron')
-  });
+try {
+  require('dotenv').config();
+} catch {
+  console.log('asar');
 }
 
 require('electron-context-menu')({
@@ -45,34 +34,40 @@ function createWindow() {
     title: "Stratis Wallet"
   });
 
-   // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, '/index.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
+  if (serve) {
+    require('electron-reload')(__dirname, {
+    });
+    mainWindow.loadURL('http://localhost:4200');
+  } else {
+    mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, 'dist/index.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
+  }
 
   if (serve) {
     mainWindow.webContents.openDevTools();
   }
 
+  // Emitted when the window is going to close.
+  mainWindow.on('close', () => {
+  })
+
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
+  mainWindow.on('closed', () => {
+    // Dereference the window object, usually you would store window
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null;
   });
 
-  // Emitted when the window is going to close.
-  mainWindow.on('close', function () {
-  })
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', function () {
+app.on('ready', () => {
   if (serve) {
     console.log("Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.")
   }
@@ -86,12 +81,12 @@ app.on('ready', function () {
   }
 });
 
-app.on('before-quit', function () {
+app.on('before-quit', () => {
   closeStratisApi();
 });
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
+app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -99,7 +94,7 @@ app.on('window-all-closed', function () {
   }
 });
 
-app.on('activate', function () {
+app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
@@ -121,7 +116,7 @@ function closeStratisApi() {
    const req = http2.request(options1, (res) => {});
    req.write('');
    req.end();
-   
+
    } else if (process.platform !== 'darwin' && !serve && testnet) {
      var http2 = require('http');
      const options2 = {
@@ -129,13 +124,13 @@ function closeStratisApi() {
        port: 38221,
        path: '/api/node/shutdown',
        method: 'POST'
-     }; 
-   
+     };
+
    const req = http2.request(options2, (res) => {});
    req.write('');
    req.end();
    }
-}; 
+};
 
 function startStratisApi() {
   var stratisProcess;
@@ -168,9 +163,6 @@ function startStratisApi() {
 
 function createTray() {
   //Put the app in system tray
-  const Menu = electron.Menu;
-  const Tray = electron.Tray;
-
   let trayIcon;
   if (serve) {
     trayIcon = nativeImage.createFromPath('./src/assets/images/icon-tray.png');
@@ -215,27 +207,5 @@ function writeLog(msg) {
 };
 
 function createMenu() {
-  const Menu = electron.Menu;
 
-  // Create the Application's main menu
-  var menuTemplate = [{
-    label: "Application",
-    submenu: [
-        { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-        { type: "separator" },
-        { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
-    ]}, {
-    label: "Edit",
-    submenu: [
-        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-        { type: "separator" },
-        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-        { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-    ]}
-  ];
-
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 };
