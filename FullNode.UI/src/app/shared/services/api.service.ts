@@ -88,6 +88,12 @@ export class ApiService {
         .map((response: Response) => response);
     }
 
+    getCoinDetails() : Observable<any> {
+      return this.http
+        .get(this.stratisApiUrl + '/sidechains/get-coindetails')
+        .map((response: Response) => response);
+    }
+
     /**
      * Get general wallet info from the API once.
      */
