@@ -54,7 +54,7 @@ export class CoinNotationPipe implements PipeTransform {
           temp = value / 100;
           return temp.toFixed(this.decimalLimit);
         default:
-          temp = value / 1.0
+          temp = value / 100000000;
           return temp.toFixed(this.decimalLimit)
       }
     }
