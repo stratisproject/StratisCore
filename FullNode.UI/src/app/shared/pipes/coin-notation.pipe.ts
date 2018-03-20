@@ -53,6 +53,9 @@ export class CoinNotationPipe implements PipeTransform {
         case "TuSTRAT":
           temp = value / 100;
           return temp.toFixed(this.decimalLimit);
+        default:
+          temp = value / 1.0
+          return temp.toFixed(this.decimalLimit)
       }
     }
   }

@@ -113,8 +113,21 @@ export class LoginComponent implements OnInit {
   public onDecryptClicked() {
     this.isDecrypting = true;
     this.globalService.setWalletName(this.openWalletForm.get("selectWallet").value);
-    this.globalService.setCoinName("TestStratis");
-    this.globalService.setCoinUnit("TSTRAT");
+
+    this.apiService.getCoinDetails().subscribe(response => {
+      if (response.status >= 200 && response.status < 400){}
+        var coinDetails = response.json();
+        this.globalService.setCoinName(coinDetails.name);
+        this.globalService.setCoinUnit(coinDetails.symbol);
+      },
+      error => {
+        if(error.status === 404) console.log("no sidechain api found, defaulting to STRAT coin")
+        else console.log(error)
+        this.globalService.setCoinName("TestStratis");
+        this.globalService.setCoinUnit("TSTRAT");
+      }
+    )
+
     this.getCurrentNetwork();
     let walletLoad = new WalletLoad(
       this.openWalletForm.get("selectWallet").value,
