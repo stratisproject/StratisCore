@@ -8,7 +8,7 @@ let serve;
 let testnet;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve" || val === "-serve");
-testnet = args.some(val => val === "--testnet" || val === "-testnet");
+testnet = args.some(val => val === "--testnet" || val === '-testnet');
 
 try {
   require('dotenv').config();
@@ -32,7 +32,7 @@ function createWindow() {
     frame: true,
     minWidth: 1200,
     minHeight: 650,
-    title: "Stratis Wallet"
+    title: 'Stratis Wallet'
   });
 
   if (serve) {
@@ -69,29 +69,25 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  console.log("current dir is ", __dirname)
-  const defaultConfig = settings.file();
-  settings.setPath(`${defaultConfig}.${serve ? 'dev' : 'prod'}`)
-  console.log(`Looking for config file ${settings.file()}`)
-  console.log(`settings are \n\r${JSON.stringify(settings.getAll(), null, 2)}`)
-  const startNode = settings.get('startNode', 'true') as boolean;
-  const apiUrl = new url.URL(settings.get('apiUrl',`http://localhost:${serve ? '38221' : '37221'}/api`));
 
-  if (serve) {
-    console.log("Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.")
-  }
-  else {
+  initialiseSettings();
+  const startNode = settings.get('startNode') as boolean;
+  const apiUrl = settings.get('apiUrl');
+
+  if (serve || !startNode) {
+    console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.')
+  }   else {
     startStratisApi();
   }
   createTray();
   createWindow();
-  if (os.platform() === 'darwin'){
+  if (os.platform() === 'darwin') {
     createMenu();
   }
 });
 
 app.on('before-quit', () => {
-  closeStratisApi(new url.URL(settings.get('apiUrl')));
+  //closeStratisApi(new url.URL(settings.get('apiUrl')));
 });
 
 // Quit when all windows are closed.
@@ -111,19 +107,33 @@ app.on('activate', () => {
   }
 });
 
-function closeStratisApi(apiUrl : url.URL) {
-  if (process.platform === "darwin" || serve) {
-    console.debug("Leaving without closing the Stratis API");
+function initialiseSettings() {
+  const defaultConfig = settings.file();
+  settings.setPath(`${defaultConfig}.${serve ? 'dev' : 'prod'}`);
+  console.log(`Looking for config file ${settings.file()}`);
+  const configWasThere = settings.has('settingsFileVersion');
+  if (!configWasThere) {
+    console.log('config file not found, using the default configuration');
+    settings.set('settingsFileVersion', '0.1.0');
+    settings.set('startNode', true);
+    settings.set('apiUrl', new url.URL(`http://localhost:${serve ? '38221' : '37221'}/api`));
+  }
+  console.log(`settings are \n\r${JSON.stringify(settings.getAll(), null, 2)}`);
+}
+
+function closeStratisApi(apiUrl: url.URL) {
+  if (process.platform === 'darwin' || serve) {
+    console.log('Leaving without closing the Stratis API');
     return;
   }
   const apiCall = {
     hostname: apiUrl.hostname,
     port: apiUrl.port,
     path: `${apiUrl.pathname}/node/shutdown`,
-    method: "POST"
+    method: 'POST'
   };
-  var http2 = require("http");
-  const req = http2.request(apiCall, (res) => {});
+  const http2 = require('http');
+  const req = http2.request(apiCall, (res) => { });
   req.write('');
   req.end();
 };
@@ -132,14 +142,14 @@ function startStratisApi() {
   var stratisProcess;
   const spawnStratis = require('child_process').spawn;
 
-  //Start Stratis Daemon
+  // Start Stratis Daemon
   let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.StratisD');
   if (os.platform() === 'win32') {
     apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.StratisD.exe');
-  } else if(os.platform() === 'linux') {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
+  } else if (os.platform() === 'linux') {
+    apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
   } else {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
+    apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
   }
 
   if (!testnet) {
@@ -170,20 +180,20 @@ function createTray() {
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Hide/Show',
-      click: function() {
+      click: function () {
         mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
       }
     },
     {
       label: 'Exit',
-      click: function() {
+      click: function () {
         app.quit();
       }
     }
   ]);
   systemTray.setToolTip('Stratis Wallet');
   systemTray.setContextMenu(contextMenu);
-  systemTray.on('click', function() {
+  systemTray.on('click', function () {
     if (!mainWindow.isVisible()) {
       mainWindow.show();
     }
@@ -194,14 +204,14 @@ function createTray() {
   });
 
   app.on('window-all-closed', function () {
-    if (systemTray) systemTray.destroy();
+    if (systemTray) { systemTray.destroy(); }
   });
-};
+}
 
 function writeLog(msg) {
   console.log(msg);
-};
+}
 
 function createMenu() {
 
-};
+}

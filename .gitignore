@@ -295,3 +295,4 @@ project.lock.json
 /FullNode.UI/daemon
 /FullNode.UI/app-builds
 /FullNode.UI/dist
+FullNode.UI/main.js

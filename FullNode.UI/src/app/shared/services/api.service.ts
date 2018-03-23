@@ -6,6 +6,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 import "rxjs/add/observable/interval";
 import 'rxjs/add/operator/startWith';
+// import * as settings from 'electron-settings';
 
 import { GlobalService } from './global.service';
 
@@ -27,6 +28,8 @@ export class ApiService {
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private pollingInterval = 3000;
+    // TODO: this URL need to come from config
+    // private stratisApiUrl = settings.get('apiUrl');
     private stratisApiUrl = 'http://localhost:38221/api';
 
     /**
