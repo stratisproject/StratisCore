@@ -2,6 +2,7 @@ import { app, BrowserWindow, Menu, nativeImage, screen, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
+import * as settings from 'electron-settings';
 
 let serve;
 let testnet;
@@ -68,6 +69,14 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  console.log("current dir is ", __dirname)
+  const defaultConfig = settings.file();
+  settings.setPath(`${defaultConfig}.${serve ? 'dev' : 'prod'}`)
+  console.log(`Looking for config file ${settings.file()}`)
+  console.log(`settings are \n\r${JSON.stringify(settings.getAll(), null, 2)}`)
+  const startNode = settings.get('startNode', 'true') as boolean;
+  const apiUrl = new url.URL(settings.get('apiUrl',`http://localhost:${serve ? '38221' : '37221'}/api`));
+
   if (serve) {
     console.log("Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.")
   }
@@ -82,7 +91,7 @@ app.on('ready', () => {
 });
 
 app.on('before-quit', () => {
-  closeStratisApi();
+  closeStratisApi(new url.URL(settings.get('apiUrl')));
 });
 
 // Quit when all windows are closed.
@@ -102,34 +111,21 @@ app.on('activate', () => {
   }
 });
 
-function closeStratisApi() {
-  // if (process.platform !== 'darwin' && !serve) {
-    if (process.platform !== 'darwin' && !serve && !testnet) {
-    var http2 = require('http');
-    const options1 = {
-      hostname: 'localhost',
-      port: 37221,
-      path: '/api/node/shutdown',
-      method: 'POST'
-    };
-
-   const req = http2.request(options1, (res) => {});
-   req.write('');
-   req.end();
-
-   } else if (process.platform !== 'darwin' && !serve && testnet) {
-     var http2 = require('http');
-     const options2 = {
-       hostname: 'localhost',
-       port: 38221,
-       path: '/api/node/shutdown',
-       method: 'POST'
-     };
-
-   const req = http2.request(options2, (res) => {});
-   req.write('');
-   req.end();
-   }
+function closeStratisApi(apiUrl : url.URL) {
+  if (process.platform === "darwin" || serve) {
+    console.debug("Leaving without closing the Stratis API");
+    return;
+  }
+  const apiCall = {
+    hostname: apiUrl.hostname,
+    port: apiUrl.port,
+    path: `${apiUrl.pathname}/node/shutdown`,
+    method: "POST"
+  };
+  var http2 = require("http");
+  const req = http2.request(apiCall, (res) => {});
+  req.write('');
+  req.end();
 };
 
 function startStratisApi() {

@@ -45,6 +45,8 @@
   "extraResources": [
     "daemon/**/*",
     "src/assets/images/icon-tray.png",
-    "src/assets/images/license_en.txt"
+    "src/assets/images/license_en.txt",
+    "src/assets/Settings.prod.json",
+    "src/assets/Settings.dev.json"
   ]
 }
