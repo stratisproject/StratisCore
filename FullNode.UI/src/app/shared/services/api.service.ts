@@ -6,7 +6,6 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 import "rxjs/add/observable/interval";
 import 'rxjs/add/operator/startWith';
-// import * as settings from 'electron-settings';
 
 import { GlobalService } from './global.service';
 import { ConfigService } from './config.service';

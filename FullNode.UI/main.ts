@@ -87,7 +87,7 @@ app.on('ready', () => {
 });
 
 app.on('before-quit', () => {
-  //closeStratisApi(new url.URL(settings.get('apiUrl')));
+  closeStratisApi(new url.URL(settings.get('apiUrl')));
 });
 
 // Quit when all windows are closed.
