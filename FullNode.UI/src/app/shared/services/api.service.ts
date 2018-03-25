@@ -8,6 +8,7 @@ import "rxjs/add/observable/interval";
 import 'rxjs/add/operator/startWith';
 
 import { GlobalService } from './global.service';
+import { ConfigService } from './config.service';
 
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
@@ -23,13 +24,12 @@ import { TransactionSending } from '../classes/transaction-sending';
  */
 @Injectable()
 export class ApiService {
-    constructor(private http: Http, private globalService: GlobalService) {};
+  constructor(private http: Http, private globalService: GlobalService, private configService: ConfigService) {};
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private pollingInterval = 3000;
-    private stratisApiUrl = 'http://localhost:38221/api';
-
-    /**
+    private stratisApiUrl = this.configService.settings.get('apiUrl');
+        /**
      * Gets available wallets at the default path
      */
     getWalletFiles(): Observable<any> {
@@ -85,6 +85,12 @@ export class ApiService {
     getWalletStatus(): Observable<any> {
       return this.http
         .get(this.stratisApiUrl + '/wallet/status')
+        .map((response: Response) => response);
+    }
+
+    getCoinDetails() : Observable<any> {
+      return this.http
+        .get(this.stratisApiUrl + '/sidechains/get-coindetails')
         .map((response: Response) => response);
     }
 
