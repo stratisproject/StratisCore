@@ -76,7 +76,10 @@ app.on('ready', () => {
 
   if (serve || !startNode) {
     console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.')
-  }   else {
+  }   else if (startNode) {
+    console.log('Stratis UI was started without a node. '
+    + 'This requires the user to be running the Stratis Full Node Daemon himself or point the UI to a remote API using the config file.')
+  } else {
     startStratisApi();
   }
   createTray();
