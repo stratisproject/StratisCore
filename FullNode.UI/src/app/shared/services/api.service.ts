@@ -9,6 +9,7 @@ import 'rxjs/add/operator/startWith';
 // import * as settings from 'electron-settings';
 
 import { GlobalService } from './global.service';
+import { ConfigService } from './config.service';
 
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
@@ -24,15 +25,12 @@ import { TransactionSending } from '../classes/transaction-sending';
  */
 @Injectable()
 export class ApiService {
-    constructor(private http: Http, private globalService: GlobalService) {};
+  constructor(private http: Http, private globalService: GlobalService, private configService: ConfigService) {};
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private pollingInterval = 3000;
-    // TODO: this URL need to come from config
-    // private stratisApiUrl = settings.get('apiUrl');
-    private stratisApiUrl = 'http://localhost:38221/api';
-
-    /**
+    private stratisApiUrl = this.configService.settings.get('apiUrl');
+        /**
      * Gets available wallets at the default path
      */
     getWalletFiles(): Observable<any> {

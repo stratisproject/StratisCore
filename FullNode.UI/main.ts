@@ -109,7 +109,7 @@ app.on('activate', () => {
 
 function initialiseSettings() {
   const defaultConfig = settings.file();
-  settings.setPath(`${defaultConfig}.${serve ? 'dev' : 'prod'}`);
+  //settings.setPath(`${defaultConfig}.${serve ? 'dev' : 'prod'}`);
   console.log(`Looking for config file ${settings.file()}`);
   const configWasThere = settings.has('settingsFileVersion');
   if (!configWasThere) {
