@@ -29,8 +29,8 @@
     <div>Change Addresses</div>
     <div *ngFor="let changeAddress of changeAddresses">{{ changeAddress }}</div>
   </form>
-  <button *ngIf="!showAll" type="button" class="btn btn-outline-secondary" placement="top" ngbTooltip="Show all addresses" (click)="showAllAddresses()">Show all addresses</button>
-  <button *ngIf="showAll" type="button" class="btn btn-outline-secondary" placement="top" ngbTooltip="Show one address" (click)="showOneAddress()">Show one address</button>
+  <button *ngIf="!showAll" type="button" class="btn btn-outline-secondary" (click)="showAllAddresses()">Show all addresses</button>
+  <button *ngIf="showAll" type="button" class="btn btn-outline-secondary" (click)="showOneAddress()">Show one address</button>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
