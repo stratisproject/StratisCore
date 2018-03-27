@@ -27,64 +27,38 @@
   </div>
 
   <form *ngIf="showAll">
-
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs mt-4" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#unused" role="tab">Unused addresses</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#used" role="tab">Used addresses</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#change" role="tab">Change addresses</a>
-      </li>
-    </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content py-2">
-      <div class="tab-pane active" id="unused" role="tabpanel">
-
-        <div *ngFor="let unusedAddress of unusedAddresses" class="tab-pane-line">
-          <code class="d-inline-block">{{ unusedAddress }}</code>
-          <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
-            <i class="lnr lnr-file-add"></i> copy
-          </button>
-        </div>
-
-        <!-- pagination bottom -->
-        <nav aria-label="inner navigation">
-          <ul class="pagination justify-content-end mt-4">
-            <li class="page-item disabled"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
-            </li>
-          </ul>
-        </nav>
-        <!-- /pagination bottom -->
-      </div>
-
-      <div class="tab-pane" id="used" role="tabpanel">
-        <div *ngFor="let unusedAddress of unusedAddresses">
-          <code class="d-inline-block my-1">{{ usedAddress }}</code>
-          <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
-            <i class="lnr lnr-file-add"></i> copy
-          </button>
-        </div>
-      </div>
-
-      <div class="tab-pane" id="change" role="tabpanel">
-        <div *ngFor="let changeAddress of changeAddresses">
-          <code class="d-inline-block my-1">{{ changeAddress }}</code>
-          <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
-            <i class="lnr lnr-file-add"></i> copy
-          </button>
-        </div>
-      </div>
-
-    </div>
+    <ngb-tabset class="nav nav-tabs mt-4">
+      <ngb-tab title="Unused Addresses">
+        <ng-template ngbTabContent>
+          <div *ngFor="let unusedAddress of unusedAddresses" class="tab-pane-line">
+            <code class="d-inline-block">{{ unusedAddress }}</code>
+            <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm" ngxClipboard [cbContent]="unusedAddress" (click)="onCopiedClick()">
+              <i class="lnr lnr-file-add"></i> copy
+            </button>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Used Addresses">
+        <ng-template ngbTabContent>
+          <div *ngFor="let usedAddress of usedAddresses" class="tab-pane-line">
+            <code class="d-inline-block">{{ usedAddress }}</code>
+            <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm" ngxClipboard [cbContent]="usedAddress" (click)="onCopiedClick()">
+              <i class="lnr lnr-file-add"></i> copy
+            </button>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Change Addresses">
+        <ng-template ngbTabContent>
+          <div *ngFor="let changeAddress of changeAddresses" class="tab-pane-line">
+            <code class="d-inline-block">{{ changeAddress }}</code>
+            <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm" ngxClipboard [cbContent]="changeAddress" (click)="onCopiedClick()">
+              <i class="lnr lnr-file-add"></i> copy
+            </button>
+          </div>
+        </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
   </form>
 
   <div class="text-center">
