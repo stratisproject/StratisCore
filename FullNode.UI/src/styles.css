@@ -7878,6 +7878,10 @@ button:hover {
   cursor: pointer;
 }
 
+img {
+  pointer-events: none !important;
+}
+
 .invalid-feedback,
 .valid-feedback {
   font-size: .8rem;
