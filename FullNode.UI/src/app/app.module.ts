@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgxElectronModule } from 'ngx-electron';
+import { NgxQRCodeModule } from 'ngx-qrcode2';
 
 import { SharedModule } from './shared/shared.module';
 
@@ -37,6 +38,7 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     HttpModule,
     NgbModule.forRoot(),
     NgxElectronModule,
+    NgxQRCodeModule,
     SharedModule.forRoot()
   ],
   declarations: [

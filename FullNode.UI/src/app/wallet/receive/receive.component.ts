@@ -18,6 +18,7 @@ export class ReceiveComponent {
   constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal, private genericModalService: ModalService) {}
 
   public address: any = "";
+  public qrString: any;
   public copied: boolean = false;
   private errorMessage: string;
 
@@ -36,6 +37,7 @@ export class ReceiveComponent {
         response => {
           if (response.status >= 200 && response.status < 400) {
             this.address = response.json();
+            this.qrString = "stratis:" + response.json();
           }
         },
         error => {
