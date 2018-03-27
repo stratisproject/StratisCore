@@ -7883,6 +7883,16 @@ button:hover {
   font-size: .8rem;
 }
 
+.link {
+  color: #158BCF !important;
+  text-decoration: none !important;
+}
+
+.link:hover {
+  cursor: pointer !important;
+  text-decoration: underline !important;
+}
+
 #GUI {
   /* used for streak effect */
 }
@@ -8166,16 +8176,6 @@ button:hover {
   background-color: rgba(40, 167, 69, 0.5) !important;
 }
 
-#GUI .table .link {
-  color: #158BCF;
-  text-decoration: none;
-}
-
-#GUI .table .link:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
 #GUI .status {
   background: #fff;
   width: auto;
@@ -8190,7 +8190,7 @@ button:hover {
 
 #GUI .status .lnr {
   font-weight: bold;
-  font-size: 90%;
+  font-size: 105%;
 }
 
 #GUI .status ul {
@@ -8315,6 +8315,11 @@ button:hover {
   100% {
     stroke-dashoffset: 0;
   }
+}
+
+.modal .tab-pane-line {
+  padding: .5em;
+  border-bottom: 1px dotted #ccc;
 }
 
 .left-login {

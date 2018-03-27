@@ -11,6 +11,14 @@ body {background: #FAFBFC !important;}
 button {&:hover {cursor: pointer;}}
 .invalid-feedback,
 .valid-feedback {font-size: .8rem;}
+.link {
+  color: $primary !important;
+  text-decoration: none !important;
+  &:hover {
+    cursor: pointer !important;
+    text-decoration: underline !important;
+  }
+}
 
 #GUI {
   #content {padding-top: $jumbotron-padding;}
@@ -266,14 +274,6 @@ button {&:hover {cursor: pointer;}}
         background-color: rgba($green,.5) !important;
       }
     }
-    .link {
-      color: $primary;
-      text-decoration: none;
-      &:hover {
-        cursor: pointer;
-        text-decoration: underline;
-      }
-    }
   }
 
 
@@ -385,6 +385,11 @@ button {&:hover {cursor: pointer;}}
   @keyframes dash {
     0% {stroke-dashoffset: 745.74853515625;}
     100% {stroke-dashoffset: 0;}
+  }
+  //tab-pane content
+  .tab-pane-line {
+    padding: .5em;
+    border-bottom: 1px dotted #ccc;
   }
 }
 
