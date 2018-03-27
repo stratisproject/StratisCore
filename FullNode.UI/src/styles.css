@@ -557,6 +557,7 @@ code {
   font-weight: 400;
   background-color: #f8f9fa;
   border-radius: 0.25rem;
+  user-select: all !important;
 }
 
 a > code {
@@ -2523,7 +2524,7 @@ fieldset[disabled] a.btn {
 }
 
 .btn-outline-light:hover {
-  color: #212529;
+  color: #fff;
   background-color: #adb5bd;
   border-color: #adb5bd;
 }
@@ -2539,7 +2540,7 @@ fieldset[disabled] a.btn {
 
 .btn-outline-light:not([disabled]):not(.disabled):active, .btn-outline-light:not([disabled]):not(.disabled).active,
 .show > .btn-outline-light.dropdown-toggle {
-  color: #212529;
+  color: #fff;
   background-color: #adb5bd;
   border-color: #adb5bd;
   box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
@@ -7872,15 +7873,42 @@ a.text-dark:focus, a.text-dark:hover {
 
 body {
   background: #FAFBFC !important;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                 supported by Chrome and Opera */
 }
 
 button:hover {
   cursor: pointer;
 }
 
+img {
+  pointer-events: none !important;
+}
+
 .invalid-feedback,
 .valid-feedback {
   font-size: .8rem;
+}
+
+.link {
+  color: #158BCF !important;
+  text-decoration: none !important;
+}
+
+.link:hover {
+  cursor: pointer !important;
+  text-decoration: underline !important;
 }
 
 #GUI {
@@ -7979,13 +8007,13 @@ button:hover {
   color: #fff;
 }
 
+#GUI #staking strong {
+  font-weight: bold !important;
+}
+
 #GUI .card .card-header {
   text-transform: uppercase;
   font-size: 0.8125rem;
-}
-
-#GUI #staking strong {
-  font-weight: 500;
 }
 
 #GUI #switch {
@@ -8166,16 +8194,6 @@ button:hover {
   background-color: rgba(40, 167, 69, 0.5) !important;
 }
 
-#GUI .table .link {
-  color: #158BCF;
-  text-decoration: none;
-}
-
-#GUI .table .link:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
 #GUI .status {
   background: #fff;
   width: auto;
@@ -8190,7 +8208,7 @@ button:hover {
 
 #GUI .status .lnr {
   font-weight: bold;
-  font-size: 90%;
+  font-size: 105%;
 }
 
 #GUI .status ul {
@@ -8220,6 +8238,8 @@ button:hover {
 
 #GUI .status li small {
   margin-left: 5px;
+  font-size: 80%;
+  font-weight: 600;
 }
 
 .modal label {
@@ -8250,6 +8270,11 @@ button:hover {
 
 .modal .btn-group label:hover {
   color: #fff;
+}
+
+.modal .btn-group label input {
+  position: absolute;
+  opacity: 0;
 }
 
 .modal .btn-outline-danger:not([disabled]):not(.disabled).active {
@@ -8315,6 +8340,11 @@ button:hover {
   100% {
     stroke-dashoffset: 0;
   }
+}
+
+.modal .tab-pane-line {
+  padding: .5em;
+  border-bottom: 1px dotted #ccc;
 }
 
 .left-login {

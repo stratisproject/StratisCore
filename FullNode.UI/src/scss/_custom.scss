@@ -7,10 +7,29 @@
 //
 
 // basics
-body {background: #FAFBFC !important;}
+body {
+  background: #FAFBFC !important;
+  -webkit-touch-callout: none; /* iOS Safari */
+   -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+      -moz-user-select: none; /* Firefox */
+       -ms-user-select: none; /* Internet Explorer/Edge */
+           user-select: none; /* Non-prefixed version, currently
+                                 supported by Chrome and Opera */
+}
 button {&:hover {cursor: pointer;}}
+img {pointer-events: none !important;}
+
 .invalid-feedback,
 .valid-feedback {font-size: .8rem;}
+.link {
+  color: $primary !important;
+  text-decoration: none !important;
+  &:hover {
+    cursor: pointer !important;
+    text-decoration: underline !important;
+  }
+}
 
 #GUI {
   #content {padding-top: $jumbotron-padding;}
@@ -96,16 +115,16 @@ button {&:hover {cursor: pointer;}}
 
   }
 
+  ///// STAKING
+  #staking {
+    strong {font-weight: bold !important;}
+  }
   ///// CARDS
   .card {
     .card-header {
       text-transform: uppercase;
       font-size: $font-size-base;
     }
-  }
-  // STAKING
-  #staking {
-    strong {font-weight: 500;}
   }
 
   // Toggle
@@ -266,14 +285,6 @@ button {&:hover {cursor: pointer;}}
         background-color: rgba($green,.5) !important;
       }
     }
-    .link {
-      color: $primary;
-      text-decoration: none;
-      &:hover {
-        cursor: pointer;
-        text-decoration: underline;
-      }
-    }
   }
 
 
@@ -316,7 +327,11 @@ button {&:hover {cursor: pointer;}}
           position: absolute;
         }
       }
-      small {margin-left: 5px;}
+      small {
+        margin-left: 5px;
+        font-size: 80%;
+        font-weight: 600;
+      }
     }
   }
 }
@@ -338,6 +353,10 @@ button {&:hover {cursor: pointer;}}
     label {
       color: $gray-700;
       &:hover {color: $white;}
+      input {
+        position: absolute;
+        opacity: 0;
+      }
     }
   }
   // fee
@@ -385,6 +404,11 @@ button {&:hover {cursor: pointer;}}
   @keyframes dash {
     0% {stroke-dashoffset: 745.74853515625;}
     100% {stroke-dashoffset: 0;}
+  }
+  //tab-pane content
+  .tab-pane-line {
+    padding: .5em;
+    border-bottom: 1px dotted #ccc;
   }
 }
 

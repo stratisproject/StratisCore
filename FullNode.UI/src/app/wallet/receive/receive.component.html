@@ -9,28 +9,90 @@
 </div>
 <div class="modal-body">
   <form *ngIf="!showAll">
-    <div class="form-group clearfix">
-      <label for="yourAddress">Your address</label>
-    </div>
-    <div class="myAddress">
-      <code class="d-inline-block">{{ address }}</code>
-      <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" placement="top" ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
-        <i class="lnr lnr-file-add"></i>
-      </button>
-      <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
+    <div class="myAddress row">
+      <div class="mx-auto mb-2">
+        <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
+      </div>
+      <div class="col-9 mx-auto mb-4">
+        <code class="d-inline-block">{{ address }}</code>
+        <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
+          <i class="lnr lnr-file-add"></i>
+        </button>
+      </div>
     </div>
   </form>
+
+  <div class="text-left">
+    <a *ngIf="showAll" class="link" (click)="showOneAddress()">← back to one address</a>
+  </div>
+
   <form *ngIf="showAll">
-    <div *ngIf="copied" class="alert alert-success alert-dismissible fade show mt-3 mb-0" role="alert">Your address has been copied to your clipboard.</div>
-    <div>Unused Addresses</div>
-    <div *ngFor="let unusedAddress of unusedAddresses">{{ unusedAddress }}</div>
-    <div>Used Addresses</div>
-    <div *ngFor="let usedAddress of usedAddresses">{{ usedAddress }}</div>
-    <div>Change Addresses</div>
-    <div *ngFor="let changeAddress of changeAddresses">{{ changeAddress }}</div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs mt-4" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#unused" role="tab">Unused addresses</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#used" role="tab">Used addresses</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#change" role="tab">Change addresses</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content py-2">
+      <div class="tab-pane active" id="unused" role="tabpanel">
+
+        <div *ngFor="let unusedAddress of unusedAddresses" class="tab-pane-line">
+          <code class="d-inline-block">{{ unusedAddress }}</code>
+          <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
+            <i class="lnr lnr-file-add"></i> copy
+          </button>
+        </div>
+
+        <!-- pagination bottom -->
+        <nav aria-label="inner navigation">
+          <ul class="pagination justify-content-end mt-4">
+            <li class="page-item disabled"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+        <!-- /pagination bottom -->
+      </div>
+
+      <div class="tab-pane" id="used" role="tabpanel">
+        <div *ngFor="let unusedAddress of unusedAddresses">
+          <code class="d-inline-block my-1">{{ usedAddress }}</code>
+          <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
+            <i class="lnr lnr-file-add"></i> copy
+          </button>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="change" role="tabpanel">
+        <div *ngFor="let changeAddress of changeAddresses">
+          <code class="d-inline-block my-1">{{ changeAddress }}</code>
+          <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
+            <i class="lnr lnr-file-add"></i> copy
+          </button>
+        </div>
+      </div>
+
+    </div>
   </form>
-  <button *ngIf="!showAll" type="button" class="btn btn-outline-secondary" placement="top" ngbTooltip="Show all addresses" (click)="showAllAddresses()">Show all addresses</button>
-  <button *ngIf="showAll" type="button" class="btn btn-outline-secondary" placement="top" ngbTooltip="Show one address" (click)="showOneAddress()">Show one address</button>
+
+  <div class="text-center">
+    <button *ngIf="!showAll" type="button" class="btn btn-link" (click)="showAllAddresses()">Show all addresses</button>
+  </div>
+
+  <div *ngIf="copied" class="alert alert-success alert-dismissible fade show mt-3 mb-0" role="alert">Your address has been copied to your clipboard.</div>
+
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
