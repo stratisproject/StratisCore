@@ -185,9 +185,9 @@ export class ApiService {
     }
 
     /**
-     * Get get all receive addresses for an account of a wallet from the API.
+     * Get get all addresses for an account of a wallet from the API.
      */
-    getAllReceiveAddresses(data: WalletInfo): Observable<any> {
+    getAllAddresses(data: WalletInfo): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
       params.set('accountName', "account 0"); //temporary
