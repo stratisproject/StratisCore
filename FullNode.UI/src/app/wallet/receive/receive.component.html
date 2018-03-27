@@ -12,12 +12,16 @@
     <div class="form-group clearfix">
       <label for="yourAddress">Your address</label>
     </div>
-    <div class="myAddress">
-      <code class="d-inline-block">{{ address }}</code>
-      <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" placement="top" ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
-        <i class="lnr lnr-file-add"></i>
-      </button>
-      <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
+    <div class="myAddress row">
+      <div class="mx-auto mb-2">
+        <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
+      </div>
+      <div class="col-9 mx-auto">
+        <code class="d-inline-block">{{ address }}</code>
+        <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" placement="top" ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
+          <i class="lnr lnr-file-add"></i>
+        </button>
+      </div>
     </div>
   </form>
   <form *ngIf="showAll">
@@ -29,8 +33,12 @@
     <div>Change Addresses</div>
     <div *ngFor="let changeAddress of changeAddresses">{{ changeAddress }}</div>
   </form>
-  <button *ngIf="!showAll" type="button" class="btn btn-outline-secondary" (click)="showAllAddresses()">Show all addresses</button>
-  <button *ngIf="showAll" type="button" class="btn btn-outline-secondary" (click)="showOneAddress()">Show one address</button>
+
+  <div class="text-center mt-4">
+    <button *ngIf="!showAll" type="button" class="btn btn-outline-info" (click)="showAllAddresses()">Show all addresses</button>
+    <button *ngIf="showAll" type="button" class="btn btn-outline-info" (click)="showOneAddress()">Show one address</button>
+  </div>
+
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
