@@ -8007,13 +8007,13 @@ img {
   color: #fff;
 }
 
+#GUI #staking strong {
+  font-weight: bold !important;
+}
+
 #GUI .card .card-header {
   text-transform: uppercase;
   font-size: 0.8125rem;
-}
-
-#GUI #staking strong {
-  font-weight: 600 !important;
 }
 
 #GUI #switch {

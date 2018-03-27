@@ -55,7 +55,9 @@ $body-bg : #FAFBFC;
     // Staking
     #staking {
       color: #A6AFB4;
-      strong {color: $black;}
+      strong {
+        color: $black;
+      }
     }
   }
 }

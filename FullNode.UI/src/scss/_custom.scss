@@ -115,16 +115,16 @@ img {pointer-events: none !important;}
 
   }
 
+  ///// STAKING
+  #staking {
+    strong {font-weight: bold !important;}
+  }
   ///// CARDS
   .card {
     .card-header {
       text-transform: uppercase;
       font-size: $font-size-base;
     }
-  }
-  // STAKING
-  #staking {
-    strong {font-weight: 600 !important;}
   }
 
   // Toggle
