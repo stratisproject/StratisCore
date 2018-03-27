@@ -327,7 +327,11 @@ img {pointer-events: none !important;}
           position: absolute;
         }
       }
-      small {margin-left: 5px;}
+      small {
+        margin-left: 5px;
+        font-size: 80%;
+        font-weight: 600;
+      }
     }
   }
 }

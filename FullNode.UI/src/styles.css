@@ -8238,6 +8238,8 @@ img {
 
 #GUI .status li small {
   margin-left: 5px;
+  font-size: 80%;
+  font-weight: 600;
 }
 
 .modal label {
