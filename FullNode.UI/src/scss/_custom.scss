@@ -353,6 +353,10 @@ img {pointer-events: none !important;}
     label {
       color: $gray-700;
       &:hover {color: $white;}
+      input {
+        position: absolute;
+        opacity: 0;
+      }
     }
   }
   // fee

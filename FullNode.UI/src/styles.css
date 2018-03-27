@@ -8272,6 +8272,11 @@ img {
   color: #fff;
 }
 
+.modal .btn-group label input {
+  position: absolute;
+  opacity: 0;
+}
+
 .modal .btn-outline-danger:not([disabled]):not(.disabled).active {
   box-shadow: none !important;
 }
