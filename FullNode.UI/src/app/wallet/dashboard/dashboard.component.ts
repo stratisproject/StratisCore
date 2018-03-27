@@ -189,11 +189,13 @@ export class DashboardComponent implements OnInit {
         response =>  {
           if (response.status >= 200 && response.status < 400) {
             this.stakingEnabled = true;
+            this.stakingForm.patchValue({ walletPassword: "" });
           }
         },
         error => {
           this.isStarting = false;
           this.stakingEnabled = false;
+          this.stakingForm.patchValue({ walletPassword: "" });
           if (error.status === 0) {
             this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
