@@ -557,6 +557,7 @@ code {
   font-weight: 400;
   background-color: #f8f9fa;
   border-radius: 0.25rem;
+  user-select: all !important;
 }
 
 a > code {
@@ -7872,6 +7873,19 @@ a.text-dark:focus, a.text-dark:hover {
 
 body {
   background: #FAFBFC !important;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                 supported by Chrome and Opera */
 }
 
 button:hover {
