@@ -2524,7 +2524,7 @@ fieldset[disabled] a.btn {
 }
 
 .btn-outline-light:hover {
-  color: #212529;
+  color: #fff;
   background-color: #adb5bd;
   border-color: #adb5bd;
 }
@@ -2540,7 +2540,7 @@ fieldset[disabled] a.btn {
 
 .btn-outline-light:not([disabled]):not(.disabled):active, .btn-outline-light:not([disabled]):not(.disabled).active,
 .show > .btn-outline-light.dropdown-toggle {
-  color: #212529;
+  color: #fff;
   background-color: #adb5bd;
   border-color: #adb5bd;
   box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
@@ -8013,7 +8013,7 @@ img {
 }
 
 #GUI #staking strong {
-  font-weight: bold !important;
+  font-weight: 600 !important;
 }
 
 #GUI #switch {
