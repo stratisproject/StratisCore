@@ -8,7 +8,7 @@
   <!-- /button close -->
 </div>
 <div class="modal-body">
-  <form>
+  <form *ngIf="!showAll">
     <div class="form-group clearfix">
       <label for="yourAddress">Your address</label>
     </div>
@@ -17,9 +17,20 @@
       <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" placement="top" ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
         <i class="lnr lnr-file-add"></i>
       </button>
+      <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
     </div>
-    <div *ngIf="copied" class="alert alert-success alert-dismissible fade show mt-3 mb-0" role="alert">Your address has been copied to your clipboard.</div>
   </form>
+  <form *ngIf="showAll">
+    <div *ngIf="copied" class="alert alert-success alert-dismissible fade show mt-3 mb-0" role="alert">Your address has been copied to your clipboard.</div>
+    <div>Unused Addresses</div>
+    <div *ngFor="let unusedAddress of unusedAddresses">{{ unusedAddress }}</div>
+    <div>Used Addresses</div>
+    <div *ngFor="let usedAddress of usedAddresses">{{ usedAddress }}</div>
+    <div>Change Addresses</div>
+    <div *ngFor="let changeAddress of changeAddresses">{{ changeAddress }}</div>
+  </form>
+  <button *ngIf="!showAll" type="button" class="btn btn-outline-secondary" placement="top" ngbTooltip="Show all addresses" (click)="showAllAddresses()">Show all addresses</button>
+  <button *ngIf="showAll" type="button" class="btn btn-outline-secondary" placement="top" ngbTooltip="Show one address" (click)="showOneAddress()">Show one address</button>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>

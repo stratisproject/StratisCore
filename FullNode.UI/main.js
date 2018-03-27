@@ -42,9 +42,9 @@ function createWindow() {
             slashes: true
         }));
     }
-    // if (serve) {
-    mainWindow.webContents.openDevTools();
-    // }
+    if (serve) {
+        mainWindow.webContents.openDevTools();
+    }
     // Emitted when the window is going to close.
     mainWindow.on('close', function () {
     });
