@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, nativeImage, screen, Tray } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
@@ -8,6 +8,17 @@ let testnet;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve" || val === "-serve");
 testnet = args.some(val => val === "--testnet" || val === "-testnet");
+
+let apiPort;
+if (testnet) {
+  apiPort = 38221;
+} else {
+  apiPort = 37221;
+}
+
+ipcMain.on('get-port', (event, arg) => {
+  event.returnValue = apiPort;
+});
 
 try {
   require('dotenv').config();

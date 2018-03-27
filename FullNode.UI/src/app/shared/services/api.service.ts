@@ -8,6 +8,7 @@ import "rxjs/add/observable/interval";
 import 'rxjs/add/operator/startWith';
 
 import { GlobalService } from './global.service';
+import { ElectronService } from 'ngx-electron';
 
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
@@ -23,11 +24,19 @@ import { TransactionSending } from '../classes/transaction-sending';
  */
 @Injectable()
 export class ApiService {
-    constructor(private http: Http, private globalService: GlobalService) {};
+    constructor(private http: Http, private globalService: GlobalService, private electronService: ElectronService) {
+      this.setApiPort();
+    };
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private pollingInterval = 3000;
-    private stratisApiUrl = 'http://localhost:38221/api';
+    private apiPort;
+    private stratisApiUrl;
+
+    setApiPort() {
+      this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
+      this.stratisApiUrl = 'http://localhost:' + this.apiPort + '/api';
+    }
 
     /**
      * Gets available wallets at the default path

@@ -89,7 +89,7 @@ export class SendComponent implements OnInit {
     },
     'amount': {
       'required': 'An amount is required.',
-      'pattern': 'Enter a valid amount. Only positive numbers are allowed.'
+      'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.'
     },
     'fee': {
       'required': 'A fee is required.'

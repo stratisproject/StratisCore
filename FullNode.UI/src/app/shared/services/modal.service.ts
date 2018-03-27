@@ -10,7 +10,7 @@ export class ModalService {
   private modalOptions: NgbModalOptions;
 
   public openModal(title, body) {
-    const modalRef = this.modalService.open(GenericModalComponent, { backdrop: "static" });
+    const modalRef = this.modalService.open(GenericModalComponent, { backdrop: "static", keyboard: false });
     if (title) {
       modalRef.componentInstance.title = title;
     }
