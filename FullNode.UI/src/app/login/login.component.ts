@@ -157,10 +157,10 @@ export class LoginComponent implements OnInit {
           if (response.status >= 200 && response.status < 400) {
             let responseMessage = response.json();
             this.globalService.setNetwork(responseMessage.network);
-            if (responseMessage.network === "Main") {
+            if (responseMessage.network === "StratisMain") {
               this.globalService.setCoinName("Stratis");
               this.globalService.setCoinUnit("STRAT");
-            } else if (responseMessage.network === "TestNet") {
+            } else if (responseMessage.network === "StratisTest") {
               this.globalService.setCoinName("TestStratis");
               this.globalService.setCoinUnit("TSTRAT");
             }

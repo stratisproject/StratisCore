@@ -1,7 +1,7 @@
 {
-  "name": "stratis-fullnode",
-  "description": "Full Node Wallet",
-  "version": "0.1.0",
+  "name": "stratis-core",
+  "description": "Stratis Core Wallet",
+  "version": "0.2.0",
   "author": {
     "name": "Stratis Group",
     "email": "info@stratisplatform.com"
@@ -12,6 +12,7 @@
     "fullnode",
     "ui",
     "stratis",
+    "core",
     "bitcoin",
     "angular",
     "electron",

@@ -29,7 +29,6 @@ export class ReceiveComponent {
 
   ngOnInit() {
     this.getUnusedReceiveAddresses();
-    this.getAddresses();
   }
 
   public onCopiedClick() {
@@ -37,10 +36,12 @@ export class ReceiveComponent {
   }
 
   public showAllAddresses(){
+    this.getAddresses();
     this.showAll = true;
   }
 
   public showOneAddress(){
+    this.getUnusedReceiveAddresses();
     this.showAll = false;
   }
 

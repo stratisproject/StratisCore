@@ -1,6 +1,6 @@
 {
-  "appId": "com.stratisplatform.breeze",
-  "productName": "Stratis Wallet",
+  "appId": "com.stratisplatform.core",
+  "productName": "Stratis Core",
   "publish": null,
   "directories": {
     "output": "app-builds"
