@@ -42,7 +42,7 @@ function createWindow() {
     frame: true,
     minWidth: 1200,
     minHeight: 650,
-    title: "Stratis Wallet"
+    title: "Stratis Core"
   });
 
   if (serve) {
@@ -196,7 +196,7 @@ function createTray() {
       }
     }
   ]);
-  systemTray.setToolTip('Stratis Wallet');
+  systemTray.setToolTip('Stratis Core');
   systemTray.setContextMenu(contextMenu);
   systemTray.on('click', function() {
     if (!mainWindow.isVisible()) {

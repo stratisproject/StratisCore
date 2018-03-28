@@ -4,7 +4,8 @@ import { Title } from '@angular/platform-browser';
 
 import { AppConfig } from './app.config';
 
-import { ApiService } from './shared/services/api.service';3
+import { ApiService } from './shared/services/api.service';
+import { GlobalService } from './shared/services/global.service';
 import { ElectronService } from 'ngx-electron';
 
 import 'rxjs/add/operator/retryWhen';
@@ -17,7 +18,7 @@ import 'rxjs/add/operator/delay';
 })
 
 export class AppComponent implements OnInit {
-  constructor(private router: Router, private apiService: ApiService, private titleService: Title, private electronService: ElectronService) {}
+  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) {}
   private errorMessage: any;
   private responseMessage: any;
   public loading: boolean = true;
@@ -33,9 +34,9 @@ export class AppComponent implements OnInit {
   }
 
   private setTitle() {
-    let applicationName = "Stratis Wallet";
+    let applicationName = "Stratis Core";
     let applicationVersion = this.electronService.remote.app.getVersion();
-    let releaseCycle = "alpha";
+    let releaseCycle = "beta";
     let newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
     this.titleService.setTitle(newTitle);
   }
