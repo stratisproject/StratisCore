@@ -1,32 +1,56 @@
-# Stratis Wallet (codename 'Storm')
+# Stratis Core UI
 
-__Warning: We're still in alpha, so use at your own risk.__
-This is the repository of the Stratis Wallet, a full node staking wallet using Angular and Electron at the front-end and C# with .NET Core in the back-end.
+__Warning: we're currently in beta, so use at your own risk.__  
+This is the repository of the Stratis Core Wallet, a full node staking wallet using Electron and Angular at the front-end and .NET Core with C# in the back-end.
 
-## Daemon Build
+# Building and running the Stratis Core daemon
 
-The StratisD daemon is the backend REST service, hosting a Stratis node upon which FullNode UI depends:
+The Stratis Core daemon is the backend REST service, hosting a Stratis node upon which FullNode UI depends.  
+The Stratis Core daemon is hosted in another repository. All information on building and running the daemon can be found [here](https://github.com/stratisproject/StratisBitcoinFullNode/blob/master/Documentation/getting-started.md).
 
-```
-# Clone and go in the directory
-git clone https://github.com/stratisproject/FullNodeUI
-cd FullNodeUI
+# Building and running the Stratis Core user interface
 
-# Initialize dependencies
-git submodule update --init --recursive
+## Install NodeJS
 
-#Navigate to the src folder and build the stratisD daemon
-cd StratisBitcoinFullNode/src
-dotnet restore
-dotnet build
+Download and install the latest Long Term Support (LTS) version of NodeJS at: https://nodejs.org/. 
 
-# Run the StratisD daemon from within the src folder:
-cd Stratis.StratisD
-dotnet run -testnet
+## Getting Started
+
+Clone this repository locally:
+
+``` bash
+git clone https://www.github.com/stratisproject/FullNodeUI
 ```
 
-## UI Build
+Navigate to the FullNodeUI folder in a terminal:
+``` bash
+cd ./FullNodeUI/FullNodeUI.UI
+```
 
-[Read more...](https://github.com/stratisproject/FullNodeUI/tree/master/FullNode.UI/README.md)
+## Install dependencies with npm:
 
+From within the FullNodeUI.UI directory run:
 
+``` bash
+npm install
+```
+
+## Run the UI in development mode
+
+#### Terminal Window 1
+[Run the daemon](https://github.com/stratisproject/StratisBitcoinFullNode/blob/master/Documentation/getting-started.md)  
+
+#### Terminal Window 2
+Use `npm run mainnet` to start the UI in mainnet mode or `npm run testnet` to start the UI in testnet mode.  
+This will compile the Angular code and spawn the Electron process.
+
+## Build the UI for production
+
+|Command|Description|
+|--|--|
+|`npm run build:prod`| Compiles the application for production. Output files can be found in the dist folder |
+|`npm run package:linux`| Builds your application and creates an app consumable on linux system |
+|`npm run package:windows`| On a Windows OS, builds your application and creates an app consumable in windows 32/64 bit systems |
+|`npm run package:mac`|  On a MAC OS, builds your application and generates a `.app` file of your application that can be run on Mac |
+
+**The application is optimised. Only the files of /dist folder are included in the executable.**
