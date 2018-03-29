@@ -1,4 +1,4 @@
-# Stratis Core UI
+# Stratis Core
 
 __Warning: we're currently in beta, so use at your own risk.__  
 This is the repository of the Stratis Core Wallet, a full node staking wallet using Electron and Angular at the front-end and .NET Core with C# in the back-end.
