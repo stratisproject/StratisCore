@@ -37,8 +37,20 @@
       </div>
       <!-- /JUMBOTRON-->
 
+
       <!-- CONTENT -->
       <section class="col-12">
+
+        <!-- NO TRANSACTIONS -->
+        <div class="row">
+            <section class="col-12 text-center mt-4">
+              <ng-template #noTransactions>
+                <img src="./assets/images/notransactions.svg" alt="No transactions yet or wallet is syncing...">
+              </ng-template>
+            </section>
+        </div>
+        <!-- /NO TRANSACTIONS -->
+
         <div class="row">
           <!-- TRANSACTIONS -->
           <div class="col-8">
@@ -64,7 +76,6 @@
                 </div>
               </div>
             </div>
-            <ng-template #noTransactions><em class="muted">Looks like you haven't made any transactions yet.</em></ng-template>
           </div>
           <!-- /TRANSACTIONS -->
           <!-- STAKING -->
@@ -140,6 +151,7 @@
             </div>
           </section>
           <!-- STAKING -->
+
         </div>
       <status-bar></status-bar>
     </section>

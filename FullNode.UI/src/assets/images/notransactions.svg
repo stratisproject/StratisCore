@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="665px" height="164px" viewBox="0 0 665 164" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>no_transactions</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M32.3186108,21.982202 L464.804592,21.0178776 L464.804592,21.0178776 C469.222859,21.008026 472.812559,24.5817529 472.82241,29.0000199 C472.822423,29.0059658 472.82243,29.0119118 472.82243,29.0178577 L472.82243,97 L472.82243,97 C472.82243,101.418278 469.240708,105 464.82243,105 L32.3364486,105 L32.3364486,105 C27.9181706,105 24.3364486,101.418278 24.3364486,97 L24.3364486,29.9821821 L24.3364486,29.9821821 C24.3364486,25.5708686 27.9073083,21.992038 32.3186108,21.982202 Z" id="path-1"></path>
+        <rect id="path-2" x="0" y="0" width="496" height="93" rx="8"></rect>
+        <rect id="path-3" x="69" y="21" width="533" height="100" rx="8"></rect>
+        <filter x="-9.6%" y="-45.0%" width="119.1%" height="202.0%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="6" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="16" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.883979173   0 0 0 0 0.909563237   0 0 0 0 0.930883291  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(-316.000000, -366.000000)">
+            <g id="no_transactions" transform="translate(317.000000, 371.000000)">
+                <g id="icons-around" stroke-width="2" stroke-linejoin="round">
+                    <g id="right" transform="translate(617.000000, 0.000000)">
+                        <polygon id="Stroke-146" stroke="#E3E9EE" stroke-linecap="round" points="38.8755286 44 41 38 34 39.1212594"></polygon>
+                        <polyline id="Stroke-152" stroke="#E3E9EE" stroke-linecap="round" points="21 120 22.6351142 124.477504 27.6829482 124.260775 29.3170518 128.738279 34.3648858 128.522496 36 133"></polyline>
+                        <polyline id="Stroke-154" stroke="#C1C6CB" stroke-linecap="round" points="34 21 31.3961977 25.3124166 26.8014216 23.8437917 24.1985784 28.1562083 19.6038023 26.6875834 17 31"></polyline>
+                        <polygon id="Stroke-157" stroke="#E3E9EE" points="4 6 0.666666667 5.33343809 0 1.99968573 2 0 5.33333333 0.666561911 6 4.00031427"></polygon>
+                        <polygon id="Stroke-159" stroke="#E3E9EE" points="44.0003143 121 40.6665619 120.333438 40 116.999686 42.0006285 115 45.3334381 115.666562 46 119.000314"></polygon>
+                    </g>
+                    <g id="left" stroke-linecap="round">
+                        <polygon id="Stroke-144" stroke="#E3E9EE" points="52.334 10.987 52.266 0 42 5.571"></polygon>
+                        <polygon id="Stroke-148" stroke="#C1C6CB" points="29.941 129.416 32.094 123 25 124.199"></polygon>
+                        <polyline id="Stroke-151" stroke="#C1C6CB" points="16 16 18.715 20.199 23.506 18.769 26.22 22.968 31.011 21.538 33.726 25.737"></polyline>
+                        <polyline id="Stroke-153" stroke="#E3E9EE" points="0 116.183 4.921 117.068 7.148 112.591 12.07 113.476 14.297 109 19.218 109.885"></polyline>
+                    </g>
+                </g>
+                <g id="bg-card" transform="translate(87.000000, 41.000000)">
+                    <g id="bg-2" opacity="0.531075093">
+                        <use fill="#F9FAFB" fill-rule="evenodd" xlink:href="#path-1"></use>
+                        <path stroke="#E3E9EE" stroke-width="1" d="M32.3197257,22.4822007 C28.1841296,22.491422 24.8364486,25.8465757 24.8364486,29.9821821 L24.8364486,97 C24.8364486,101.142136 28.194313,104.5 32.3364486,104.5 L464.82243,104.5 C468.964566,104.5 472.32243,101.142136 472.32243,97 L472.32243,29.0178577 C472.322427,29.0094962 472.322427,29.0094962 472.322411,29.0011348 C472.313175,24.8590095 468.947832,21.5086405 464.805707,21.5178763 L32.3197257,22.4822007 Z"></path>
+                    </g>
+                    <g id="bg-1">
+                        <use fill="#F7F9FA" fill-rule="evenodd" xlink:href="#path-2"></use>
+                        <rect stroke="#E3E9EE" stroke-width="1" x="0.5" y="0.5" width="495" height="92" rx="8"></rect>
+                    </g>
+                </g>
+                <g id="bg">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="#FAFBFC" fill-rule="evenodd" xlink:href="#path-3"></use>
+                    <rect stroke="#E3E9EE" stroke-width="1" x="69.5" y="21.5" width="532" height="99" rx="8"></rect>
+                </g>
+                <g id="text" transform="translate(173.000000, 53.000000)">
+                    <text id="No-transactions-yet" font-family="Lato-Bold, Lato" font-size="14" font-weight="bold" fill="#4A4A4A">
+                        <tspan x="0" y="14">No transactions yet</tspan>
+                    </text>
+                    <text id="Looks-like-you-haven" font-family="Lato-Regular, Lato" font-size="12" font-weight="normal" fill="#A4A4A4">
+                        <tspan x="0" y="33">Looks like you haven't made any transactions yet or the wallet is syncing.</tspan>
+                    </text>
+                </g>
+                <g id="stratis" transform="translate(112.000000, 51.000000)">
+                    <rect id="Rectangle-3-Copy" fill="#EAF7FF" x="0" y="0" width="39" height="40" rx="8"></rect>
+                    <path d="M7.36268848,15.5236645 L19.9862785,22.7909358 C19.994651,22.796359 20.005194,22.796359 20.0135664,22.7909358 L32.6343657,15.5238241 C32.6503353,15.5134561 32.6504903,15.4896897 32.6345207,15.4791623 L20.0113958,8.2107745 C20.0028683,8.20535129 19.9920152,8.20535129 19.9836428,8.21093401 L7.36237839,15.4793218 C7.34671887,15.4898492 7.34687391,15.5134561 7.36268848,15.5236645 Z M19.5172681,31.8501019 L6.14279623,24.1445071 C6.13085779,24.1366913 6.1274468,24.1204216 6.13504399,24.1081396 L6.71351603,23.1849166 C6.72111322,23.1726346 6.73708283,23.169285 6.74886624,23.1771008 L19.9836428,30.8008688 C19.9920152,30.8064515 20.0028683,30.806611 20.0112407,30.8008688 L32.4149773,23.6580126 C32.7196403,23.482396 32.8725144,23.1252612 32.8725144,22.7671693 L32.8725144,20.8278905 C32.8725144,20.8069951 32.850188,20.7943941 32.8331331,20.8055596 L20.4749797,27.9240113 C20.1343463,28.1202042 19.8651886,28.1227563 19.5206791,27.9246493 L7.0226753,20.7296345 C6.37908446,20.3093352 6.0031009,19.5901208 6.0031009,18.8058278 L6,15.4172738 C6,14.9269511 6.24683127,14.7709538 6.6077755,14.562798 L19.5012985,7.13602036 C19.8177449,6.95434257 20.1800845,6.95418306 20.4982364,7.13841296 L33.5886662,14.6781211 C33.8582891,14.8334803 34,15.1617445 34,15.4919228 C34,15.8035983 33.8283654,16.1527578 33.5886662,16.2908903 L20.4704834,23.8468681 C20.1348114,24.0397114 19.8600721,24.0397114 19.523935,23.8465491 L7.15353308,16.7212386 C7.13632311,16.7102327 7.11415171,16.7228337 7.11415171,16.7435695 L7.11740765,18.8058278 C7.11740765,19.1927903 7.30687236,19.5475326 7.624249,19.7548909 L19.9837978,26.8758947 C19.9921702,26.881318 20.0028683,26.881318 20.0112407,26.8758947 L32.6087833,19.6177154 C32.9351525,19.4038173 33.4012171,19.3937684 33.7035544,19.6700335 C33.8965851,19.8466071 34,20.105167 34,20.3707451 L33.9996899,22.7583965 C33.9975193,23.4965921 33.5886662,24.2981118 33.0125199,24.6298851 L20.4718788,31.852973 C20.1306252,32.0494849 19.8656537,32.0494849 19.5172681,31.8501019 L19.5172681,31.8501019 Z" id="logo" fill="#2FBAFF"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
