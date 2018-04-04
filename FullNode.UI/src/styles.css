@@ -7873,6 +7873,7 @@ a.text-dark:focus, a.text-dark:hover {
 
 body {
   background: #FAFBFC !important;
+  cursor: default !important;
   -webkit-touch-callout: none;
   /* iOS Safari */
   -webkit-user-select: none;
@@ -7927,6 +7928,10 @@ img {
 
 #GUI .navbar.bg-light {
   background-color: #fff !important;
+}
+
+#GUI .navbar .navbar-text {
+  font-weight: bold;
 }
 
 #GUI .navbar .form-inline a:hover {
