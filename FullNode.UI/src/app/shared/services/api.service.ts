@@ -129,6 +129,7 @@ export class ApiService {
     getWalletBalance(data: WalletInfo): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
+      params.set('accountName', "account 0");
 
       return Observable
         .interval(this.pollingInterval)
@@ -158,6 +159,7 @@ export class ApiService {
     getWalletHistory(data: WalletInfo): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
+      params.set('accountName', "account 0");
 
       return Observable
         .interval(this.pollingInterval)

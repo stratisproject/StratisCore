@@ -85,6 +85,7 @@ export class DashboardComponent implements OnInit {
         response =>  {
           if (response.status >= 200 && response.status < 400) {
               let balanceResponse = response.json();
+              //TO DO - add account feature instead of using first entry in array
               this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
               this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
           }
@@ -120,8 +121,9 @@ export class DashboardComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            if (response.json().transactionsHistory.length > 0) {
-              historyResponse = response.json().transactionsHistory;
+            //TO DO - add account feature instead of using first entry in array
+            if (response.json().history[0].transactionsHistory.length > 0) {
+              historyResponse = response.json().history[0].transactionsHistory;
               this.getTransactionInfo(historyResponse);
             }
           }
