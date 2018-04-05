@@ -8275,6 +8275,7 @@ img {
 
 .modal .blockText {
   font-weight: 500;
+  user-select: auto !important;
 }
 
 .modal .btn-group label {
