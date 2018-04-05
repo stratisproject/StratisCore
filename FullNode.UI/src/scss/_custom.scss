@@ -356,7 +356,10 @@ img {pointer-events: none !important;}
     color: #A49803;
     background-color: #FFF8A7;
   }
-  .blockText {font-weight: 500;}
+  .blockText {
+    font-weight: 500;
+    user-select: auto !important;
+  }
   .btn-group {
     label {
       color: $gray-700;
