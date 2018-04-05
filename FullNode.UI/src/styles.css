@@ -7920,6 +7920,10 @@ img {
   padding-top: 2rem;
 }
 
+#GUI .mnemonics .list-inline {
+  user-select: all !important;
+}
+
 #GUI .mnemonics .badge {
   font-size: .7rem;
   padding: .5rem;
