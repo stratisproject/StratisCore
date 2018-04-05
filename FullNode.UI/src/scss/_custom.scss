@@ -33,7 +33,12 @@ img {pointer-events: none !important;}
 }
 
 #GUI {
-  #content {padding-top: $jumbotron-padding;}
+  #content {
+    padding-top: $jumbotron-padding;
+    .jumbotron {
+      strong {user-select: auto !important;}
+    }
+  }
 
   ///// MNEMONICS
   .mnemonics {

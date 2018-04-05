@@ -8,8 +8,8 @@
             <div class="col-9 text-left">
               <h5>Spendable balance</h5>
               <p class="lead">
-                <strong>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }} </strong>
-                <small class="text-uppercase">{{ coinUnit }}</small>
+                <strong>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
+                <small class="text-uppercase"> {{ coinUnit }}</small>
               </p>
               <ul class="list-unstyled">
                 <li><strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong><em> (unconfirmed)</em></li>
