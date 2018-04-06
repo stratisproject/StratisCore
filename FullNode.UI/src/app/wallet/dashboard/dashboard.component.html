@@ -123,7 +123,7 @@
                   <div class="form-group">
                     <label for="inputPassword" class="sr-only">Password</label>
                     <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword" placeholder="Password">
-                    <button type="button" id="flipcard" class="btn btn-outline-primary ml-2" [disabled]="isStarting" (click)="startStaking()">Unlock</button>
+                    <button type="button" id="flipcard" class="btn btn-outline-primary ml-2" [disabled]="isStarting || !stakingForm.valid" (click)="startStaking()">Unlock</button>
                   </div>
                 </form>
               </div>
