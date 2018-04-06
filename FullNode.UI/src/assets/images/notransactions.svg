@@ -52,7 +52,7 @@
                         <tspan x="0" y="14">No transactions yet</tspan>
                     </text>
                     <text id="Looks-like-you-haven" font-family="Lato-Regular, Lato" font-size="12" font-weight="normal" fill="#A4A4A4">
-                        <tspan x="0" y="33">Looks like you haven't made any transactions yet or the wallet is syncing.</tspan>
+                        <tspan x="0" y="33">Create your first transaction by using the Send or Receive button.</tspan>
                     </text>
                 </g>
                 <g id="stratis" transform="translate(112.000000, 51.000000)">
