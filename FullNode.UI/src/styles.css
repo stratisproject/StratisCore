@@ -7873,6 +7873,7 @@ a.text-dark:focus, a.text-dark:hover {
 
 body {
   background: #FAFBFC !important;
+  cursor: default !important;
   -webkit-touch-callout: none;
   /* iOS Safari */
   -webkit-user-select: none;
@@ -7919,6 +7920,14 @@ img {
   padding-top: 2rem;
 }
 
+#GUI #content .jumbotron strong {
+  user-select: auto !important;
+}
+
+#GUI .mnemonics .list-inline {
+  user-select: all !important;
+}
+
 #GUI .mnemonics .badge {
   font-size: .7rem;
   padding: .5rem;
@@ -7927,6 +7936,10 @@ img {
 
 #GUI .navbar.bg-light {
   background-color: #fff !important;
+}
+
+#GUI .navbar .navbar-text {
+  font-weight: bold;
 }
 
 #GUI .navbar .form-inline a:hover {
@@ -8262,6 +8275,7 @@ img {
 
 .modal .blockText {
   font-weight: 500;
+  user-select: auto !important;
 }
 
 .modal .btn-group label {

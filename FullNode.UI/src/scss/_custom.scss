@@ -9,6 +9,7 @@
 // basics
 body {
   background: #FAFBFC !important;
+  cursor: default !important;
   -webkit-touch-callout: none; /* iOS Safari */
    -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
@@ -32,10 +33,16 @@ img {pointer-events: none !important;}
 }
 
 #GUI {
-  #content {padding-top: $jumbotron-padding;}
+  #content {
+    padding-top: $jumbotron-padding;
+    .jumbotron {
+      strong {user-select: auto !important;}
+    }
+  }
 
   ///// MNEMONICS
   .mnemonics {
+    .list-inline {user-select: all !important;}
     .badge {
       font-size: .7rem;
       padding: .5rem;
@@ -46,6 +53,7 @@ img {pointer-events: none !important;}
   ///// NAVBAR
   .navbar {
     &.bg-light {background-color: $white !important;}
+    .navbar-text {font-weight: bold;}
     .form-inline {
       a {
         &:hover {
@@ -348,7 +356,10 @@ img {pointer-events: none !important;}
     color: #A49803;
     background-color: #FFF8A7;
   }
-  .blockText {font-weight: 500;}
+  .blockText {
+    font-weight: 500;
+    user-select: auto !important;
+  }
   .btn-group {
     label {
       color: $gray-700;
