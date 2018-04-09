@@ -8,6 +8,9 @@
   <!-- /button close -->
 </div>
 <div class="modal-body">
+  <p>
+    Amount available: {{ totalBalance | coinNotation }} {{ coinUnit }}
+  <p>
   <form [formGroup]="sendForm">
     <!--<div class="form-group has-danger clearfix">-->
       <div class="form-group clearfix">
@@ -41,8 +44,7 @@
       <!-- /fee buttons -->
     <div class="form-group clearfix">
       <small class="text-info" *ngIf="estimatedFee">
-        <em>Estimated Fee:
-        {{ estimatedFee | coinNotation }} {{ coinUnit }}</em>
+        <em>Transaction Fee: {{ estimatedFee | coinNotation }} {{ coinUnit }}</em>
       </small>
     </div>
     </div>
