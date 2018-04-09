@@ -37,10 +37,10 @@ let mainWindow = null;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1200,
+    width: 1150,
     height: 650,
     frame: true,
-    minWidth: 1200,
+    minWidth: 1150,
     minHeight: 650,
     title: "Stratis Core"
   });
