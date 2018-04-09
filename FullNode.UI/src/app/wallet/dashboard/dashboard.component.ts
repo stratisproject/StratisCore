@@ -253,6 +253,8 @@ export class DashboardComponent implements OnInit {
             this.dateTime = this.secondsToString(this.expectedTime);
             if (this.stakingActive) {
               this.isStarting = false;
+            } else {
+              this.isStopping = false;
             }
           }
         },
