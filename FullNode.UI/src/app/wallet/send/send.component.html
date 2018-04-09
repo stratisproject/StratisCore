@@ -59,7 +59,7 @@
 </div>
 <div class="modal-footer">
   <button *ngIf="!isSending" type="button" [disabled]="isSending" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
-  <button *ngIf="!isSending" type="button" [disabled]="isSending" class="btn btn-primary btn-block" [disabled]="!sendForm.valid || isSending" (click)="send()">Send</button>
+  <button *ngIf="!isSending" type="button" class="btn btn-primary btn-block" [disabled]="!sendForm.valid || isSending || !estimatedFee" (click)="send()">Send</button>
   <!-- SVG -->
   <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
     <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
