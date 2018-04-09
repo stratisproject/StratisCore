@@ -62,6 +62,14 @@ export class SendComponent implements OnInit {
       .subscribe(data => this.onValueChanged(data));
 
     this.onValueChanged();
+
+    this.sendForm.get('amount').valueChanges
+      .subscribe(val =>
+        {
+          if (this.isMaxBalance) {
+            this.isMaxBalance = false;
+          }
+        });
   }
 
   onValueChanged(data?: any) {
