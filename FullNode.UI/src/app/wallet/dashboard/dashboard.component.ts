@@ -44,6 +44,7 @@ export class DashboardComponent implements OnInit {
   public dateTime: string;
   public isStarting: boolean;
   public isStopping: boolean;
+  public hasBalance: boolean = false;
 
   ngOnInit() {
     this.startSubscriptions();
@@ -88,6 +89,11 @@ export class DashboardComponent implements OnInit {
               //TO DO - add account feature instead of using first entry in array
               this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
               this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
+              if ((this.confirmedBalance + this.unconfirmedBalance) > 0) {
+                this.hasBalance = true;
+              } else {
+                this.hasBalance = false;
+              }
           }
         },
         error => {

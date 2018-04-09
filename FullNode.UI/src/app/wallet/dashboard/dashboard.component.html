@@ -45,7 +45,7 @@
         <div class="row">
             <section class="col-12 text-center mt-4">
               <ng-template #noTransactions>
-                <img src="./assets/images/notransactions.svg" alt="Create your first transaction by using the Send or Receive button.">
+                <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">
               </ng-template>
             </section>
         </div>
@@ -114,7 +114,7 @@
               </div>
             </div>
           </div> -->
-          <section class="col-4">
+          <section class="col-4" *ngIf="hasBalance">
             <div class="card" *ngIf="!stakingEnabled">
               <div class="card-header">Staking</div>
               <div class="card-body">
