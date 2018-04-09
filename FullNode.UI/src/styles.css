@@ -7975,6 +7975,7 @@ img {
 
 #GUI .jumbotron .lead {
   font-size: 3rem;
+  margin-bottom: 0 !important;
 }
 
 #GUI .jumbotron .lead strong {
