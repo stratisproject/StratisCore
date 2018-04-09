@@ -28,8 +28,9 @@ export class SendComponent implements OnInit {
   public sendForm: FormGroup;
   public coinUnit: string;
   public isSending: boolean = false;
-  public estimatedFee: number;
+  public estimatedFee: number = 0;
   public apiError: string;
+  private isMaxBalance: boolean = false;
   private transactionHex: string;
   private responseMessage: any;
   private errorMessage: string;
@@ -43,7 +44,7 @@ export class SendComponent implements OnInit {
     this.sendForm = this.fb.group({
       "address": ["", Validators.compose([Validators.required, Validators.minLength(26)])],
       // "amount": ["", Validators.compose([Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]{0,8})?$/)])],
-      "amount": ["", Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/)])],
+      "amount": ["", Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001)])],
       "fee": ["medium", Validators.required],
       "password": ["", Validators.required]
     });
@@ -70,7 +71,7 @@ export class SendComponent implements OnInit {
 
     this.apiError = "";
 
-    if(this.sendForm.get("address").valid && this.sendForm.get("amount").valid) {
+    if(this.sendForm.get("address").valid && this.sendForm.get("amount").valid && !this.isMaxBalance) {
       this.estimateFee();
     }
   }
@@ -89,7 +90,8 @@ export class SendComponent implements OnInit {
     },
     'amount': {
       'required': 'An amount is required.',
-      'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.'
+      'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
+      'min': "The amount has to be more or equal to 0.00001 Stratis."
     },
     'fee': {
       'required': 'A fee is required.'
@@ -133,6 +135,7 @@ export class SendComponent implements OnInit {
         () => {
           this.sendForm.patchValue({amount: +new CoinNotationPipe(this.globalService).transform(balanceResponse.maxSpendableAmount)});
           this.estimatedFee = balanceResponse.fee;
+          this.isMaxBalance = true;
         }
       )
   };
@@ -176,6 +179,7 @@ export class SendComponent implements OnInit {
   }
 
   public buildTransaction() {
+    console.log(this.estimatedFee);
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
       "account 0",
@@ -183,6 +187,8 @@ export class SendComponent implements OnInit {
       this.sendForm.get("address").value.trim(),
       this.sendForm.get("amount").value,
       this.sendForm.get("fee").value,
+      // TO DO: use coin notation
+      this.estimatedFee / 100000000,
       true,
       false
     );
