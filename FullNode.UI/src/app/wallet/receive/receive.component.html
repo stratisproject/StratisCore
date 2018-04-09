@@ -15,7 +15,7 @@
       </div>
       <div class="col-9 mx-auto mb-4">
         <code class="d-inline-block">{{ address }}</code>
-        <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
+        <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" ngbTooltip="Copy to clipboard"  ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
           <i class="lnr lnr-file-add"></i>
         </button>
       </div>
