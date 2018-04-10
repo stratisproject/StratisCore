@@ -35,7 +35,6 @@ export class SendComponent implements OnInit {
   public estimatedFee: number = 0;
   public totalBalance: number = 0;
   public apiError: string;
-  private isMaxBalance: boolean = false;
   private transactionHex: string;
   private responseMessage: any;
   private errorMessage: string;
@@ -62,15 +61,6 @@ export class SendComponent implements OnInit {
     this.sendForm.valueChanges
       .debounceTime(300)
       .subscribe(data => this.onValueChanged(data));
-
-    this.sendForm.get('amount').valueChanges
-      .debounceTime(1000)
-      .subscribe(val =>
-        {
-          if (this.isMaxBalance) {
-            this.isMaxBalance = false;
-          }
-        });
   }
 
   onValueChanged(data?: any) {
@@ -89,13 +79,9 @@ export class SendComponent implements OnInit {
 
     this.apiError = "";
 
-    if(this.sendForm.get("address").valid && this.sendForm.get("amount").valid && !this.isMaxBalance) {
+    if(this.sendForm.get("address").valid && this.sendForm.get("amount").valid) {
       this.estimateFee();
     }
-
-    // if(!this.sendForm.get("address").valid && !this.sendForm.get("amount").valid && !this.isMaxBalance) {
-    //   this.estimatedFee = 0;
-    // }
   }
 
   formErrors = {
@@ -156,7 +142,6 @@ export class SendComponent implements OnInit {
           }
         },
         () => {
-          this.isMaxBalance = true;
           this.sendForm.patchValue({amount: +new CoinNotationPipe(this.globalService).transform(balanceResponse.maxSpendableAmount)});
           this.estimatedFee = balanceResponse.fee;
         }
@@ -202,7 +187,6 @@ export class SendComponent implements OnInit {
   }
 
   public buildTransaction() {
-    console.log(this.estimatedFee);
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
       "account 0",
