@@ -16,6 +16,7 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
 
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'send-component',
@@ -59,11 +60,11 @@ export class SendComponent implements OnInit {
     });
 
     this.sendForm.valueChanges
+      .debounceTime(300)
       .subscribe(data => this.onValueChanged(data));
 
-    this.onValueChanged();
-
     this.sendForm.get('amount').valueChanges
+      .debounceTime(1000)
       .subscribe(val =>
         {
           if (this.isMaxBalance) {
@@ -91,6 +92,10 @@ export class SendComponent implements OnInit {
     if(this.sendForm.get("address").valid && this.sendForm.get("amount").valid && !this.isMaxBalance) {
       this.estimateFee();
     }
+
+    // if(!this.sendForm.get("address").valid && !this.sendForm.get("amount").valid && !this.isMaxBalance) {
+    //   this.estimatedFee = 0;
+    // }
   }
 
   formErrors = {
@@ -151,9 +156,9 @@ export class SendComponent implements OnInit {
           }
         },
         () => {
+          this.isMaxBalance = true;
           this.sendForm.patchValue({amount: +new CoinNotationPipe(this.globalService).transform(balanceResponse.maxSpendableAmount)});
           this.estimatedFee = balanceResponse.fee;
-          this.isMaxBalance = true;
         }
       )
   };
