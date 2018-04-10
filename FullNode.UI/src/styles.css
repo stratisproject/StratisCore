@@ -89,7 +89,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: normal;
   line-height: 1.5;
   color: #354052;
   text-align: left;
@@ -467,7 +467,7 @@ hr {
 small,
 .small {
   font-size: 80%;
-  font-weight: 300;
+  font-weight: normal;
 }
 
 mark,
@@ -1790,7 +1790,7 @@ select.form-control:focus::-ms-value {
 select.form-control-sm:not([size]):not([multiple]), .input-group-sm > select.form-control:not([size]):not([multiple]),
 .input-group-sm > select.input-group-addon:not([size]):not([multiple]),
 .input-group-sm > .input-group-btn > select.btn:not([size]):not([multiple]) {
-  height: calc(1.414062rem + 2px);
+  height: calc(1.414063rem + 2px);
 }
 
 .form-control-lg, .input-group-lg > .form-control,
@@ -2069,7 +2069,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 .btn {
   display: inline-block;
-  font-weight: 300;
+  font-weight: normal;
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
@@ -2577,7 +2577,7 @@ fieldset[disabled] a.btn {
 }
 
 .btn-link {
-  font-weight: 300;
+  font-weight: normal;
   color: #158BCF;
   background-color: transparent;
 }
@@ -2735,7 +2735,7 @@ tbody.collapse.show {
   width: 100%;
   padding: 0.25rem 1.5rem;
   clear: both;
-  font-weight: 300;
+  font-weight: normal;
   color: #212529;
   text-align: inherit;
   white-space: nowrap;
@@ -2974,7 +2974,7 @@ tbody.collapse.show {
   padding: 0.375rem 0.75rem;
   margin-bottom: 0;
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: normal;
   line-height: 1.5;
   color: #495057;
   text-align: center;
@@ -3205,7 +3205,7 @@ tbody.collapse.show {
 }
 
 .custom-select-sm {
-  height: calc(1.414062rem + 2px);
+  height: calc(1.414063rem + 2px);
   padding-top: 0.375rem;
   padding-bottom: 0.375rem;
   font-size: 75%;
@@ -4835,7 +4835,7 @@ button.close {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-style: normal;
-  font-weight: 300;
+  font-weight: normal;
   line-height: 1.5;
   text-align: left;
   text-align: start;
@@ -4948,7 +4948,7 @@ button.close {
   max-width: 276px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-style: normal;
-  font-weight: 300;
+  font-weight: normal;
   line-height: 1.5;
   text-align: left;
   text-align: start;
@@ -5002,7 +5002,8 @@ button.close {
 }
 
 .popover.bs-popover-top .arrow::before, .popover.bs-popover-auto[x-placement^="top"] .arrow::before,
-.popover.bs-popover-top .arrow::after, .popover.bs-popover-auto[x-placement^="top"] .arrow::after {
+.popover.bs-popover-top .arrow::after,
+.popover.bs-popover-auto[x-placement^="top"] .arrow::after {
   border-bottom-width: 0;
 }
 
@@ -5012,7 +5013,9 @@ button.close {
   border-top-color: rgba(53, 64, 82, 0.25);
 }
 
-.popover.bs-popover-top .arrow::after, .popover.bs-popover-auto[x-placement^="top"] .arrow::after {
+
+.popover.bs-popover-top .arrow::after,
+.popover.bs-popover-auto[x-placement^="top"] .arrow::after {
   bottom: calc((0.8rem - 1px) * -1);
   margin-left: -0.8rem;
   border-top-color: #fff;
@@ -5027,7 +5030,8 @@ button.close {
 }
 
 .popover.bs-popover-right .arrow::before, .popover.bs-popover-auto[x-placement^="right"] .arrow::before,
-.popover.bs-popover-right .arrow::after, .popover.bs-popover-auto[x-placement^="right"] .arrow::after {
+.popover.bs-popover-right .arrow::after,
+.popover.bs-popover-auto[x-placement^="right"] .arrow::after {
   margin-top: -0.8rem;
   border-left-width: 0;
 }
@@ -5037,7 +5041,9 @@ button.close {
   border-right-color: rgba(53, 64, 82, 0.25);
 }
 
-.popover.bs-popover-right .arrow::after, .popover.bs-popover-auto[x-placement^="right"] .arrow::after {
+
+.popover.bs-popover-right .arrow::after,
+.popover.bs-popover-auto[x-placement^="right"] .arrow::after {
   left: calc((0.8rem - 1px) * -1);
   border-right-color: #fff;
 }
@@ -5051,7 +5057,8 @@ button.close {
 }
 
 .popover.bs-popover-bottom .arrow::before, .popover.bs-popover-auto[x-placement^="bottom"] .arrow::before,
-.popover.bs-popover-bottom .arrow::after, .popover.bs-popover-auto[x-placement^="bottom"] .arrow::after {
+.popover.bs-popover-bottom .arrow::after,
+.popover.bs-popover-auto[x-placement^="bottom"] .arrow::after {
   margin-left: -0.8rem;
   border-top-width: 0;
 }
@@ -5061,7 +5068,9 @@ button.close {
   border-bottom-color: rgba(53, 64, 82, 0.25);
 }
 
-.popover.bs-popover-bottom .arrow::after, .popover.bs-popover-auto[x-placement^="bottom"] .arrow::after {
+
+.popover.bs-popover-bottom .arrow::after,
+.popover.bs-popover-auto[x-placement^="bottom"] .arrow::after {
   top: calc((0.8rem - 1px) * -1);
   border-bottom-color: #fff;
 }
@@ -5086,7 +5095,8 @@ button.close {
 }
 
 .popover.bs-popover-left .arrow::before, .popover.bs-popover-auto[x-placement^="left"] .arrow::before,
-.popover.bs-popover-left .arrow::after, .popover.bs-popover-auto[x-placement^="left"] .arrow::after {
+.popover.bs-popover-left .arrow::after,
+.popover.bs-popover-auto[x-placement^="left"] .arrow::after {
   margin-top: -0.8rem;
   border-right-width: 0;
 }
@@ -5096,7 +5106,9 @@ button.close {
   border-left-color: rgba(53, 64, 82, 0.25);
 }
 
-.popover.bs-popover-left .arrow::after, .popover.bs-popover-auto[x-placement^="left"] .arrow::after {
+
+.popover.bs-popover-left .arrow::after,
+.popover.bs-popover-auto[x-placement^="left"] .arrow::after {
   right: calc((0.8rem - 1px) * -1);
   border-left-color: #fff;
 }
@@ -7772,7 +7784,7 @@ a.bg-dark:focus, a.bg-dark:hover {
 }
 
 .font-weight-normal {
-  font-weight: 300 !important;
+  font-weight: normal !important;
 }
 
 .font-weight-bold {

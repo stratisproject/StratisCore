@@ -227,7 +227,7 @@ $font-size-lg:                ($font-size-base * 1.15) !default;
 $font-size-sm:                ($font-size-base * .75) !default;
 
 $font-weight-light:           200 !default;
-$font-weight-normal:          300 !default;
+$font-weight-normal:          normal !default;
 $font-weight-bold:            600 !default;
 
 $font-weight-base:            $font-weight-normal !default;
