@@ -40,21 +40,23 @@
 
       <!-- CONTENT -->
       <section class="col-12">
-
         <!-- NO TRANSACTIONS -->
         <div class="row">
-            <section class="col-12 text-center mt-4">
-              <ng-template #noTransactions>
+          <ng-template #noTransactions>
+              <section class="col-12 text-center my-4">
                 <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">
-              </ng-template>
-            </section>
+              </section>
+              <div class="col-12 text-center">
+                <p>Click the down arrow for a receive address.</p>
+              </div>
+          </ng-template>
         </div>
         <!-- /NO TRANSACTIONS -->
 
-        <div class="row">
+        <div class="row" *ngIf="transactionArray; else noTransactions">
           <!-- TRANSACTIONS -->
           <div class="col-8">
-            <div class="card" *ngIf="transactionArray; else noTransactions">
+            <div class="card">
               <div class="card-header">Latest Transactions</div>
               <div class="card-body">
                 <table class="table table-sm">
