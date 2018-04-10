@@ -13,9 +13,9 @@
   <p>
   <form [formGroup]="sendForm">
     <!--<div class="form-group has-danger clearfix">-->
-      <div class="form-group clearfix">
+    <div class="form-group clearfix">
       <label class="float-left" for="amount">Amount</label>
-      <span class="float-right btn-link" (click)="getMaxBalance()">max</span>
+      <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
       <input type="text" class="form-control" [class.is-invalid]="formErrors.amount" [class.is-valid]="!formErrors.amount && sendForm.get('amount').valid" formControlName="amount" id="amount" placeholder="amount" placeholder="0.00 {{ coinUnit }}">
       <div *ngIf="formErrors.amount" class="invalid-feedback">{{ formErrors.amount }}</div>
     </div>
@@ -27,8 +27,12 @@
     </div>
     <div class="form-group clearfix">
       <label>Transaction Fee</label>
+      <div>
+        <label *ngIf="!estimatedFee">Please enter a valid amount and destination address to calculate the fee.</label>
+        <label *ngIf="estimatedFee">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+      </div>
       <!-- fee buttons -->
-      <div class="col row">
+      <!-- <div class="col row">
         <div class="btn-group" ngbRadioGroup name="feeButtons" formControlName="fee">
           <label ngbButtonLabel class="btn btn-outline-danger">
             <input ngbButton type="radio" value="low"> Low/Slow
@@ -40,13 +44,13 @@
             <input ngbButton type="radio" value="high"> High/Fast
           </label>
         </div>
-      </div>
+      </div> -->
       <!-- /fee buttons -->
-    <div class="form-group clearfix">
+    <!-- <div class="form-group clearfix">
       <small class="text-info" *ngIf="estimatedFee">
         <em>Transaction Fee: {{ estimatedFee | coinNotation }} {{ coinUnit }}</em>
       </small>
-    </div>
+    </div> -->
     </div>
     <div class="form-group clearfix">
       <label for="walletPassword">Wallet Password</label>
