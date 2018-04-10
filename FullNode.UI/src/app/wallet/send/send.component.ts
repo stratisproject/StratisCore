@@ -16,6 +16,7 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
 
 import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'send-component',
@@ -34,7 +35,6 @@ export class SendComponent implements OnInit {
   public estimatedFee: number = 0;
   public totalBalance: number = 0;
   public apiError: string;
-  private isMaxBalance: boolean = false;
   private transactionHex: string;
   private responseMessage: any;
   private errorMessage: string;
@@ -59,9 +59,8 @@ export class SendComponent implements OnInit {
     });
 
     this.sendForm.valueChanges
+      .debounceTime(300)
       .subscribe(data => this.onValueChanged(data));
-
-    this.onValueChanged();
   }
 
   onValueChanged(data?: any) {
@@ -80,7 +79,7 @@ export class SendComponent implements OnInit {
 
     this.apiError = "";
 
-    if(this.sendForm.get("address").valid && this.sendForm.get("amount").valid && !this.isMaxBalance) {
+    if(this.sendForm.get("address").valid && this.sendForm.get("amount").valid) {
       this.estimateFee();
     }
   }
@@ -145,7 +144,6 @@ export class SendComponent implements OnInit {
         () => {
           this.sendForm.patchValue({amount: +new CoinNotationPipe(this.globalService).transform(balanceResponse.maxSpendableAmount)});
           this.estimatedFee = balanceResponse.fee;
-          this.isMaxBalance = true;
         }
       )
   };
@@ -189,7 +187,6 @@ export class SendComponent implements OnInit {
   }
 
   public buildTransaction() {
-    console.log(this.estimatedFee);
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
       "account 0",

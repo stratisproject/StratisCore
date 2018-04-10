@@ -14,12 +14,16 @@
         <li class="list-inline-item col-9 blockText text-uppercase">Sent</li>
       </ul>
       <ul class="list-inline row">
-        <li class="list-inline-item col blockLabel">Amount</li>
-        <li class="list-inline-item col-9 blockText text-danger">-{{ transaction.amount | number:'1.8-8' }} <small>{{ coinUnit }}</small></li>
+        <li class="list-inline-item col blockLabel">Amount Sent</li>
+        <li class="list-inline-item col-9 blockText text-danger">{{ transaction.amount - transactionFee | number:'1.8-8' }} <small>{{ coinUnit }}</small></li>
       </ul>
       <ul class="list-inline row">
         <li class="list-inline-item col blockLabel">Fee</li>
-        <li class="list-inline-item col-9 blockText text-danger">- {{ transactionFee }} {{ coinUnit }}</li>
+        <li class="list-inline-item col-9 blockText text-danger">{{ transactionFee }} <small>{{ coinUnit }}</small></li>
+      </ul>
+      <ul class="list-inline row">
+        <li class="list-inline-item col blockLabel">Total</li>
+        <li class="list-inline-item col-9 blockText text-danger">{{ transaction.amount }} <small>{{ coinUnit }}</small></li>
       </ul>
       <ul class="list-inline row">
         <li class="list-inline-item col blockLabel">Destination</li>
