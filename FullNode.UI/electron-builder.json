@@ -23,6 +23,7 @@
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
   },
   "mac": {
+    "icon": "dist/assets/images/icon.icns",
     "target": [
       "dmg"
     ],
