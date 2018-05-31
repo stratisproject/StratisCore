@@ -1,6 +1,26 @@
 export class TransactionBuilding {
 
-  constructor(walletName: string, accountName: string, password: string, destinationAddress: string, amount: string, feeType: string, feeAmount: number, allowUnconfirmed: boolean, shuffleOutputs: boolean) {
+  walletName: string;
+  accountName: string;
+  password: string;
+  destinationAddress: string;
+  amount: string;
+  feeType: string;
+  feeAmount: number;
+  allowUnconfirmed: boolean;
+  shuffleOutputs: boolean;
+
+  constructor (
+    walletName: string,
+    accountName: string,
+    password: string,
+    destinationAddress: string,
+    amount: string,
+    feeType: string,
+    feeAmount: number,
+    allowUnconfirmed: boolean,
+    shuffleOutputs: boolean) {
+
     this.walletName = walletName;
     this.accountName = accountName;
     this.password = password;
@@ -11,14 +31,4 @@ export class TransactionBuilding {
     this.allowUnconfirmed = allowUnconfirmed;
     this.shuffleOutputs = shuffleOutputs;
   }
-
-  walletName: string;
-  accountName: string;
-  password: string;
-  destinationAddress: string;
-  amount: string;
-  feeType: string;
-  feeAmount: number;
-  allowUnconfirmed: boolean;
-  shuffleOutputs: boolean;
 }
