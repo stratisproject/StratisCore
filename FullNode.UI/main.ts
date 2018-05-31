@@ -3,17 +3,17 @@ import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 
-let serve;
-let testnet;
 const args = process.argv.slice(1);
-serve = args.some(val => val === "--serve" || val === "-serve");
-testnet = args.some(val => val === "--testnet" || val === "-testnet");
+const serve = args.some(val => val === '--serve' || val === '-serve');
+const testnet = args.some(val => val === '--testnet' || val === '-testnet');
+const customPort = args.filter(val => val.indexOf('--port=') >= 0 || val.indexOf('-port=') >= 0);
 
-let apiPort;
-if (testnet) {
-  apiPort = 38221;
-} else {
-  apiPort = 37221;
+let apiPort = testnet ? 38221 : 37221;
+if (!!customPort && customPort.length > 0) {
+  const portKeyValuePairTokens = customPort[0].split('=');
+  if (portKeyValuePairTokens.length === 2 && parseInt(portKeyValuePairTokens[1], 10) !== NaN) {
+    apiPort = parseInt(portKeyValuePairTokens[1], 10);
+  }
 }
 
 ipcMain.on('get-port', (event, arg) => {
@@ -42,7 +42,7 @@ function createWindow() {
     frame: true,
     minWidth: 1150,
     minHeight: 650,
-    title: "Stratis Core"
+    title: 'Stratis Core'
   });
 
   if (serve) {
@@ -63,7 +63,7 @@ function createWindow() {
 
   // Emitted when the window is going to close.
   mainWindow.on('close', () => {
-  })
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -73,21 +73,20 @@ function createWindow() {
     mainWindow = null;
   });
 
-};
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   if (serve) {
-    console.log("Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.")
-  }
-  else {
+    console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.');
+  } else {
     startStratisApi();
   }
   createTray();
   createWindow();
-  if (os.platform() === 'darwin'){
+  if (os.platform() === 'darwin') {
     createMenu();
   }
 });
@@ -116,20 +115,20 @@ app.on('activate', () => {
 function closeStratisApi() {
   // if (process.platform !== 'darwin' && !serve) {
     if (process.platform !== 'darwin' && !serve && !testnet) {
-    var http2 = require('http');
-    const options1 = {
-      hostname: 'localhost',
-      port: 37221,
-      path: '/api/node/shutdown',
-      method: 'POST'
-    };
+      const http2 = require('http');
+      const options1 = {
+        hostname: 'localhost',
+        port: 37221,
+        path: '/api/node/shutdown',
+        method: 'POST'
+      };
 
-   const req = http2.request(options1, (res) => {});
-   req.write('');
-   req.end();
+     const req = http2.request(options1, (res) => {});
+     req.write('');
+     req.end();
 
    } else if (process.platform !== 'darwin' && !serve && testnet) {
-     var http2 = require('http');
+     const http2 = require('http');
      const options2 = {
        hostname: 'localhost',
        port: 38221,
@@ -137,24 +136,24 @@ function closeStratisApi() {
        method: 'POST'
      };
 
-   const req = http2.request(options2, (res) => {});
-   req.write('');
-   req.end();
+     const req = http2.request(options2, (res) => {});
+     req.write('');
+     req.end();
    }
-};
+}
 
 function startStratisApi() {
-  var stratisProcess;
+  let stratisProcess;
   const spawnStratis = require('child_process').spawn;
 
-  //Start Stratis Daemon
+  // Start Stratis Daemon
   let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.StratisD');
   if (os.platform() === 'win32') {
     apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.StratisD.exe');
-  } else if(os.platform() === 'linux') {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
+  } else if (os.platform() === 'linux') {
+    apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
   } else {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
+    apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
   }
 
   if (!testnet) {
@@ -173,7 +172,7 @@ function startStratisApi() {
 }
 
 function createTray() {
-  //Put the app in system tray
+  // Put the app in system tray
   let trayIcon;
   if (serve) {
     trayIcon = nativeImage.createFromPath('./src/assets/images/icon-tray.png');
@@ -181,7 +180,7 @@ function createTray() {
     trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/images/icon-tray.png'));
   }
 
-  let systemTray = new Tray(trayIcon);
+  const systemTray = new Tray(trayIcon);
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Hide/Show',
@@ -209,29 +208,29 @@ function createTray() {
   });
 
   app.on('window-all-closed', function () {
-    if (systemTray) systemTray.destroy();
+    if (systemTray) { systemTray.destroy(); }
   });
-};
+}
 
 function writeLog(msg) {
   console.log(msg);
-};
+}
 
 function createMenu() {
-  var menuTemplate = [{
+  const menuTemplate = [{
     label: app.getName(),
     submenu: [
-      { label: "About " + app.getName(), selector: "orderFrontStandardAboutPanel:" },
-      { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
+      { label: `About ${app.getName()}`, selector: 'orderFrontStandardAboutPanel:' },
+      { label: 'Quit', accelerator: 'Command+Q', click: function() { app.quit(); }}
     ]}, {
-    label: "Edit",
+    label: 'Edit',
     submenu: [
-      { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-      { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-      { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-      { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-      { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-      { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+      { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
+      { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+      { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+      { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+      { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+      { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
     ]}
   ];
 
