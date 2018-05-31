@@ -235,4 +235,4 @@ function createMenu() {
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
-};
+}
