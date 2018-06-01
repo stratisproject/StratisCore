@@ -121,7 +121,7 @@ img {pointer-events: none !important;}
         color: $white;
       }
     }
-
+    .btn-lg {&.btn-purple {.text-uppercase {font-size: .6rem;}}}
   }
 
   ///// STAKING

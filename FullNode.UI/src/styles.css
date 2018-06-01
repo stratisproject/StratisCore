@@ -8176,6 +8176,10 @@ img {
   color: #fff;
 }
 
+#GUI .jumbotron .btn-lg.btn-purple .text-uppercase, #GUI .jumbotron .btn-group-lg > .btn-purple.btn .text-uppercase {
+  font-size: .6rem;
+}
+
 #GUI #staking strong {
   font-weight: bold !important;
 }
