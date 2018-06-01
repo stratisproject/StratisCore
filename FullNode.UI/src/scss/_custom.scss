@@ -55,16 +55,22 @@ img {pointer-events: none !important;}
     &.bg-light {background-color: $white !important;}
     .navbar-text {font-weight: bold;}
     .form-inline {
-      a {
-        &:hover {
-          cursor: pointer;
-          .lnr-exit {color: $primary;}
-        }
-        .lnr-exit {
-          font-size: 1.5rem;
-          color: $gray-500;
+      .list-inline {
+        margin-bottom: 0;
+        a {
+          &:hover {
+            cursor: pointer;
+            .lnr-exit,
+            .lnr-cog {color: $primary;}
+          }
+          .lnr-exit,
+          .lnr-cog {
+            font-size: 1.5rem;
+            color: $gray-500;
+          }
         }
       }
+
     }
   }
 

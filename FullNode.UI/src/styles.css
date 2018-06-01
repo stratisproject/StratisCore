@@ -8097,15 +8097,21 @@ img {
   font-weight: bold;
 }
 
-#GUI .navbar .form-inline a:hover {
+#GUI .navbar .form-inline .list-inline {
+  margin-bottom: 0;
+}
+
+#GUI .navbar .form-inline .list-inline a:hover {
   cursor: pointer;
 }
 
-#GUI .navbar .form-inline a:hover .lnr-exit {
+#GUI .navbar .form-inline .list-inline a:hover .lnr-exit,
+#GUI .navbar .form-inline .list-inline a:hover .lnr-cog {
   color: #158BCF;
 }
 
-#GUI .navbar .form-inline a .lnr-exit {
+#GUI .navbar .form-inline .list-inline a .lnr-exit,
+#GUI .navbar .form-inline .list-inline a .lnr-cog {
   font-size: 1.5rem;
   color: #adb5bd;
 }
