@@ -33,6 +33,17 @@ img {pointer-events: none !important;}
 }
 
 #GUI {
+  &.SideChain {
+    .left-login {background: $purple;}
+    .btn-primary {
+      background-color: $purple !important;
+      border-color: $purple !important;
+      &:hover {
+        border-color: $purple !important;
+        background-color: lighten($purple, 10%) !important;
+      }
+    }
+  }
   #content {
     padding-top: $jumbotron-padding;
     .jumbotron {

@@ -8071,6 +8071,20 @@ img {
   /* used for streak effect */
 }
 
+#GUI.SideChain .left-login {
+  background: #5757D5;
+}
+
+#GUI.SideChain .btn-primary {
+  background-color: #5757D5 !important;
+  border-color: #5757D5 !important;
+}
+
+#GUI.SideChain .btn-primary:hover {
+  border-color: #5757D5 !important;
+  background-color: #8080df !important;
+}
+
 #GUI #content {
   padding-top: 2rem;
 }
