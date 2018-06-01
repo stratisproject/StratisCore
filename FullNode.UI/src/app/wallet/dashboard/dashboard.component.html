@@ -5,7 +5,7 @@
       <div class="jumbotron jumbotron-fluid">
         <div class="col-12">
           <div class="row d-flex align-items-center">
-            <div class="col-9 text-left">
+            <div class="col-8 text-left">
               <h5>Spendable balance</h5>
               <p class="lead">
                 <strong>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
@@ -26,6 +26,10 @@
                 <a class="btn btn-lg btn-secondary ml-2" (click)="openSendDialog()">
                   <i class="icon lnr lnr-arrow-up-circle"></i>
                   <span class="text-center text-uppercase">Send</span>
+                </a>
+                <a class="btn btn-lg btn-purple ml-2" (click)="openSendDialog()">
+                  <i class="icon lnr lnr-link"></i>
+                  <span class="text-center text-uppercase">Cross-chain</span>
                 </a>
               </p>
             </div>
