@@ -18,7 +18,7 @@ import { ClipboardModule } from 'ngx-clipboard';
       NgbModule,
       ClipboardModule,
       ReactiveFormsModule,
-      SharedModule.forRoot(),
+      SharedModule.forRoot()
     ],
     declarations: [
       DepositConfirmationComponent,
