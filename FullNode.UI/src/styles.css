@@ -3454,7 +3454,7 @@ tbody.collapse.show {
   display: inline-block;
   padding-top: 0.408594rem;
   padding-bottom: 0.408594rem;
-  margin-right: 1rem;
+  margin-right: 0;
   font-size: 0.934375rem;
   line-height: inherit;
   white-space: nowrap;
