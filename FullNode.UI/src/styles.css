@@ -8444,6 +8444,10 @@ img {
   user-select: auto !important;
 }
 
+.modal .btn-group.btn-group-toggle label {
+  color: #fff !important;
+}
+
 .modal .btn-group label {
   color: #495057;
 }
