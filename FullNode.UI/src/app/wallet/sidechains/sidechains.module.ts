@@ -9,6 +9,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
     imports: [
@@ -24,19 +25,22 @@ import { ClipboardModule } from 'ngx-clipboard';
       DepositConfirmationComponent,
       DepositComponent,
       WithdrawConfirmationComponent,
-      WithdrawComponent
+      WithdrawComponent,
+      SettingsComponent
     ],
     exports: [
       DepositConfirmationComponent,
       DepositComponent,
       WithdrawConfirmationComponent,
-      WithdrawComponent
+      WithdrawComponent,
+      SettingsComponent
     ],
     entryComponents: [
       DepositConfirmationComponent,
       DepositComponent,
       WithdrawConfirmationComponent,
-      WithdrawComponent
+      WithdrawComponent,
+      SettingsComponent
     ]
 })
 export class SidechainsModule {}

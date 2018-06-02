@@ -12,27 +12,24 @@ import { SendComponent } from '../send/send.component';
 import { ReceiveComponent } from '../receive/receive.component';
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
 
-import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
 import { Router } from '@angular/router';
+import { DepositComponent } from '../sidechains/deposit/deposit.component';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'dashboard-component',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 
-export class DashboardComponent implements OnInit {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
-    this.buildStakingForm();
-  }
-
+export class DashboardComponent implements OnInit, OnDestroy {
   public walletName: string;
   public coinUnit: string;
   public confirmedBalance: number;
   public unconfirmedBalance: number;
   public transactionArray: TransactionInfo[];
-  private stakingForm: FormGroup;
+  public stakingForm: FormGroup;
   private walletBalanceSubscription: Subscription;
   private walletHistorySubscription: Subscription;
   private stakingInfoSubscription: Subscription;
@@ -44,21 +41,31 @@ export class DashboardComponent implements OnInit {
   public dateTime: string;
   public isStarting: boolean;
   public isStopping: boolean;
-  public hasBalance: boolean = false;
+  public hasBalance = false;
+
+  constructor(
+    private apiService: ApiService,
+    private globalService: GlobalService,
+    private modalService: NgbModal,
+    private genericModalService: ModalService,
+    private router: Router,
+    private fb: FormBuilder) {
+    this.buildStakingForm();
+  }
 
   ngOnInit() {
     this.startSubscriptions();
-    this.walletName = this.globalService.getWalletName();
-    this.coinUnit = this.globalService.getCoinUnit();
-  };
+    this.walletName = this.globalService.WalletName;
+    this.coinUnit = this.globalService.CoinUnit;
+  }
 
   ngOnDestroy() {
     this.cancelSubscriptions();
-  };
+  }
 
   private buildStakingForm(): void {
     this.stakingForm = this.fb.group({
-      "walletPassword": ["", Validators.required]
+      'walletPassword': ['', Validators.required]
     });
   }
 
@@ -67,26 +74,33 @@ export class DashboardComponent implements OnInit {
   }
 
   public openSendDialog() {
-    const modalRef = this.modalService.open(SendComponent, { backdrop: "static", keyboard: false });
-  };
+    const modalRef = this.modalService.open(SendComponent, { backdrop: 'static', keyboard: false });
+  }
+
+  public openSidechainTransferDialog() {
+    const modalRef = this.modalService.open(
+        DepositComponent,
+        { backdrop: 'static', keyboard: false }
+    );
+  }
 
   public openReceiveDialog() {
-    const modalRef = this.modalService.open(ReceiveComponent, { backdrop: "static", keyboard: false });
-  };
+    const modalRef = this.modalService.open(ReceiveComponent, { backdrop: 'static', keyboard: false });
+  }
 
   public openTransactionDetailDialog(transaction: TransactionInfo) {
-    const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: "static", keyboard: false });
+    const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: 'static', keyboard: false });
     modalRef.componentInstance.transaction = transaction;
   }
 
   private getWalletBalance() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName());
+    const walletInfo = new WalletInfo(this.globalService.WalletName);
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
-              let balanceResponse = response.json();
-              //TO DO - add account feature instead of using first entry in array
+              const balanceResponse = response.json();
+              // TODO - add account feature instead of using first entry in array
               this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
               this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
               if ((this.confirmedBalance + this.unconfirmedBalance) > 0) {
@@ -104,8 +118,7 @@ export class DashboardComponent implements OnInit {
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               if (error.json().errors[0].description) {
                 this.genericModalService.openModal(null, error.json().errors[0].message);
               } else {
@@ -115,19 +128,18 @@ export class DashboardComponent implements OnInit {
             }
           }
         }
-      )
-    ;
-  };
+      );
+  }
 
   // todo: add history in seperate service to make it reusable
   private getHistory() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName());
+    const walletInfo = new WalletInfo(this.globalService.WalletName);
     let historyResponse;
     this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            //TO DO - add account feature instead of using first entry in array
+            // TODO - add account feature instead of using first entry in array
             if (response.json().history[0].transactionsHistory.length > 0) {
               historyResponse = response.json().history[0].transactionsHistory;
               this.getTransactionInfo(historyResponse);
@@ -142,8 +154,7 @@ export class DashboardComponent implements OnInit {
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               if (error.json().errors[0].description) {
                 this.genericModalService.openModal(null, error.json().errors[0].message);
               } else {
@@ -153,64 +164,68 @@ export class DashboardComponent implements OnInit {
             }
           }
         }
-      )
-    ;
-  };
+      );
+  }
 
   private getTransactionInfo(transactions: any) {
     this.transactionArray = [];
 
-    for (let transaction of transactions) {
+    for (const transaction of transactions) {
       let transactionType;
-      if (transaction.type === "send") {
-        transactionType = "sent";
-      } else if (transaction.type === "received") {
-        transactionType = "received";
-      } else if (transaction.type === "staked") {
-        transactionType = "staked";
+      if (transaction.type === 'send') {
+        transactionType = 'sent';
+      } else if (transaction.type === 'received') {
+        transactionType = 'received';
+      } else if (transaction.type === 'staked') {
+        transactionType = 'staked';
       }
-      let transactionId = transaction.id;
-      let transactionAmount = transaction.amount;
+      const transactionId = transaction.id;
+      const transactionAmount = transaction.amount;
       let transactionFee;
       if (transaction.fee) {
         transactionFee = transaction.fee;
       } else {
         transactionFee = 0;
       }
-      let transactionConfirmedInBlock = transaction.confirmedInBlock;
-      let transactionTimestamp = transaction.timestamp;
-      let transactionConfirmed;
+      const transactionConfirmedInBlock = transaction.confirmedInBlock;
+      const transactionTimestamp = transaction.timestamp;
 
-      this.transactionArray.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
+      this.transactionArray.push(
+        new TransactionInfo(
+          transactionType,
+          transactionId,
+          transactionAmount,
+          transactionFee,
+          transactionConfirmedInBlock,
+          transactionTimestamp));
     }
   }
 
   private startStaking() {
     this.isStarting = true;
     this.isStopping = false;
-    let walletData = {
-      name: this.globalService.getWalletName(),
+    const walletData = {
+      name: this.globalService.WalletName,
       password: this.stakingForm.get('walletPassword').value
-    }
+    };
     this.apiService.startStaking(walletData)
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
             this.stakingEnabled = true;
-            this.stakingForm.patchValue({ walletPassword: "" });
+            this.stakingForm.patchValue({ walletPassword: '' });
           }
         },
         error => {
           this.isStarting = false;
           this.stakingEnabled = false;
-          this.stakingForm.patchValue({ walletPassword: "" });
+          this.stakingForm.patchValue({ walletPassword: '' });
           if (error.status === 0) {
             this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
@@ -235,8 +250,7 @@ export class DashboardComponent implements OnInit {
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
@@ -250,7 +264,7 @@ export class DashboardComponent implements OnInit {
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
-            let stakingResponse = response.json()
+            const stakingResponse = response.json();
             this.stakingEnabled = stakingResponse.enabled;
             this.stakingActive = stakingResponse.staking;
             this.stakingWeight = stakingResponse.weight;
@@ -270,8 +284,7 @@ export class DashboardComponent implements OnInit {
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
@@ -280,40 +293,39 @@ export class DashboardComponent implements OnInit {
     ;
   }
 
-  private secondsToString(seconds: number)
-  {
-    let numDays = Math.floor(seconds / 86400);
-    let numHours = Math.floor((seconds % 86400) / 3600);
-    let numMinutes = Math.floor(((seconds % 86400) % 3600) / 60);
-    let numSeconds = ((seconds % 86400) % 3600) % 60;
-    let dateString = "";
+  private secondsToString(seconds: number) {
+    const numDays = Math.floor(seconds / 86400);
+    const numHours = Math.floor((seconds % 86400) / 3600);
+    const numMinutes = Math.floor(((seconds % 86400) % 3600) / 60);
+    const numSeconds = ((seconds % 86400) % 3600) % 60;
+    let dateString = '';
 
     if (numDays > 0) {
       if (numDays > 1) {
-        dateString += numDays + " days ";
+        dateString += numDays + ' days ';
       } else {
-        dateString += numDays + " day ";
+        dateString += numDays + ' day ';
       }
     }
 
     if (numHours > 0) {
       if (numHours > 1) {
-        dateString += numHours + " hours ";
+        dateString += numHours + ' hours ';
       } else {
-        dateString += numHours + " hour ";
+        dateString += numHours + ' hour ';
       }
     }
 
     if (numMinutes > 0) {
       if (numMinutes > 1) {
-        dateString += numMinutes + " minutes ";
+        dateString += numMinutes + ' minutes ';
       } else {
-        dateString += numMinutes + " minute ";
+        dateString += numMinutes + ' minute ';
       }
     }
 
-    if (dateString === "") {
-      dateString = "Unknown";
+    if (dateString === '') {
+      dateString = 'Unknown';
     }
 
     return dateString;
@@ -324,14 +336,14 @@ export class DashboardComponent implements OnInit {
       this.walletBalanceSubscription.unsubscribe();
     }
 
-    if(this.walletHistorySubscription) {
+    if (this.walletHistorySubscription) {
       this.walletHistorySubscription.unsubscribe();
     }
 
     if (this.stakingInfoSubscription) {
       this.stakingInfoSubscription.unsubscribe();
     }
-  };
+  }
 
   private startSubscriptions() {
     this.getWalletBalance();

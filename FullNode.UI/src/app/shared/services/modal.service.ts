@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
 import { NgbModal, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
@@ -10,7 +10,7 @@ export class ModalService {
   private modalOptions: NgbModalOptions;
 
   public openModal(title, body) {
-    const modalRef = this.modalService.open(GenericModalComponent, { backdrop: "static", keyboard: false });
+    const modalRef = this.modalService.open(GenericModalComponent, { backdrop: 'static', keyboard: false });
     if (title) {
       modalRef.componentInstance.title = title;
     }

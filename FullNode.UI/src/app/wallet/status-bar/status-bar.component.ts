@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ApiService } from '../../shared/services/api.service';
@@ -10,19 +9,20 @@ import { ModalService } from '../../shared/services/modal.service';
 import { WalletInfo } from '../../shared/classes/wallet-info';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'status-bar',
   templateUrl: './status-bar.component.html',
   styleUrls: ['./status-bar.component.css']
 })
-export class StatusBarComponent implements OnInit {
+export class StatusBarComponent implements OnInit, OnDestroy {
 
   private generalWalletInfoSubscription: Subscription;
   private stakingInfoSubscription: Subscription;
   public lastBlockSyncedHeight: number;
   public chainTip: number;
   private isChainSynced: boolean;
-  public connectedNodes: number = 0;
-  private percentSyncedNumber: number = 0;
+  public connectedNodes = 0;
+  private percentSyncedNumber = 0;
   public percentSynced: string;
   public stakingEnabled: boolean;
 
@@ -37,23 +37,22 @@ export class StatusBarComponent implements OnInit {
   }
 
   private getGeneralWalletInfo() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName())
+    const walletInfo = new WalletInfo(this.globalService.WalletName);
     this.generalWalletInfoSubscription = this.apiService.getGeneralInfo(walletInfo)
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
-            let generalWalletInfoResponse = response.json();
+            const generalWalletInfoResponse = response.json();
             this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
             this.chainTip = generalWalletInfoResponse.chainTip;
             this.isChainSynced = generalWalletInfoResponse.isChainSynced;
             this.connectedNodes = generalWalletInfoResponse.connectedNodes;
 
-            if(!this.isChainSynced) {
-              this.percentSynced = "syncing...";
-            }
-            else {
+            if (!this.isChainSynced) {
+              this.percentSynced = 'syncing...';
+            } else {
               this.percentSyncedNumber = ((this.lastBlockSyncedHeight / this.chainTip) * 100);
-              if (this.percentSyncedNumber.toFixed(0) === "100" && this.lastBlockSyncedHeight != this.chainTip) {
+              if (this.percentSyncedNumber.toFixed(0) === '100' && this.lastBlockSyncedHeight !== this.chainTip) {
                 this.percentSyncedNumber = 99;
               }
 
@@ -69,8 +68,7 @@ export class StatusBarComponent implements OnInit {
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               if (error.json().errors[0].description) {
                 this.genericModalService.openModal(null, error.json().errors[0].message);
               } else {
@@ -80,16 +78,15 @@ export class StatusBarComponent implements OnInit {
             }
           }
         }
-      )
-    ;
-  };
+      );
+  }
 
   private getStakingInfo() {
     this.apiService.getStakingInfo()
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
-            let stakingResponse = response.json()
+            const stakingResponse = response.json();
             this.stakingEnabled = stakingResponse.enabled;
           }
         },
@@ -99,8 +96,7 @@ export class StatusBarComponent implements OnInit {
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }
@@ -110,14 +106,14 @@ export class StatusBarComponent implements OnInit {
   }
 
   private cancelSubscriptions() {
-    if(this.generalWalletInfoSubscription) {
+    if (this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
     }
-    
+
     if (this.stakingInfoSubscription) {
       this.stakingInfoSubscription.unsubscribe();
     }
-  };
+  }
 
   private startSubscriptions() {
     this.getGeneralWalletInfo();

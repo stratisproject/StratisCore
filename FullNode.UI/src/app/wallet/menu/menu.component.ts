@@ -6,6 +6,7 @@ import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confi
 
 import { ModalService } from '../../shared/services/modal.service';
 import { GlobalService } from '../../shared/services/global.service';
+import { SettingsComponent } from '../sidechains/settings/settings.component';
 
 @Component({
   selector: 'app-menu',
@@ -17,11 +18,15 @@ export class MenuComponent implements OnInit {
   public walletName: string;
 
   ngOnInit() {
-    this.walletName = this.globalService.getWalletName();
+    this.walletName = this.globalService.WalletName;
   }
 
   public logOut() {
-    const modalRef = this.modalService.open(LogoutConfirmationComponent, { backdrop: "static" });
+    const modalRef = this.modalService.open(LogoutConfirmationComponent, { backdrop: 'static' });
+  }
+
+  public openSettings() {
+    const modalRef = this.modalService.open(SettingsComponent, { backdrop: 'static' });
   }
 
   public goToDashboard() {

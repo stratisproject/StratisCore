@@ -1565,6 +1565,21 @@ pre code {
   background-color: #b9bbbe;
 }
 
+.table-purple,
+.table-purple > th,
+.table-purple > td {
+  background-color: #d0d0f3;
+}
+
+.table-hover .table-purple:hover {
+  background-color: #bcbcee;
+}
+
+.table-hover .table-purple:hover > td,
+.table-hover .table-purple:hover > th {
+  background-color: #bcbcee;
+}
+
 .table-active,
 .table-active > th,
 .table-active > td {
@@ -1790,7 +1805,7 @@ select.form-control:focus::-ms-value {
 select.form-control-sm:not([size]):not([multiple]), .input-group-sm > select.form-control:not([size]):not([multiple]),
 .input-group-sm > select.input-group-addon:not([size]):not([multiple]),
 .input-group-sm > .input-group-btn > select.btn:not([size]):not([multiple]) {
-  height: calc(1.414063rem + 2px);
+  height: calc(1.414062rem + 2px);
 }
 
 .form-control-lg, .input-group-lg > .form-control,
@@ -2336,6 +2351,35 @@ fieldset[disabled] a.btn {
   box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
 }
 
+.btn-purple {
+  color: #fff;
+  background-color: #5757D5;
+  border-color: #5757D5;
+}
+
+.btn-purple:hover {
+  color: #fff;
+  background-color: #3838cd;
+  border-color: #3232c7;
+}
+
+.btn-purple:focus, .btn-purple.focus {
+  box-shadow: 0 0 0 0.2rem rgba(87, 87, 213, 0.5);
+}
+
+.btn-purple.disabled, .btn-purple:disabled {
+  background-color: #5757D5;
+  border-color: #5757D5;
+}
+
+.btn-purple:not([disabled]):not(.disabled):active, .btn-purple:not([disabled]):not(.disabled).active,
+.show > .btn-purple.dropdown-toggle {
+  color: #fff;
+  background-color: #3232c7;
+  border-color: #2f2fbd;
+  box-shadow: 0 0 0 0.2rem rgba(87, 87, 213, 0.5);
+}
+
 .btn-outline-primary {
   color: #158BCF;
   background-color: transparent;
@@ -2574,6 +2618,36 @@ fieldset[disabled] a.btn {
   background-color: #343a40;
   border-color: #343a40;
   box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
+}
+
+.btn-outline-purple {
+  color: #5757D5;
+  background-color: transparent;
+  background-image: none;
+  border-color: #5757D5;
+}
+
+.btn-outline-purple:hover {
+  color: #fff;
+  background-color: #5757D5;
+  border-color: #5757D5;
+}
+
+.btn-outline-purple:focus, .btn-outline-purple.focus {
+  box-shadow: 0 0 0 0.2rem rgba(87, 87, 213, 0.5);
+}
+
+.btn-outline-purple.disabled, .btn-outline-purple:disabled {
+  color: #5757D5;
+  background-color: transparent;
+}
+
+.btn-outline-purple:not([disabled]):not(.disabled):active, .btn-outline-purple:not([disabled]):not(.disabled).active,
+.show > .btn-outline-purple.dropdown-toggle {
+  color: #fff;
+  background-color: #5757D5;
+  border-color: #5757D5;
+  box-shadow: 0 0 0 0.2rem rgba(87, 87, 213, 0.5);
 }
 
 .btn-link {
@@ -3205,7 +3279,7 @@ tbody.collapse.show {
 }
 
 .custom-select-sm {
-  height: calc(1.414063rem + 2px);
+  height: calc(1.414062rem + 2px);
   padding-top: 0.375rem;
   padding-bottom: 0.375rem;
   font-size: 75%;
@@ -3380,7 +3454,7 @@ tbody.collapse.show {
   display: inline-block;
   padding-top: 0.408594rem;
   padding-bottom: 0.408594rem;
-  margin-right: 1rem;
+  margin-right: 0;
   font-size: 0.934375rem;
   line-height: inherit;
   white-space: nowrap;
@@ -4213,6 +4287,17 @@ tbody.collapse.show {
   background-color: #1d2124;
 }
 
+.badge-purple {
+  color: #fff;
+  background-color: #5757D5;
+}
+
+.badge-purple[href]:focus, .badge-purple[href]:hover {
+  color: #fff;
+  text-decoration: none;
+  background-color: #3232c7;
+}
+
 .jumbotron {
   padding: 1rem;
   margin: 0;
@@ -4360,6 +4445,20 @@ tbody.collapse.show {
 
 .alert-dark .alert-link {
   color: #040505;
+}
+
+.alert-purple {
+  color: #2d2d6f;
+  background-color: #ddddf7;
+  border-color: #d0d0f3;
+}
+
+.alert-purple hr {
+  border-top-color: #bcbcee;
+}
+
+.alert-purple .alert-link {
+  color: #1e1e4b;
 }
 
 @keyframes progress-bar-stripes {
@@ -4670,6 +4769,30 @@ button.list-group-item-dark.active {
   color: #fff;
   background-color: #1b1e21;
   border-color: #1b1e21;
+}
+
+.list-group-item-purple {
+  color: #2d2d6f;
+  background-color: #d0d0f3;
+}
+
+a.list-group-item-purple,
+button.list-group-item-purple {
+  color: #2d2d6f;
+}
+
+a.list-group-item-purple:focus, a.list-group-item-purple:hover,
+button.list-group-item-purple:focus,
+button.list-group-item-purple:hover {
+  color: #2d2d6f;
+  background-color: #bcbcee;
+}
+
+a.list-group-item-purple.active,
+button.list-group-item-purple.active {
+  color: #fff;
+  background-color: #2d2d6f;
+  border-color: #2d2d6f;
 }
 
 .close {
@@ -5398,6 +5521,14 @@ a.bg-dark:focus, a.bg-dark:hover {
   background-color: #1d2124 !important;
 }
 
+.bg-purple {
+  background-color: #5757D5 !important;
+}
+
+a.bg-purple:focus, a.bg-purple:hover {
+  background-color: #3232c7 !important;
+}
+
 .bg-white {
   background-color: #fff !important;
 }
@@ -5460,6 +5591,10 @@ a.bg-dark:focus, a.bg-dark:hover {
 
 .border-dark {
   border-color: #343a40 !important;
+}
+
+.border-purple {
+  border-color: #5757D5 !important;
 }
 
 .border-white {
@@ -7863,6 +7998,14 @@ a.text-dark:focus, a.text-dark:hover {
   color: #1d2124 !important;
 }
 
+.text-purple {
+  color: #5757D5 !important;
+}
+
+a.text-purple:focus, a.text-purple:hover {
+  color: #3232c7 !important;
+}
+
 .text-muted {
   color: #868e96 !important;
 }
@@ -7928,6 +8071,20 @@ img {
   /* used for streak effect */
 }
 
+#GUI.SideChain .left-login {
+  background: #5757D5;
+}
+
+#GUI.SideChain .btn-primary {
+  background-color: #5757D5 !important;
+  border-color: #5757D5 !important;
+}
+
+#GUI.SideChain .btn-primary:hover {
+  border-color: #5757D5 !important;
+  background-color: #8080df !important;
+}
+
 #GUI #content {
   padding-top: 2rem;
 }
@@ -7954,15 +8111,21 @@ img {
   font-weight: bold;
 }
 
-#GUI .navbar .form-inline a:hover {
+#GUI .navbar .form-inline .list-inline {
+  margin-bottom: 0;
+}
+
+#GUI .navbar .form-inline .list-inline a:hover {
   cursor: pointer;
 }
 
-#GUI .navbar .form-inline a:hover .lnr-exit {
+#GUI .navbar .form-inline .list-inline a:hover .lnr-exit,
+#GUI .navbar .form-inline .list-inline a:hover .lnr-cog {
   color: #158BCF;
 }
 
-#GUI .navbar .form-inline a .lnr-exit {
+#GUI .navbar .form-inline .list-inline a .lnr-exit,
+#GUI .navbar .form-inline .list-inline a .lnr-cog {
   font-size: 1.5rem;
   color: #adb5bd;
 }
@@ -8031,6 +8194,10 @@ img {
   font-size: .9rem;
   font-weight: 400;
   color: #fff;
+}
+
+#GUI .jumbotron .btn-lg.btn-purple .text-uppercase, #GUI .jumbotron .btn-group-lg > .btn-purple.btn .text-uppercase {
+  font-size: .6rem;
 }
 
 #GUI #staking strong {
@@ -8289,6 +8456,10 @@ img {
 .modal .blockText {
   font-weight: 500;
   user-select: auto !important;
+}
+
+.modal .btn-group.btn-group-toggle label {
+  color: #fff !important;
 }
 
 .modal .btn-group label {

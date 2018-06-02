@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class GlobalService {
@@ -10,52 +10,61 @@ export class GlobalService {
   private coinName: string;
   private coinUnit: string;
   private network: string;
+  private sidechainsEnabled = false;
 
-  getWalletPath() {
+  get WalletPath() {
     return this.walletPath;
   }
 
-  setWalletPath(walletPath: string) {
+  set WalletPath(walletPath: string) {
     this.walletPath = walletPath;
   }
 
-  getNetwork() {
+  get Network() {
     return this.network;
   }
 
-  setNetwork(network: string) {
+  set Network(network: string) {
     this.network = network;
   }
 
-  getWalletName() {
+  get WalletName() {
     return this.currentWalletName;
   }
 
-  setWalletName(currentWalletName: string) {
+  set WalletName(currentWalletName: string) {
     this.currentWalletName = currentWalletName;
   }
 
-  getCoinType() {
+  get CoinType() {
     return this.coinType;
   }
 
-  setCoinType (coinType: number) {
+  set CoinType (coinType: number) {
     this.coinType = coinType;
   }
 
-  getCoinName() {
+  get CoinName() {
     return this.coinName;
   }
 
-  setCoinName(coinName: string) {
+  set CoinName(coinName: string) {
     this.coinName = coinName;
   }
 
-  getCoinUnit() {
+  get CoinUnit() {
     return this.coinUnit;
   }
 
-  setCoinUnit(coinUnit: string) {
+  set CoinUnit(coinUnit: string) {
     this.coinUnit = coinUnit;
+  }
+
+  get SidechainsEnabled() {
+    return this.sidechainsEnabled;
+  }
+
+  set SidechainsEnabled(sidechainsEnabled: boolean) {
+    this.sidechainsEnabled = sidechainsEnabled;
   }
 }

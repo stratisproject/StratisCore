@@ -17,40 +17,40 @@ export class CoinNotationPipe implements PipeTransform {
     let temp;
     if (typeof value === 'number') {
       switch (this.getCoinUnit()) {
-        case "BTC":
+        case 'BTC':
           temp = value / 100000000;
           return temp.toFixed(this.decimalLimit);
-        case "mBTC":
+        case 'mBTC':
           temp = value / 100000;
           return temp.toFixed(this.decimalLimit);
-        case "uBTC":
+        case 'uBTC':
           temp = value / 100;
           return temp.toFixed(this.decimalLimit);
-        case "TBTC":
+        case 'TBTC':
           temp = value / 100000000;
           return temp.toFixed(this.decimalLimit);
-        case "TmBTC":
+        case 'TmBTC':
           temp = value / 100000;
           return temp.toFixed(this.decimalLimit);
-        case "TuBTC":
+        case 'TuBTC':
           temp = value / 100;
           return temp.toFixed(this.decimalLimit);
-        case "STRAT":
+        case 'STRAT':
           temp = value / 100000000;
           return temp.toFixed(this.decimalLimit);
-        case "mSTRAT":
+        case 'mSTRAT':
           temp = value / 100000;
           return temp.toFixed(this.decimalLimit);
-        case "uSTRAT":
+        case 'uSTRAT':
           temp = value / 100;
           return temp.toFixed(this.decimalLimit);
-        case "TSTRAT":
+        case 'TSTRAT':
           temp = value / 100000000;
           return temp.toFixed(this.decimalLimit);
-        case "TmSTRAT":
+        case 'TmSTRAT':
           temp = value / 100000;
           return temp.toFixed(this.decimalLimit);
-        case "TuSTRAT":
+        case 'TuSTRAT':
           temp = value / 100;
           return temp.toFixed(this.decimalLimit);
       }
@@ -62,8 +62,8 @@ export class CoinNotationPipe implements PipeTransform {
   }
 
   setCoinUnit() {
-    this.coinUnit = this.globalService.getCoinUnit();
-  };
+    this.coinUnit = this.globalService.CoinUnit;
+  }
 }
 
 

@@ -22,10 +22,10 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.route.queryParams.subscribe(params => {
       this.newWallet = new WalletCreation(
-        params["name"],
-        params["mnemonic"],
-        params["password"]
-      )
+        params['name'],
+        params['mnemonic'],
+        params['password']
+      );
     });
 
     this.showMnemonic();
@@ -33,11 +33,18 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
 
   private showMnemonic() {
     this.mnemonic = this.newWallet.mnemonic;
-    this.mnemonicArray = this.mnemonic.split(" ");
+    this.mnemonicArray = this.mnemonic.split(' ');
   }
 
   public onContinueClicked() {
-    this.router.navigate(['/setup/create/confirm-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password }});
+    this.router.navigate(
+      ['/setup/create/confirm-mnemonic'],
+      { queryParams : {
+        name: this.newWallet.name,
+        mnemonic: this.newWallet.mnemonic,
+        password: this.newWallet.password
+      }}
+    );
   }
 
   public onCancelClicked() {

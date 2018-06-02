@@ -21,7 +21,7 @@ export class SendConfirmationComponent implements OnInit {
   public coinUnit: string;
 
   ngOnInit() {
-    this.coinUnit = this.globalService.getCoinUnit();
+    this.coinUnit = this.globalService.CoinUnit;
     this.transactionFee = new CoinNotationPipe(this.globalService).transform(this.transactionFee);
     this.transaction.amount = +this.transaction.amount + +this.transactionFee;
   }

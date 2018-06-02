@@ -8,64 +8,31 @@ import { ApiService } from '../../shared/services/api.service';
 import { ModalService } from '../../shared/services/modal.service';
 
 import { WalletRecovery } from '../../shared/classes/wallet-recovery';
+import { BaseForm } from '../../shared/components/base-form';
 
 @Component({
   selector: 'app-recover',
   templateUrl: './recover.component.html',
   styleUrls: ['./recover.component.css']
 })
-export class RecoverComponent implements OnInit {
+export class RecoverComponent extends BaseForm implements OnInit {
 
-  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
-    this.buildRecoverForm();
+  constructor(
+    private globalService: GlobalService,
+    private apiService: ApiService,
+    private genericModalService: ModalService,
+    private router: Router,
+    private fb: FormBuilder) {
+      super();
+      this.buildRecoverForm();
   }
 
   public recoverWalletForm: FormGroup;
   public creationDate: Date;
-  public isRecovering: boolean = false;
+  public isRecovering = false;
   public maxDate = new Date();
   public bsConfig: Partial<BsDatepickerConfig>;
   private walletRecovery: WalletRecovery;
-
-  ngOnInit() {
-    this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-blue'});
-  }
-
-  private buildRecoverForm(): void {
-    this.recoverWalletForm = this.fb.group({
-      "walletName": ["", [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(24),
-          Validators.pattern(/^[a-zA-Z0-9]*$/)
-        ]
-      ],
-      "walletMnemonic": ["", Validators.required],
-      "walletDate": ["", Validators.required],
-      "walletPassword": ["", Validators.required],
-      "selectNetwork": ["test", Validators.required]
-    });
-
-    this.recoverWalletForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
-
-    this.onValueChanged();
-  }
-
-  onValueChanged(data?: any) {
-    if (!this.recoverWalletForm) { return; }
-    const form = this.recoverWalletForm;
-    for (const field in this.formErrors) {
-      this.formErrors[field] = '';
-      const control = form.get(field);
-      if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
-        for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
-        }
-      }
-    }
-  }
 
   formErrors = {
     'walletName': '',
@@ -94,20 +61,51 @@ export class RecoverComponent implements OnInit {
 
   };
 
-  public onBackClicked() {
-    this.router.navigate(["/setup"]);
+  ngOnInit() {
+    this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-blue'});
   }
 
-  public onRecoverClicked(){
+  private buildRecoverForm(): void {
+    this.recoverWalletForm = this.fb.group({
+      'walletName': ['', [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(24),
+          Validators.pattern(/^[a-zA-Z0-9]*$/)
+        ]
+      ],
+      'walletMnemonic': ['', Validators.required],
+      'walletDate': ['', Validators.required],
+      'walletPassword': ['', Validators.required],
+      'selectNetwork': ['test', Validators.required]
+    });
+
+    this.recoverWalletForm.valueChanges
+      .subscribe(data => this.onValueChanged(data));
+
+    this.onValueChanged();
+  }
+
+  onValueChanged(data?: any) {
+    if (!this.recoverWalletForm) { return; }
+    const form = this.recoverWalletForm;
+    this.validateControls(form, this.formErrors, this.validationMessages);
+  }
+
+  public onBackClicked() {
+    this.router.navigate(['/setup']);
+  }
+
+  public onRecoverClicked() {
     this.isRecovering = true;
 
-    let recoveryDate = new Date(this.recoverWalletForm.get("walletDate").value);
+    const recoveryDate = new Date(this.recoverWalletForm.get('walletDate').value);
     recoveryDate.setDate(recoveryDate.getDate() - 1);
 
     this.walletRecovery = new WalletRecovery(
-      this.recoverWalletForm.get("walletName").value,
-      this.recoverWalletForm.get("walletMnemonic").value,
-      this.recoverWalletForm.get("walletPassword").value,
+      this.recoverWalletForm.get('walletName').value,
+      this.recoverWalletForm.get('walletMnemonic').value,
+      this.recoverWalletForm.get('walletPassword').value,
       recoveryDate
     );
     this.recoverWallet(this.walletRecovery);
@@ -119,9 +117,9 @@ export class RecoverComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
-            let body = "Your wallet has been recovered. \nYou will be redirected to the decryption page.";
-            this.genericModalService.openModal("Wallet Recovered", body);
-            this.router.navigate([''])
+            const body = 'Your wallet has been recovered. \nYou will be redirected to the decryption page.';
+            this.genericModalService.openModal('Wallet Recovered', body);
+            this.router.navigate(['']);
           }
         },
         error => {
@@ -132,8 +130,7 @@ export class RecoverComponent implements OnInit {
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }

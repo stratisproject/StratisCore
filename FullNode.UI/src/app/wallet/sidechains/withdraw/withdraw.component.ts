@@ -17,6 +17,7 @@ import { TransactionSending } from '../../../shared/classes/transaction-sending'
 
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
+import { BaseForm } from '../../../shared/components/base-form';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,7 +26,7 @@ import 'rxjs/add/operator/debounceTime';
   styleUrls: ['./withdraw.component.css'],
 })
 
-export class WithdrawComponent implements OnInit, OnDestroy {
+export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
   public withdrawForm: FormGroup;
   public coinUnit: string;
   public isWithdrawing = false;
@@ -71,12 +72,13 @@ export class WithdrawComponent implements OnInit, OnDestroy {
     private genericModalService: ModalService,
     public activeModal: NgbActiveModal,
     private fb: FormBuilder) {
-    this.buildWithdrawForm();
+      super();
+      this.buildWithdrawForm();
   }
 
   ngOnInit() {
     this.startSubscriptions();
-    this.coinUnit = this.globalService.getCoinUnit();
+    this.coinUnit = this.globalService.CoinUnit;
   }
 
   ngOnDestroy() {
@@ -105,24 +107,7 @@ export class WithdrawComponent implements OnInit, OnDestroy {
   onValueChanged(data?: any) {
     if (!this.withdrawForm) { return; }
     const form = this.withdrawForm;
-    for (const field in this.formErrors) {
-      if (!this.formErrors.hasOwnProperty(field)) {
-        continue;
-      }
-
-      this.formErrors[field] = '';
-      const control = form.get(field);
-      if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
-        for (const key in control.errors) {
-          if (!control.errors.hasOwnProperty(key)) {
-            continue;
-          }
-
-          this.formErrors[field] += messages[key] + ' ';
-        }
-      }
-    }
+    this.validateControls(form, this.formErrors, this.validationMessages);
 
     this.apiError = '';
 
@@ -133,7 +118,7 @@ export class WithdrawComponent implements OnInit, OnDestroy {
 
   public getMaxBalance() {
     const data = {
-      walletName: this.globalService.getWalletName(),
+      walletName: this.globalService.WalletName,
       feeType: this.withdrawForm.get('fee').value
     };
 
@@ -168,7 +153,7 @@ export class WithdrawComponent implements OnInit, OnDestroy {
 
   public estimateFee() {
     const transaction = new FeeEstimation(
-      this.globalService.getWalletName(),
+      this.globalService.WalletName,
       'account 0',
       this.withdrawForm.get('address').value.trim(),
       this.withdrawForm.get('amount').value,
@@ -204,7 +189,7 @@ export class WithdrawComponent implements OnInit, OnDestroy {
 
   public buildTransaction() {
     this.transaction = new TransactionBuilding(
-      this.globalService.getWalletName(),
+      this.globalService.WalletName,
       'account 0',
       this.withdrawForm.get('password').value,
       this.withdrawForm.get('address').value.trim(),
@@ -283,7 +268,7 @@ export class WithdrawComponent implements OnInit, OnDestroy {
   }
 
   private getWalletBalance() {
-    const walletInfo = new WalletInfo(this.globalService.getWalletName());
+    const walletInfo = new WalletInfo(this.globalService.WalletName);
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
         response =>  {

@@ -10,6 +10,7 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 import { TransactionInfo } from '../../shared/classes/transaction-info';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'transaction-details',
   templateUrl: './transaction-details.component.html',
   styleUrls: ['./transaction-details.component.css']
@@ -17,17 +18,21 @@ import { TransactionInfo } from '../../shared/classes/transaction-info';
 export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   @Input() transaction: TransactionInfo;
-  constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService, public activeModal: NgbActiveModal) {}
-
-  public copied: boolean = false;
+  public copied = false;
   public coinUnit: string;
   public confirmations: number;
   private generalWalletInfoSubscription: Subscription;
   private lastBlockSyncedHeight: number;
 
+  constructor(
+    private apiService: ApiService,
+    private globalService: GlobalService,
+    private genericModalService: ModalService,
+    public activeModal: NgbActiveModal) {}
+
   ngOnInit() {
     this.startSubscriptions();
-    this.coinUnit = this.globalService.getCoinUnit();
+    this.coinUnit = this.globalService.CoinUnit;
   }
 
   ngOnDestroy() {
@@ -39,12 +44,12 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   }
 
   private getGeneralWalletInfo() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName())
+    const walletInfo = new WalletInfo(this.globalService.WalletName);
     this.generalWalletInfoSubscription = this.apiService.getGeneralInfo(walletInfo)
       .subscribe(
         response =>  {
           if (response.status >= 200 && response.status < 400) {
-            let generalWalletInfoResponse = response.json();
+            const generalWalletInfoResponse = response.json();
             this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
             this.getConfirmations(this.transaction);
           }
@@ -56,8 +61,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               if (error.json().errors[0].description) {
                 this.genericModalService.openModal(null, error.json().errors[0].message);
               } else {
@@ -69,7 +73,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
         }
       )
     ;
-  };
+  }
 
   private getConfirmations(transaction: TransactionInfo) {
     if (transaction.transactionConfirmedInBlock) {
@@ -80,10 +84,10 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   }
 
   private cancelSubscriptions() {
-    if(this.generalWalletInfoSubscription) {
+    if (this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
     }
-  };
+  }
 
   private startSubscriptions() {
     this.getGeneralWalletInfo();

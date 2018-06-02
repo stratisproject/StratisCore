@@ -10,67 +10,24 @@ import { PasswordValidationDirective } from '../../shared/directives/password-va
 
 import { WalletCreation } from '../../shared/classes/wallet-creation';
 import { Mnemonic } from '../../shared/classes/mnemonic';
+import { BaseForm } from '../../shared/components/base-form';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'create-component',
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.css'],
 })
 
-export class CreateComponent implements OnInit {
-  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
-    this.buildCreateForm();
-  }
-
-  public createWalletForm: FormGroup;
-  private newWallet: WalletCreation;
-  private mnemonic: string;
-
-  ngOnInit() {
-    this.getNewMnemonic();
-  }
-
-  private buildCreateForm(): void {
-    this.createWalletForm = this.fb.group({
-      "walletName": ["",
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(24),
-          Validators.pattern(/^[a-zA-Z0-9]*$/)
-        ])
-      ],
-      "walletPassword": ["",
-        Validators.required,
-        // Validators.compose([
-        //   Validators.required,
-        //   Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{10,})/)])
-        ],
-      "walletPasswordConfirmation": ["", Validators.required],
-      "selectNetwork": ["test", Validators.required]
-    }, {
-      validator: PasswordValidationDirective.MatchPassword
-    });
-
-    this.createWalletForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
-
-    this.onValueChanged();
-  }
-
-  onValueChanged(data?: any) {
-    if (!this.createWalletForm) { return; }
-    const form = this.createWalletForm;
-    for (const field in this.formErrors) {
-      this.formErrors[field] = '';
-      const control = form.get(field);
-      if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
-        for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
-        }
-      }
-    }
+export class CreateComponent extends BaseForm implements OnInit {
+  constructor(
+    private globalService: GlobalService,
+    private apiService: ApiService,
+    private genericModalService: ModalService,
+    private router: Router,
+    private fb: FormBuilder) {
+      super();
+      this.buildCreateForm();
   }
 
   formErrors = {
@@ -88,7 +45,8 @@ export class CreateComponent implements OnInit {
     },
     'walletPassword': {
       'required': 'A password is required.',
-      'pattern': 'A password must be at least 10 characters long and contain one lowercase and uppercase alphabetical character and a number.'
+      'pattern':
+        'A password must be at least 10 characters long and contain one lowercase and uppercase alphabetical character and a number.'
     },
     'walletPasswordConfirmation': {
       'required': 'Confirm your password.',
@@ -96,18 +54,66 @@ export class CreateComponent implements OnInit {
     }
   };
 
+  public createWalletForm: FormGroup;
+  private newWallet: WalletCreation;
+  private mnemonic: string;
+
+  ngOnInit() {
+    this.getNewMnemonic();
+  }
+
+  private buildCreateForm(): void {
+    this.createWalletForm = this.fb.group({
+      'walletName': ['',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(24),
+          Validators.pattern(/^[a-zA-Z0-9]*$/)
+        ])
+      ],
+      'walletPassword': ['',
+        Validators.required,
+        // Validators.compose([
+        //   Validators.required,
+        //   Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{10,})/)])
+        ],
+      'walletPasswordConfirmation': ['', Validators.required],
+      'selectNetwork': ['test', Validators.required]
+    }, {
+      validator: PasswordValidationDirective.MatchPassword
+    });
+
+    this.createWalletForm.valueChanges
+      .subscribe(data => this.onValueChanged(data));
+
+    this.onValueChanged();
+  }
+
+  onValueChanged(data?: any) {
+    if (!this.createWalletForm) { return; }
+    const form = this.createWalletForm;
+    this.validateControls(form, this.formErrors, this.validationMessages);
+  }
+
   public onBackClicked() {
-    this.router.navigate(["/setup"]);
+    this.router.navigate(['/setup']);
   }
 
   public onContinueClicked() {
     if (this.mnemonic) {
       this.newWallet = new WalletCreation(
-        this.createWalletForm.get("walletName").value,
+        this.createWalletForm.get('walletName').value,
         this.mnemonic,
-        this.createWalletForm.get("walletPassword").value,
+        this.createWalletForm.get('walletPassword').value,
       );
-      this.router.navigate(['/setup/create/show-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password }});
+      this.router.navigate(
+        ['/setup/create/show-mnemonic'],
+        { queryParams : {
+          name: this.newWallet.name,
+          mnemonic: this.newWallet.mnemonic,
+          password: this.newWallet.password
+        }});
     }
   }
 
@@ -116,7 +122,7 @@ export class CreateComponent implements OnInit {
       .getNewMnemonic()
       .subscribe(
         response => {
-          if (response.status >= 200 && response.status < 400){
+          if (response.status >= 200 && response.status < 400) {
             this.mnemonic = response.json();
           }
         },
@@ -127,8 +133,7 @@ export class CreateComponent implements OnInit {
           } else if (error.status >= 400) {
             if (!error.json().errors[0]) {
               console.log(error);
-            }
-            else {
+            } else {
               this.genericModalService.openModal(null, error.json().errors[0].message);
             }
           }

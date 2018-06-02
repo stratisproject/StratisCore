@@ -33,6 +33,17 @@ img {pointer-events: none !important;}
 }
 
 #GUI {
+  &.SideChain {
+    .left-login {background: $purple;}
+    .btn-primary {
+      background-color: $purple !important;
+      border-color: $purple !important;
+      &:hover {
+        border-color: $purple !important;
+        background-color: lighten($purple, 10%) !important;
+      }
+    }
+  }
   #content {
     padding-top: $jumbotron-padding;
     .jumbotron {
@@ -55,16 +66,22 @@ img {pointer-events: none !important;}
     &.bg-light {background-color: $white !important;}
     .navbar-text {font-weight: bold;}
     .form-inline {
-      a {
-        &:hover {
-          cursor: pointer;
-          .lnr-exit {color: $primary;}
-        }
-        .lnr-exit {
-          font-size: 1.5rem;
-          color: $gray-500;
+      .list-inline {
+        margin-bottom: 0;
+        a {
+          &:hover {
+            cursor: pointer;
+            .lnr-exit,
+            .lnr-cog {color: $primary;}
+          }
+          .lnr-exit,
+          .lnr-cog {
+            font-size: 1.5rem;
+            color: $gray-500;
+          }
         }
       }
+
     }
   }
 
@@ -121,7 +138,7 @@ img {pointer-events: none !important;}
         color: $white;
       }
     }
-
+    .btn-lg {&.btn-purple {.text-uppercase {font-size: .6rem;}}}
   }
 
   ///// STAKING
@@ -362,6 +379,7 @@ img {pointer-events: none !important;}
     user-select: auto !important;
   }
   .btn-group {
+    &.btn-group-toggle {label{color:$white !important;}}
     label {
       color: $gray-700;
       &:hover {color: $white;}
