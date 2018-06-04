@@ -4859,8 +4859,8 @@ button.close {
   background-color: #fff;
   border: 1px solid #158BCF;
   box-shadow: 0 5px 20px #BDDDF2;
-  padding: 1rem;
-  margin: 1.5rem;
+  padding: .75rem;
+  margin: 1.2rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -4909,14 +4909,14 @@ button.close {
 .modal-body {
   position: relative;
   flex: 1 1 auto;
-  padding: 15px;
+  padding: 5px 15px;
 }
 
 .modal-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 15px;
+  padding: 5px 15px;
 }
 
 .modal-footer > :not(:first-child) {
@@ -8437,6 +8437,7 @@ img {
 
 .modal label {
   color: #868e96;
+  margin-bottom: .25rem !important;
 }
 
 .modal .alert {
@@ -8460,6 +8461,7 @@ img {
 
 .modal .btn-group.btn-group-toggle label, .modal .btn-group.fee label {
   color: #fff !important;
+  margin-bottom: 0 !important;
 }
 
 .modal .btn-group label {
