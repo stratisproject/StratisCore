@@ -4,7 +4,7 @@
     <span class="navbar-text">{{ walletName }}</span>
     <span class="navbar-brand align-middle">
       <a (click)="goToDashboard()">
-        <img src="./assets/images/logo_sc.svg" height="36" alt="Stratis">
+        <img [attr.src]="sidechainsAvailable ? './assets/images/logo_sc.svg' : './assets/images/logo.svg'" height="36" alt="Stratis">
       </a>
     </span>
     <form class="form-inline">

@@ -1,7 +1,7 @@
-<section id="GUI" class="container-fluid SideChain">
+<section id="GUI" class="container-fluid" [ngClass]="{ 'SideChain': sidechainsAvailable}">
   <div class="row">
     <div class="col-4 left-login d-flex align-items-center">
-      <img src="./assets/images/logo_Sidechains.svg" width="160px" height="auto">
+      <img [attr.src]="sidechainsAvailable ? './assets/images/logo_Sidechains.svg' : './assets/images/logo_white.svg'" width="160px" height="auto">
     </div>
     <!-- /col -->
     <div class="col-8 right-login d-flex align-content-center flex-wrap">

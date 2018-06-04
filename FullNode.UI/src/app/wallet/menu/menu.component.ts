@@ -21,6 +21,10 @@ export class MenuComponent implements OnInit {
     this.walletName = this.globalService.WalletName;
   }
 
+  get sidechainsAvailable() {
+    return this.globalService.SidechainsEnabled;
+  }
+
   public logOut() {
     const modalRef = this.modalService.open(LogoutConfirmationComponent, { backdrop: 'static' });
   }

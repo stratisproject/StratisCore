@@ -49,6 +49,10 @@ export class LoginComponent extends BaseForm implements OnInit {
     this.tryToLoadSidechain();
   }
 
+  get sidechainsAvailable() {
+    return this.globalService.SidechainsEnabled;
+  }
+
   private buildDecryptForm(): void {
     this.openWalletForm = this.fb.group({
       'selectWallet': ['', Validators.required],
