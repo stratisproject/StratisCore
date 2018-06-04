@@ -8436,7 +8436,7 @@ img {
 }
 
 .modal label {
-  color: #868e96;
+  color: #354052;
   margin-bottom: .25rem !important;
 }
 
@@ -8548,7 +8548,7 @@ img {
 
 .purple-shadow .modal-content {
   border: 1px solid #5757D5 !important;
-  box-shadow: 0 5px 40px 0 rgba(87, 87, 213, 0.4) !important;
+  box-shadow: 0 5px 20px 0 rgba(87, 87, 213, 0.4) !important;
 }
 
 .left-login {
