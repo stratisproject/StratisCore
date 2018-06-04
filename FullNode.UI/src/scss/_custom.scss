@@ -440,9 +440,12 @@ img {pointer-events: none !important;}
     border-bottom: 1px dotted #ccc;
   }
 }
+// for cross-chain modal look
 .purple-shadow {
-  border: 1px solid $purple !important;
-  box-shadow: 0 5px 20px $purple !important;
+  .modal-content {
+    border: 1px solid $purple !important;
+    box-shadow: 0 5px 40px 0 rgba($purple,.4) !important;
+  }
 }
 
 ////// LOGIN

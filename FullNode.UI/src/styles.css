@@ -4860,7 +4860,7 @@ button.close {
   border: 1px solid #158BCF;
   box-shadow: 0 5px 20px #BDDDF2;
   padding: 1rem;
-  margin: 0;
+  margin: 1.5rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -4937,7 +4937,7 @@ button.close {
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 500px;
+    max-width: 550px;
     margin: 30px auto;
   }
   .modal-sm {
@@ -8544,9 +8544,9 @@ img {
   border-bottom: 1px dotted #ccc;
 }
 
-.purple-shadow {
+.purple-shadow .modal-content {
   border: 1px solid #5757D5 !important;
-  box-shadow: 0 5px 20px #5757D5 !important;
+  box-shadow: 0 5px 40px 0 rgba(87, 87, 213, 0.4) !important;
 }
 
 .left-login {
