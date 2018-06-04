@@ -27,7 +27,7 @@
     </div>
     <div class="form-group clearfix">
       <label for="SDAddress">Sidechain Federation address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Sidechain Destination address is the sidechain address where the Federation will deposit your sidechain coins."></i>
-      <input type="text" class="form-control" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && depositForm.get('address').valid" formControlName="address" id="SDAddress" placeholder="Please enter the Sidechain Destination address here.">
+      <input type="text" class="form-control" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && depositForm.get('address').valid" formControlName="address" id="SDAddress" placeholder="Please enter the Sidechain Destination address here." value="SNpCNJTTdYxRHdqPdx3WGFucNScpYYthJV">
       <div *ngIf="formErrors.address" class="invalid-feedback">{{ formErrors.address }}</div>
     </div>
     <div class="form-group clearfix">
