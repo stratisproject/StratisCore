@@ -13,22 +13,22 @@
     <!-- crosschain -->
     <div class="row align-items-center my-3">
       <label class="col-7" for="">Cross-Chain Transactions</label>
-      <div class="btn-group btn-group-toggle col d-flex justify-content-end" data-toggle="buttons">
-        <label class="btn btn-primary active">
-          <input autocomplete="off" id="" name="options" type="radio">Disable</label>
-        <label class="btn btn-primary">
-          <input  autocomplete="off" id="" name="options" type="radio" checked="">Enable</label>
+      <div class="btn-group col d-flex justify-content-end" ngbRadioGroup name="" formControlName="">
+        <label ngbButtonLabel class="btn btn-primary">
+          <input ngbButton type="radio" value="Disable">Disable</label>
+        <label ngbButtonLabel class="btn btn-primary active">
+          <input ngbButton type="radio" value="Enable">Enable</label>
       </div>
     </div>
     <!-- /crosschain -->
     <!-- fed addr -->
     <div class="row align-items-center my-3">
       <label class="col-7" for="">Federation Address auto-populate</label>
-      <div class="btn-group btn-group-toggle col d-flex justify-content-end" data-toggle="buttons">
-        <label class="btn btn-primary active">
-          <input autocomplete="off" checked="" id="" name="options" type="radio">Disable</label>
-        <label class="btn btn-primary">
-          <input  autocomplete="off" id="" name="options" type="radio">Enable</label>
+      <div class="btn-group col d-flex justify-content-end" ngbRadioGroup name="" formControlName="">
+        <label ngbButtonLabel class="btn btn-primary">
+          <input ngbButton type="radio" value="Disable">Disable</label>
+        <label ngbButtonLabel class="btn btn-primary">
+          <input ngbButton type="radio" value="Enable">Enable</label>
       </div>
     </div>
     <!-- /fed addr -->

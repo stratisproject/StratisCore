@@ -382,7 +382,8 @@ img {pointer-events: none !important;}
     user-select: auto !important;
   }
   .btn-group {
-    &.btn-group-toggle, &.fee {
+      label {color: $white;}
+    &.fee {
       label {
         margin-bottom: 0 !important;
         &.btn-outline-danger {color: $red;}
