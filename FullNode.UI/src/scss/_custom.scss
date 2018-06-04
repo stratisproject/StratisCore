@@ -379,7 +379,7 @@ img {pointer-events: none !important;}
     user-select: auto !important;
   }
   .btn-group {
-    &.btn-group-toggle {label{color:$white !important;}}
+    &.btn-group-toggle, &.fee {label{color:$white !important;}}
     label {
       color: $gray-700;
       &:hover {color: $white;}

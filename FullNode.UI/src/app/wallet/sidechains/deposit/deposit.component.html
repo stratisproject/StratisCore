@@ -32,25 +32,22 @@
     </div>
     <div class="form-group clearfix">
       <label>Transaction Fee</label>
-      <div>
-        <label *ngIf="!estimatedFee" class="blockText text-danger">Please enter a valid amount and destination address to calculate the fee.</label>
-        <label *ngIf="estimatedFee" class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
-      </div>
       <!-- fee buttons -->
-      <!-- <div class="col row">
-        <div class="btn-group" ngbRadioGroup name="feeButtons" formControlName="fee">
-          <label ngbButtonLabel class="btn btn-outline-danger">
+      <div class="col row">
+        <div class="btn-group fee" ngbRadioGroup name="feeButtons" formControlName="fee">
+          <label ngbButtonLabel class="btn btn-danger">
             <input ngbButton type="radio" value="low"> Low/Slow
           </label>
-          <label ngbButtonLabel class="btn btn-outline-warning">
+          <label ngbButtonLabel class="btn btn-warning">
             <input ngbButton type="radio" value="medium"> Medium
           </label>
-          <label ngbButtonLabel class="btn btn-outline-success">
+          <label ngbButtonLabel class="btn btn-success">
             <input ngbButton type="radio" value="high"> High/Fast
           </label>
         </div>
-      </div> -->
+      </div>
       <!-- /fee buttons -->
+
     <!-- <div class="form-group clearfix">
       <small class="text-info" *ngIf="estimatedFee">
         <em>Transaction Fee: {{ estimatedFee | coinNotation }} {{ coinUnit }}</em>

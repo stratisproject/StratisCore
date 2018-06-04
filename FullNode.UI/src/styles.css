@@ -8458,7 +8458,7 @@ img {
   user-select: auto !important;
 }
 
-.modal .btn-group.btn-group-toggle label {
+.modal .btn-group.btn-group-toggle label, .modal .btn-group.fee label {
   color: #fff !important;
 }
 
@@ -8490,7 +8490,6 @@ img {
 .modal .modal-title {
   font-size: 2rem;
   font-weight: 300;
-  text-transform: capitalize;
 }
 
 .modal .modal-dialog {
