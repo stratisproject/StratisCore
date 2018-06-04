@@ -76,13 +76,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public openSendDialog() {
     const modalRef = this.modalService.open(
         SendComponent,
-        { backdrop: 'static', keyboard: false, windowClass: 'test-class' });
+        { backdrop: 'static', keyboard: false });
   }
 
   public openSidechainTransferDialog() {
     const modalRef = this.modalService.open(
         DepositComponent,
-        { backdrop: 'static', keyboard: false }
+        { backdrop: 'static', keyboard: false, windowClass: 'purple-shadow' }
     );
   }
 

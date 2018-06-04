@@ -46,6 +46,7 @@ export class LoginComponent extends BaseForm implements OnInit {
 
   ngOnInit() {
     this.getWalletFiles();
+    this.tryToLoadSidechain();
   }
 
   private buildDecryptForm(): void {
