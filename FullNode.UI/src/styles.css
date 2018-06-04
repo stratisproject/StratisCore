@@ -8544,6 +8544,11 @@ img {
   border-bottom: 1px dotted #ccc;
 }
 
+.purple-shadow {
+  border: 1px solid #5757D5 !important;
+  box-shadow: 0 5px 20px #5757D5 !important;
+}
+
 .left-login {
   height: 100vh;
   background: #158BCF;

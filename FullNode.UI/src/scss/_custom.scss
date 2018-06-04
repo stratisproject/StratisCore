@@ -440,6 +440,10 @@ img {pointer-events: none !important;}
     border-bottom: 1px dotted #ccc;
   }
 }
+.purple-shadow {
+  border: 1px solid $purple !important;
+  box-shadow: 0 5px 20px $purple !important;
+}
 
 ////// LOGIN
 .left-login {
