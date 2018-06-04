@@ -9,6 +9,7 @@ import { ModalService } from '../shared/services/modal.service';
 import { WalletLoad } from '../shared/classes/wallet-load';
 import { WalletInfo } from '../shared/classes/wallet-info';
 import { BaseForm } from '../shared/components/base-form';
+import { SidechainsService } from '../wallet/sidechains/services/sidechains.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ export class LoginComponent extends BaseForm implements OnInit {
     private apiService: ApiService,
     private genericModalService: ModalService,
     private router: Router,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private sidechainsService: SidechainsService) {
       super();
       this.buildDecryptForm();
   }
@@ -113,14 +115,37 @@ export class LoginComponent extends BaseForm implements OnInit {
   public onDecryptClicked() {
     this.isDecrypting = true;
     this.globalService.WalletName = this.openWalletForm.get('selectWallet').value;
-    this.globalService.CoinName = 'TestStratis';
-    this.globalService.CoinUnit = 'TSTRAT';
+    if (!this.globalService.SidechainsEnabled) {
+      this.globalService.CoinName = 'TestStratis';
+      this.globalService.CoinUnit = 'TSTRAT';
+    }
     this.getCurrentNetwork();
     const walletLoad = new WalletLoad(
       this.openWalletForm.get('selectWallet').value,
       this.openWalletForm.get('password').value
     );
     this.loadWallet(walletLoad);
+  }
+
+  private tryToLoadSidechain() {
+    this.globalService.SidechainsEnabled = false;
+    this.sidechainsService.getCoinDetails().subscribe(
+      response => {
+        if (response.status >= 200 && response.status < 400) {
+          this.globalService.SidechainsEnabled = true;
+          const coinDetails = response.json();
+          this.globalService.CoinName = coinDetails.name;
+          this.globalService.CoinUnit = coinDetails.symbol;
+        }
+      },
+      error => {
+        if (error.status === 404) {
+          this.globalService.SidechainsEnabled = false;
+        } else {
+          console.log(error);
+        }
+      }
+    );
   }
 
   private loadWallet(walletLoad: WalletLoad) {

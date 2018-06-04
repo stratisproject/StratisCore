@@ -36,7 +36,7 @@ export class ApiService {
 
     setApiPort() {
       this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
-      this.stratisApiUrl = 'http://localhost:' + this.apiPort + '/api';
+      this.stratisApiUrl = `http://localhost:${this.apiPort}/api`;
     }
 
     /**
@@ -44,7 +44,7 @@ export class ApiService {
      */
     getWalletFiles(): Observable<any> {
       return this.http
-        .get(this.stratisApiUrl + '/wallet/files')
+        .get(`${this.stratisApiUrl}/wallet/files`)
         .map((response: Response) => response);
      }
 
@@ -58,7 +58,7 @@ export class ApiService {
       params.set('wordCount', '12');
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/mnemonic', new RequestOptions({headers: this.headers, search: params}))
+        .get(`${this.stratisApiUrl}/wallet/mnemonic`, new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 
@@ -67,7 +67,7 @@ export class ApiService {
      */
     createStratisWallet(data: WalletCreation): Observable<any> {
       return this.http
-        .post(this.stratisApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
+        .post(`${this.stratisApiUrl}/wallet/create/`, JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
@@ -76,7 +76,7 @@ export class ApiService {
      */
     recoverStratisWallet(data: WalletRecovery): Observable<any> {
       return this.http
-        .post(this.stratisApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
+        .post(`${this.stratisApiUrl}/wallet/recover/`, JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
@@ -85,7 +85,7 @@ export class ApiService {
      */
     loadStratisWallet(data: WalletLoad): Observable<any> {
       return this.http
-        .post(this.stratisApiUrl + '/wallet/load/', JSON.stringify(data), {headers: this.headers})
+        .post(`${this.stratisApiUrl}/wallet/load/`, JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
@@ -94,7 +94,7 @@ export class ApiService {
      */
     getWalletStatus(): Observable<any> {
       return this.http
-        .get(this.stratisApiUrl + '/wallet/status')
+        .get(`${this.stratisApiUrl}/wallet/status`)
         .map((response: Response) => response);
     }
 
@@ -106,7 +106,7 @@ export class ApiService {
       params.set('Name', data.walletName);
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, search: params}))
+        .get(`${this.stratisApiUrl}/wallet/general-info`, new RequestOptions({headers: this.headers, search: params}))
         .map((response: Response) => response);
     }
 

@@ -74,7 +74,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public openSendDialog() {
-    const modalRef = this.modalService.open(SendComponent, { backdrop: 'static', keyboard: false });
+    const modalRef = this.modalService.open(
+        SendComponent,
+        { backdrop: 'static', keyboard: false, windowClass: 'test-class' });
   }
 
   public openSidechainTransferDialog() {

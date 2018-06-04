@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
 import { DepositConfirmationComponent } from './deposit/confirmation/deposit-confirmation.component';
@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { SettingsComponent } from './settings/settings.component';
+import { SidechainsService } from './services/sidechains.service';
 
 @NgModule({
     imports: [
@@ -41,6 +42,15 @@ import { SettingsComponent } from './settings/settings.component';
       WithdrawConfirmationComponent,
       WithdrawComponent,
       SettingsComponent
-    ]
+    ],
+    providers: [SidechainsService]
 })
-export class SidechainsModule {}
+export class SidechainsModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+        ngModule: SidechainsModule,
+        providers: [SidechainsService]
+    };
+}
+}
+

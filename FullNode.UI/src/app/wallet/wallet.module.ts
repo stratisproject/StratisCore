@@ -13,7 +13,6 @@ import { SharedModule } from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
-import { SidechainsModule } from './sidechains/sidechains.module';
 
 @NgModule({
   imports: [
@@ -23,8 +22,7 @@ import { SidechainsModule } from './sidechains/sidechains.module';
     SharedModule.forRoot(),
     NgbModule,
     ReactiveFormsModule,
-    WalletRoutingModule,
-    SidechainsModule
+    WalletRoutingModule
   ],
   declarations: [
     WalletComponent,

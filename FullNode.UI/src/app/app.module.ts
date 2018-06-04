@@ -25,6 +25,7 @@ import { SendConfirmationComponent } from './wallet/send/send-confirmation/send-
 import { ReceiveComponent } from './wallet/receive/receive.component';
 import { TransactionDetailsComponent } from './wallet/transaction-details/transaction-details.component';
 import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout-confirmation.component';
+import { SidechainsModule } from './wallet/sidechains/sidechains.module';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     NgbModule.forRoot(),
     NgxElectronModule,
     NgxQRCodeModule,
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
+    SidechainsModule.forRoot()
   ],
   declarations: [
     AppComponent,
