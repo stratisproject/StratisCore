@@ -1,6 +1,6 @@
 <!-- MODAL SEND -->
 <div class="modal-header">
-  <h5 class="modal-title">Deposit</h5>
+  <h5 class="modal-title">Deposit to Sidechain</h5>
   <!-- button close -->
   <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
     <i class="lnr lnr-cross-circle"></i>
@@ -21,8 +21,13 @@
     </div>
     <!--<div class="form-group has-success">-->
     <div class="form-group clearfix">
-      <label for="destinationAddress">Destination address</label>
-      <input type="text" class="form-control" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && depositForm.get('address').valid" formControlName="address" id="destinationAddress" placeholder="Please enter the destination address here.">
+      <label for="MFAddress">Mainchain Federation address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Mainchain Federation address is the Stratis address where the Federation will hold your STRAT."></i>
+      <input type="text" class="form-control" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && depositForm.get('address').valid" formControlName="address" id="MFAddress" placeholder="Please enter the Mainchain Federation address here.">
+      <div *ngIf="formErrors.address" class="invalid-feedback">{{ formErrors.address }}</div>
+    </div>
+    <div class="form-group clearfix">
+      <label for="SDAddress">Sidechain Federation address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Sidechain Destination address is the sidechain address where the Federation will deposit your sidechain coins."></i>
+      <input type="text" class="form-control" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && depositForm.get('address').valid" formControlName="address" id="SDAddress" placeholder="Please enter the Sidechain Destination address here.">
       <div *ngIf="formErrors.address" class="invalid-feedback">{{ formErrors.address }}</div>
     </div>
     <div class="form-group clearfix">
@@ -63,7 +68,7 @@
 </div>
 <div class="modal-footer">
   <button *ngIf="!isDepositing" type="button" [disabled]="isDepositing" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
-  <button *ngIf="!isDepositing" type="button" class="btn btn-primary btn-block" [disabled]="!depositForm.valid || isDepositing || !estimatedFee" (click)="deposit()">Send</button>
+  <button *ngIf="!isDepositing" type="button" class="btn btn-purple btn-block" [disabled]="!depositForm.valid || isDepositing || !estimatedFee" (click)="deposit()">Send</button>
   <!-- SVG -->
   <div *ngIf="isDepositing" class="Loading LoadingSend col-2 mx-auto">
     <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
