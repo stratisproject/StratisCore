@@ -382,9 +382,16 @@ img {pointer-events: none !important;}
     user-select: auto !important;
   }
   .btn-group {
-    &.btn-group-toggle, &.fee {label{color:$white !important; margin-bottom: 0 !important;}}
+    &.btn-group-toggle, &.fee {
+      label {
+        margin-bottom: 0 !important;
+        &.btn-outline-danger {color: $red;}
+        &.btn-outline-warning {color: $yellow;}
+        &.btn-outline-success {color: $green;}
+        &.active {color: $white !important;}
+      }
+    }
     label {
-      color: $gray-700;
       &:hover {color: $white;}
       input {
         position: absolute;

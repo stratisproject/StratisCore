@@ -8460,12 +8460,23 @@ img {
 }
 
 .modal .btn-group.btn-group-toggle label, .modal .btn-group.fee label {
-  color: #fff !important;
   margin-bottom: 0 !important;
 }
 
-.modal .btn-group label {
-  color: #495057;
+.modal .btn-group.btn-group-toggle label.btn-outline-danger, .modal .btn-group.fee label.btn-outline-danger {
+  color: #dc3545;
+}
+
+.modal .btn-group.btn-group-toggle label.btn-outline-warning, .modal .btn-group.fee label.btn-outline-warning {
+  color: #ffc107;
+}
+
+.modal .btn-group.btn-group-toggle label.btn-outline-success, .modal .btn-group.fee label.btn-outline-success {
+  color: #28a745;
+}
+
+.modal .btn-group.btn-group-toggle label.active, .modal .btn-group.fee label.active {
+  color: #fff !important;
 }
 
 .modal .btn-group label:hover {
