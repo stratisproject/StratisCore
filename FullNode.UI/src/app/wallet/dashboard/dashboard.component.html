@@ -27,7 +27,7 @@
                   <i class="icon lnr lnr-arrow-up-circle"></i>
                   <span class="text-center text-uppercase">Send</span>
                 </a>
-                <a *ngIf="sidechainsAvailable && crossChainTransactionsEnabled" class="btn btn-lg btn-purple ml-2" (click)="openSidechainTransferDialog()">
+                <a *ngIf="crossChainTransactionsEnabled" class="btn btn-lg btn-purple ml-2" (click)="openSidechainTransferDialog()">
                   <i class="icon lnr lnr-link"></i>
                   <span class="text-center text-uppercase">Cross-chain</span>
                 </a>

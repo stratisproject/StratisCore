@@ -15,6 +15,7 @@ import { TransactionDetailsComponent } from '../transaction-details/transaction-
 import { Subscription } from 'rxjs/Subscription';
 import { Router } from '@angular/router';
 import { DepositComponent } from '../sidechains/deposit/deposit.component';
+import { WithdrawComponent } from '../sidechains/withdraw/withdraw.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -88,8 +89,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public openSidechainTransferDialog() {
+    if (!this.crossChainTransactionsEnabled) {
+      return;
+    }
+
+    const modalComponent = this.sidechainsAvailable ? WithdrawComponent : DepositComponent;
     const modalRef = this.modalService.open(
-        DepositComponent,
+        modalComponent,
         { backdrop: 'static', keyboard: false, windowClass: 'purple-shadow' }
     );
   }
