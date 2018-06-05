@@ -41,6 +41,7 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
 
   formErrors = {
     'address': '',
+    'federationAddress': '',
     'amount': '',
     'fee': '',
     'password': ''
@@ -48,6 +49,10 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
 
   validationMessages = {
     'address': {
+      'required': 'An address is required.',
+      'minlength': 'An address is at least 26 characters long.'
+    },
+    'federationAddress': {
       'required': 'An address is required.',
       'minlength': 'An address is at least 26 characters long.'
     },
@@ -88,6 +93,10 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
   private buildDepositForm(): void {
     this.depositForm = this.fb.group({
       'address': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      'federationAddress': [
+        this.globalService.federationAddressAutoPopulationEnabled ? this.globalService.federationAddress : '',
+        Validators.compose([Validators.required, Validators.minLength(26)])
+      ],
       'amount': [
         '',
         Validators.compose([
@@ -198,7 +207,8 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
       // TO DO: use coin notation
       this.estimatedFee / 100000000,
       true,
-      false
+      false,
+      this.depositForm.get('federationAddress').value
     );
 
     this.apiService

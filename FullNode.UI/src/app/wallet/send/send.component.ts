@@ -199,7 +199,8 @@ export class SendComponent extends BaseForm implements OnInit, OnDestroy {
       // TODO: use coin notation
       this.estimatedFee / 100000000,
       true,
-      false
+      false,
+      null
     );
 
     this.apiService
