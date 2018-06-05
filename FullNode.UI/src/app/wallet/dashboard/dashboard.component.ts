@@ -55,12 +55,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.startSubscriptions();
-    this.walletName = this.globalService.WalletName;
-    this.coinUnit = this.globalService.CoinUnit;
+    this.walletName = this.globalService.walletName;
+    this.coinUnit = this.globalService.coinUnit;
   }
 
   ngOnDestroy() {
     this.cancelSubscriptions();
+  }
+
+  get sidechainsAvailable() {
+    return this.globalService.sidechainsEnabled;
+  }
+
+  get crossChainTransactionsEnabled() {
+    return this.globalService.crossChainTransactionsEnabled;
   }
 
   private buildStakingForm(): void {
@@ -96,7 +104,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private getWalletBalance() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
         response =>  {
@@ -135,7 +143,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // todo: add history in seperate service to make it reusable
   private getHistory() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     let historyResponse;
     this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(
@@ -207,7 +215,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isStarting = true;
     this.isStopping = false;
     const walletData = {
-      name: this.globalService.WalletName,
+      name: this.globalService.walletName,
       password: this.stakingForm.get('walletPassword').value
     };
     this.apiService.startStaking(walletData)

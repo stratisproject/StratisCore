@@ -62,7 +62,7 @@ export class CoinNotationPipe implements PipeTransform {
   }
 
   setCoinUnit() {
-    this.coinUnit = this.globalService.CoinUnit;
+    this.coinUnit = this.globalService.coinUnit;
   }
 }
 

@@ -50,7 +50,7 @@ export class LoginComponent extends BaseForm implements OnInit {
   }
 
   get sidechainsAvailable() {
-    return this.globalService.SidechainsEnabled;
+    return this.globalService.sidechainsEnabled;
   }
 
   private buildDecryptForm(): void {
@@ -78,7 +78,7 @@ export class LoginComponent extends BaseForm implements OnInit {
           if (response.status >= 200 && response.status < 400) {
             const responseMessage = response.json();
             this.wallets = responseMessage.walletsFiles;
-            this.globalService.WalletPath = responseMessage.walletsPath;
+            this.globalService.walletPath = responseMessage.walletsPath;
             if (this.wallets.length > 0) {
               this.hasWallet = true;
               for (const wallet in this.wallets) {
@@ -119,10 +119,10 @@ export class LoginComponent extends BaseForm implements OnInit {
 
   public onDecryptClicked() {
     this.isDecrypting = true;
-    this.globalService.WalletName = this.openWalletForm.get('selectWallet').value;
-    if (!this.globalService.SidechainsEnabled) {
-      this.globalService.CoinName = 'TestStratis';
-      this.globalService.CoinUnit = 'TSTRAT';
+    this.globalService.walletName = this.openWalletForm.get('selectWallet').value;
+    if (!this.globalService.sidechainsEnabled) {
+      this.globalService.coinName = 'TestStratis';
+      this.globalService.coinUnit = 'TSTRAT';
     }
     this.getCurrentNetwork();
     const walletLoad = new WalletLoad(
@@ -133,19 +133,19 @@ export class LoginComponent extends BaseForm implements OnInit {
   }
 
   private tryToLoadSidechain() {
-    this.globalService.SidechainsEnabled = false;
+    this.globalService.sidechainsEnabled = false;
     this.sidechainsService.getCoinDetails().subscribe(
       response => {
         if (response.status >= 200 && response.status < 400) {
-          this.globalService.SidechainsEnabled = true;
+          this.globalService.sidechainsEnabled = true;
           const coinDetails = response.json();
-          this.globalService.CoinName = coinDetails.name;
-          this.globalService.CoinUnit = coinDetails.symbol;
+          this.globalService.coinName = coinDetails.name;
+          this.globalService.coinUnit = coinDetails.symbol;
         }
       },
       error => {
         if (error.status === 404) {
-          this.globalService.SidechainsEnabled = false;
+          this.globalService.sidechainsEnabled = false;
         } else {
           console.log(error);
         }
@@ -179,19 +179,19 @@ export class LoginComponent extends BaseForm implements OnInit {
   }
 
   private getCurrentNetwork() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     this.apiService.getGeneralInfoOnce(walletInfo)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
             const responseMessage = response.json();
-            this.globalService.Network = responseMessage.network;
+            this.globalService.network = responseMessage.network;
             if (responseMessage.network === 'StratisMain') {
-              this.globalService.CoinName = 'Stratis';
-              this.globalService.CoinUnit = 'STRAT';
+              this.globalService.coinName = 'Stratis';
+              this.globalService.coinUnit = 'STRAT';
             } else if (responseMessage.network === 'StratisTest') {
-              this.globalService.CoinName = 'TestStratis';
-              this.globalService.CoinUnit = 'TSTRAT';
+              this.globalService.coinName = 'TestStratis';
+              this.globalService.coinUnit = 'TSTRAT';
             }
           }
         },

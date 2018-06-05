@@ -51,7 +51,7 @@ export class ReceiveComponent implements OnInit {
   }
 
   private getUnusedReceiveAddresses() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     this.apiService.getUnusedReceiveAddress(walletInfo)
       .subscribe(
         response => {
@@ -77,7 +77,7 @@ export class ReceiveComponent implements OnInit {
   }
 
   private getAddresses() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     this.apiService.getAllAddresses(walletInfo)
       .subscribe(
         response => {

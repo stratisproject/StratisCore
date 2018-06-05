@@ -18,11 +18,11 @@ export class MenuComponent implements OnInit {
   public walletName: string;
 
   ngOnInit() {
-    this.walletName = this.globalService.WalletName;
+    this.walletName = this.globalService.walletName;
   }
 
   get sidechainsAvailable() {
-    return this.globalService.SidechainsEnabled;
+    return this.globalService.sidechainsEnabled;
   }
 
   public logOut() {

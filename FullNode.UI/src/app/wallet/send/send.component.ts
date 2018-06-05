@@ -78,7 +78,7 @@ export class SendComponent extends BaseForm implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.startSubscriptions();
-    this.coinUnit = this.globalService.CoinUnit;
+    this.coinUnit = this.globalService.coinUnit;
   }
 
   ngOnDestroy() {
@@ -116,7 +116,7 @@ export class SendComponent extends BaseForm implements OnInit, OnDestroy {
 
   public getMaxBalance() {
     const data = {
-      walletName: this.globalService.WalletName,
+      walletName: this.globalService.walletName,
       feeType: this.sendForm.get('fee').value
     };
 
@@ -153,7 +153,7 @@ export class SendComponent extends BaseForm implements OnInit, OnDestroy {
 
   public estimateFee() {
     const transaction = new FeeEstimation(
-      this.globalService.WalletName,
+      this.globalService.walletName,
       'account 0',
       this.sendForm.get('address').value.trim(),
       this.sendForm.get('amount').value,
@@ -190,7 +190,7 @@ export class SendComponent extends BaseForm implements OnInit, OnDestroy {
 
   public buildTransaction() {
     this.transaction = new TransactionBuilding(
-      this.globalService.WalletName,
+      this.globalService.walletName,
       'account 0',
       this.sendForm.get('password').value,
       this.sendForm.get('address').value.trim(),
@@ -273,7 +273,7 @@ export class SendComponent extends BaseForm implements OnInit, OnDestroy {
   }
 
   private getWalletBalance() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
         response =>  {

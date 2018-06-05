@@ -37,7 +37,7 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   }
 
   private getGeneralWalletInfo() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     this.generalWalletInfoSubscription = this.apiService.getGeneralInfo(walletInfo)
       .subscribe(
         response =>  {

@@ -9,11 +9,11 @@
 </div>
 <div class="modal-body">
   <!-- settings -->
-  <form>
+  <form [formGroup]="settingsForm">
     <!-- crosschain -->
     <div class="row align-items-center my-3">
       <label class="col-7" for="">Cross-Chain Transactions</label>
-      <div class="btn-group col d-flex justify-content-end" ngbRadioGroup name="" formControlName="">
+      <div class="btn-group col d-flex justify-content-end" ngbRadioGroup name="crossChainTransactionsEnabled" formControlName="crossChainTransactionsEnabled">
         <label ngbButtonLabel class="btn btn-primary">
           <input ngbButton type="radio" value="Disable">Disable</label>
         <label ngbButtonLabel class="btn btn-primary active">
@@ -22,9 +22,9 @@
     </div>
     <!-- /crosschain -->
     <!-- fed addr -->
-    <div class="row align-items-center my-3">
+    <div class="row align-items-center my-3" [hidden]="settingsForm.get('crossChainTransactionsEnabled').value !== 'Enable'">
       <label class="col-7" for="">Federation Address auto-populate</label>
-      <div class="btn-group col d-flex justify-content-end" ngbRadioGroup name="" formControlName="">
+      <div class="btn-group col d-flex justify-content-end" ngbRadioGroup name="federationAddressAutoPopulationEnabled" formControlName="federationAddressAutoPopulationEnabled">
         <label ngbButtonLabel class="btn btn-primary">
           <input ngbButton type="radio" value="Disable">Disable</label>
         <label ngbButtonLabel class="btn btn-primary">
@@ -33,20 +33,22 @@
     </div>
     <!-- /fed addr -->
     <!-- fed addr form -->
-    <div class="row align-items-center my-3">
+    <div class="row align-items-center my-3" [hidden]="settingsForm.get('federationAddressAutoPopulationEnabled').value !== 'Enable' || settingsForm.get('crossChainTransactionsEnabled').value !== 'Enable'">
       <div class="form-group col">
         <label for="">Sidechain Federation Address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Sidechain Federation address is the sidechain address where the Federation will receive your sidechain coins."></i>
-        <input type="text" class="form-control" id="" aria-describedby="" placeholder="" value="">
-        <div class="invalid-feedback">Enter a valid address.</div>
+        <input type="text" class="form-control" formControlName="address" id="address" aria-describedby="address" placeholder="Please enter a valid federation address." value="" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && settingsForm.get('address').valid">
+        <div *ngIf="formErrors.address" class="invalid-feedback">{{ formErrors.address }}</div>
       </div>
     </div>
     <!-- /fed addr form -->
 
-    <div class="alert alert-success alert-dismissible fade show mt-3 mb-0" role="alert">Your changes have been successfully saved.</div>
+    <div class="alert alert-success alert-dismissible fade show mt-3 mb-0" role="alert" *ngIf="saved">
+      Your changes have been successfully saved.
+    </div>
 
     <div class="d-flex mt-4">
       <button class="btn btn-outline-light" type="button" (click)="activeModal.close('Close click')">Cancel</button>
-      <button class="btn btn-primary btn-block ml-2" type="button" disabled="">Save</button>
+      <button class="btn btn-primary btn-block ml-2" type="button" (click)="save()" [disabled]="settingsForm.invalid || settingsForm.pristine || isSaving">Save</button>
     </div>
 
   </form>

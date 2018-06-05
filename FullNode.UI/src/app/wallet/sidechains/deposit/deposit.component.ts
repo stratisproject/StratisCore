@@ -78,7 +78,7 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.startSubscriptions();
-    this.coinUnit = this.globalService.CoinUnit;
+    this.coinUnit = this.globalService.coinUnit;
   }
 
   ngOnDestroy() {
@@ -118,7 +118,7 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
 
   public getMaxBalance() {
     const data = {
-      walletName: this.globalService.WalletName,
+      walletName: this.globalService.walletName,
       feeType: this.depositForm.get('fee').value
     };
 
@@ -153,7 +153,7 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
 
   public estimateFee() {
     const transaction = new FeeEstimation(
-      this.globalService.WalletName,
+      this.globalService.walletName,
       'account 0',
       this.depositForm.get('address').value.trim(),
       this.depositForm.get('amount').value,
@@ -189,7 +189,7 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
 
   public buildTransaction() {
     this.transaction = new TransactionBuilding(
-      this.globalService.WalletName,
+      this.globalService.walletName,
       'account 0',
       this.depositForm.get('password').value,
       this.depositForm.get('address').value.trim(),
@@ -268,7 +268,7 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
   }
 
   private getWalletBalance() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
         response =>  {

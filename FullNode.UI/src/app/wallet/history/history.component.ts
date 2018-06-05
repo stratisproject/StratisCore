@@ -36,7 +36,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.startSubscriptions();
-    this.coinUnit = this.globalService.CoinUnit;
+    this.coinUnit = this.globalService.coinUnit;
   }
 
   ngOnDestroy() {
@@ -54,7 +54,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
   // TODO: add history in seperate service to make it reusable
   private getHistory() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     let historyResponse;
     this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(

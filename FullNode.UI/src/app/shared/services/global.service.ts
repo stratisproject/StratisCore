@@ -4,67 +4,93 @@ import {Injectable} from '@angular/core';
 export class GlobalService {
   constructor() {}
 
-  private walletPath: string;
-  private currentWalletName: string;
-  private coinType: number;
-  private coinName: string;
-  private coinUnit: string;
-  private network: string;
-  private sidechainsEnabled = false;
+  private _walletPath: string;
+  private _currentWalletName: string;
+  private _coinType: number;
+  private _coinName: string;
+  private _coinUnit: string;
+  private _network: string;
+  private _sidechainsEnabled = false;
 
-  get WalletPath() {
-    return this.walletPath;
+  get walletPath() {
+    return this._walletPath;
   }
 
-  set WalletPath(walletPath: string) {
-    this.walletPath = walletPath;
+  set walletPath(walletPath: string) {
+    this._walletPath = walletPath;
   }
 
-  get Network() {
-    return this.network;
+  get network() {
+    return this._network;
   }
 
-  set Network(network: string) {
-    this.network = network;
+  set network(network: string) {
+    this._network = network;
   }
 
-  get WalletName() {
-    return this.currentWalletName;
+  get walletName() {
+    return this._currentWalletName;
   }
 
-  set WalletName(currentWalletName: string) {
-    this.currentWalletName = currentWalletName;
+  set walletName(currentWalletName: string) {
+    this._currentWalletName = currentWalletName;
   }
 
-  get CoinType() {
-    return this.coinType;
+  get coinType() {
+    return this._coinType;
   }
 
-  set CoinType (coinType: number) {
-    this.coinType = coinType;
+  set coinType (coinType: number) {
+    this._coinType = coinType;
   }
 
-  get CoinName() {
-    return this.coinName;
+  get coinName() {
+    return this._coinName;
   }
 
-  set CoinName(coinName: string) {
-    this.coinName = coinName;
+  set coinName(coinName: string) {
+    this._coinName = coinName;
   }
 
-  get CoinUnit() {
-    return this.coinUnit;
+  get coinUnit() {
+    return this._coinUnit;
   }
 
-  set CoinUnit(coinUnit: string) {
-    this.coinUnit = coinUnit;
+  set coinUnit(coinUnit: string) {
+    this._coinUnit = coinUnit;
   }
 
-  get SidechainsEnabled() {
-    return this.sidechainsEnabled;
+  get sidechainsEnabled() {
+    return this._sidechainsEnabled;
   }
 
-  set SidechainsEnabled(sidechainsEnabled: boolean) {
-    this.sidechainsEnabled = sidechainsEnabled;
+  set sidechainsEnabled(sidechainsEnabled: boolean) {
+    this._sidechainsEnabled = sidechainsEnabled;
+  }
+
+  get crossChainTransactionsEnabled() {
+    const enabledValue = localStorage.getItem('crossChainTransactionsEnabled');
+    return !!enabledValue && enabledValue === 'true';
+  }
+
+  set crossChainTransactionsEnabled(value: boolean) {
+    localStorage.setItem('crossChainTransactionsEnabled', value.toString());
+  }
+
+  get federationAddressAutoPopulationEnabled() {
+    const enabledValue = localStorage.getItem('federationAddressAutoPopulationEnabled');
+    return !!enabledValue && enabledValue === 'true';
+  }
+
+  set federationAddressAutoPopulationEnabled(value: boolean) {
+    localStorage.setItem('federationAddressAutoPopulationEnabled', value.toString());
+  }
+
+  get federationAddress() {
+    return localStorage.getItem('federationAddress');
+  }
+
+  set federationAddress(value: string) {
+    localStorage.setItem('federationAddressAutoPopulationEnabled', value);
   }
 }

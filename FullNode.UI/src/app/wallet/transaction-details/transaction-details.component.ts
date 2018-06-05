@@ -32,7 +32,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.startSubscriptions();
-    this.coinUnit = this.globalService.CoinUnit;
+    this.coinUnit = this.globalService.coinUnit;
   }
 
   ngOnDestroy() {
@@ -44,7 +44,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   }
 
   private getGeneralWalletInfo() {
-    const walletInfo = new WalletInfo(this.globalService.WalletName);
+    const walletInfo = new WalletInfo(this.globalService.walletName);
     this.generalWalletInfoSubscription = this.apiService.getGeneralInfo(walletInfo)
       .subscribe(
         response =>  {
