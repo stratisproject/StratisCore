@@ -18,20 +18,20 @@
       </div>
       <!--<div class="form-group has-success">-->
       <div class="form-group clearfix">
-        <label for="MFAddress">Mainchain Federation address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Mainchain Federation address is the Stratis address where the Federation will hold your STRAT."></i>
-        <input type="text" class="form-control" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && withdrawForm.get('address').valid" formControlName="address" id="MFAddress" placeholder="Please enter the Mainchain Federation address here.">
-        <div *ngIf="formErrors.address" class="invalid-feedback">{{ formErrors.address }}</div>
+        <label for="sidechainAddress">Sidechain Federation address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Sidechain Federation address is the sidechain address where the Federation will withdraw your sidechain coins."></i>
+        <input type="text" class="form-control" [class.is-invalid]="formErrors.sidechainAddress" [class.is-valid]="!formErrors.sidechainAddress && withdrawForm.get('sidechainAddress').valid" formControlName="sidechainAddress" id="sidechainAddress" placeholder="Please enter the Sidechain Destination address here." value="SNpCNJTTdYxRHdqPdx3WGFucNScpYYthJV">
+        <div *ngIf="formErrors.sidechainAddress" class="invalid-feedback">{{ formErrors.sidechainAddress }}</div>
       </div>
       <div class="form-group clearfix">
-        <label for="SDAddress">Sidechain Federation address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Sidechain Destination address is the sidechain address where the Federation will withdraw your sidechain coins."></i>
-        <input type="text" class="form-control" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && withdrawForm.get('address').valid" formControlName="address" id="SDAddress" placeholder="Please enter the Sidechain Destination address here." value="SNpCNJTTdYxRHdqPdx3WGFucNScpYYthJV">
-        <div *ngIf="formErrors.address" class="invalid-feedback">{{ formErrors.address }}</div>
+        <label for="mainchainAddress">Mainchain Destination address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Mainchain Federation address is the Stratis address where the Federation will hold your STRAT."></i>
+        <input type="text" class="form-control" [class.is-invalid]="formErrors.mainchainAddress" [class.is-valid]="!formErrors.mainchainAddress && withdrawForm.get('mainchainAddress').valid" formControlName="mainchainAddress" id="mainchainAddress" placeholder="Please enter the Mainchain Destination address here.">
+        <div *ngIf="formErrors.mainchainAddress" class="invalid-feedback">{{ formErrors.mainchainAddress }}</div>
       </div>
       <div class="form-group clearfix">
         <label>Transaction Fee</label>
         <!-- fee buttons -->
         <div class="row align-items-center">
-          <div class="btn-group col fee" ngbRadioGroup name="feeButtons" formControlName="fee">
+          <div class="btn-group col fee" ngbRadioGroup name="feeButtons" formControlName="feeType">
             <label ngbButtonLabel class="btn btn-outline-danger">
               <input ngbButton type="radio" value="low"> Low/Slow
             </label>
@@ -43,7 +43,7 @@
             </label>
           </div>
           <div class="col text-left">
-            <small><strong><em>Fee: 0.0001 STRAT</em></strong></small>
+            <small><strong><em>Fee: {{ estimatedFee | coinNotation }} {{ coinUnit }}</em></strong></small>
           </div>
         </div>
 

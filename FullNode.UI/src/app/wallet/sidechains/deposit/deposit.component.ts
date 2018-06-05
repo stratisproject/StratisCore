@@ -40,21 +40,21 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
   private walletBalanceSubscription: Subscription;
 
   formErrors = {
-    'address': '',
-    'federationAddress': '',
+    'mainchainAddress': '',
+    'sidechainAddress': '',
     'amount': '',
-    'fee': '',
+    'feeType': '',
     'password': ''
   };
 
   validationMessages = {
-    'address': {
-      'required': 'An address is required.',
-      'minlength': 'An address is at least 26 characters long.'
+    'mainchainAddress': {
+      'required': 'An mainchain federation address is required.',
+      'minlength': 'An mainchain federation address is at least 26 characters long.'
     },
-    'federationAddress': {
-      'required': 'An address is required.',
-      'minlength': 'An address is at least 26 characters long.'
+    'sidechainAddress': {
+      'required': 'An sidechain destination is required.',
+      'minlength': 'An sidechain destination is at least 26 characters long.'
     },
     'amount': {
       'required': 'An amount is required.',
@@ -62,7 +62,7 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
       'min': 'The amount has to be more or equal to 0.00001 Stratis.',
       'max': 'The total transaction amount exceeds your available balance.'
     },
-    'fee': {
+    'feeType': {
       'required': 'A fee is required.'
     },
     'password': {
@@ -92,8 +92,8 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
 
   private buildDepositForm(): void {
     this.depositForm = this.fb.group({
-      'address': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      'federationAddress': [
+      'sidechainAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      'mainchainAddress': [
         this.globalService.federationAddressAutoPopulationEnabled ? this.globalService.federationAddress : '',
         Validators.compose([Validators.required, Validators.minLength(26)])
       ],
@@ -104,13 +104,21 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
           Validators.min(0.00001),
           (control: AbstractControl) => Validators.max((this.totalBalance - this.estimatedFee) / 100000000)(control)])
       ],
-      'fee': ['medium', Validators.required],
+      'feeType': ['medium', Validators.required],
       'password': ['', Validators.required]
     });
 
     this.depositForm.valueChanges
       .debounceTime(300)
       .subscribe(data => this.onValueChanged(data));
+
+    this.depositForm.get('feeType').valueChanges
+      .subscribe((feeType: string) => {
+        if (this.depositForm.get('mainchainAddress').valid && this.depositForm.get('amount').valid) {
+          this.estimateFee();
+        }
+      }
+    );
   }
 
   onValueChanged(data?: any) {
@@ -120,7 +128,7 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
 
     this.apiError = '';
 
-    if (this.depositForm.get('address').valid && this.depositForm.get('amount').valid) {
+    if (this.depositForm.get('mainchainAddress').valid && this.depositForm.get('amount').valid) {
       this.estimateFee();
     }
   }
@@ -128,7 +136,7 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
   public getMaxBalance() {
     const data = {
       walletName: this.globalService.walletName,
-      feeType: this.depositForm.get('fee').value
+      feeType: this.depositForm.get('feeType').value
     };
 
     let balanceResponse;
@@ -164,9 +172,9 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
     const transaction = new FeeEstimation(
       this.globalService.walletName,
       'account 0',
-      this.depositForm.get('address').value.trim(),
+      this.depositForm.get('mainchainAddress').value.trim(),
       this.depositForm.get('amount').value,
-      this.depositForm.get('fee').value,
+      this.depositForm.get('feeType').value,
       true
     );
 
@@ -201,14 +209,14 @@ export class DepositComponent extends BaseForm implements OnInit, OnDestroy {
       this.globalService.walletName,
       'account 0',
       this.depositForm.get('password').value,
-      this.depositForm.get('address').value.trim(),
+      this.depositForm.get('mainchainAddress').value.trim(),
       this.depositForm.get('amount').value,
-      this.depositForm.get('fee').value,
+      this.depositForm.get('feeType').value,
       // TO DO: use coin notation
       this.estimatedFee / 100000000,
       true,
       false,
-      this.depositForm.get('federationAddress').value
+      this.depositForm.get('sidechainAddress').value
     );
 
     this.apiService

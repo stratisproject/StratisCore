@@ -40,21 +40,21 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
   private walletBalanceSubscription: Subscription;
 
   formErrors = {
-    'address': '',
-    'federationAddress': '',
+    'sidechainAddress': '',
+    'mainchainAddress': '',
     'amount': '',
-    'fee': '',
+    'feeType': '',
     'password': ''
   };
 
   validationMessages = {
-    'address': {
-      'required': 'An address is required.',
-      'minlength': 'An address is at least 26 characters long.'
+    'sidechainAddress': {
+      'required': 'A sidechain federation address is required.',
+      'minlength': 'A sidechain federation address is at least 26 characters long.'
     },
-    'federationAddress': {
-      'required': 'An address is required.',
-      'minlength': 'An address is at least 26 characters long.'
+    'mainchainAddress': {
+      'required': 'A mainnet destination address is required.',
+      'minlength': 'An mainnet destination address is at least 26 characters long.'
     },
     'amount': {
       'required': 'An amount is required.',
@@ -62,7 +62,7 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
       'min': 'The amount has to be more or equal to 0.00001 Stratis.',
       'max': 'The total transaction amount exceeds your available balance.'
     },
-    'fee': {
+    'feeType': {
       'required': 'A fee is required.'
     },
     'password': {
@@ -92,8 +92,8 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
 
   private buildWithdrawForm(): void {
     this.withdrawForm = this.fb.group({
-      'address': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      'federationAddress': [
+      'mainchainAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      'sidechainAddress': [
         this.globalService.federationAddressAutoPopulationEnabled ? this.globalService.federationAddress : '',
         Validators.compose([Validators.required, Validators.minLength(26)])
       ],
@@ -104,13 +104,21 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
           Validators.min(0.00001),
           (control: AbstractControl) => Validators.max((this.totalBalance - this.estimatedFee) / 100000000)(control)])
       ],
-      'fee': ['medium', Validators.required],
+      'feeType': ['medium', Validators.required],
       'password': ['', Validators.required]
     });
 
     this.withdrawForm.valueChanges
       .debounceTime(300)
       .subscribe(data => this.onValueChanged(data));
+
+    this.withdrawForm.get('feeType').valueChanges
+      .subscribe((feeType: string) => {
+        if (this.withdrawForm.get('federationAddress').valid && this.withdrawForm.get('amount').valid) {
+          this.estimateFee();
+        }
+      }
+    );
   }
 
   onValueChanged(data?: any) {
@@ -120,7 +128,7 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
 
     this.apiError = '';
 
-    if (this.withdrawForm.get('address').valid && this.withdrawForm.get('amount').valid) {
+    if (this.withdrawForm.get('sidechainAddress').valid && this.withdrawForm.get('amount').valid) {
       this.estimateFee();
     }
   }
@@ -128,7 +136,7 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
   public getMaxBalance() {
     const data = {
       walletName: this.globalService.walletName,
-      feeType: this.withdrawForm.get('fee').value
+      feeType: this.withdrawForm.get('feeType').value
     };
 
     let balanceResponse;
@@ -164,9 +172,9 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
     const transaction = new FeeEstimation(
       this.globalService.walletName,
       'account 0',
-      this.withdrawForm.get('address').value.trim(),
+      this.withdrawForm.get('sidechainAddress').value.trim(),
       this.withdrawForm.get('amount').value,
-      this.withdrawForm.get('fee').value,
+      this.withdrawForm.get('feeType').value,
       true
     );
 
@@ -201,14 +209,14 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
       this.globalService.walletName,
       'account 0',
       this.withdrawForm.get('password').value,
-      this.withdrawForm.get('address').value.trim(),
+      this.withdrawForm.get('sidechainAddress').value.trim(),
       this.withdrawForm.get('amount').value,
-      this.withdrawForm.get('fee').value,
+      this.withdrawForm.get('feeType').value,
       // TO DO: use coin notation
       this.estimatedFee / 100000000,
       true,
       false,
-      this.withdrawForm.get('federationAddress').value
+      this.withdrawForm.get('mainchainAddress').value
     );
 
     this.apiService
