@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { GlobalService } from '../shared/services/global.service';
 import { ApiService } from '../shared/services/api.service';
 import { ModalService } from '../shared/services/modal.service';
+import { Log } from '../shared/services/logger.service';
 
 import { WalletLoad } from '../shared/classes/wallet-load';
 import { WalletInfo } from '../shared/classes/wallet-info';
@@ -24,7 +25,8 @@ export class LoginComponent extends BaseForm implements OnInit {
     private genericModalService: ModalService,
     private router: Router,
     private fb: FormBuilder,
-    private sidechainsService: SidechainsService) {
+    private sidechainsService: SidechainsService,
+    private log: Log) {
       super();
       this.buildDecryptForm();
   }
@@ -133,6 +135,7 @@ export class LoginComponent extends BaseForm implements OnInit {
   }
 
   private tryToLoadSidechain() {
+    this.log.log('Check if sidechain API is available');
     this.globalService.sidechainsEnabled = false;
     this.sidechainsService.getCoinDetails().subscribe(
       response => {

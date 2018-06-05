@@ -19,6 +19,7 @@ import { GenericModalComponent } from './shared/components/generic-modal/generic
 import { ApiService } from './shared/services/api.service';
 import { GlobalService } from './shared/services/global.service';
 import { ModalService } from './shared/services/modal.service';
+import { Log } from './shared/services/logger.service';
 
 import { SendComponent } from './wallet/send/send.component';
 import { SendConfirmationComponent } from './wallet/send/send-confirmation/send-confirmation.component';
@@ -61,7 +62,7 @@ import { SidechainsModule } from './wallet/sidechains/sidechains.module';
     TransactionDetailsComponent,
     LogoutConfirmationComponent
   ],
-  providers: [ ApiService, GlobalService, ModalService, Title ],
+  providers: [ ApiService, GlobalService, ModalService, Title, Log ],
   bootstrap: [ AppComponent ]
 })
 

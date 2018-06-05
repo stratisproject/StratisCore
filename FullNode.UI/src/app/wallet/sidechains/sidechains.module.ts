@@ -1,9 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
-import { DepositConfirmationComponent } from './deposit/confirmation/deposit-confirmation.component';
 import { DepositComponent } from './deposit/deposit.component';
-import { WithdrawConfirmationComponent } from './withdraw/confirmation/withdraw-confirmation.component';
 import { WithdrawComponent } from './withdraw/withdraw.component';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +9,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { SettingsComponent } from './settings/settings.component';
 import { SidechainsService } from './services/sidechains.service';
+
+const COMPONENTS = [
+  DepositComponent,
+  WithdrawComponent,
+  SettingsComponent
+];
 
 @NgModule({
     imports: [
@@ -23,25 +27,13 @@ import { SidechainsService } from './services/sidechains.service';
       SharedModule.forRoot()
     ],
     declarations: [
-      DepositConfirmationComponent,
-      DepositComponent,
-      WithdrawConfirmationComponent,
-      WithdrawComponent,
-      SettingsComponent
+      COMPONENTS
     ],
     exports: [
-      DepositConfirmationComponent,
-      DepositComponent,
-      WithdrawConfirmationComponent,
-      WithdrawComponent,
-      SettingsComponent
+      COMPONENTS
     ],
     entryComponents: [
-      DepositConfirmationComponent,
-      DepositComponent,
-      WithdrawConfirmationComponent,
-      WithdrawComponent,
-      SettingsComponent
+      COMPONENTS
     ],
     providers: [SidechainsService]
 })

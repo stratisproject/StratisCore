@@ -1,3 +1,4 @@
+import { Log } from './shared/services/logger.service';
 import { CONF_LOCAL } from '../environments/environment.local';
 import { CONF_DEV } from '../environments/environment.dev';
 import { CONF_PROD } from '../environments/environment.prod';
@@ -9,8 +10,6 @@ const DEV: String = 'dev';
 const PROD: String = 'prod';
 
 let conf: any;
-
-console.log('Env', ENV);
 
 if (ENV === PROD) {
   conf = CONF_PROD;

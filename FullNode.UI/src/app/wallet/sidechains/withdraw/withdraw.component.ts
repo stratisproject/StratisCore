@@ -12,12 +12,13 @@ import { FeeEstimation } from '../../../shared/classes/fee-estimation';
 import { TransactionBuilding } from '../../../shared/classes/transaction-building';
 import { WalletInfo } from '../../../shared/classes/wallet-info';
 
-import { WithdrawConfirmationComponent } from './confirmation/withdraw-confirmation.component';
 import { TransactionSending } from '../../../shared/classes/transaction-sending';
+
+import { Log } from '../../../shared/services/logger.service';
 
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
-import { BaseForm } from '../../../shared/components/base-form';
+import { SideChainTransferForm } from '../models/transfer-form';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -26,49 +27,7 @@ import { BaseForm } from '../../../shared/components/base-form';
   styleUrls: ['./withdraw.component.css'],
 })
 
-export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
-  public withdrawForm: FormGroup;
-  public coinUnit: string;
-  public isWithdrawing = false;
-  public estimatedFee = 0;
-  public totalBalance = 0;
-  public apiError: string;
-  private transactionHex: string;
-  private responseMessage: any;
-  private errorMessage: string;
-  private transaction: TransactionBuilding;
-  private walletBalanceSubscription: Subscription;
-
-  formErrors = {
-    'sidechainAddress': '',
-    'mainchainAddress': '',
-    'amount': '',
-    'feeType': '',
-    'password': ''
-  };
-
-  validationMessages = {
-    'sidechainAddress': {
-      'required': 'A sidechain federation address is required.',
-      'minlength': 'A sidechain federation address is at least 26 characters long.'
-    },
-    'mainchainAddress': {
-      'required': 'A mainnet destination address is required.',
-      'minlength': 'An mainnet destination address is at least 26 characters long.'
-    },
-    'amount': {
-      'required': 'An amount is required.',
-      'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-      'min': 'The amount has to be more or equal to 0.00001 Stratis.',
-      'max': 'The total transaction amount exceeds your available balance.'
-    },
-    'feeType': {
-      'required': 'A fee is required.'
-    },
-    'password': {
-      'required': 'Your password is required.'
-    }
-  };
+export class WithdrawComponent extends SideChainTransferForm implements OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
@@ -76,9 +35,10 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private genericModalService: ModalService,
     public activeModal: NgbActiveModal,
-    private fb: FormBuilder) {
-      super();
-      this.buildWithdrawForm();
+    private fb: FormBuilder,
+    private log: Log) {
+      super(apiService, globalService, modalService, genericModalService, activeModal, fb, log, 'sidechainAddress');
+      this.buildForm();
   }
 
   ngOnInit() {
@@ -88,247 +48,5 @@ export class WithdrawComponent extends BaseForm implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.cancelSubscriptions();
-  }
-
-  private buildWithdrawForm(): void {
-    this.withdrawForm = this.fb.group({
-      'mainchainAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      'sidechainAddress': [
-        this.globalService.federationAddressAutoPopulationEnabled ? this.globalService.federationAddress : '',
-        Validators.compose([Validators.required, Validators.minLength(26)])
-      ],
-      'amount': [
-        '',
-        Validators.compose([
-          Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
-          Validators.min(0.00001),
-          (control: AbstractControl) => Validators.max((this.totalBalance - this.estimatedFee) / 100000000)(control)])
-      ],
-      'feeType': ['medium', Validators.required],
-      'password': ['', Validators.required]
-    });
-
-    this.withdrawForm.valueChanges
-      .debounceTime(300)
-      .subscribe(data => this.onValueChanged(data));
-
-    this.withdrawForm.get('feeType').valueChanges
-      .subscribe((feeType: string) => {
-        if (this.withdrawForm.get('federationAddress').valid && this.withdrawForm.get('amount').valid) {
-          this.estimateFee();
-        }
-      }
-    );
-  }
-
-  onValueChanged(data?: any) {
-    if (!this.withdrawForm) { return; }
-    const form = this.withdrawForm;
-    this.validateControls(form, this.formErrors, this.validationMessages);
-
-    this.apiError = '';
-
-    if (this.withdrawForm.get('sidechainAddress').valid && this.withdrawForm.get('amount').valid) {
-      this.estimateFee();
-    }
-  }
-
-  public getMaxBalance() {
-    const data = {
-      walletName: this.globalService.walletName,
-      feeType: this.withdrawForm.get('feeType').value
-    };
-
-    let balanceResponse;
-
-    this.apiService
-      .getMaximumBalance(data)
-      .subscribe(
-        response => {
-          if (response.status >= 200 && response.status < 400) {
-            balanceResponse = response.json();
-          }
-        },
-        error => {
-          console.log(error);
-          if (error.status === 0) {
-            this.apiError = 'Something went wrong while connecting to the API. Please restart the application.';
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            } else {
-              this.apiError = error.json().errors[0].message;
-            }
-          }
-        },
-        () => {
-          this.withdrawForm.patchValue({amount: +new CoinNotationPipe(this.globalService).transform(balanceResponse.maxSpendableAmount)});
-          this.estimatedFee = balanceResponse.fee;
-        }
-      );
-  }
-
-  public estimateFee() {
-    const transaction = new FeeEstimation(
-      this.globalService.walletName,
-      'account 0',
-      this.withdrawForm.get('sidechainAddress').value.trim(),
-      this.withdrawForm.get('amount').value,
-      this.withdrawForm.get('feeType').value,
-      true
-    );
-
-    this.apiService.estimateFee(transaction)
-      .subscribe(
-        response => {
-          if (response.status >= 200 && response.status < 400) {
-            this.responseMessage = response.json();
-          }
-        },
-        error => {
-          console.log(error);
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            } else {
-              this.apiError = error.json().errors[0].message;
-            }
-          }
-        },
-        () => {
-          this.estimatedFee = this.responseMessage;
-        }
-      )
-    ;
-  }
-
-  public buildTransaction() {
-    this.transaction = new TransactionBuilding(
-      this.globalService.walletName,
-      'account 0',
-      this.withdrawForm.get('password').value,
-      this.withdrawForm.get('sidechainAddress').value.trim(),
-      this.withdrawForm.get('amount').value,
-      this.withdrawForm.get('feeType').value,
-      // TO DO: use coin notation
-      this.estimatedFee / 100000000,
-      true,
-      false,
-      this.withdrawForm.get('mainchainAddress').value
-    );
-
-    this.apiService
-      .buildTransaction(this.transaction)
-      .subscribe(
-        response => {
-          if (response.status >= 200 && response.status < 400) {
-            console.log(response);
-            this.responseMessage = response.json();
-          }
-        },
-        error => {
-          console.log(error);
-          this.isWithdrawing = false;
-          if (error.status === 0) {
-            this.apiError = 'Something went wrong while connecting to the API. Please restart the application.';
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            } else {
-              this.apiError = error.json().errors[0].message;
-            }
-          }
-        },
-        () => {
-          this.estimatedFee = this.responseMessage.fee;
-          this.transactionHex = this.responseMessage.hex;
-          if (this.isWithdrawing) {
-            this.withdrawTransaction(this.transactionHex);
-          }
-        }
-      )
-    ;
-  }
-
-  public withdraw() {
-    this.isWithdrawing = true;
-    this.buildTransaction();
-  }
-
-  private withdrawTransaction(hex: string) {
-    const transaction = new TransactionSending(hex);
-    this.apiService
-      .sendTransaction(transaction)
-      .subscribe(
-        response => {
-          if (response.status >= 200 && response.status < 400) {
-            this.activeModal.close('Close clicked');
-          }
-        },
-        error => {
-          console.log(error);
-          this.isWithdrawing = false;
-          if (error.status === 0) {
-            this.apiError = 'Something went wrong while connecting to the API. Please restart the application.';
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            } else {
-              this.apiError = error.json().errors[0].message;
-            }
-          }
-        },
-        () => this.openConfirmationModal()
-      )
-    ;
-  }
-
-  private getWalletBalance() {
-    const walletInfo = new WalletInfo(this.globalService.walletName);
-    this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
-      .subscribe(
-        response =>  {
-          if (response.status >= 200 && response.status < 400) {
-              const balanceResponse = response.json();
-              this.totalBalance = balanceResponse.balances[0].amountConfirmed + balanceResponse.balances[0].amountUnconfirmed;
-          }
-        },
-        error => {
-          console.log(error);
-          if (error.status === 0) {
-            this.cancelSubscriptions();
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            } else {
-              if (error.json().errors[0].description) {
-                this.genericModalService.openModal(null, error.json().errors[0].message);
-              } else {
-                this.cancelSubscriptions();
-                this.startSubscriptions();
-              }
-            }
-          }
-        }
-      );
-  }
-
-  private openConfirmationModal() {
-    const modalRef = this.modalService.open(WithdrawConfirmationComponent, { backdrop: 'static' });
-    modalRef.componentInstance.transaction = this.transaction;
-    modalRef.componentInstance.transactionFee = this.estimatedFee;
-  }
-
-  private cancelSubscriptions() {
-    if (this.walletBalanceSubscription) {
-      this.walletBalanceSubscription.unsubscribe();
-    }
-  }
-
-  private startSubscriptions() {
-    this.getWalletBalance();
   }
 }

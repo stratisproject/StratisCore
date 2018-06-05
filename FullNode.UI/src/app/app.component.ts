@@ -18,10 +18,16 @@ import 'rxjs/add/operator/delay';
 })
 
 export class AppComponent implements OnInit {
-  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) {}
   private errorMessage: any;
   private responseMessage: any;
-  public loading: boolean = true;
+  public loading = true;
+
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    private globalService: GlobalService,
+    private titleService: Title,
+    private electronService: ElectronService) {}
 
   ngOnInit() {
     this.setTitle();
@@ -34,10 +40,10 @@ export class AppComponent implements OnInit {
   }
 
   private setTitle() {
-    let applicationName = "Stratis Core";
-    let applicationVersion = this.electronService.remote.app.getVersion();
-    let releaseCycle = "beta";
-    let newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
+    const applicationName = 'Stratis Core';
+    const applicationVersion = this.electronService.remote.app.getVersion();
+    const releaseCycle = 'beta';
+    const newTitle = `${applicationName} v${applicationVersion} ${releaseCycle}`;
     this.titleService.setTitle(newTitle);
   }
 }

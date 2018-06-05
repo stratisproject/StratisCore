@@ -8,23 +8,23 @@
   <!-- /button close -->
 </div>
 <div class="modal-body">
-  <form [formGroup]="depositForm">
+  <form [formGroup]="mainForm">
     <!--<div class="form-group has-danger clearfix">-->
     <div class="form-group clearfix">
       <label class="float-left" for="amount">Amount</label>
       <span class="float-right btn-link" (click)="getMaxBalance()" ngbTooltip="Click to add the maximum amount available.">Available: {{ totalBalance | coinNotation }} {{ coinUnit }}</span>
-      <input type="text" class="form-control" [class.is-invalid]="formErrors.amount" [class.is-valid]="!formErrors.amount && depositForm.get('amount').valid" formControlName="amount" id="amount" placeholder="amount" placeholder="0.00 {{ coinUnit }}">
+      <input type="text" class="form-control" [class.is-invalid]="formErrors.amount" [class.is-valid]="!formErrors.amount && mainForm.get('amount').valid" formControlName="amount" id="amount" placeholder="amount" placeholder="0.00 {{ coinUnit }}">
       <div *ngIf="formErrors.amount" class="invalid-feedback">{{ formErrors.amount }}</div>
     </div>
     <!--<div class="form-group has-success">-->
     <div class="form-group clearfix">
       <label for="mainchainAddress">Mainchain Federation address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Mainchain Federation address is the Stratis address where the Federation will hold your STRAT."></i>
-      <input type="text" class="form-control" [class.is-invalid]="formErrors.mainchainAddress" [class.is-valid]="!formErrors.mainchainAddress && depositForm.get('mainchainAddress').valid" formControlName="mainchainAddress" id="mainchainAddress" placeholder="Please enter the Mainchain Federation address here.">
+      <input type="text" class="form-control" [class.is-invalid]="formErrors.mainchainAddress" [class.is-valid]="!formErrors.mainchainAddress && mainForm.get('mainchainAddress').valid" formControlName="mainchainAddress" id="mainchainAddress" placeholder="Please enter the Mainchain Federation address here.">
       <div *ngIf="formErrors.mainchainAddress" class="invalid-feedback">{{ formErrors.mainchainAddress }}</div>
     </div>
     <div class="form-group clearfix">
       <label for="sidechainAddress">Sidechain Destination address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Sidechain Destination address is the sidechain address where the Federation will deposit your sidechain coins."></i>
-      <input type="text" class="form-control" [class.is-invalid]="formErrors.sidechainAddress" [class.is-valid]="!formErrors.sidechainAddress && depositForm.get('sidechainAddress').valid" formControlName="sidechainAddress" id="sidechainAddress" placeholder="Please enter the Sidechain Destination address here." value="SNpCNJTTdYxRHdqPdx3WGFucNScpYYthJV">
+      <input type="text" class="form-control" [class.is-invalid]="formErrors.sidechainAddress" [class.is-valid]="!formErrors.sidechainAddress && mainForm.get('sidechainAddress').valid" formControlName="sidechainAddress" id="sidechainAddress" placeholder="Please enter the Sidechain Destination address here." value="SNpCNJTTdYxRHdqPdx3WGFucNScpYYthJV">
       <div *ngIf="formErrors.sidechainAddress" class="invalid-feedback">{{ formErrors.sidechainAddress }}</div>
     </div>
     <div class="form-group clearfix">
@@ -50,7 +50,7 @@
     </div>
     <div class="form-group clearfix">
       <label for="walletPassword">Wallet Password</label>
-      <input type="password" class="form-control" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && depositForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
+      <input type="password" class="form-control" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && mainForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
       <div *ngIf="formErrors.password" class="invalid-feedback">{{formErrors.password}}</div>
     </div>
     <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
@@ -58,10 +58,10 @@
   <!-- /form-->
 </div>
 <div class="modal-footer">
-  <button *ngIf="!isDepositing" type="button" [disabled]="isDepositing" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
-  <button *ngIf="!isDepositing" type="button" class="btn btn-purple btn-block" [disabled]="!depositForm.valid || isDepositing || !estimatedFee" (click)="deposit()">Send</button>
+  <button *ngIf="!isBusy" type="button" [disabled]="isBusy" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
+  <button *ngIf="!isBusy" type="button" class="btn btn-purple btn-block" [disabled]="!mainForm.valid || isBusy || !estimatedFee" (click)="deposit()">Send</button>
   <!-- SVG -->
-  <div *ngIf="isDepositing" class="Loading LoadingSend col-2 mx-auto">
+  <div *ngIf="isBusy" class="Loading LoadingSend col-2 mx-auto">
     <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="anim" fill-rule="nonzero">
