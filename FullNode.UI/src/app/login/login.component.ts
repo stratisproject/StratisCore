@@ -137,13 +137,15 @@ export class LoginComponent extends BaseForm implements OnInit {
   private tryToLoadSidechain() {
     this.log.log('Check if sidechain API is available');
     this.globalService.sidechainsEnabled = false;
-    this.sidechainsService.getCoinDetails().subscribe(
+    this.sidechainsService.getNodeStatus().subscribe(
       response => {
         if (response.status >= 200 && response.status < 400) {
-          this.globalService.sidechainsEnabled = true;
-          const coinDetails = response.json();
-          this.globalService.coinName = coinDetails.name;
-          this.globalService.coinUnit = coinDetails.symbol;
+          const nodeStasus = response.json();
+          this.globalService.sidechainsEnabled =
+                  nodeStasus.network.toUpperCase().indexOf('STRATIS') < 0 &&
+                  nodeStasus.network.toUpperCase() !== 'MAIN';
+          this.globalService.coinName = 'TAPEX'; // TODO: change to nodeStasus.coinName once available;
+          this.globalService.coinUnit = 'TAPEX'; // TODO: change to nodeStasus.coinSymbol once available;
         }
       },
       error => {

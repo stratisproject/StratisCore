@@ -34,6 +34,15 @@ export class SidechainsService {
     }
 
     /**
+     * Gets node status.
+     */
+    getNodeStatus(): Observable<any> {
+      return this.http
+        .get(`${this.stratisApiUrl}/node/status`)
+        .map((response: Response) => response);
+    }
+
+    /**
      * Gets all available sidechains
      */
     getSidechains(): Observable<any> {
