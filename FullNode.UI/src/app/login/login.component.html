@@ -10,24 +10,24 @@
           <h3 class="display-4 mb-4">Welcome</h3>
         </div>
         <form *ngIf="hasWallet" class="form-group col-12" [formGroup]="openWalletForm">
-          <select class="custom-select col-12" formControlName="selectWallet">
+          <select [attr.disabled]="isDecrypting ? '' : null" class="custom-select col-12" formControlName="selectWallet">
             <option value="" disabled selected>Choose a wallet</option>
             <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
           </select>
           <div class="form-group mt-3">
-            <input type="password" class="form-control" id="Password" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
+            <input [attr.disabled]="isDecrypting ? '' : null" type="password" class="form-control" id="Password" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
             <div *ngIf="formErrors.password" class="invalid-feedback">{{ formErrors.password }}</div>
           </div>
         </form>
         <div class="col-12">
-          <div *ngIf="!isDecrypting && hasWallet">
-            <button type="submit" class="btn btn-block btn-lg btn-primary" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
+          <div *ngIf="hasWallet">
+            <button [attr.disabled]="isDecrypting ? '' : null" type="submit" class="btn btn-block btn-lg btn-primary" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
           </div>
           <div class="row d-flex justify-content-center mt-3">
-              <button type="button" class="btn btn-block btn-link text-dark" (click)="onCreateClicked()">Create or restore a wallet</button>
+              <button [attr.disabled]="isDecrypting ? '' : null" type="button" class="btn btn-block btn-link text-dark" (click)="onCreateClicked()">Create or restore a wallet</button>
           </div>
           <!-- SVG -->
-          <div *ngIf="isDecrypting" class="Loading">
+          <div [ngClass]="{'invisible': !isDecrypting}" class="Loading">
               <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                   <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                     <g id="anim" fill-rule="nonzero">
