@@ -463,6 +463,14 @@ img {pointer-events: none !important;}
   border-radius: 100%;
   -webkit-animation: scaleout 1.5s infinite ease-in-out;
   animation: scaleout 1.5s infinite ease-in-out;
+  
+}
+.Loading {
+  &.unset-left {
+    &:before{
+      left : unset;
+    }
+  }
 }
 @-webkit-keyframes scaleout {
   0% {

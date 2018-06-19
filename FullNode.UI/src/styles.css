@@ -8426,6 +8426,10 @@ img {
   animation: scaleout 1.5s infinite ease-in-out;
 }
 
+.Loading.unset-left:before {
+  left: unset;
+}
+
 @-webkit-keyframes scaleout {
   0% {
     -webkit-transform: scale(1);
