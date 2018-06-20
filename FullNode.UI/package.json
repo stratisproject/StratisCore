@@ -36,7 +36,7 @@
     "electron:tsc": "tsc main.ts",
     "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:tsc && electron . --serve",
     "electron:serve:test": "wait-on http-get://localhost:4200/ && npm run electron:tsc && electron . --serve --testnet",
-    "electron:serve:test:sidechain": "wait-on http-get://localhost:4200/ && npm run electron:tsc && electron . --serve --testnet --port=38220",
+    "electron:serve:test:sidechain": "wait-on http-get://localhost:4200/ && npm run electron:tsc && electron . --serve --testnet --port=38225",
     "electron:local": "npm run build:prod && electron .",
     "package:linux": "npm run build:prod && npx electron-builder build --linux",
     "package:windows": "npm run build:prod && npx electron-builder build --windows",
