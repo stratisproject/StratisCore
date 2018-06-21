@@ -265,7 +265,7 @@ export class SideChainTransferForm extends BaseForm {
     ;
   }
 
-  public withdraw() {
+  public send() {
     this.isBusy = true;
     this.buildTransaction();
   }

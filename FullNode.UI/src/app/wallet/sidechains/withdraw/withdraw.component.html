@@ -59,7 +59,7 @@
   </div>
   <div class="modal-footer">
     <button *ngIf="!isBusy" type="button" [disabled]="isBusy" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
-    <button *ngIf="!isBusy" type="button" class="btn btn-purple btn-block" [disabled]="!mainForm.valid || isBusy || !estimatedFee" (click)="withdraw()">Send</button>
+    <button *ngIf="!isBusy" type="button" class="btn btn-purple btn-block" [disabled]="!mainForm.valid || isBusy || !estimatedFee" (click)="send()">Send</button>
     <!-- SVG -->
     <div *ngIf="isBusy" class="Loading LoadingSend col-2 mx-auto">
       <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
