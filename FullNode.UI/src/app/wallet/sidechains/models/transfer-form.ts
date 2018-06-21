@@ -69,12 +69,12 @@ export class SideChainTransferForm extends BaseForm {
 
   validationMessages = {
     'mainchainAddress': {
-      'required': 'An mainchain federation address is required.',
-      'minlength': 'An mainchain federation address is at least 26 characters long.'
+      'required': 'A mainchain federation address is required.',
+      'minlength': 'A mainchain federation address is at least 26 characters long.'
     },
     'sidechainAddress': {
-      'required': 'An sidechain federation is required.',
-      'minlength': 'An sidechain federation is at least 26 characters long.'
+      'required': 'A sidechain federation is required.',
+      'minlength': 'A sidechain federation is at least 26 characters long.'
     },
     'amount': {
       'required': 'An amount is required.',
