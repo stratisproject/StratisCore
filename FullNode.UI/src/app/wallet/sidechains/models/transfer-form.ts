@@ -79,7 +79,7 @@ export class SideChainTransferForm extends BaseForm {
     'amount': {
       'required': 'An amount is required.',
       'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-      'min': `The amount has to be more or equal to 0.00001.`,
+      'min': `The amount has to be more or equal to 1.`,
       'max': 'The total transaction amount exceeds your available balance.'
     },
     'feeType': {
@@ -108,7 +108,7 @@ export class SideChainTransferForm extends BaseForm {
         '',
         Validators.compose([
           Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
-          Validators.min(0.00001),
+          Validators.min(1),
           (control: AbstractControl) => Validators.max((this.totalBalance - this.estimatedFee) / 100000000)(control)])
       ],
       'feeType': ['medium', Validators.required],
