@@ -95,7 +95,7 @@ export class SideChainTransferForm extends BaseForm {
       'mainchainAddress': [
         this.fromAddressKey === 'mainchainAddress' && this._globalService.federationAddressAutoPopulationEnabled
             ? this._globalService.federationAddress
-          : '',
+            : '',
         Validators.compose([Validators.required, Validators.minLength(26)])
       ],
       'sidechainAddress': [

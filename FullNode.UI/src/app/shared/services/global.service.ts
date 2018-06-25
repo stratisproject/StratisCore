@@ -91,6 +91,6 @@ export class GlobalService {
   }
 
   set federationAddress(value: string) {
-    localStorage.setItem('federationAddressAutoPopulationEnabled', value);
+    localStorage.setItem('federationAddress', value);
   }
 }
