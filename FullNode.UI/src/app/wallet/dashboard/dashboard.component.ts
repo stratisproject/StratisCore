@@ -364,6 +364,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private startSubscriptions() {
     this.getWalletBalance();
     this.getHistory();
-    this.getStakingInfo();
+    if (!this.globalService.sidechainsEnabled) {
+      this.getStakingInfo();
+    }
   }
 }
