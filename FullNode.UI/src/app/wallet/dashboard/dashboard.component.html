@@ -121,7 +121,7 @@
             </div>
           </div> -->
           <section class="col-4" *ngIf="hasBalance">
-            <div class="card" *ngIf="!stakingEnabled">
+            <div class="card" *ngIf="!stakingEnabled && !sidechainsAvailable">
               <div class="card-header">Staking</div>
               <div class="card-body">
                 <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
