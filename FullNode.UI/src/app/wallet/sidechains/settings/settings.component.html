@@ -23,7 +23,7 @@
     <!-- /crosschain -->
     <!-- fed addr -->
     <div class="row align-items-center my-3" [hidden]="settingsForm.get('crossChainTransactionsEnabled').value !== 'Enable'">
-      <label class="col-7" for="">Federation Address auto-populate</label>
+      <label class="col-7" for="">Auto-populate Default Federation Address</label>
       <div class="btn-group col d-flex justify-content-end" ngbRadioGroup name="federationAddressAutoPopulationEnabled" formControlName="federationAddressAutoPopulationEnabled">
         <label ngbButtonLabel class="btn btn-primary">
           <input ngbButton type="radio" value="Disable">Disable</label>
@@ -35,7 +35,7 @@
     <!-- fed addr form -->
     <div class="row align-items-center my-3" [hidden]="settingsForm.get('federationAddressAutoPopulationEnabled').value !== 'Enable' || settingsForm.get('crossChainTransactionsEnabled').value !== 'Enable'">
       <div class="form-group col">
-        <label for="">Sidechain Federation Address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Sidechain Federation address is the sidechain address where the Federation will receive your sidechain coins."></i>
+        <label for="">Default Federation Address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Sidechain Federation address is the sidechain address where the Federation will receive your sidechain coins."></i>
         <input type="text" class="form-control" formControlName="address" id="address" aria-describedby="address" placeholder="Please enter a valid federation address." value="" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && settingsForm.get('address').valid">
         <div *ngIf="formErrors.address" class="invalid-feedback">{{ formErrors.address }}</div>
       </div>
