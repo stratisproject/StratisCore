@@ -32,7 +32,7 @@
           <button type="button" class="btn btn-link" (click)="onBackClicked()">&#8592; back</button>
           <button *ngIf="!isCreating" type="button" class="btn btn-primary btn-block" [disabled]="!mnemonicForm.valid || isCreating" (click)="onConfirmClicked()">Confirm</button>
           <!-- SVG -->
-          <div *ngIf="isCreating" class="Loading col-2 mx-auto">
+          <div *ngIf="isCreating" class="Loading col-2 mx-auto unset-left">
             <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                   <g id="anim" fill-rule="nonzero">
