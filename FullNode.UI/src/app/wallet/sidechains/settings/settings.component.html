@@ -35,7 +35,7 @@
     <!-- fed addr form -->
     <div class="row align-items-center my-3" [hidden]="settingsForm.get('federationAddressAutoPopulationEnabled').value !== 'Enable' || settingsForm.get('crossChainTransactionsEnabled').value !== 'Enable'">
       <div class="form-group col">
-        <label for="">Default Federation Address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Sidechain Federation address is the sidechain address where the Federation will receive your sidechain coins."></i>
+        <label for="">Default Federation Address</label><i class="icon lnr lnr-question-circle ml-2 text-info" placement="top" ngbTooltip="Default federation address is the federation address where the Federation will receive your sidechain coins."></i>
         <input type="text" class="form-control" formControlName="address" id="address" aria-describedby="address" placeholder="Please enter a valid federation address." value="" [class.is-invalid]="formErrors.address" [class.is-valid]="!formErrors.address && settingsForm.get('address').valid">
         <div *ngIf="formErrors.address" class="invalid-feedback">{{ formErrors.address }}</div>
       </div>
