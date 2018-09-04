@@ -108,6 +108,7 @@ export class RecoverComponent implements OnInit {
       this.recoverWalletForm.get("walletName").value,
       this.recoverWalletForm.get("walletMnemonic").value,
       this.recoverWalletForm.get("walletPassword").value,
+      this.recoverWalletForm.get("walletPassword").value,
       recoveryDate
     );
     this.recoverWallet(this.walletRecovery);

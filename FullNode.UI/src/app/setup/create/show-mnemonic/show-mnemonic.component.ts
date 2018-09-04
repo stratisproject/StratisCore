@@ -24,6 +24,7 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
       this.newWallet = new WalletCreation(
         params["name"],
         params["mnemonic"],
+        params["password"],
         params["password"]
       )
     });
