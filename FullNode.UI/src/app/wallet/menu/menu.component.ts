@@ -14,17 +14,21 @@ import { GlobalService } from '../../shared/services/global.service';
 })
 export class MenuComponent implements OnInit {
   constructor(private modalService: NgbModal, private globalService: GlobalService, private router: Router) {}
-  public walletName: string;
+  walletName: string;
 
   ngOnInit() {
     this.walletName = this.globalService.getWalletName();
   }
 
-  public logOut() {
+  logOut() {
     const modalRef = this.modalService.open(LogoutConfirmationComponent, { backdrop: "static" });
   }
 
-  public goToDashboard() {
+  goToDashboard() {
     this.router.navigate(['/wallet/']);
+  }
+
+  goToStaking() {
+      this.router.navigate(['/wallet/staking/']);
   }
 }
