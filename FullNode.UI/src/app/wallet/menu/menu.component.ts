@@ -23,12 +23,4 @@ export class MenuComponent implements OnInit {
   logOut() {
     const modalRef = this.modalService.open(LogoutConfirmationComponent, { backdrop: "static" });
   }
-
-  goToDashboard() {
-    this.router.navigate(['/wallet/']);
-  }
-
-  goToStaking() {
-      this.router.navigate(['/wallet/staking/']);
-  }
 }

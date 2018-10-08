@@ -1,6 +1,24 @@
-<div style="background:cadetblue; height:100%; width:100%">
-    <h3 style="text-align:center; height:100%; display: flex; flex-direction: column; justify-content: center">
-        {{stakingType}}
-    </h3>
+<div class="card card-staking">
+
+    <div class="stake-type text-right">
+        <span class="badge badge-hot ml-auto">Hot Wallet <span data-toggle="tooltip" data-placement="top" title="Coins that you can only stake but other wallets can spend."
+                class="lnr lnr-question-circle ml-2"></span></span>
+    </div>
+
+    <div class="card-header">Balance</div>
+    <div class="card-body">
+        <p class="lead">
+            <strong>16,025</strong><small class="text-uppercase">.00 STRAT</small>
+        </p>
+    </div>
+
+    <div class="card-header">Mature for staking</div>
+    <div class="card-body">
+        <p class="sub">16,025.00 STRAT</p>
+    </div>
+    <div class="card-footer">
+        <button data-toggle="modal" data-target="#modalColdAddress" type="button" class="btn btn-primary btn-lg btn-block">Get
+            first unused address</button>
+    </div>
+
 </div>
-    
