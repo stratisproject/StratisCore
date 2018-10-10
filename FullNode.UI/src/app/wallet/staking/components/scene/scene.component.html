@@ -1,41 +1,29 @@
 <section id="GUI" class="light">
     <section id="content" class="light col-10 mx-auto">
 
-        <!-- JUMBOTRON-->
         <section>
             <div class="col-12">
                 <div class="row d-flex align-items-center">
-                    <div class="col text-left">
-                        <nav aria-label="breadcrumb" role="navigation">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="dashboard.html">← Dashboard</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Staking</li>
-                            </ol>
-                        </nav>
-                    </div>
                     <div class="col text-right">
-                        <a href="#" data-toggle="modal" data-target="#modalNewSetup">+ Create Coldstaking Setup</a>
+                        <a href="#" data-toggle="modal" data-target="#modalNewSetup" style="margin-bottom: 10px; display: inline-block">+ Create Coldstaking Setup</a>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- /JUMBOTRON-->
 
-        <!-- CONTENT -->
         <section class="col-12">
             <div class="row">
                 <div class="col-6">
-                    <app-staking-wallet [stakingType]='StakingTypeEnum.Hot'></app-staking-wallet>
+                    <app-staking-wallet [hotWallet]="true" [balance]="stakingInfo.hotWalletBalance" [amount]="stakingInfo.hotWalletAmount"></app-staking-wallet>
                 </div>
                 <div class="col-6">
-                    <app-staking-wallet [stakingType]='StakingTypeEnum.Cold'></app-staking-wallet>
+                    <app-staking-wallet [hotWallet]="false" [balance]="stakingInfo.coldWalletBalance" [amount]="stakingInfo.coldWalletAmount"></app-staking-wallet>
                 </div>
                 <div class="col-12 mt-4">
                     <app-staking-history></app-staking-history>
                 </div>
             </div>
         </section>
-        <!-- /CONTENT -->
 
     </section>
 </section>

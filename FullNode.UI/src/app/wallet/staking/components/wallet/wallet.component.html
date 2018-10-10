@@ -1,24 +1,53 @@
-<div class="card card-staking">
+<!-- HOT STAKING -->
+<div class="card card-staking" *ngIf="hotWallet">
 
     <div class="stake-type text-right">
-        <span class="badge badge-hot ml-auto">Hot Wallet <span data-toggle="tooltip" data-placement="top" title="Coins that you can only stake but other wallets can spend."
-                class="lnr lnr-question-circle ml-2"></span></span>
+        <span class="badge badge-hot ml-auto">Hot Wallet <span data-placement="top" title="{{description}}" class="lnr lnr-question-circle ml-2"></span></span>
     </div>
 
     <div class="card-header">Balance</div>
     <div class="card-body">
         <p class="lead">
-            <strong>16,025</strong><small class="text-uppercase">.00 STRAT</small>
+            <strong>{{balance}}</strong><small class="text-uppercase">.00 STRAT</small>
         </p>
     </div>
 
     <div class="card-header">Mature for staking</div>
     <div class="card-body">
-        <p class="sub">16,025.00 STRAT</p>
+        <p class="sub">{{amount}} STRAT</p>
     </div>
     <div class="card-footer">
-        <button data-toggle="modal" data-target="#modalColdAddress" type="button" class="btn btn-primary btn-lg btn-block">Get
+        <button data-toggle="modal" type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="onGetFirstUnusedAddress()">Get
             first unused address</button>
+    </div>
+
+</div>
+
+<!-- COLD STAKING -->
+<div class="card card-staking" *ngIf="!hotWallet">
+
+    <div class="stake-type text-right">
+        <span class="badge badge-cold ml-auto">Cold Wallet <span data-placement="top" title="{{description}}" class="lnr lnr-question-circle ml-2"></span></span>
+    </div>
+
+    <div class="card-header">Balance</div>
+    <div class="card-body">
+        <p class="lead">
+            <strong>{{balance}}</strong><small class="text-uppercase">.00 STRAT</small>
+        </p>
+    </div>
+
+    <div class="card-header">Spendable</div>
+    <div class="card-body">
+        <p class="sub">{{amount}} STRAT</p>
+    </div>
+    <div class="card-footer">
+        <div class="row justify-content-center">
+            <button data-toggle="modal" data-target="#modalWithdraw" type="button" class="btn btn-outline-light btn-lg col-4"
+                (click)="onWithdraw()">Withdraw</button>
+            <button type="button" class="btn btn-outline-primary btn-lg col-7 ml-2" style="min-width:220px" (click)="onGetFirstUnusedAddress()">Get
+                first unused address</button>
+        </div>
     </div>
 
 </div>

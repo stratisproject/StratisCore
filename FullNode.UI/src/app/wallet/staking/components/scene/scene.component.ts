@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { StakingType } from '../../enums';
+import { GlobalService } from '../../../../shared/services/global.service';
+import { StakingServiceBase, StakingInfo } from '../../staking.service';
 
 @Component({
   selector: 'app-staking-scene',
@@ -9,13 +10,14 @@ import { StakingType } from '../../enums';
 })
 export class StakingSceneComponent implements OnInit {
 
-  StakingTypeEnum = StakingType;
+    constructor(private globalService: GlobalService, private stakingService: StakingServiceBase) { }
 
-  constructor() { }
+    stakingInfo: StakingInfo;
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+        this.stakingService.GetInfo(this.globalService.getWalletName()).subscribe(x => this.stakingInfo = x);
+    }
 
-  onSetup() {
-  }
+    onSetup() {
+    }
 }
