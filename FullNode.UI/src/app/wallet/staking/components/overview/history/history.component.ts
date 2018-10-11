@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { GlobalService } from '../../../../shared/services/global.service';
-import { StakingServiceBase } from '../../staking.service';
+import { GlobalService } from '../../../../../shared/services/global.service';
+import { StakingServiceBase } from '../../../staking.service';
 
 export class HistoryItem {
     constructor(public status: string, public side: string, public amount: string, public dateTime: string, public wallet: string) { }

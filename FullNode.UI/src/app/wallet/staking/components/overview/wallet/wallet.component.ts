@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { StakingCreateAddressComponent } from '../create-address/create-address.component';
 
 @Component({
     selector: 'app-staking-wallet',

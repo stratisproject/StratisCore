@@ -4,8 +4,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GlobalService } from '../../../../shared/services/global.service';
 import { StakingServiceBase, StakingInfo } from '../../staking.service';
-import { StakingCreateAddressComponent } from '../create-address/create-address.component';
-import { StakingWithdrawComponent } from '../withdraw/withdraw.component';
+import { StakingCreateAddressComponent } from '../modals/create-address/create-address.component';
+import { StakingWithdrawComponent } from '../modals/withdraw/withdraw.component';
 
 @Component({
   selector: 'app-staking-scene',
