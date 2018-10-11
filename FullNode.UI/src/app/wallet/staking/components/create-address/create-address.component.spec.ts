@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SceneComponent } from './scene.component';
+import { CreateAddressComponent } from './create-address.component';
 
-describe('SceneComponent', () => {
-  let component: SceneComponent;
-  let fixture: ComponentFixture<SceneComponent>;
+describe('CreateAddressComponent', () => {
+  let component: CreateAddressComponent;
+  let fixture: ComponentFixture<CreateAddressComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SceneComponent ]
+      declarations: [ CreateAddressComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SceneComponent);
+    fixture = TestBed.createComponent(CreateAddressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

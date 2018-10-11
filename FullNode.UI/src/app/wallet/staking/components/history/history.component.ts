@@ -4,13 +4,13 @@ import { GlobalService } from '../../../../shared/services/global.service';
 import { StakingServiceBase } from '../../staking.service';
 
 export class HistoryItem {
-    constructor(public status: string, public side: string, public amount: string, public dateTime: string, public wallet: string) {}
+    constructor(public status: string, public side: string, public amount: string, public dateTime: string, public wallet: string) { }
 }
 
 @Component({
-  selector: 'app-staking-history',
-  templateUrl: './history.component.html',
-  styleUrls: ['./history.component.css']
+    selector: 'app-staking-history',
+    templateUrl: './history.component.html',
+    styleUrls: ['./history.component.css']
 })
 export class StakingHistoryComponent implements OnInit {
 

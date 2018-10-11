@@ -17,7 +17,7 @@
         <p class="sub">{{amount}} STRAT</p>
     </div>
     <div class="card-footer">
-        <button data-toggle="modal" type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="onGetFirstUnusedAddress()">Get
+        <button data-toggle="modal" type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="unusedAddressClicked()">Get
             first unused address</button>
     </div>
 
@@ -44,8 +44,8 @@
     <div class="card-footer">
         <div class="row justify-content-center">
             <button data-toggle="modal" data-target="#modalWithdraw" type="button" class="btn btn-outline-light btn-lg col-4"
-                (click)="onWithdraw()">Withdraw</button>
-            <button type="button" class="btn btn-outline-primary btn-lg col-7 ml-2" style="min-width:220px" (click)="onGetFirstUnusedAddress()">Get
+                (click)="withdrawClicked()">Withdraw</button>
+            <button type="button" class="btn btn-outline-primary btn-lg col-7 ml-2" style="min-width:220px" (click)="unusedAddressClicked()">Get
                 first unused address</button>
         </div>
     </div>

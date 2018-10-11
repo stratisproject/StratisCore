@@ -1,23 +1,21 @@
-import { Component, OnInit, Input } from '@angular/core';
-
-import { StakingServiceBase } from '../../staking.service';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { StakingCreateAddressComponent } from '../create-address/create-address.component';
 
 @Component({
-  selector: 'app-staking-wallet',
-  templateUrl: './wallet.component.html',
-  styleUrls: ['./wallet.component.css']
+    selector: 'app-staking-wallet',
+    templateUrl: './wallet.component.html',
+    styleUrls: ['./wallet.component.css']
 })
-export class StakingWalletComponent implements OnInit {
+export class StakingWalletComponent {
 
     private _hotWallet = false;
     private _balance = '0';
     private _amount = '0';
     description = '';
+    @Output() onGetFirstUnusedAddress = new EventEmitter<StakingWalletComponent>();
+    @Output() onWithdraw = new EventEmitter<StakingWalletComponent>();
 
-    constructor(private service: StakingServiceBase) { 
-    }
-
-    @Input() 
+    @Input()
     set hotWallet(value: boolean) {
         this._hotWallet = value;
         this.description = value ? 'Coins that you can only stake but other wallets can spend' : 'Coins blah to be defined';
@@ -42,13 +40,6 @@ export class StakingWalletComponent implements OnInit {
         return this._amount;
     }
 
-    ngOnInit() {
-    }
-
-    onGetFirstUnusedAddress() {
-    }
-
-    onWithdraw() {
-        
-    }
+    unusedAddressClicked = () => this.onGetFirstUnusedAddress.emit(this);
+    withdrawClicked = () => this.onWithdraw.emit(this);
 }
