@@ -21,7 +21,8 @@
                 </div>
                 <div class="col-6">
                     <app-staking-wallet [hotWallet]="false" [balance]="stakingInfo.coldWalletBalance" [amount]="stakingInfo.coldWalletAmount"
-                        (onGetFirstUnusedAddress)="onWalletGetFirstUnusedAddress($event)"></app-staking-wallet>
+                        (onGetFirstUnusedAddress)="onWalletGetFirstUnusedAddress($event)"
+                        (onWithdraw)="onWalletWithdraw($event)"></app-staking-wallet>
                 </div>
                 <div class="col-12 mt-4">
                     <app-staking-history></app-staking-history>

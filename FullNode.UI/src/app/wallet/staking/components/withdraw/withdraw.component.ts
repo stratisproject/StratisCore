@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: 'app-create-address',
-    templateUrl: './create-address.component.html',
-    styleUrls: ['./create-address.component.css']
+    selector: 'app-withdraw',
+    templateUrl: './withdraw.component.html',
+    styleUrls: ['./withdraw.component.css']
 })
-export class StakingCreateAddressComponent implements OnInit {
+export class StakingWithdrawComponent implements OnInit {
 
     constructor(private activeModal: NgbActiveModal) { }
 
@@ -16,4 +16,5 @@ export class StakingCreateAddressComponent implements OnInit {
     onCloseClicked() {
         this.activeModal.close();
     }
+
 }

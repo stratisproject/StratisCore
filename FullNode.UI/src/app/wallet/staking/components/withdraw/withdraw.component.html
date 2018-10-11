@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h5 class="modal-title">Withdraw from coldstaking</h5>
+    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="onCloseClicked()">
+        <i class="lnr lnr-cross-circle"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <p class="">Amount spendable : 18,900.07 STRAT</p>
+    <form>
+        <div class="form-group clearfix">
+            <label class="float-left" for="Amount">Amount</label>
+            <input type="text" class="form-control is-valid" id="Amount" placeholder="Amount" value="180.68" required>
+        </div>
+        <div class="form-group clearfix">
+            <label for="destinationAddress">Destination address</label>
+            <input type="text" class="form-control" formControlName="address" id="destinationAddress" placeholder="Please enter the destination address here."
+                value="3d14065z6d31qfzfgzdz" required>
+        </div>
+        <div class="form-group clearfix">
+            <label for="walletPassword">Password</label>
+            <input type="password" class="form-control is-invalid" formControlName="password" id="walletPassword"
+                placeholder="Please enter your wallet password." value="XCYTUGILHKJ" required>
+            <!-- <div *ngIf="formErrors.password" class="invalid-feedback">Wrong password</div> -->
+        </div>
+        <div class="form-group clearfix">
+            <label for="feeType">Fee type</label>
+            <select class="form-control">
+                <option>Low - 0.0001 STRAT</option>
+                <option selected>Medium - 0.001 STRAT</option>
+                <option>High - 0.01 STRAT</option>
+            </select>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="onCloseClicked()">Cancel</button>
+    <button type="button" data-toggle="modal" data-target="#" class="btn btn-primary btn-block" data-dismiss="modal">Withdraw</button>
+</div>

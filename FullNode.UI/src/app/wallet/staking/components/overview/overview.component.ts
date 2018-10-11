@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '../../../../shared/services/global.service';
 import { StakingServiceBase, StakingInfo } from '../../staking.service';
 import { StakingCreateAddressComponent } from '../create-address/create-address.component';
+import { StakingWithdrawComponent } from '../withdraw/withdraw.component';
 
 @Component({
   selector: 'app-staking-scene',
@@ -23,6 +24,10 @@ export class StakingOverviewComponent implements OnInit {
 
     onWalletGetFirstUnusedAddress(walletComponent) {
         this.modalService.open(StakingCreateAddressComponent);
+    }
+
+    onWalletWithdraw(walletComponent) {
+        this.modalService.open(StakingWithdrawComponent);
     }
 
     onSetup() {
