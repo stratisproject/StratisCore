@@ -6,7 +6,7 @@
             <div class="col-12">
                 <div class="row d-flex align-items-center">
                     <div class="col text-right">
-                        <a href="#" data-toggle="modal" data-target="#modalNewSetup" style="margin-bottom: 10px; display: inline-block">+
+                        <a class="nav-link" style="margin-bottom: 10px; display: inline-block" (click)="onSetup()">+
                             Create Coldstaking Setup</a>
                     </div>
                 </div>
@@ -21,8 +21,7 @@
                 </div>
                 <div class="col-6">
                     <app-staking-wallet [hotWallet]="false" [balance]="stakingInfo.coldWalletBalance" [amount]="stakingInfo.coldWalletAmount"
-                        (onGetFirstUnusedAddress)="onWalletGetFirstUnusedAddress($event)"
-                        (onWithdraw)="onWalletWithdraw($event)"></app-staking-wallet>
+                        (onGetFirstUnusedAddress)="onWalletGetFirstUnusedAddress($event)" (onWithdraw)="onWalletWithdraw($event)"></app-staking-wallet>
                 </div>
                 <div class="col-12 mt-4">
                     <app-staking-history></app-staking-history>

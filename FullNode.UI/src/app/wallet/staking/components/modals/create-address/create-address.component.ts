@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ClipboardService } from 'ngx-clipboard';
+
+import { StakingServiceBase } from '../../../staking.service';
+import { GlobalService } from '../../../../../shared/services/global.service';
 
 @Component({
     selector: 'app-create-address',
@@ -8,12 +12,23 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class StakingCreateAddressComponent implements OnInit {
 
-    constructor(private activeModal: NgbActiveModal) { }
+    constructor(private globalService: GlobalService, private stakingService: StakingServiceBase,
+        private activeModal: NgbActiveModal, private clipboardService: ClipboardService) { }
+
+    address = '';
+    addressCopied = false;
 
     ngOnInit() {
+        this.stakingService.GetAddress(this.globalService.getWalletName()).subscribe(x => this.address = x);
     }
 
-    onCloseClicked() {
+    closeClicked() {
         this.activeModal.close();
+    }
+
+    copyClicked() {
+        if (this.address) {
+            this.addressCopied = this.clipboardService.copyFromContent(this.address);
+        }
     }
 }

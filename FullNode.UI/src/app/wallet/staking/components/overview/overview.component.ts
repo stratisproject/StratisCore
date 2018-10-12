@@ -6,6 +6,7 @@ import { GlobalService } from '../../../../shared/services/global.service';
 import { StakingServiceBase, StakingInfo } from '../../staking.service';
 import { StakingCreateAddressComponent } from '../modals/create-address/create-address.component';
 import { StakingWithdrawComponent } from '../modals/withdraw/withdraw.component';
+import { StakingCreateComponent } from '../modals/create/create.component';
 
 @Component({
   selector: 'app-staking-scene',
@@ -31,5 +32,6 @@ export class StakingOverviewComponent implements OnInit {
     }
 
     onSetup() {
+        this.modalService.open(StakingCreateComponent);
     }
 }

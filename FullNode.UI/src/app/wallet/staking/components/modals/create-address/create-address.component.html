@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h5 class="modal-title">Cold address</h5>
-    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="onCloseClicked()">
+    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
         <i class="lnr lnr-cross-circle"></i>
     </button>
 </div>
@@ -9,22 +9,19 @@
         <label for="yourAddress">Address</label>
         <div class="myAddress">
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="ScCHt2Mug856o1E6gck6VFriXYnRYBD8NE" readonly>
+                <input class="form-control" type="text" placeholder="{{address}}" readonly>
                 <div class="input-group-append">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary ml-2" type="button" id="">copy</button>
+                        <button class="btn btn-outline-secondary ml-2" type="button" id="" (click)="copyClicked()">copy</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <div *ngIf="addressCopied" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
             Your address has been copied to your clipboard.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
         </div>
     </form>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" (click)="onCloseClicked()">OK</button>
+    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" (click)="closeClicked()">OK</button>
 </div>
