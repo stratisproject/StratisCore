@@ -3,10 +3,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 export class StakingInfo {
-    constructor(public hotWalletBalance: string, 
-                public coldWalletBalance: string,
-                public hotWalletAmount: string,
-                public coldWalletAmount: string) {}
+    constructor(public hotWalletBalance: number, 
+                public coldWalletBalance: number,
+                public hotWalletAmount: number,
+                public coldWalletAmount: number) {}
 }
 
 export class StakingHistoryItem {
@@ -23,7 +23,7 @@ export abstract class StakingServiceBase {
 export class FakeStakingService implements StakingServiceBase {
     
     GetInfo(walletName: string): Observable<StakingInfo> { 
-        return Observable.of<StakingInfo>(new StakingInfo('88025','91223','4000','28765'));
+        return Observable.of<StakingInfo>(new StakingInfo(88025, 91223, 4000, 28765));
     }
 
     GetHistory(walletName: string): Observable<StakingHistoryItem[]> {

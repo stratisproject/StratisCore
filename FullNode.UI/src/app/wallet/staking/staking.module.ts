@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { StakingServiceBase, FakeStakingService } from './staking.service';
 
@@ -14,7 +15,7 @@ import { StakingCreateComponent } from './components/modals/create/create.compon
 
 @NgModule({
   imports: [
-    CommonModule, NgbModalModule, ClipboardModule
+    CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule
   ],
   providers: [ { provide: StakingServiceBase, useClass: FakeStakingService } ],
 

@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { GlobalService } from '../../../../../shared/services/global.service';
+
+import { StakingServiceBase } from '../../../staking.service';
+
+type FeeType = { id: number, display: string };
 
 @Component({
     selector: 'app-withdraw',
@@ -8,13 +13,69 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class StakingWithdrawComponent implements OnInit {
 
-    constructor(private activeModal: NgbActiveModal) { }
+    private _amount;
+    private _amountFormatted = '';
+    private _amountSpendable = 0;
+    private _destinationAddress = '';
+    private _password = '';
+    amountSpendableFormatted = '';
+    passwordValid = false;
+    canWithdraw = false;
+    feeTypes: FeeType[] = [
+        { id: 0, display: 'Low - 0.0001 STRAT' },
+        { id: 1, display: 'Medium - 0.001 STRAT' },
+        { id: 2, display: 'High - 0.01 STRAT' },
+    ];
+    selectedFeeType: FeeType;
+
+    constructor(private globalService: GlobalService, private stakingService: StakingServiceBase, private activeModal: NgbActiveModal) { 
+        this.selectedFeeType = this.feeTypes[1];
+    }
+
+    @Input()
+    set amount(value: number) {
+        this._amount = value;
+        this._amountFormatted = this._amount.toString();
+        this.setCanWithdraw();
+    }
+    get amount(): number {
+        return this._amount;
+    }
+
+    @Input()
+    set destinationAddress(value: string) {
+        this._destinationAddress = value;
+        this.setCanWithdraw();
+    }
+    get destinationAddress(): string {
+        return this._destinationAddress;
+    }
+
+    @Input() 
+    set password(value: string) {
+        this._password = value;
+        this.passwordValid = this._password.length > 0;
+        this.setCanWithdraw();
+    }
+    get password(): string {
+        return this._password;
+    }
+
+    private setCanWithdraw() {
+        this.canWithdraw = this._amountFormatted.length && this._destinationAddress.length && this.passwordValid;
+    }
 
     ngOnInit() {
+        this.setCanWithdraw();
+        
+        this.stakingService.GetInfo(this.globalService.getWalletName()).subscribe(x => {
+            this._amountSpendable = x.coldWalletAmount;
+            this.amountSpendableFormatted = this._amountSpendable.toLocaleString();
+        });
     }
 
-    onCloseClicked() {
-        this.activeModal.close();
+    withdrawClicked() {
     }
 
+    closeClicked = () => this.activeModal.close();
 }

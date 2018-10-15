@@ -8,8 +8,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class StakingWalletComponent {
 
     private _hotWallet = false;
-    private _balance = '0';
-    private _amount = '0';
+    private _balance = 0;
+    private _amount = 0;
+    balanceFormatted = '';
+    amountFormatted = '';
     description = '';
     @Output() onGetFirstUnusedAddress = new EventEmitter<StakingWalletComponent>();
     @Output() onWithdraw = new EventEmitter<StakingWalletComponent>();
@@ -24,19 +26,15 @@ export class StakingWalletComponent {
     }
 
     @Input()
-    set balance(value: string) {
-        this._balance = Number(value).toLocaleString();
-    }
-    get balance(): string {
-        return this._balance;
+    set balance(value: number) {
+        this._balance = value;
+        this.balanceFormatted = this._balance.toLocaleString();
     }
 
     @Input()
-    set amount(value: string) {
-        this._amount = Number(value).toLocaleString();
-    }
-    get amount(): string {
-        return this._amount;
+    set amount(value: number) {
+        this._amount = value;
+        this.amountFormatted = this._amount.toLocaleString();
     }
 
     unusedAddressClicked = () => this.onGetFirstUnusedAddress.emit(this);

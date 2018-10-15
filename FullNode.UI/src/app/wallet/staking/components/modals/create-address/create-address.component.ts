@@ -13,7 +13,7 @@ import { GlobalService } from '../../../../../shared/services/global.service';
 export class StakingCreateAddressComponent implements OnInit {
 
     constructor(private globalService: GlobalService, private stakingService: StakingServiceBase,
-        private activeModal: NgbActiveModal, private clipboardService: ClipboardService) { }
+                private activeModal: NgbActiveModal, private clipboardService: ClipboardService) { }
 
     address = '';
     addressCopied = false;

@@ -8,13 +8,13 @@
     <div class="card-header">Balance</div>
     <div class="card-body">
         <p class="lead">
-            <strong>{{balance}}</strong><small class="text-uppercase">.00 STRAT</small>
+            <strong>{{balanceFormatted}}</strong><small class="text-uppercase">.00 STRAT</small>
         </p>
     </div>
 
     <div class="card-header">Mature for staking</div>
     <div class="card-body">
-        <p class="sub">{{amount}} STRAT</p>
+        <p class="sub">{{amountFormatted}} STRAT</p>
     </div>
     <div class="card-footer">
         <button data-toggle="modal" type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="unusedAddressClicked()">Get
@@ -33,13 +33,13 @@
     <div class="card-header">Balance</div>
     <div class="card-body">
         <p class="lead">
-            <strong>{{balance}}</strong><small class="text-uppercase">.00 STRAT</small>
+            <strong>{{balanceFormatted}}</strong><small class="text-uppercase">.00 STRAT</small>
         </p>
     </div>
 
     <div class="card-header">Spendable</div>
     <div class="card-body">
-        <p class="sub">{{amount}} STRAT</p>
+        <p class="sub">{{amountFormatted}} STRAT</p>
     </div>
     <div class="card-footer">
         <div class="row justify-content-center">
