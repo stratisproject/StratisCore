@@ -3,26 +3,27 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 export class StakingInfo {
-    constructor(public hotWalletBalance: number, 
-                public coldWalletBalance: number,
-                public hotWalletAmount: number,
-                public coldWalletAmount: number) {}
+    constructor(public hotWalletBalance: number,
+        public coldWalletBalance: number,
+        public hotWalletAmount: number,
+        public coldWalletAmount: number) { }
 }
 
 export class StakingHistoryItem {
-    constructor(public status: string, public side: string, public amount: string, public dateTime: string, public wallet: string) {}
+    constructor(public status: string, public side: string, public amount: string, public dateTime: string, public wallet: string) { }
 }
 
 export abstract class StakingServiceBase {
-    GetInfo(walletName: string): Observable<StakingInfo> { return Observable.empty(); }
-    GetHistory(walletName: string): Observable<StakingHistoryItem[]> { return Observable.empty(); }
-    GetAddress(walletName: string): Observable<string> { return Observable.empty(); }
+    GetInfo(walletName: string): Observable<StakingInfo> { return Observable.of(); }
+    GetHistory(walletName: string): Observable<StakingHistoryItem[]> { return Observable.of(); }
+    GetAddress(walletName: string): Observable<string> { return Observable.of(); }
+    CreateColdstaking(...params): Observable<boolean> { return Observable.of(); }
 }
 
 @Injectable()
 export class FakeStakingService implements StakingServiceBase {
-    
-    GetInfo(walletName: string): Observable<StakingInfo> { 
+
+    GetInfo(walletName: string): Observable<StakingInfo> {
         return Observable.of<StakingInfo>(new StakingInfo(88025, 91223, 4000, 28765));
     }
 
@@ -36,5 +37,9 @@ export class FakeStakingService implements StakingServiceBase {
 
     GetAddress(walletName: string): Observable<string> {
         return Observable.of('ScCHt2Mug856o1E6gck6VFriXYnRYBD8NE');
+    }
+
+    CreateColdstaking(...params): Observable<boolean> {
+        return Observable.of(true);
     }
 }

@@ -12,7 +12,6 @@ type FeeType = { id: number, display: string };
     styleUrls: ['./withdraw.component.css']
 })
 export class StakingWithdrawComponent implements OnInit {
-
     private _amount;
     private _amountFormatted = '';
     private _amountSpendable = 0;
@@ -28,7 +27,7 @@ export class StakingWithdrawComponent implements OnInit {
     ];
     selectedFeeType: FeeType;
 
-    constructor(private globalService: GlobalService, private stakingService: StakingServiceBase, private activeModal: NgbActiveModal) { 
+    constructor(private globalService: GlobalService, private stakingService: StakingServiceBase, private activeModal: NgbActiveModal) {
         this.selectedFeeType = this.feeTypes[1];
     }
 
@@ -51,7 +50,7 @@ export class StakingWithdrawComponent implements OnInit {
         return this._destinationAddress;
     }
 
-    @Input() 
+    @Input()
     set password(value: string) {
         this._password = value;
         this.passwordValid = this._password.length > 0;
@@ -67,7 +66,7 @@ export class StakingWithdrawComponent implements OnInit {
 
     ngOnInit() {
         this.setCanWithdraw();
-        
+
         this.stakingService.GetInfo(this.globalService.getWalletName()).subscribe(x => {
             this._amountSpendable = x.coldWalletAmount;
             this.amountSpendableFormatted = this._amountSpendable.toLocaleString();

@@ -9,9 +9,9 @@ import { StakingWithdrawComponent } from '../modals/withdraw/withdraw.component'
 import { StakingCreateComponent } from '../modals/create/create.component';
 
 @Component({
-  selector: 'app-staking-scene',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css']
+    selector: 'app-staking-scene',
+    templateUrl: './overview.component.html',
+    styleUrls: ['./overview.component.css']
 })
 export class StakingOverviewComponent implements OnInit {
 

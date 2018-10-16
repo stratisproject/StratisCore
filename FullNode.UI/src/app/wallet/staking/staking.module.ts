@@ -12,22 +12,25 @@ import { StakingWalletComponent } from './components/overview/wallet/wallet.comp
 import { StakingCreateAddressComponent } from './components/modals/create-address/create-address.component';
 import { StakingWithdrawComponent } from './components/modals/withdraw/withdraw.component';
 import { StakingCreateComponent } from './components/modals/create/create.component';
+import { StakingCreateSuccessComponent } from './components/modals/create-success/create-success.component';
 
 @NgModule({
-  imports: [
-    CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule
-  ],
-  providers: [ { provide: StakingServiceBase, useClass: FakeStakingService } ],
+    imports: [
+        CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule
+    ],
+    providers: [{ provide: StakingServiceBase, useClass: FakeStakingService }],
 
-  declarations: [ StakingOverviewComponent, 
-                  StakingHistoryComponent, 
-                  StakingWalletComponent, 
-                  StakingCreateAddressComponent, 
-                  StakingWithdrawComponent, 
-                  StakingCreateComponent ],
-                  
-  entryComponents: [ StakingCreateAddressComponent, 
-                     StakingWithdrawComponent, 
-                     StakingCreateComponent ]
+    declarations: [StakingOverviewComponent,
+        StakingHistoryComponent,
+        StakingWalletComponent,
+        StakingCreateAddressComponent,
+        StakingWithdrawComponent,
+        StakingCreateComponent,
+        StakingCreateSuccessComponent],
+
+    entryComponents: [StakingCreateAddressComponent,
+        StakingWithdrawComponent,
+        StakingCreateComponent,
+        StakingCreateSuccessComponent]
 })
 export class StakingModule { }
