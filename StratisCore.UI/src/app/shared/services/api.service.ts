@@ -248,7 +248,7 @@ export class ApiService {
      */
     startStaking(data: any): Observable<any> {
       return this.http
-        .post(this.stratisApiUrl + '/miner/startstaking', JSON.stringify(data), {headers: this.headers})
+        .post(this.stratisApiUrl + '/staking/startstaking', JSON.stringify(data), {headers: this.headers})
         .map((response: Response) => response);
     }
 
@@ -259,7 +259,7 @@ export class ApiService {
       return Observable
         .interval(this.pollingInterval)
         .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/miner/getstakinginfo'))
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/staking/getstakinginfo'))
         .map((response: Response) => response);
     }
 
@@ -268,7 +268,7 @@ export class ApiService {
       */
     stopStaking(): Observable<any> {
       return this.http
-        .post(this.stratisApiUrl + '/miner/stopstaking', {headers: this.headers})
+        .post(this.stratisApiUrl + '/staking/stopstaking', {headers: this.headers})
         .map((response: Response) => response);
     }
 
