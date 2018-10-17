@@ -25,7 +25,7 @@ Clone this repository locally:
 git clone https://www.github.com/stratisproject/StratisCore
 ```
 
-Navigate to the FullNodeUI folder in a terminal:
+Navigate to the StratisCore.UI folder in a terminal:
 ``` bash
 cd ./StratisCore/StratisCore.UI
 ```

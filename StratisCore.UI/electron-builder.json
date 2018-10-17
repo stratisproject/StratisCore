@@ -18,7 +18,7 @@
       "deb",
       "tar.gz"
     ],
-    "synopsis": "FullNode.UI: Stratis' staking wallet.",
+    "synopsis": "StratisCore.UI: Stratis' staking wallet.",
     "category": "Utility",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
   },
