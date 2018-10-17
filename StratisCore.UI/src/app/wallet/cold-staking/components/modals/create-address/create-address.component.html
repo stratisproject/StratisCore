@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h5 class="modal-title">Cold address</h5>
+    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
+        <i class="lnr lnr-cross-circle"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <form>
+        <label for="yourAddress">Address</label>
+        <div class="myAddress">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="{{address}}" readonly>
+                <div class="input-group-append">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary ml-2" type="button" id="" (click)="copyClicked()">copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="addressCopied" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            Your address has been copied to your clipboard.
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" (click)="closeClicked()">OK</button>
+</div>

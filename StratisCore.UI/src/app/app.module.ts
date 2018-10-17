@@ -7,9 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgxElectronModule } from 'ngx-electron';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
-
 import { SharedModule } from './shared/shared.module';
-
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -25,7 +23,6 @@ import { SendConfirmationComponent } from './wallet/send/send-confirmation/send-
 import { ReceiveComponent } from './wallet/receive/receive.component';
 import { TransactionDetailsComponent } from './wallet/transaction-details/transaction-details.component';
 import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout-confirmation.component';
-
 
 @NgModule({
   imports: [

@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h5 class="modal-title">Withdraw <span style="text-transform: lowercase">from</span> coldstaking</h5>
+    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
+        <i class="lnr lnr-cross-circle"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <p class="">Amount spendable : {{amountSpendableFormatted}} STRAT</p>
+    <form>
+        <div class="form-group clearfix">
+            <label class="float-left" for="Amount">Amount</label>
+            <input type="number" class="form-control is-valid" placeholder="Amount" name="amount" [(ngModel)]="amount"
+                required>
+        </div>
+        <div class="form-group clearfix">
+            <label for="destinationAddress">Destination address</label>
+            <input type="text" class="form-control" placeholder="Please enter the destination address here."
+                [(ngModel)]="destinationAddress" name="destinationAddress" required>
+        </div>
+        <div class="form-group clearfix">
+            <label for="walletPassword">Password</label>
+            <input type="password" class="form-control is-invalid" id="walletPassword" placeholder="Please enter your wallet password."
+                name="password" [(ngModel)]="password" required>
+        </div>
+        <div class="form-group clearfix">
+            <label for="feeType">Fee type</label>
+            <select class="form-control" [(ngModel)]="selectedFeeType" [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let feeType of feeTypes" [ngValue]="feeType" [selected]="feeType.id === 1">{{feeType.display}}</option>
+            </select>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
+    <button type="button" data-toggle="modal" data-target="#" class="btn btn-primary btn-block" (click)="withdrawClicked()"
+        data-dismiss="modal" [disabled]="!canWithdraw">Withdraw</button>
+</div>

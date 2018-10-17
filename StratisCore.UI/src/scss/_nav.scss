@@ -14,11 +14,15 @@
 .nav-link {
   display: block;
   padding: $nav-link-padding-y $nav-link-padding-x;
+  color: $gray-600;
+
 
   @include hover-focus {
     text-decoration: none;
+    color: $link-color;
   }
 
+  &.active {color: $link-color !important;}
   // Disabled state lightens text
   &.disabled {
     color: $nav-link-disabled-color;

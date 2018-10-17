@@ -1,0 +1,20 @@
+<div class="card">
+    <div class="card-header">Staking history</div>
+    <div class="card-body">
+        <table class="table table-sm">
+
+            <tr *ngFor="let item of items">
+                <th class="text-center"><span class="bubble bg-warning"></span></th>
+                <td class="text-uppercase text-left">{{item.side}}</td>
+                <td class="text-center"><strong>{{item.amount}}</strong></td>
+                <td class="text-center">{{item.dateTime}}</td>
+                <td class="text-center">{{item.wallet}}</td>
+                <td class="text-right"><a href="#">details</a></td>
+            </tr>
+
+        </table>
+        <div class="text-center my-2">
+            <a href="history.html" class="btn btn-outline-primary">See all History</a>
+        </div>
+    </div>
+</div>

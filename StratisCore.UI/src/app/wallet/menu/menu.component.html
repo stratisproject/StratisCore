@@ -1,17 +1,30 @@
-<!-- MENU -->
 <section id="GUI" class="light">
-  <nav class="navbar navbar-light bg-light justify-content-between">
-    <span class="navbar-text">{{ walletName }}</span>
-    <span class="navbar-brand align-middle">
-      <a (click)="goToDashboard()">
-        <img src="./assets/images/logo.svg" width="36" height="36" alt="Stratis">
-      </a>
-    </span>
-    <form class="form-inline">
-      <a data-toggle="modal" role="button" (click)="logOut()">
-        <i class="lnr lnr-exit"></i>
-      </a>
-    </form>
-  </nav>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+
+        <ul class="nav list-inline mr-auto col-5">
+            <li class="nav-item list-inline-item">
+                <a class="nav-link" routerLink="/wallet">Dashboard</a>
+            </li>
+            <!-- <li class="nav-item list-inline-item">
+                <a class="nav-link" routerLink="/wallet/staking">Cold Staking</a>
+            </li> -->
+            <li class="nav-item list-inline-item">
+                <a class="nav-link" routerLink="/wallet/History">History</a>
+            </li>
+        </ul>
+
+        <span class="navbar-brand mx-auto">
+            <a href="dashboard.html">
+                <img src="./assets/images/logo.svg" width="36" height="36" alt="Stratis">
+            </a>
+        </span>
+
+        <form class="form-inline col-5">
+            <span class="navbar-text mr-4 ml-auto">{{walletName}}</span>
+            <a data-toggle="modal" data-target="#modalLogout" role="button">
+                <i class="lnr lnr-exit"></i>
+            </a>
+        </form>
+
+    </nav>
 </section>
-<!-- /MENU -->

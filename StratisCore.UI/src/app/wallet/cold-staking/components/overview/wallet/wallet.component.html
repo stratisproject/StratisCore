@@ -1,0 +1,53 @@
+<!-- HOT STAKING -->
+<div class="card card-staking" *ngIf="hotWallet">
+
+    <div class="stake-type text-right">
+        <span class="badge badge-hot ml-auto">Hot Wallet <span data-placement="top" title="{{description}}" class="lnr lnr-question-circle ml-2"></span></span>
+    </div>
+
+    <div class="card-header">Balance</div>
+    <div class="card-body">
+        <p class="lead">
+            <strong>{{balanceFormatted}}</strong><small class="text-uppercase">.00 STRAT</small>
+        </p>
+    </div>
+
+    <div class="card-header">Mature for staking</div>
+    <div class="card-body">
+        <p class="sub">{{amountFormatted}} STRAT</p>
+    </div>
+    <div class="card-footer">
+        <button data-toggle="modal" type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="unusedAddressClicked()">Get
+            first unused address</button>
+    </div>
+
+</div>
+
+<!-- COLD STAKING -->
+<div class="card card-staking" *ngIf="!hotWallet">
+
+    <div class="stake-type text-right">
+        <span class="badge badge-cold ml-auto">Cold Wallet <span data-placement="top" title="{{description}}" class="lnr lnr-question-circle ml-2"></span></span>
+    </div>
+
+    <div class="card-header">Balance</div>
+    <div class="card-body">
+        <p class="lead">
+            <strong>{{balanceFormatted}}</strong><small class="text-uppercase">.00 STRAT</small>
+        </p>
+    </div>
+
+    <div class="card-header">Spendable</div>
+    <div class="card-body">
+        <p class="sub">{{amountFormatted}} STRAT</p>
+    </div>
+    <div class="card-footer">
+        <div class="row justify-content-center">
+            <button data-toggle="modal" data-target="#modalWithdraw" type="button" class="btn btn-outline-light btn-lg col-4"
+                (click)="withdrawClicked()">Withdraw</button>
+            <button type="button" class="btn btn-outline-primary btn-lg col-7 ml-2" style="min-width:220px" (click)="unusedAddressClicked()">Get
+                first unused address</button>
+        </div>
+    </div>
+
+</div>

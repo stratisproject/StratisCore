@@ -1,0 +1,54 @@
+<div [style.opacity]="opacity">
+    <div class="modal-header">
+        <h5 class="modal-title">Coldstake Setup</h5>
+        <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
+            <i class="lnr lnr-cross-circle"></i>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="mb-3 row">
+            <div class="btn-group btn-group-toggle col" data-toggle="buttons">
+                <label class="btn btn-outline-primary col-6 btn-lg" [class.active]="hotColdWalletSelection === HotColdWalletEnum.Hot">
+                    <input type="radio" name="walletOption" (change)="hotColdWalletSelection = HotColdWalletEnum.Hot"
+                        autocomplete="off">
+                    This will be a Hot Wallet
+                </label>
+                <label class="btn btn-outline-primary col-6 btn-lg" [class.active]="hotColdWalletSelection === HotColdWalletEnum.Cold">
+                    <input type="radio" name="walletOption" (change)="hotColdWalletSelection = HotColdWalletEnum.Cold"
+                        autocomplete="off">
+                    This will be a Cold Wallet
+                </label>
+            </div>
+            <!-- <em class="text-light col mt-2"><span class="lnr lnr-question-circle ml-2"></span> This is a help text to
+            display when the user selects an option</em> -->
+        </div>
+        <form>
+            <div class="form-group clearfix">
+                <label class="float-left" for="Amount">Amount</label>
+                <input type="number" class="form-control is-valid" placeholder="Amount" name="amount" [(ngModel)]="amount"
+                    required>
+            </div>
+            <div class="form-group clearfix">
+                <label for="destinationAddress">Destination address</label>
+                <input type="text" class="form-control" placeholder="Please enter the destination address here."
+                    [(ngModel)]="destinationAddress" name="destinationAddress" required>
+            </div>
+            <div class="form-group clearfix">
+                <label for="walletPassword">Password</label>
+                <input type="password" class="form-control is-invalid" id="walletPassword" placeholder="Please enter your wallet password."
+                    name="password" [(ngModel)]="password" required>
+            </div>
+            <div class="form-group clearfix">
+                <label for="feeType">Fee type</label>
+                <select class="form-control" [(ngModel)]="selectedFeeType" [ngModelOptions]="{standalone: true}">
+                    <option *ngFor="let feeType of feeTypes" [ngValue]="feeType" [selected]="feeType.id === 1">{{feeType.display}}</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
+        <button type="button" data-toggle="modal" data-target="#modalValidation" class="btn btn-primary btn-block"
+            (click)="createClicked()" data-dismiss="modal" [disabled]="!canCreate">Create</button>
+    </div>
+</div>
