@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 
-import { StakingModule } from './staking/staking.module';
 import { SharedModule } from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
+import { ColdStakingModule } from './cold-staking/cold-staking.module';
 
 import { WalletComponent } from './wallet.component';
 import { MenuComponent } from './menu/menu.component';
@@ -23,7 +23,7 @@ import { StatusBarComponent } from './status-bar/status-bar.component';
     NgbModule,
     ReactiveFormsModule,
     WalletRoutingModule,
-    StakingModule
+    ColdStakingModule
   ],
   declarations: [
     WalletComponent,

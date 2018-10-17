@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { GlobalService } from '../../../../../shared/services/global.service';
-import { StakingServiceBase } from '../../../staking.service';
+import { ColdStakingServiceBase } from '../../../cold-staking.service';
 
 export class HistoryItem {
     constructor(public status: string, public side: string, public amount: string, public dateTime: string, public wallet: string) { }
@@ -12,9 +12,9 @@ export class HistoryItem {
     templateUrl: './history.component.html',
     styleUrls: ['./history.component.css']
 })
-export class StakingHistoryComponent implements OnInit {
+export class ColdStakingHistoryComponent implements OnInit {
 
-    constructor(private globalService: GlobalService, private stakingService: StakingServiceBase) { }
+    constructor(private globalService: GlobalService, private stakingService: ColdStakingServiceBase) { }
 
     items: HistoryItem[] = [];
 

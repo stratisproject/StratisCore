@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { WalletComponent }   from './wallet.component';
 import { HistoryComponent } from './history/history.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { StakingOverviewComponent } from './staking/components/overview/overview.component';
+import { ColdStakingOverviewComponent } from './cold-staking/components/overview/overview.component';
 
 const routes: Routes = [
   { path: '', component: WalletComponent,
@@ -12,7 +12,7 @@ const routes: Routes = [
         { path: '', redirectTo:'dashboard', pathMatch:'full' },
         { path: 'dashboard', component: DashboardComponent},
         { path: 'history', component: HistoryComponent},
-        { path: 'staking', component: StakingOverviewComponent }
+        { path: 'staking', component: ColdStakingOverviewComponent }
         ]
   },
   { path: 'stratis-wallet', component: WalletComponent,
@@ -20,7 +20,7 @@ const routes: Routes = [
         { path: '', redirectTo:'dashboard', pathMatch:'full' },
         { path: 'dashboard', component: DashboardComponent},
         { path: 'history', component: HistoryComponent},
-        { path: 'staking', component: StakingOverviewComponent }
+        { path: 'staking', component: ColdStakingOverviewComponent }
         ]
   }
 ];

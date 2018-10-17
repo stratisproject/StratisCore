@@ -5,7 +5,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     templateUrl: './wallet.component.html',
     styleUrls: ['./wallet.component.css']
 })
-export class StakingWalletComponent {
+export class ColdStakingWalletComponent {
 
     private _hotWallet = false;
     private _balance = 0;
@@ -13,8 +13,8 @@ export class StakingWalletComponent {
     balanceFormatted = '';
     amountFormatted = '';
     description = '';
-    @Output() onGetFirstUnusedAddress = new EventEmitter<StakingWalletComponent>();
-    @Output() onWithdraw = new EventEmitter<StakingWalletComponent>();
+    @Output() onGetFirstUnusedAddress = new EventEmitter<ColdStakingWalletComponent>();
+    @Output() onWithdraw = new EventEmitter<ColdStakingWalletComponent>();
 
     @Input()
     set hotWallet(value: boolean) {

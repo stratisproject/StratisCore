@@ -6,7 +6,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
     templateUrl: './create-success.component.html',
     styleUrls: ['./create-success.component.css']
 })
-export class StakingCreateSuccessComponent {
+export class ColdStakingCreateSuccessComponent {
 
     constructor(private activeModal: NgbActiveModal) { }
 

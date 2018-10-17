@@ -3,8 +3,8 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GlobalService } from '../../../../../shared/services/global.service';
 
-import { StakingServiceBase } from '../../../staking.service';
-import { StakingCreateSuccessComponent } from '../create-success/create-success.component';
+import { ColdStakingServiceBase } from '../../../cold-staking.service';
+import { ColdStakingCreateSuccessComponent } from '../create-success/create-success.component';
 import { Router } from '@angular/router';
 
 type FeeType = { id: number, display: string };
@@ -15,7 +15,7 @@ enum HotColdWallet { Hot = 1, Cold };
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.css']
 })
-export class StakingCreateComponent {
+export class ColdStakingCreateComponent {
     private _amount;
     private _amountFormatted = '';
     private _destinationAddress = '';
@@ -32,7 +32,7 @@ export class StakingCreateComponent {
     HotColdWalletEnum = HotColdWallet;
     hotColdWalletSelection = HotColdWallet.Hot;
 
-    constructor(private globalService: GlobalService, private stakingService: StakingServiceBase,
+    constructor(private globalService: GlobalService, private stakingService: ColdStakingServiceBase,
         private activeModal: NgbActiveModal, private modalService: NgbModal, private routerService: Router) {
         this.selectedFeeType = this.feeTypes[1];
         this.setCanCreate();
@@ -76,7 +76,7 @@ export class StakingCreateComponent {
             .subscribe(success => {
                 if (success) {
                     this.opacity = .5;
-                    this.modalService.open(StakingCreateSuccessComponent, { backdrop: 'static' }).result
+                    this.modalService.open(ColdStakingCreateSuccessComponent, { backdrop: 'static' }).result
                         .then(_ => this.activeModal.close());
                 }
             });

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardService } from 'ngx-clipboard';
 
-import { StakingServiceBase } from '../../../staking.service';
+import { ColdStakingServiceBase } from '../../../cold-staking.service';
 import { GlobalService } from '../../../../../shared/services/global.service';
 
 @Component({
@@ -10,9 +10,9 @@ import { GlobalService } from '../../../../../shared/services/global.service';
     templateUrl: './create-address.component.html',
     styleUrls: ['./create-address.component.css']
 })
-export class StakingCreateAddressComponent implements OnInit {
+export class ColdStakingCreateAddressComponent implements OnInit {
 
-    constructor(private globalService: GlobalService, private stakingService: StakingServiceBase,
+    constructor(private globalService: GlobalService, private stakingService: ColdStakingServiceBase,
         private activeModal: NgbActiveModal, private clipboardService: ClipboardService) { }
 
     address = '';

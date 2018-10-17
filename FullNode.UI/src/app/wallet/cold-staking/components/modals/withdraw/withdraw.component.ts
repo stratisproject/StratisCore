@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '../../../../../shared/services/global.service';
 
-import { StakingServiceBase } from '../../../staking.service';
+import { ColdStakingServiceBase } from '../../../cold-staking.service';
 
 type FeeType = { id: number, display: string };
 
@@ -11,7 +11,7 @@ type FeeType = { id: number, display: string };
     templateUrl: './withdraw.component.html',
     styleUrls: ['./withdraw.component.css']
 })
-export class StakingWithdrawComponent implements OnInit {
+export class ColdStakingWithdrawComponent implements OnInit {
     private _amount;
     private _amountFormatted = '';
     private _amountSpendable = 0;
@@ -27,7 +27,7 @@ export class StakingWithdrawComponent implements OnInit {
     ];
     selectedFeeType: FeeType;
 
-    constructor(private globalService: GlobalService, private stakingService: StakingServiceBase, private activeModal: NgbActiveModal) {
+    constructor(private globalService: GlobalService, private stakingService: ColdStakingServiceBase, private activeModal: NgbActiveModal) {
         this.selectedFeeType = this.feeTypes[1];
     }
 
