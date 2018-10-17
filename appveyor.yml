@@ -18,7 +18,7 @@ branches:
 #---------------------------------#
 
 image: Visual Studio 2017
-clone_folder: c:\projects\fullnodeui
+clone_folder: c:\projects\stratiscoreui
 configuration:
   - Release
 
@@ -36,7 +36,7 @@ environment:
 
 # build cache to preserve files/folders between builds
 cache:
-  - '%APPVEYOR_BUILD_FOLDER%\FullNode.UI\node_modules'
+  - '%APPVEYOR_BUILD_FOLDER%\StratisCore.UI\node_modules'
   - '%USERPROFILE%\.nuget\packages'
   
 init:
@@ -58,7 +58,7 @@ install:
       npm config set unsafe-perm=true
       
       Write-Host "--> npm install" -foregroundcolor "magenta"
-      cd $env:APPVEYOR_BUILD_FOLDER/FullNode.UI
+      cd $env:APPVEYOR_BUILD_FOLDER/StratisCore.UI
       npm install
       
       Write-Host "--> npm install npx" -foregroundcolor "magenta"
@@ -90,18 +90,18 @@ build_script:
 - ps: |
       Write-Host "$env:log_prefix running 'dotnet publish'" -foregroundcolor "magenta"
       cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/src/Stratis.StratisD
-      dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\FullNode.UI\daemon
+      dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\StratisCore.UI\daemon
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
-      Write-Host "$env:log_prefix building FullNode.UI" -foregroundcolor "magenta"
-      cd $env:APPVEYOR_BUILD_FOLDER/FullNode.UI
+      Write-Host "$env:log_prefix building StratisCore.UI" -foregroundcolor "magenta"
+      cd $env:APPVEYOR_BUILD_FOLDER/StratisCore.UI
       npm run build:prod
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
-      Write-Host "$env:log_prefix packaging the FullNode.UI" -foregroundcolor "magenta"
+      Write-Host "$env:log_prefix packaging the StratisCore.UI" -foregroundcolor "magenta"
       npx electron-builder build --windows --$env:arch
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
-      Write-Host "[$env:configuration][$env:win_runtime] Finished FullNode.UI packaging" -foregroundcolor "magenta"
+      Write-Host "[$env:configuration][$env:win_runtime] Finished StratisCore.UI packaging" -foregroundcolor "magenta"
       
       dir
       cd app-builds
@@ -121,8 +121,8 @@ test_script:
 
 # pushing all files in build directory recursively
 artifacts:
-- path: FullNode.UI\app-builds\*.exe
-  name: FullNode.UI app
+- path: StratisCore.UI\app-builds\*.exe
+  name: StratisCore.UI app
   
 #----------------------------------#
 #      deployment configuration    #

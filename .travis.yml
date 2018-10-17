@@ -33,7 +33,7 @@ env:
 
 cache:
   directories:
-  - ${TRAVIS_BUILD_DIR}/FullNode.UI/node_modules
+  - ${TRAVIS_BUILD_DIR}/StratisCore.UI/node_modules
   - $HOME/.electron
   - $HOME/.nuget/packages
   - /usr/share/dotnet/sdk/ # dotnet path for linux
@@ -59,9 +59,9 @@ deploy:
     secure: $secure_github_key # this key is set on the Travis build page 
   file_glob: true
   file: 
-    - "$TRAVIS_BUILD_DIR/FullNode.UI/app-builds/*.deb"
-    - "$TRAVIS_BUILD_DIR/FullNode.UI/app-builds/*.tar.gz"
-    - "$TRAVIS_BUILD_DIR/FullNode.UI/app-builds/*.dmg"
+    - "$TRAVIS_BUILD_DIR/StratisCore.UI/app-builds/*.deb"
+    - "$TRAVIS_BUILD_DIR/StratisCore.UI/app-builds/*.tar.gz"
+    - "$TRAVIS_BUILD_DIR/StratisCore.UI/app-builds/*.dmg"
   skip_cleanup: true
   overwrite: true
   prerelease: true

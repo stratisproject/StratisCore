@@ -23,7 +23,7 @@ Write-Host "--> git submodule" -foregroundcolor "magenta"
 git submodule update --init --recursive
 
 Write-Host "--> npm install" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/FullNode.UI
+cd $env:APPVEYOR_BUILD_FOLDER/StratisCore.UI
 npm install --verbose
 
 Write-Host "--> npm install npx" -foregroundcolor "magenta"
@@ -47,18 +47,18 @@ if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
     
 Write-Host "running 'dotnet publish'" -foregroundcolor "magenta"
 cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/src/Stratis.StratisD
-dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\FullNode.UI\daemon
+dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\StratisCore.UI\daemon
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
-Write-Host "building FullNode.UI" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/FullNode.UI
+Write-Host "building StratisCore.UI" -foregroundcolor "magenta"
+cd $env:APPVEYOR_BUILD_FOLDER/StratisCore.UI
 npm run build:prod
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
-Write-Host "packaging FullNode.UI" -foregroundcolor "magenta"
+Write-Host "packaging StratisCore.UI" -foregroundcolor "magenta"
 npx electron-builder build --windows --$env:arch
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
-Write-Host "[$env:configuration][$env:win_runtime] FINISHED FullNode.UI packaging" -foregroundcolor "magenta"
+Write-Host "[$env:configuration][$env:win_runtime] FINISHED StratisCore.UI packaging" -foregroundcolor "magenta"
 
 dir
 cd app-builds
