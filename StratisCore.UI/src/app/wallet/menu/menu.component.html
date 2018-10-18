@@ -5,9 +5,9 @@
             <li class="nav-item list-inline-item">
                 <a class="nav-link" routerLink="/wallet">Dashboard</a>
             </li>
-            <!-- <li class="nav-item list-inline-item">
+            <li *ngIf="coldStakingEnabled" class="nav-item list-inline-item">
                 <a class="nav-link" routerLink="/wallet/staking">Cold Staking</a>
-            </li> -->
+            </li>
             <li class="nav-item list-inline-item">
                 <a class="nav-link" routerLink="/wallet/History">History</a>
             </li>
