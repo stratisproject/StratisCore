@@ -39,7 +39,7 @@ export class ApiService {
 
     getNodeStatus(): Observable<any> {
         return this.http
-            .get(this.stratisApiUrl + '/Node/status')
+            .get(this.stratisApiUrl + '/node/status')
             .map((response: Response) => response.json());
     }
 
