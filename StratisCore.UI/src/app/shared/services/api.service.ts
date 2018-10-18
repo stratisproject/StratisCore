@@ -14,7 +14,6 @@ import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
 import { WalletInfo } from '../classes/wallet-info';
-import { Mnemonic } from '../classes/mnemonic';
 import { FeeEstimation } from '../classes/fee-estimation';
 import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
@@ -36,6 +35,12 @@ export class ApiService {
     setApiPort() {
       this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
       this.stratisApiUrl = 'http://localhost:' + this.apiPort + '/api';
+    }
+
+    getNodeStatus(): Observable<any> {
+        return this.http
+            .get(this.stratisApiUrl + '/node/status')
+            .map((response: Response) => response.json());
     }
 
     /**
