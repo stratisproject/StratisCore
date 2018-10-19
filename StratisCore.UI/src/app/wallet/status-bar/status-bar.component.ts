@@ -25,6 +25,7 @@ export class StatusBarComponent implements OnInit {
   private percentSyncedNumber: number = 0;
   public percentSynced: string;
   public stakingEnabled: boolean;
+  connectedNodesTooltip = '';
 
   constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService) { }
 
@@ -47,6 +48,12 @@ export class StatusBarComponent implements OnInit {
             this.chainTip = generalWalletInfoResponse.chainTip;
             this.isChainSynced = generalWalletInfoResponse.isChainSynced;
             this.connectedNodes = generalWalletInfoResponse.connectedNodes;
+            
+            if (this.connectedNodes == 1) {
+                this.connectedNodesTooltip = "1 connection";
+            } else if (this.connectedNodes >= 0) {
+                this.connectedNodesTooltip = `${this.connectedNodes} connections`;
+            }
 
             if(!this.isChainSynced) {
               this.percentSynced = "syncing...";
