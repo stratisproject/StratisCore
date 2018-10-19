@@ -1,69 +1,43 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
-import { Subscription } from 'rxjs';
-import 'rxjs/add/operator/retryWhen';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/do';
+import { AppConfig } from './app.config';
 
 import { ApiService } from './shared/services/api.service';
 import { GlobalService } from './shared/services/global.service';
 import { ElectronService } from 'ngx-electron';
 
+import 'rxjs/add/operator/retryWhen';
+import 'rxjs/add/operator/delay';
+
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 
 export class AppComponent implements OnInit {
-    constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
+  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) {}
+  private errorMessage: any;
+  private responseMessage: any;
+  public loading: boolean = true;
 
-    private subscription: Subscription;
-    private readonly MaxRetryCount = 5;
+  ngOnInit() {
+    this.setTitle();
+    this.apiService.getWalletFiles().delay(5000).retryWhen(errors => errors.delay(2000)).subscribe(() => this.startApp());
+  }
 
-    loading = true;
-    loadingFailed = false;
+  private startApp() {
+    this.loading = false;
+    this.router.navigate(['/login']);
+  }
 
-    ngOnInit() {
-        this.setTitle();
-        this.tryStart();
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-    }
-
-    //Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
-    private tryStart() {
-        let retry = 0;
-        const stream$ = this.apiService.getWalletFiles().
-            retryWhen(errors =>
-                errors.delay(5000)
-                    .do(errorStatus => {
-                        if (retry++ === this.MaxRetryCount) {
-                            throw errorStatus;
-                        }
-                        console.log(`Retrying ${retry}...`);
-                    })
-            );
-
-        this.subscription = stream$.subscribe(_ =>
-            this.router.navigate(['/login']),
-            _ => {
-                console.log('Failed to start wallet');
-                this.loading = false;
-                this.loadingFailed = true;
-            },
-            () => this.loading = false);
-    }
-
-    private setTitle() {
-        let applicationName = "Stratis Core";
-        let applicationVersion = this.electronService.remote.app.getVersion();
-        let releaseCycle = "beta";
-        let newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
-        this.titleService.setTitle(newTitle);
-    }
+  private setTitle() {
+    let applicationName = "Stratis Core";
+    let applicationVersion = this.electronService.remote.app.getVersion();
+    let releaseCycle = "beta";
+    let newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
+    this.titleService.setTitle(newTitle);
+  }
 }
