@@ -7,7 +7,7 @@
 # 5. start the app
 
 $env:current_folder = $PSScriptRoot
-$env:APPVEYOR_BUILD_FOLDER = $env:current_folder + "\.."
+$env:BUILD_FOLDER = $env:current_folder + "\.."
 
 $env:win_runtime = "win-x64" # win-x32
 $env:configuration = "Release" # Debug
@@ -15,7 +15,7 @@ $env:arch = "x64" # ia32
 $env:plat = "win32"
 $env:app_output_name = "app"
 
-cd $env:APPVEYOR_BUILD_FOLDER
+cd $env:BUILD_FOLDER
 dir
 Write-Host "Installing dependencies" -foregroundcolor "magenta"     
 Write-Host "--> git submodule" -foregroundcolor "magenta"
@@ -23,7 +23,7 @@ Write-Host "--> git submodule" -foregroundcolor "magenta"
 git submodule update --init --recursive
 
 Write-Host "--> npm install" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/StratisCore.UI
+cd $env:BUILD_FOLDER/StratisCore.UI
 npm install --verbose
 
 Write-Host "--> npm install npx" -foregroundcolor "magenta"
@@ -39,19 +39,19 @@ if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 Write-Host "*--------------------------------*" -foregroundcolor "magenta"
 Write-Host "current environment variables:" -foregroundcolor "magenta"
 Write-Host "Windows runtime: $env:win_runtime" -foregroundcolor "magenta"
-Write-Host "Build directory: $env:APPVEYOR_BUILD_FOLDER" -foregroundcolor "magenta"
+Write-Host "Build directory: $env:BUILD_FOLDER" -foregroundcolor "magenta"
 Write-Host "Configuration: $env:configuration" -foregroundcolor "magenta"
 Write-Host "*--------------------------------*" -foregroundcolor "magenta"
 
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
     
 Write-Host "running 'dotnet publish'" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/StratisBitcoinFullNode/src/Stratis.StratisD
-dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:APPVEYOR_BUILD_FOLDER\StratisCore.UI\daemon
+cd $env:BUILD_FOLDER/StratisBitcoinFullNode/src/Stratis.StratisD
+dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:BUILD_FOLDER\StratisCore.UI\daemon
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
 Write-Host "building StratisCore.UI" -foregroundcolor "magenta"
-cd $env:APPVEYOR_BUILD_FOLDER/StratisCore.UI
+cd $env:BUILD_FOLDER/StratisCore.UI
 npm run build:prod
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
       
@@ -68,3 +68,6 @@ dir
 Write-Host "[$env:configuration][$env:win_runtime] Done! Your installer is:" -foregroundcolor "green"
 Get-ChildItem -Path "*.exe" | foreach-object {$_.Fullname}
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+
+
+Read-Host "Press ENTER to exit"

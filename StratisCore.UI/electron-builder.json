@@ -10,7 +10,7 @@
     "target": [
       "nsis"
     ],
-    "artifactName": "${productName}-v${version}-setup-${os}-${env.arch}.${ext}"
+    "artifactName": "${productName}-v${version}-setup-${os}-${arch}.${ext}"
   },
   "linux": {
     "icon": "dist/assets/images/",
