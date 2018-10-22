@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
+import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/delay';
@@ -9,7 +10,6 @@ import 'rxjs/add/operator/do';
 
 import { ApiService } from './shared/services/api.service';
 import { GlobalService } from './shared/services/global.service';
-import { ElectronService } from 'ngx-electron';
 
 @Component({
     selector: 'app-root',
@@ -21,7 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
 
     private subscription: Subscription;
-    private readonly MaxRetryCount = 5;
+    private readonly MaxRetryCount = 20;
+    private readonly TryDelayMilliseconds = 3000;
 
     loading = true;
     loadingFailed = false;
@@ -40,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
         let retry = 0;
         const stream$ = this.apiService.getWalletFiles().
             retryWhen(errors =>
-                errors.delay(5000)
+                errors.delay(this.TryDelayMilliseconds)
                     .do(errorStatus => {
                         if (retry++ === this.MaxRetryCount) {
                             throw errorStatus;
