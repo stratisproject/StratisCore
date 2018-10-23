@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
+import { HttpClientModule } from '@angular/common/http';
 
 import { SharedModule } from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
@@ -13,6 +14,9 @@ import { MenuComponent } from './menu/menu.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HistoryComponent } from './history/history.component';
 import { StatusBarComponent } from './status-bar/status-bar.component';
+import { AdvancedComponent } from './advanced/advanced.component';
+import { AdvancedService } from '../wallet/advanced/advanced.service';
+import { FeedbackComponent } from './advanced/feedback/feedback.component';
 
 @NgModule({
   imports: [
@@ -23,14 +27,20 @@ import { StatusBarComponent } from './status-bar/status-bar.component';
     NgbModule,
     ReactiveFormsModule,
     WalletRoutingModule,
-    ColdStakingModule
+    ColdStakingModule,
+    HttpClientModule,
   ],
   declarations: [
     WalletComponent,
     MenuComponent,
     DashboardComponent,
     HistoryComponent,
-    StatusBarComponent
+    StatusBarComponent,
+    AdvancedComponent,
+    FeedbackComponent
+  ],
+  providers: [
+    AdvancedService
   ],
   exports: []
 })
