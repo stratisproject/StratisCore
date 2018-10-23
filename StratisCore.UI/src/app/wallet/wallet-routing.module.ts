@@ -5,6 +5,7 @@ import { WalletComponent }   from './wallet.component';
 import { HistoryComponent } from './history/history.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ColdStakingOverviewComponent } from './cold-staking/components/overview/overview.component';
+import { AdvancedComponent } from './advanced/advanced.component';
 
 const routes: Routes = [
   { path: '', component: WalletComponent,
@@ -12,16 +13,18 @@ const routes: Routes = [
         { path: '', redirectTo:'dashboard', pathMatch:'full' },
         { path: 'dashboard', component: DashboardComponent},
         { path: 'history', component: HistoryComponent},
-        { path: 'staking', component: ColdStakingOverviewComponent }
-        ]
+        { path: 'staking', component: ColdStakingOverviewComponent },
+        { path: 'advanced', component: AdvancedComponent }
+    ]
   },
   { path: 'stratis-wallet', component: WalletComponent,
         children: [
         { path: '', redirectTo:'dashboard', pathMatch:'full' },
         { path: 'dashboard', component: DashboardComponent},
         { path: 'history', component: HistoryComponent},
-        { path: 'staking', component: ColdStakingOverviewComponent }
-        ]
+        { path: 'staking', component: ColdStakingOverviewComponent },
+        { path: 'advanced', component: AdvancedComponent }
+    ]
   }
 ];
 
