@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/observable/empty';
 
 import { GlobalService } from '../../shared/services/global.service';
-import { NavigationService, Page } from '../../shared/services/navigation.service';
+import { ElectronService } from 'ngx-electron';
 
 class dateRequest {
     constructor(public date: Date){}
@@ -17,10 +17,9 @@ export class AdvancedService {
     private readonly accountName = 'account 0';
     private headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-    constructor(private httpClient: HttpClient, private globalService: GlobalService, navigationService: NavigationService) { 
+    constructor(private httpClient: HttpClient, private globalService: GlobalService, private electronService: ElectronService) { 
         this.walletName = this.globalService.getWalletName();
-
-        navigationService.pageSubject.subscribe(x => this.urlPrefix = `http://localhost:3722${x}/api/Wallet/`);
+        this.urlPrefix = `http://localhost:${electronService.ipcRenderer.sendSync('get-port')}/api/Wallet/`;
     }
 
     public getExtPubKey(): Observable<string> {
