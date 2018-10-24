@@ -27,7 +27,7 @@
                 <div style="margin-left: 30px">
                     <label class="label">Resync</label>
                     <div style="display:flex; flex-direction:row">
-                        <ngb-datepicker [(ngModel)]="resyncDate" [outsideDays]="hidden" [minDate]="minResyncDate" [maxDate]="maxResyncDate" style="outline:none; border:none"
+                        <ngb-datepicker [(ngModel)]="resyncDate" [minDate]="minResyncDate" [maxDate]="maxResyncDate" style="outline:none; border:none"
                             formControlName="datePickerControl"></ngb-datepicker>
                         <button [disabled]="!resyncDate" style="margin-left: 5px; align-self:flex-start; height:34px" (click)="resync()" class="btn btn-darkgray btn-sm"
                             type="button">Go</button>
