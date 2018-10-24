@@ -14,7 +14,6 @@ import { SerialDisposable } from '../../../app/shared/classes/serialDisposable';
   styleUrls: ['./advanced.component.css']
 })
 export class AdvancedComponent implements OnInit, OnDestroy {
-    private addressCount = '';
     private extPubKeySubs = new SerialDisposable();
     private generateAddressesSubs = new SerialDisposable();
     private resyncSubs = new SerialDisposable();
@@ -25,6 +24,7 @@ export class AdvancedComponent implements OnInit, OnDestroy {
         this.setResyncDates();
     }
 
+    addressCount = '';
     icoFormGroup: FormGroup;
     extPubKey = '';
     extPubKeyLoadingState = new LoadingState();  
