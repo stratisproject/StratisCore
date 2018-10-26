@@ -17,6 +17,8 @@ import { StatusBarComponent } from './status-bar/status-bar.component';
 import { AdvancedComponent } from './advanced/advanced.component';
 import { AdvancedService } from '../wallet/advanced/advanced.service';
 import { FeedbackComponent } from './advanced/feedback/feedback.component';
+import { SmartContractsComponent } from './smart-contracts/smart-contracts.component';
+import { AddressBookComponent } from './address-book/address-book.component';
 
 @NgModule({
   imports: [
@@ -37,7 +39,9 @@ import { FeedbackComponent } from './advanced/feedback/feedback.component';
     HistoryComponent,
     StatusBarComponent,
     AdvancedComponent,
-    FeedbackComponent
+    FeedbackComponent,
+    SmartContractsComponent,
+    AddressBookComponent
   ],
   providers: [
     AdvancedService
