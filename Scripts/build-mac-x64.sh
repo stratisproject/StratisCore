@@ -2,9 +2,9 @@
 
 arch=x64
 configuration=Release  
-os_platform=linux
-log_prefix=LINUX-BUILD
-build_directory=$(dirname $(dirname "$0"))
+os_platform=osx
+log_prefix=MAC-BUILD
+build_directory=$(dirname $PWD) #$(dirname $(dirname "$0"))
 
 # exit if error
 set -o errexit
@@ -49,7 +49,7 @@ npm run build:prod
 
 # node packaging
 echo $log_prefix packaging StratisCore.UI 
-npx electron-builder build --linux --$arch
+npx electron-builder build --mac --$arch
 echo $log_prefix finished packaging
 
 echo $log_prefix contents of build_directory
