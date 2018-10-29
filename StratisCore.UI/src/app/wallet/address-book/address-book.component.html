@@ -1,3 +1,32 @@
-<p>
-  address-book works!
-</p>
+<section class="col-12">
+    <div class="row" *ngFor="let addressRow of addresses">
+        <div class="card col-12 my-1">
+            <div class="card-body">
+                <dl class="row d-flex align-items-center">
+                    <dt class="col-3">{{addressRow.name}}</dt>
+                    <dd class="col-6">
+                        <div class="myAddress d-inline">
+                            <code class="d-inline-block">{{addressRow.address}}</code>
+                            <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
+                                data-toggle="tooltip" data-placement="right" title="Copy to Clipboard" (click)="copyToClipboardClicked(addressRow)">
+                                <i class="lnr lnr-file-add"></i>
+                            </button>
+                        </div>
+                    </dd>
+                    <dd class="col-3 text-right">
+                        <button type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendClicked(addressRow)">Send</button>
+                        <div ngbDropdown class="d-inline-block">
+                            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle></button>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal"
+                                    data-target="#modalEditAddress"><i class="lnr lnr-pencil mr-2"></i> Edit</button>
+                                <button class="dropdown-item d-flex align-items-center" type="button"><i class="lnr lnr-trash mr-2"></i>
+                                    Remove</button>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</section>
