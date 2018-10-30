@@ -24,7 +24,8 @@ export class MenuComponent implements OnDestroy {
             { 'displayName': 'Advanced', 'routerLink': '/wallet/advanced', 'isEnabled': true, 'featureName': '' },
             { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': false, 'featureName': 'coldstakingfeature' },
             { 'displayName': 'Dashboard', 'routerLink': '/wallet', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'History', 'routerLink': '/wallet/history', 'isEnabled': true, 'featureName': '' }
+            { 'displayName': 'History', 'routerLink': '/wallet/history', 'isEnabled': true, 'featureName': '' },
+            { 'displayName': 'Smart Contracts', 'routerLink': '/wallet/smart-contracts', 'isEnabled': true, 'featureName': '' }
         ];
 
         this.walletName = this.globalService.getWalletName();
