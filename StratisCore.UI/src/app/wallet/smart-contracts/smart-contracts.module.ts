@@ -4,21 +4,18 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { SmartContractsServiceBase, FakeSmartContractsService } from './smart-contracts.service';
 import { SmartContractsComponent } from './components/smart-contracts.component';
 
 @NgModule({
     imports: [
         CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule
     ],
-    //providers: [{ provide: ColdStakingServiceBase, useClass: FakeColdStakingService }],
+
+    providers: [{ provide: SmartContractsServiceBase, useClass: FakeSmartContractsService }],
 
     declarations: [
         SmartContractsComponent
     ]
-
-    // entryComponents: [ColdStakingCreateAddressComponent,
-    //     ColdStakingWithdrawComponent,
-    //     ColdStakingCreateComponent,
-    //     ColdStakingCreateSuccessComponent]
 })
 export class SmartContractsModule { }
