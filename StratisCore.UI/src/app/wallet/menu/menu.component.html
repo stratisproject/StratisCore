@@ -1,7 +1,7 @@
 <section id="GUI" class="light">
     <nav class="navbar navbar-light bg-light justify-content-between">
 
-        <ul class="nav list-inline mr-auto col-5">
+        <ul class="nav list-inline col-5">
             <li *ngFor="let option of tabOptions" class="nav-item list-inline-item">
                 <a class="nav-link" routerLink="{{option.routerLink}}">{{option.displayName}}</a>
             </li>
@@ -13,10 +13,10 @@
             </a>
         </span>
 
-        <form class="form-inline col-1" style="max-width: none">
+        <form class="form-inline col-5" style="max-width: none">
             <div class="btn-group navbar-text ml-auto">
                 <div ngbDropdown class="d-inline-block">
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{walletName}}</button>
+                    <button class="btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle>{{walletName}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                         <button *ngFor="let option of dropdownOptions" class="dropdown-item d-flex align-items-center"
                             type="button" (click)="optionClicked(option)">{{option.displayName}}</button>

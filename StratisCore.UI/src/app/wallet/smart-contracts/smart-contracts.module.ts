@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SmartContractsServiceBase, FakeSmartContractsService } from './smart-contracts.service';
 import { SmartContractsComponent } from './components/smart-contracts.component';
+import { CallTransactionComponent } from './components/modals/call-transaction/call-transaction.component';
+import { CreateNewTransactionComponent } from './components/modals/create-new-transaction/create-new-transaction.component';
 
 @NgModule({
     imports: [
@@ -15,7 +17,13 @@ import { SmartContractsComponent } from './components/smart-contracts.component'
     providers: [{ provide: SmartContractsServiceBase, useClass: FakeSmartContractsService }],
 
     declarations: [
-        SmartContractsComponent
+        SmartContractsComponent,
+        CallTransactionComponent,
+        CreateNewTransactionComponent
+    ],
+
+    entryComponents: [
+        CallTransactionComponent, CreateNewTransactionComponent
     ]
 })
 export class SmartContractsModule { }

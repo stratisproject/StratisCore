@@ -1,0 +1,75 @@
+<div class="modal-header">
+    <h5 class="modal-title">Call Transaction</h5>
+    <!-- button close -->
+    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
+        <i class="lnr lnr-cross-circle"></i>
+    </button>
+    <!-- /button close -->
+</div>
+
+<div class="modal-body">
+    <form>
+        <div class="form-group clearfix">
+            <label for="">Sender</label>
+            <select class="form-control">
+                <option>SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn</option>
+                <option selected>SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn</option>
+                <option>SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn</option>
+            </select>
+        </div>
+        <div class="mt-1 mb-3">Balance : <strong data-toggle="tooltip" data-placement="top" title=""
+                data-original-title="Set maximum amount" class="btn-link">18,900.07<small>
+                    STRAT</small></strong></div>
+        <div class="form-group clearfix">
+            <label class="float-left" for="Amount">Amount</label>
+            <input type="text" class="form-control" id="Amount" placeholder="Amount" value="180.68" required>
+        </div>
+        <div class="row">
+            <div class="form-group col-6 clearfix">
+                <label class="float-left" for="GasPrice">Gas Price</label>
+                <input type="text" class="form-control" id="GasPrice" placeholder="Gas Price" value="" required>
+            </div>
+            <div class="form-group col-6 clearfix">
+                <label class="float-left" for="GasLimit">Gas Limit</label>
+                <input type="text" class="form-control" id="GasLimit" placeholder="Gas Limit" value="" required>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-12" for="">Parameters</label>
+            <div class="mb-2 col-6 clearfix">
+                <select class="form-control form-control-sm">
+                    <option>Type 1</option>
+                    <option selected>Type 2</option>
+                    <option>Type 3</option>
+                </select>
+            </div>
+            <div class="mb-2 col-4 clearfix">
+                <input type="text" class="form-control form-control-sm" id="Value" placeholder="value" value=""
+                    required>
+            </div>
+            <div class="col-2 d-flex align-items-start justify-content-center">
+                <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" data-toggle="tooltip"
+                    data-placement="right" title="" data-original-title="Remove"><i class="lnr lnr-cross"></i></button>
+            </div>
+        </div>
+        <div class="mt-2 mb-4 d-flex justify-content-end">
+            <button type="button" class="btn btn-outline-secondary"><i class="lnr lnr-plus-circle"></i>
+                Add a parameter</button>
+        </div>
+        <div class="form-group clearfix">
+            <label for="destinationAddress">Method Name</label>
+            <input type="text" class="form-control" id="" placeholder="Method" value="" required>
+        </div>
+        <div class="form-group clearfix">
+            <label for="destinationAddress">Destination Address</label>
+            <input type="text" class="form-control" id="destinationAddress" placeholder="Please enter the destination address here."
+                value="3d14065z6d31qfzfgzdz" required>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
+    <button type="button" data-toggle="modal" data-target="#" class="btn btn-purple btn-block" data-dismiss="modal">Call
+        transaction</button>
+</div>

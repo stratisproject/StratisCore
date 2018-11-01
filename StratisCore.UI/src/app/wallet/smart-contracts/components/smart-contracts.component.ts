@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ClipboardService } from 'ngx-clipboard';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { SmartContractsServiceBase } from '../smart-contracts.service';
 import { GlobalService } from '../../../shared/services/global.service';
-import { ClipboardService } from 'ngx-clipboard';
+import { CallTransactionComponent } from './modals/call-transaction/call-transaction.component';
+import { CreateNewTransactionComponent } from './modals/create-new-transaction/create-new-transaction.component';
 
 export class ContractItem {
     amountFormatted = '';
@@ -21,7 +24,8 @@ export class SmartContractsComponent implements OnInit {
     private walletName = '';
     private balanceSubscription: Subscription;
 
-    constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService) {
+    constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
+        private modalService: NgbModal) {
         this.walletName = this.globalService.getWalletName();
     }
 
@@ -43,9 +47,11 @@ export class SmartContractsComponent implements OnInit {
     }
 
     callTransactionClicked() {
+        this.modalService.open(CallTransactionComponent);
     }
 
     createNewTransactionClicked() {
+        this.modalService.open(CreateNewTransactionComponent);
     }
 
     contractClicked(contract: ContractItem) {
