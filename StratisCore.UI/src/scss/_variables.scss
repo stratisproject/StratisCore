@@ -75,6 +75,7 @@ $warning:       $yellow !default;
 $danger:        $red !default;
 $light:         $gray-500 !default;
 $dark:          $gray-800 !default;
+$purple:        $purple !default;
 
 $theme-colors: () !default;
 $theme-colors: map-merge((
@@ -87,7 +88,9 @@ $theme-colors: map-merge((
   "light":      $light,
   "dark":       $dark,
   "hot":        $hot,
-  "cold":       $cold
+  "cold":       $cold,
+  "lighter":    $gray-100,
+  "purple":    $purple
 ), $theme-colors);
 // stylelint-enable
 
@@ -495,8 +498,8 @@ $dropdown-border-width:             $border-width !default;
 $dropdown-divider-bg:               $gray-200 !default;
 $dropdown-box-shadow:               0 .5rem 1rem rgba($black,.175) !default;
 
-$dropdown-link-color:               $gray-900 !default;
-$dropdown-link-hover-color:         darken($gray-900, 5%) !default;
+$dropdown-link-color:               $gray-600 !default;
+$dropdown-link-hover-color:         $primary !default;
 $dropdown-link-hover-bg:            $gray-100 !default;
 
 $dropdown-link-active-color:        $component-active-color !default;
@@ -783,7 +786,7 @@ $breadcrumb-padding-y:              .75rem !default;
 $breadcrumb-padding-x:              1rem !default;
 $breadcrumb-item-padding:           .5rem !default;
 
-$breadcrumb-margin-bottom:          1rem !default;
+$breadcrumb-margin-bottom:          0 !default;
 
 $breadcrumb-bg:                     transparent !default;
 $breadcrumb-divider-color:          $gray-600 !default;

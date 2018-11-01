@@ -19,13 +19,16 @@ export class MenuComponent implements OnDestroy {
 
     constructor(private modalService: NgbModal, private globalService: GlobalService, private featuresService: FeaturesService, private router: Router) {
 
-        this.options = [
-            { 'displayName': 'Address Book', 'routerLink': '/wallet/address-book', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'Advanced', 'routerLink': '/wallet/advanced', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': false, 'featureName': 'coldstakingfeature' },
+        this.tabOptions = [
             { 'displayName': 'Dashboard', 'routerLink': '/wallet', 'isEnabled': true, 'featureName': '' },
+            { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': true, 'featureName': 'coldstakingfeature' },
             { 'displayName': 'History', 'routerLink': '/wallet/history', 'isEnabled': true, 'featureName': '' },
             { 'displayName': 'Smart Contracts', 'routerLink': '/wallet/smart-contracts', 'isEnabled': true, 'featureName': '' }
+        ];
+
+        this.dropdownOptions = [
+            { 'displayName': 'Advanced', 'routerLink': '/wallet/advanced', 'isEnabled': true, 'featureName': '' },
+            { 'displayName': 'Address Book', 'routerLink': '/wallet/address-book', 'isEnabled': true, 'featureName': '' }
         ];
 
         this.walletName = this.globalService.getWalletName();
@@ -36,10 +39,10 @@ export class MenuComponent implements OnDestroy {
 
     walletName: string;
     coldStakingEnabled = false;
-    options: Option[];
-    enabledOptions: Option[];
+    tabOptions: Option[];
+    dropdownOptions: Option[];
 
-    logOut() {
+    logoutClicked() {
         this.modalService.open(LogoutConfirmationComponent, { backdrop: "static" });
     }
 
@@ -55,14 +58,12 @@ export class MenuComponent implements OnDestroy {
     }
 
     private processEnabledFeatures(features: string[]) {
-        features.forEach(feature => {
-            const featureName = feature.toLowerCase();
-            const option = this.options.filter(o => o.featureName).find(o => o.displayName === featureName);
-            if (option) {
-                option.isEnabled = true;
-            }
-        });
-
-        this.enabledOptions = this.options.filter(x => x.isEnabled);
+        // features.forEach(feature => {
+        //     const featureName = feature.toLowerCase();
+        //     const option = this.tabOptions.filter(o => o.featureName).find(o => o.displayName === featureName);
+        //     if (option) {
+        //         option.isEnabled = true;
+        //     }
+        // });
     }
 }

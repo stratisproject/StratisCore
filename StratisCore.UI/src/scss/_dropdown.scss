@@ -29,6 +29,12 @@
   border: $dropdown-border-width solid $dropdown-border-color;
   @include border-radius($border-radius);
   @include box-shadow($dropdown-box-shadow);
+
+  // added for latest version
+  &.dropdown-menu-right {
+    right: 0 !important;
+    left: auto;
+  }
 }
 
 // Allow for dropdowns to go bottom up (aka, dropup-menu)
