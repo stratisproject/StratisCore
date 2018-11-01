@@ -175,9 +175,6 @@ img {pointer-events: none !important;}
       padding: 1.125rem 1.25rem 0;
       background-color: $white;
     }
-    .card-body {
-      dl, dt, dd {margin-bottom: 0;}
-    }
   }
 
   // no caret
@@ -449,6 +446,11 @@ img {pointer-events: none !important;}
     flex-direction: column;
     justify-content: center;
     overflow: auto;
+    // special addresses
+    .tab-content {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }  
   }
   .myAddress {
     .btn {&:hover {cursor: pointer;}}
