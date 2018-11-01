@@ -58,10 +58,17 @@ img {pointer-events: none !important;}
       a {
         &:hover {
           cursor: pointer;
-          .lnr-exit {color: $primary;}
+          .lnr {color: $primary;}
         }
-        .lnr-exit {
-          font-size: 1.5rem;
+        .lnr {
+          font-size: 1.25rem;
+          color: $gray-500;
+        }
+      }
+      .dropdown-menu {
+        .lnr {
+          margin-right: .5rem;
+          font-size: 1rem;
           color: $gray-500;
         }
       }
@@ -168,6 +175,16 @@ img {pointer-events: none !important;}
       padding: 1.125rem 1.25rem 0;
       background-color: $white;
     }
+    .card-body {
+      dl, dt, dd {margin-bottom: 0;}
+    }
+  }
+
+  // no caret
+  .dropdown-menu-nocaret {
+    .dropdown-toggle::after {
+    display:none;
+}
   }
 
   // Toggle
@@ -381,7 +398,10 @@ img {pointer-events: none !important;}
 
 /// MODALS
 .modal {
-  label {color: $gray-600;}
+  label {
+    color: $black;
+    margin-bottom: .25rem !important;
+  }
   .alert {text-align: center !important;}
   .blockID {
     word-wrap: break-word;
@@ -396,8 +416,17 @@ img {pointer-events: none !important;}
     user-select: auto !important;
   }
   .btn-group {
+      label {color: $white;}
+    &.fee {
+      label {
+        margin-bottom: 0 !important;
+        &.btn-outline-danger {color: $red;}
+        &.btn-outline-warning {color: $yellow;}
+        &.btn-outline-success {color: $green;}
+        &.active {color: $white !important;}
+      }
+    }
     label {
-      color: $gray-700;
       &:hover {color: $white;}
       input {
         position: absolute;
@@ -413,7 +442,6 @@ img {pointer-events: none !important;}
   .modal-title {
     font-size: 2rem;
     font-weight: 300;
-    text-transform: capitalize;
   }
   .modal-dialog {
     min-height: calc(100vh - 60px);
@@ -456,6 +484,87 @@ img {pointer-events: none !important;}
     padding: .5em;
     border-bottom: 1px dotted #ccc;
   }
+}
+// for cross-chain modal look
+.purple-shadow {
+  .modal-content {
+    border: 1px solid $purple !important;
+    box-shadow: 0 5px 20px 0 rgba($purple,.4) !important;
+  }
+}
+
+// for cross-chain modal look
+.purple-shadow {
+  .modal-content {
+    border: 1px solid $purple !important;
+    box-shadow: 0 5px 20px 0 rgba($purple,.4) !important;
+  }
+}
+
+////// Smart Contracts
+.smartcontracts {
+  .card {
+    min-height: 120px;
+    &:hover {border-color: $purple !important;}
+
+    .card-header {padding: 1rem 1.25rem;}
+    .card-body {padding: 0rem 1rem 1rem 1rem;}
+    .sub {
+      font-size: ($font-size-base * 2);
+      margin-bottom: 0 !important;
+      strong {font-weight: 600;}
+      small {
+        font-weight: light;
+        font-size: 50%;
+      }
+    }
+    // table
+    .table {
+      margin: 1rem 0 !important;
+      th {
+        color: #A6AFB4;
+        font-weight: normal;
+        text-transform: uppercase;
+      }
+      td {
+        padding: .75rem .25rem !important;
+        vertical-align: middle;
+        // amount
+        strong {color: $black;}
+        small {color: rgba($black, .7);}
+        // see details
+        .btn-primary {
+          border-radius: 50%;
+          background-color: rgba($primary, .1);
+          color: $primary;
+          border: $border-width solid transparent;
+          padding: 0;
+          width: 18px;
+          height: 18px;
+          &:hover {
+            background-color: $primary;
+            color: $white;
+          }
+        }
+      }
+      .badge-info {
+        color: #95B1C2;
+        background-color: rgba(#C0DCED,.3);
+        border: $border-width solid #C0DCED;
+      }
+    }
+  }
+}
+
+// <pre> styling
+.code-block {
+  padding: .5rem;
+  border-radius: $border-radius-lg;
+  background-color: rgba($purple, .05);
+  color: rgba($purple, .8);
+  overflow-wrap: break-word;
+  display: inline-block;
+  margin: .5rem 0 0;
 }
 
 ////// LOGIN

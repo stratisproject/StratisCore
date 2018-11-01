@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { ColdStakingModule } from './cold-staking/cold-staking.module';
+import { SmartContractsModule } from './smart-contracts/smart-contracts.module';
 
 import { WalletComponent } from './wallet.component';
 import { MenuComponent } from './menu/menu.component';
@@ -17,7 +18,6 @@ import { StatusBarComponent } from './status-bar/status-bar.component';
 import { AdvancedComponent } from './advanced/advanced.component';
 import { AdvancedService } from '../wallet/advanced/advanced.service';
 import { FeedbackComponent } from './advanced/feedback/feedback.component';
-import { SmartContractsComponent } from './smart-contracts/smart-contracts.component';
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddressBookService } from './address-book/address-book-service';
 
@@ -31,6 +31,7 @@ import { AddressBookService } from './address-book/address-book-service';
     ReactiveFormsModule,
     WalletRoutingModule,
     ColdStakingModule,
+    SmartContractsModule,
     HttpClientModule,
   ],
   declarations: [
@@ -41,7 +42,6 @@ import { AddressBookService } from './address-book/address-book-service';
     StatusBarComponent,
     AdvancedComponent,
     FeedbackComponent,
-    SmartContractsComponent,
     AddressBookComponent
   ],
   providers: [
