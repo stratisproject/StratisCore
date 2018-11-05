@@ -16,7 +16,7 @@ export abstract class SmartContractsServiceBase {
 }
 
 @Injectable()
-export class FakeSmartContractsService {
+export class FakeSmartContractsService implements SmartContractsServiceBase {
     GetBalance(walletName: string): Observable<number> { return Observable.of(10898026); }
 
     GetAddress(walletName: string): Observable<string> { return Observable.of('SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn'); }

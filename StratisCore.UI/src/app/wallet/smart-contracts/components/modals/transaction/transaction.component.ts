@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
-import { NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '../../../../../shared/services/global.service';
 import { SmartContractsServiceBase } from '../../../smart-contracts.service';
 import { Observable } from 'rxjs';
@@ -37,18 +37,12 @@ export class TransactionComponent implements OnInit {
     byteCode = '';
     @Input() mode: Mode;
 
-    get title(): string {
-        return `${this.prefixText} Transaction`;
-    }
-    get buttonText(): string {
-        return `${this.prefixText} transaction`;
-    }
+    get title(): string { return `${this.prefixText} Transaction`; }
+    get buttonText(): string { return `${this.prefixText} transaction`; }
     get amountControl(): AbstractControl { return this.theFormGroup.get('amountControl'); }
     get gasPriceControl(): AbstractControl { return this.theFormGroup.get('gasPriceControl'); }
     get gasLimitControl(): AbstractControl { return this.theFormGroup.get('gasLimitControl'); }
-    get isValid(): boolean {
-        return (this.amount && this.gasPrice && this.gasLimit && this.methodName && this.destinationAddress) ? true : false;
-    }
+    get isValid(): boolean { return (this.amount && this.gasPrice && this.gasLimit && this.methodName && this.destinationAddress) ? true : false; }
 
     ngOnInit() {
         this.registerControls();
