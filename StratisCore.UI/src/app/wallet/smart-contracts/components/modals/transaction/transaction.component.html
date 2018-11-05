@@ -1,7 +1,7 @@
 <div>
 
     <div class="modal-header">
-        <h5 class="modal-title">Call Transaction</h5>
+        <h5 class="modal-title">{{title}}</h5>
         <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
             <i class="lnr lnr-cross-circle"></i>
         </button>
@@ -54,24 +54,39 @@
                 <button type="button" class="btn btn-outline-secondary" (click)="addParameterClicked()"><i class="lnr lnr-plus-circle"></i>
                     Add a parameter</button>
             </div>
-            <div class="form-group clearfix">
-                <!-- <label for="destinationAddress">Method Name</label> -->
-                <input [(ngModel)]="methodName" type="text" class="form-control" id="" placeholder="Method"
-                    [ngModelOptions]="{standalone: true}">
+
+            <div>
+                <div *ngIf="mode === modeEnum.Call">
+                    <div class="form-group clearfix">
+                        <!-- <label for="destinationAddress">Method Name</label> -->
+                        <input [(ngModel)]="methodName" type="text" class="form-control" id="" placeholder="Method"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
+                    <div class="form-group clearfix">
+                        <!-- <label for="destinationAddress">Destination Address</label> -->
+                        <input [(ngModel)]="destinationAddress" type="text" class="form-control" id="destinationAddress"
+                            placeholder="Destination Address" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div *ngIf="mode === modeEnum.Create">
+                    <div class="form-group clearfix">
+                        <label class="float-left" for="">Byte Code</label>
+                        <span class="float-right">
+                            <button type="button" class="btn btn-link d-inline-block ml-2 btn-sm" data-toggle="tooltip"
+                                data-placement="right" title="" data-original-title="Copy to Clipboard">Copy</button>
+                        </span>
+                        <textarea class="form-control form-control-sm" id="" rows="5">{{byteCode}}</textarea>
+                    </div>
+                </div>
             </div>
-            <div class="form-group clearfix">
-                <!-- <label for="destinationAddress">Destination Address</label> -->
-                <input [(ngModel)]="destinationAddress" type="text" class="form-control" id="destinationAddress"
-                    placeholder="Destination Address" [ngModelOptions]="{standalone: true}">
-            </div>
+
         </form>
     </div>
 
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
         <button type="button" data-toggle="modal" data-target="#" class="btn btn-purple btn-block" data-dismiss="modal"
-            [disabled]="!isValid">Call
-            transaction</button>
+            [disabled]="!isValid">{{buttonText}}</button>
     </div>
 
 </div>
