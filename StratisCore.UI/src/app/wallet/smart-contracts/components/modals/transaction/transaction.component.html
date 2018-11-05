@@ -1,0 +1,92 @@
+<div>
+
+    <div class="modal-header">
+        <h5 class="modal-title">{{title}}</h5>
+        <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
+            <i class="lnr lnr-cross-circle"></i>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <form [formGroup]="theFormGroup">
+            <div class="form-group clearfix">
+                <label for="">Sender</label>
+                <select class="form-control" [(ngModel)]="selectedSenderAddress" [ngModelOptions]="{standalone: true}">
+                    <option *ngFor="let address of senderAddresses">{{address}}</option>
+                </select>
+            </div>
+            <div class="mt-1 mb-3">Balance : <strong data-toggle="tooltip" data-placement="top" title=""
+                    data-original-title="Set maximum amount" class="btn-link">{{balance}}<small>
+                        STRAT</small></strong></div>
+            <div class="form-group clearfix">
+                <input formControlName="amountControl" type="text" class="form-control" placeholder="Amount">
+            </div>
+            <div class="row">
+                <div class="form-group col-6 clearfix">
+                    <input formControlName="gasPriceControl" type="text" class="form-control" placeholder="Gas Price">
+                </div>
+                <div class="form-group col-6 clearfix">
+                    <input formControlName="gasLimitControl" type="text" class="form-control" placeholder="Gas Limit">
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-12" for="">Parameters</label>
+                <div style="display:block; margin-left:auto; margin-right:auto">
+                    <div class="row" *ngFor="let parameter of parameters">
+                        <div class="mb-2 col-6">
+                            <select class="form-control form-control-sm">
+                                <option *ngFor="let type of parameterTypes">{{type}}</option>
+                            </select>
+                        </div>
+                        <div class="mb-2 col-4">
+                            <input type="text" class="form-control form-control-sm" id="Value" placeholder="value"
+                                value="" required>
+                        </div>
+                        <div class="col-2 d-flex align-items-start justify-content-center">
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal"
+                                data-toggle="tooltip" (click)="removeParameterClicked(parameter)" data-placement="right"
+                                title="" data-original-title="Remove"><i class="lnr lnr-cross"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2 mb-4 d-flex justify-content-end">
+                <button type="button" class="btn btn-outline-secondary" (click)="addParameterClicked()"><i class="lnr lnr-plus-circle"></i>
+                    Add a parameter</button>
+            </div>
+
+            <div>
+                <div *ngIf="mode === modeEnum.Call">
+                    <div class="form-group clearfix">
+                        <!-- <label for="destinationAddress">Method Name</label> -->
+                        <input [(ngModel)]="methodName" type="text" class="form-control" id="" placeholder="Method"
+                            [ngModelOptions]="{standalone: true}">
+                    </div>
+                    <div class="form-group clearfix">
+                        <!-- <label for="destinationAddress">Destination Address</label> -->
+                        <input [(ngModel)]="destinationAddress" type="text" class="form-control" id="destinationAddress"
+                            placeholder="Destination Address" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div *ngIf="mode === modeEnum.Create">
+                    <div class="form-group clearfix">
+                        <label class="float-left" for="">Byte Code</label>
+                        <span class="float-right">
+                            <button type="button" class="btn btn-link d-inline-block ml-2 btn-sm" data-toggle="tooltip"
+                                data-placement="right" title="" data-original-title="Copy to Clipboard">Copy</button>
+                        </span>
+                        <textarea class="form-control form-control-sm" id="" rows="5">{{byteCode}}</textarea>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
+        <button type="button" data-toggle="modal" data-target="#" class="btn btn-purple btn-block" data-dismiss="modal"
+            [disabled]="!isValid">{{buttonText}}</button>
+    </div>
+
+</div>

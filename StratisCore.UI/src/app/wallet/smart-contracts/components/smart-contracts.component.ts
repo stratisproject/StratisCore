@@ -5,8 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { SmartContractsServiceBase } from '../smart-contracts.service';
 import { GlobalService } from '../../../shared/services/global.service';
-import { CallTransactionComponent } from './modals/call-transaction/call-transaction.component';
-import { CreateNewTransactionComponent } from './modals/create-new-transaction/create-new-transaction.component';
+import { TransactionComponent, Mode } from './modals/transaction/transaction.component';
 
 export class ContractItem {
     amountFormatted = '';
@@ -47,11 +46,13 @@ export class SmartContractsComponent implements OnInit {
     }
 
     callTransactionClicked() {
-        this.modalService.open(CallTransactionComponent);
+        const modal = this.modalService.open(TransactionComponent);
+        (<TransactionComponent>modal.componentInstance).mode = Mode.Call;
     }
 
     createNewTransactionClicked() {
-        this.modalService.open(CreateNewTransactionComponent);
+        const modal = this.modalService.open(TransactionComponent);
+        (<TransactionComponent>modal.componentInstance).mode = Mode.Create;
     }
 
     contractClicked(contract: ContractItem) {
