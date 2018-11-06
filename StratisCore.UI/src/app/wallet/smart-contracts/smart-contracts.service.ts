@@ -23,7 +23,8 @@ export class SmartContractsService implements SmartContractsServiceBase
     constructor(private apiService: ApiService) { }
 
     GetBalance(walletName: string): Observable<number> {
-        return Observable.of(10898026);
+        return this.apiService.getAccountBalance(walletName)
+            .map(response => response.json());
     }    
     
     GetAddress(walletName: string): Observable<string> {

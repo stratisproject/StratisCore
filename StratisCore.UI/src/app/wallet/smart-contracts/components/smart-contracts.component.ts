@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,19 +21,19 @@ export class ContractItem {
 })
 export class SmartContractsComponent implements OnInit {
     private walletName = '';
-    private balanceSubscription: Subscription;
 
     constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
         private modalService: NgbModal) {
         this.walletName = this.globalService.getWalletName();
+        this.balance = this.smartContractsService.GetBalance(this.walletName);
     }
 
-    balance = '';
+    balance: Observable<number>;
     address = '';
     contracts: ContractItem[];
 
     ngOnInit() {
-        this.getBalance();
+        this.balance.subscribe();
         this.smartContractsService.GetAddress(this.walletName).subscribe(x => this.address = x);
         this.smartContractsService.GetContracts(this.walletName).subscribe(x =>
             this.contracts = x.map(c => new ContractItem(c.blockId, c.type, c.hash, c.destinationAddress, c.amount)));
@@ -56,13 +56,5 @@ export class SmartContractsComponent implements OnInit {
     }
 
     contractClicked(contract: ContractItem) {
-    }
-
-    private getBalance() {
-        if (this.balanceSubscription) {
-            this.balanceSubscription.unsubscribe();
-        }
-        this.balanceSubscription = this.smartContractsService.GetBalance(this.walletName)
-            .subscribe(x => this.balance = x.toLocaleString());
     }
 }
