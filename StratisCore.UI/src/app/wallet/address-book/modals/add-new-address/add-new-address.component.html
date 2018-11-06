@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h5 class="modal-title">New Address</h5>
+    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
+        <i class="lnr lnr-cross-circle"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form>
+        <label for="yourAddress">Label</label>
+        <div class="input-group">
+            <input [(ngModel)]="label" type="text" class="form-control" placeholder="Insert label"
+                    [ngModelOptions]="{standalone: true}">
+        </div>
+        <small id="passwordHelpBlock" class="form-text text-muted">
+            Your label must be 2-40 characters long.
+        </small>
+        <div class="row mb-3"></div>
+        <label for="yourAddress">Address</label>
+        <div class="myAddress">
+            <div class="input-group">
+                <input [(ngModel)]="address" type="text" class="form-control" placeholder="Insert new address"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
+    <button type="button" data-toggle="modal" data-target="#modalValidation" class="btn btn-primary btn-block"
+        data-dismiss="modal" [disabled]="!isValid" (click)="createClicked()">Create</button>
+</div>

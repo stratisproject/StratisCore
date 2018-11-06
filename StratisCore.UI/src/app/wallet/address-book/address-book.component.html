@@ -1,5 +1,9 @@
 <section id="GUI" class="light">
     <section id="content" class="light col-10 mx-auto">
+        <div class="col text-right">
+            <button class="btn btn-link mb-2" style="display: inline-block" (click)="addNewAddressClicked()">+
+                Add New Address</button>
+        </div>
         <section class="col-12">
             <div class="row" *ngFor="let addressRow of addresses">
                 <div class="card col-12 my-1">
@@ -17,7 +21,7 @@
                             </dd>
                             <dd class="col-3 text-right">
                                 <button type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendClicked(addressRow)">Send</button>
-                                <button type="button" class="btn btn-lighter btn-sm ml-2"><i class="lnr lnr-trash"></i></button>
+                                <button type="button" class="btn btn-lighter btn-sm ml-2" (click)="removeClicked(addressRow)"><i class="lnr lnr-trash"></i></button>
                             </dd>
                         </dl>
                     </div>
