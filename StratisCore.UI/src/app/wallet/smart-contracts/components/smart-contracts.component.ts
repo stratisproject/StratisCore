@@ -67,13 +67,19 @@ export class SmartContractsComponent implements OnInit {
     }
 
     callTransactionClicked() {
-        const modal = this.modalService.open(TransactionComponent);
-        (<TransactionComponent>modal.componentInstance).mode = Mode.Call;
+        this.showModal(Mode.Call);
     }
 
     createNewTransactionClicked() {
+        this.showModal(Mode.Create);
+    }
+
+    showModal(mode: Mode)
+    {
         const modal = this.modalService.open(TransactionComponent);
-        (<TransactionComponent>modal.componentInstance).mode = Mode.Create;
+        (<TransactionComponent>modal.componentInstance).mode = mode;
+        (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
+        (<TransactionComponent>modal.componentInstance).balance = this.balance.toLocaleString();
     }
 
     contractClicked(contract: ContractItem) {
