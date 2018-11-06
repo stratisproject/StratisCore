@@ -43,6 +43,32 @@ export class ApiService {
             .map((response: Response) => response.json());
     }
 
+    getAddressBookAddresses(skip: number, take: number): Observable<any> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('skip', skip.toString());
+        params.set('take', take.toString());
+        return this.http
+            .get(this.stratisApiUrl + '/AddressBook', new RequestOptions({headers: this.headers, search: params}))
+            .map((response: Response) => response.json());
+    }
+
+    addAddressBookAddress(label: string, address: string): Observable<any> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('label', label);
+        params.set('address', address);
+        return this.http
+            .post(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, search: params}))
+            .map((response: Response) => response.json());
+    }
+
+    removeAddressBookAddress(label: string): Observable<any> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('label', label);
+        return this.http
+            .post(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, search: params}))
+            .map((response: Response) => response.json());
+    }
+
     /**
      * Gets available wallets at the default path
      */

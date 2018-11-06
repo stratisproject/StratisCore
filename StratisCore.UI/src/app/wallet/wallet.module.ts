@@ -20,6 +20,7 @@ import { AdvancedService } from '../wallet/advanced/advanced.service';
 import { FeedbackComponent } from './advanced/feedback/feedback.component';
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddressBookService } from './address-book/address-book-service';
+import { AddNewAddressComponent } from './address-book/modals/add-new-address/add-new-address.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { AddressBookService } from './address-book/address-book-service';
     StatusBarComponent,
     AdvancedComponent,
     FeedbackComponent,
-    AddressBookComponent
+    AddressBookComponent,
+    AddNewAddressComponent
   ],
   providers: [
     AdvancedService, AddressBookService
