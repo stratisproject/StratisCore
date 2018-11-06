@@ -4,7 +4,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { SmartContractsServiceBase, SmartContractsService, FakeSmartContractsService } from './smart-contracts.service';
+import { SmartContractsServiceBase, FakeSmartContractsService } from './smart-contracts.service';
 import { SmartContractsComponent } from './components/smart-contracts.component';
 import { TransactionComponent } from './components/modals/transaction/transaction.component';
 
@@ -13,7 +13,7 @@ import { TransactionComponent } from './components/modals/transaction/transactio
         CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule
     ],
 
-    providers: [{ provide: SmartContractsServiceBase, useClass: SmartContractsService }],
+    providers: [{ provide: SmartContractsServiceBase, useClass: FakeSmartContractsService }],
 
     declarations: [
         SmartContractsComponent,

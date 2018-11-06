@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription, Observable, Subject } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -20,68 +20,49 @@ export class ContractItem {
     styleUrls: ['./smart-contracts.component.css']
 })
 export class SmartContractsComponent implements OnInit {
-    
     private walletName = '';
-    addresses: string[];
-    addressChangedSubject: Subject<string>;
-    balance: string;
-    contracts: ContractItem[];
-    selectedAddress: string;
+    private balanceSubscription: Subscription;
 
     constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
         private modalService: NgbModal) {
-
         this.walletName = this.globalService.getWalletName();
-        this.addressChangedSubject = new Subject();
-
-        this.smartContractsService
-            .GetAddresses(this.walletName)
-            .subscribe(addresses => {
-                if (addresses && addresses.length > 0) {
-                    this.addressChangedSubject.next(addresses[0]);
-                    this.addresses = addresses;
-                }
-        });
-
-        this.addressChangedSubject
-            .flatMap(x => this.smartContractsService.GetAddressBalance(x))
-            .map(balance => balance.toLocaleString())
-            .subscribe(balance => this.balance = balance);
-
-        this.addressChangedSubject.subscribe(address => this.selectedAddress = address);
     }
 
+    balance = '';
+    address = '';
+    contracts: ContractItem[];
+
     ngOnInit() {
+        this.getBalance();
+        this.smartContractsService.GetAddress(this.walletName).subscribe(x => this.address = x);
         this.smartContractsService.GetContracts(this.walletName).subscribe(x =>
             this.contracts = x.map(c => new ContractItem(c.blockId, c.type, c.hash, c.destinationAddress, c.amount)));
     }
 
-    addressChanged(address: string) {
-        this.addressChangedSubject.next(address);
-    }
-
     clipboardAddressClicked() {
-        if (this.selectedAddress && this.clipboardService.copyFromContent(this.selectedAddress)) {
-            console.log(`Copied ${this.selectedAddress} to clipboard`);
+        if (this.address && this.clipboardService.copyFromContent(this.address)) {
+            console.log(`Copied ${this.address} to clipboard`);
         }
     }
 
     callTransactionClicked() {
-        this.showModal(Mode.Call);
+        const modal = this.modalService.open(TransactionComponent);
+        (<TransactionComponent>modal.componentInstance).mode = Mode.Call;
     }
 
     createNewTransactionClicked() {
-        this.showModal(Mode.Create);
-    }
-
-    showModal(mode: Mode)
-    {
         const modal = this.modalService.open(TransactionComponent);
-        (<TransactionComponent>modal.componentInstance).mode = mode;
-        (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
-        (<TransactionComponent>modal.componentInstance).balance = this.balance.toLocaleString();
+        (<TransactionComponent>modal.componentInstance).mode = Mode.Create;
     }
 
     contractClicked(contract: ContractItem) {
+    }
+
+    private getBalance() {
+        if (this.balanceSubscription) {
+            this.balanceSubscription.unsubscribe();
+        }
+        this.balanceSubscription = this.smartContractsService.GetBalance(this.walletName)
+            .subscribe(x => this.balance = x.toLocaleString());
     }
 }

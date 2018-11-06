@@ -11,7 +11,9 @@
         <form [formGroup]="theFormGroup">
             <div class="form-group clearfix">
                 <label for="">Sender</label>
-                <input class="form-control" [(ngModel)]="selectedSenderAddress" [ngModelOptions]="{standalone: true}" [readonly]="true" />
+                <select class="form-control" [(ngModel)]="selectedSenderAddress" [ngModelOptions]="{standalone: true}">
+                    <option *ngFor="let address of senderAddresses">{{address}}</option>
+                </select>
             </div>
             <div class="mt-1 mb-3">Balance : <strong data-toggle="tooltip" data-placement="top" title=""
                     data-original-title="Set maximum amount" class="btn-link">{{balance}}<small>

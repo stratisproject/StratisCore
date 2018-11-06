@@ -54,6 +54,18 @@ export class TransactionComponent implements OnInit {
         this.registerControls();
 
         const walletName = this.globalService.getWalletName();
+        this.smartContractsService.GetSenderAddresses(walletName).subscribe(x => {
+            this.senderAddresses = x;
+            if (this.senderAddresses.length) {
+                this.selectedSenderAddress = this.senderAddresses[0];
+            }
+        });
+        this.smartContractsService.GetBalance(walletName).subscribe(x => {
+            this.balanceNumber = x;
+            this.balance = this.balanceNumber.toLocaleString();
+        });
+        this.smartContractsService.GetParameterTypes(walletName).subscribe(x => this.parameterTypes = x);
+        this.smartContractsService.GetByteCode(walletName).subscribe(x => this.byteCode = x);
     }
 
     closeClicked() {
