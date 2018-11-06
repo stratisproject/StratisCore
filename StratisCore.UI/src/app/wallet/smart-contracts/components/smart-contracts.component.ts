@@ -24,7 +24,7 @@ export class SmartContractsComponent implements OnInit {
     private walletName = '';
     addresses: string[];
     addressChangedSubject: Subject<string>;
-    balance: Observable<number>;
+    balance: string;
     contracts: ContractItem[];
     selectedAddress: string;
 
@@ -43,10 +43,12 @@ export class SmartContractsComponent implements OnInit {
                 }
         });
 
-        this.balance = this.addressChangedSubject
-            .flatMap(x => this.smartContractsService.GetAddressBalance(x));
+        this.addressChangedSubject
+            .flatMap(x => this.smartContractsService.GetAddressBalance(x))
+            .map(balance => balance.toLocaleString())
+            .subscribe(balance => this.balance = balance);
 
-        this.addressChangedSubject.subscribe(address => this.selectedAddress = address)
+        this.addressChangedSubject.subscribe(address => this.selectedAddress = address);
     }
 
     ngOnInit() {
