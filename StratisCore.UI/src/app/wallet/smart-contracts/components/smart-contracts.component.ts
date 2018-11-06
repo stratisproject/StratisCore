@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, Subject } from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -35,8 +35,6 @@ export class SmartContractsComponent implements OnInit {
     contracts: ContractItem[];
 
     ngOnInit() {
-        this.balance.subscribe();
-        this.address.subscribe(x => this.addressString = x);
         this.smartContractsService.GetContracts(this.walletName).subscribe(x =>
             this.contracts = x.map(c => new ContractItem(c.blockId, c.type, c.hash, c.destinationAddress, c.amount)));
     }

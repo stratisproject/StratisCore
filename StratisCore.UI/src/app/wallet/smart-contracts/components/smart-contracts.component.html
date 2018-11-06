@@ -20,7 +20,7 @@
                             <div class="card-header">My address</div>
                             <div class="card-body d-flex align-items-center">
                                 <div class="myAddress d-inline">
-                                    <code class="d-inline-block">{{addressString}}</code>
+                                    <code class="d-inline-block">{{ address | async}}</code>
                                     <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
                                         data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
                                         (click)="clipboardAddressClicked()">
