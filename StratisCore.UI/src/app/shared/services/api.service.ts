@@ -285,4 +285,16 @@ export class ApiService {
         .post(this.stratisApiUrl + '/node/shutdown', {headers: this.headers})
         .map((response: Response) => response);
     }
+
+    /*
+     * Get the active smart contract wallet address.
+     */
+    getAccountAddress(walletName: string): Observable<Response> {
+
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', walletName);
+
+      return this.http
+        .get(this.stratisApiUrl + '/smartcontractwallet/account-address', new RequestOptions({headers: this.headers, search: params}));
+    }
 }
