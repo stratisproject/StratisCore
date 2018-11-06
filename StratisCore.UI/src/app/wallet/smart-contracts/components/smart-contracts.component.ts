@@ -20,15 +20,20 @@ export class ContractItem {
     styleUrls: ['./smart-contracts.component.css']
 })
 export class SmartContractsComponent implements OnInit {
+    
     private walletName = '';
-    addressString: string;
     addresses: string[];
     addressChangedSubject: Subject<string>;
+    balance: Observable<number>;
+    contracts: ContractItem[];
+    selectedAddress: string;
 
     constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
         private modalService: NgbModal) {
-        this.addressChangedSubject = new Subject();
+
         this.walletName = this.globalService.getWalletName();
+        this.addressChangedSubject = new Subject();
+
         this.smartContractsService
             .GetAddresses(this.walletName)
             .subscribe(addresses => {
@@ -36,14 +41,13 @@ export class SmartContractsComponent implements OnInit {
                     this.addressChangedSubject.next(addresses[0]);
                     this.addresses = addresses;
                 }
-            });
+        });
 
         this.balance = this.addressChangedSubject
             .flatMap(x => this.smartContractsService.GetAddressBalance(x));
-    }
 
-    balance: Observable<number>;
-    contracts: ContractItem[];
+        this.addressChangedSubject.subscribe(address => this.selectedAddress = address)
+    }
 
     ngOnInit() {
         this.smartContractsService.GetContracts(this.walletName).subscribe(x =>
@@ -55,8 +59,8 @@ export class SmartContractsComponent implements OnInit {
     }
 
     clipboardAddressClicked() {
-        if (this.addressString && this.clipboardService.copyFromContent(this.addressString)) {
-            console.log(`Copied ${this.addressString} to clipboard`);
+        if (this.selectedAddress && this.clipboardService.copyFromContent(this.selectedAddress)) {
+            console.log(`Copied ${this.selectedAddress} to clipboard`);
         }
     }
 
