@@ -21,27 +21,29 @@ export class ContractItem {
 })
 export class SmartContractsComponent implements OnInit {
     private walletName = '';
+    addressString: string;
 
     constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
         private modalService: NgbModal) {
         this.walletName = this.globalService.getWalletName();
         this.balance = this.smartContractsService.GetBalance(this.walletName);
+        this.address = this.smartContractsService.GetAddress(this.walletName);
     }
 
     balance: Observable<number>;
-    address = '';
+    address: Observable<string>;
     contracts: ContractItem[];
 
     ngOnInit() {
         this.balance.subscribe();
-        this.smartContractsService.GetAddress(this.walletName).subscribe(x => this.address = x);
+        this.address.subscribe(x => this.addressString = x);
         this.smartContractsService.GetContracts(this.walletName).subscribe(x =>
             this.contracts = x.map(c => new ContractItem(c.blockId, c.type, c.hash, c.destinationAddress, c.amount)));
     }
 
     clipboardAddressClicked() {
-        if (this.address && this.clipboardService.copyFromContent(this.address)) {
-            console.log(`Copied ${this.address} to clipboard`);
+        if (this.addressString && this.clipboardService.copyFromContent(this.addressString)) {
+            console.log(`Copied ${this.addressString} to clipboard`);
         }
     }
 
