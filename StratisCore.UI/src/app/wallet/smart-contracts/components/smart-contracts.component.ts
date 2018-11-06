@@ -22,21 +22,36 @@ export class ContractItem {
 export class SmartContractsComponent implements OnInit {
     private walletName = '';
     addressString: string;
+    addresses: string[];
+    addressChangedSubject: Subject<string>;
 
     constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
         private modalService: NgbModal) {
+        this.addressChangedSubject = new Subject();
         this.walletName = this.globalService.getWalletName();
-        this.balance = this.smartContractsService.GetBalance(this.walletName);
-        this.address = this.smartContractsService.GetAddress(this.walletName);
+        this.smartContractsService
+            .GetAddresses(this.walletName)
+            .subscribe(addresses => {
+                if (addresses && addresses.length > 0) {
+                    this.addressChangedSubject.next(addresses[0]);
+                    this.addresses = addresses;
+                }
+            });
+
+        this.balance = this.addressChangedSubject
+            .flatMap(x => this.smartContractsService.GetAddressBalance(x));
     }
 
     balance: Observable<number>;
-    address: Observable<string>;
     contracts: ContractItem[];
 
     ngOnInit() {
         this.smartContractsService.GetContracts(this.walletName).subscribe(x =>
             this.contracts = x.map(c => new ContractItem(c.blockId, c.type, c.hash, c.destinationAddress, c.amount)));
+    }
+
+    addressChanged(address: string) {
+        this.addressChangedSubject.next(address);
     }
 
     clipboardAddressClicked() {

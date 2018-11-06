@@ -23,6 +23,7 @@ import { TransactionSending } from '../classes/transaction-sending';
  */
 @Injectable()
 export class ApiService {
+
     constructor(private http: Http, private globalService: GlobalService, private electronService: ElectronService) {
       this.setApiPort();
     };
@@ -298,6 +299,14 @@ export class ApiService {
         .get(this.stratisApiUrl + '/smartcontractwallet/account-address', new RequestOptions({headers: this.headers, search: params}));
     }
 
+    getAccountAddresses(walletName: string): any {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', walletName);
+
+      return this.http
+        .get(this.stratisApiUrl + '/smartcontractwallet/account-addresses', new RequestOptions({headers: this.headers, search: params}));
+    }
+
     /*
      * Get the balance of the active smart contract address.
      */
@@ -308,5 +317,17 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/smartcontractwallet/account-balance', new RequestOptions({headers: this.headers, search: params}));
+    }
+
+        /*
+     * Get the balance of the active smart contract address.
+     */
+    getAddressBalance(address: string): Observable<Response> {
+
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('address', address);
+
+      return this.http
+        .get(this.stratisApiUrl + '/smartcontractwallet/address-balance', new RequestOptions({headers: this.headers, search: params}));
     }
 }
