@@ -43,6 +43,15 @@ export class ApiService {
             .map((response: Response) => response.json());
     }
 
+    getAddressBookAddresses(skip: number, take: number): Observable<any> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('skip', skip.toString());
+        params.set('take', take.toString());
+        return this.http
+            .get(this.stratisApiUrl + '/AddressBook', new RequestOptions({headers: this.headers, search: params}))
+            .map((response: Response) => response.json());
+    }
+
     /**
      * Gets available wallets at the default path
      */

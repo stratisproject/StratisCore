@@ -20,7 +20,7 @@ export class AddressBookComponent implements OnInit {
     addresses: Address[];
 
     ngOnInit() {
-        this.addressBookService.GetAddresses(this.globalService.getWalletName())
+        this.addressBookService.GetAddresses(0,0)
             .subscribe(x => this.addresses = x.map(a => new Address(a.name, a.address)));
     }
 
