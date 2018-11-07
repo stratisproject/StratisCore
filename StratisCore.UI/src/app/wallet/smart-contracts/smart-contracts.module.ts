@@ -14,7 +14,7 @@ import { AddNewAddressComponent } from '../address-book/modals/add-new-address/a
         CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule
     ],
 
-    providers: [{ provide: SmartContractsServiceBase, useClass: SmartContractsService }],
+    providers: [{ provide: SmartContractsServiceBase, useClass: FakeSmartContractsService }],
 
     declarations: [
         SmartContractsComponent,

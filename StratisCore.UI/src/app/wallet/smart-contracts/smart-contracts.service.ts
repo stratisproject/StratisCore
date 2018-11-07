@@ -77,7 +77,7 @@ export class SmartContractsService implements SmartContractsServiceBase
 }
 
 @Injectable()
-export class FakeSmartContractsService {
+export class FakeSmartContractsService implements SmartContractsServiceBase {
     GetBalance(walletName: string): Observable<number> { return Observable.of(10898026); }
 
     GetAddress(walletName: string): Observable<string> { return Observable.of('SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn'); }
@@ -111,5 +111,17 @@ export class FakeSmartContractsService {
 
     GetByteCode(walletName: string): Observable<string> {
         return Observable.of('4D5A90000300000004000000FFFF0000B800000000000000400000000000000000000000000000000000000000000000000000000000000000000000800000000E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F742062652072756E20696E20444F53206D6F64652E0D0D0A240000000000000050');
+    }
+
+    GetAddresses(walletName: string): Observable<string[]> { 
+        return Observable.of([
+            'SarP7wvxZmaG7t1UAjaxyB6RNT9FV1Z2Sn',
+            'SbrP8wvxZmaG7t2UAjbxyB7RNT9FV1Z2Sn',
+            'ScrP9wvxZmaG7t3UAjcxyB8RNT9FV1Z2Sn'
+        ]); 
+    }
+
+    GetAddressBalance(address: string): Observable<number> { 
+        return Observable.of(10898026);
     }
 }
