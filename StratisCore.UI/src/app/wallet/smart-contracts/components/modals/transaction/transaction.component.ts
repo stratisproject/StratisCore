@@ -42,7 +42,14 @@ export class TransactionComponent implements OnInit {
     get amountControl(): AbstractControl { return this.theFormGroup.get('amountControl'); }
     get gasPriceControl(): AbstractControl { return this.theFormGroup.get('gasPriceControl'); }
     get gasLimitControl(): AbstractControl { return this.theFormGroup.get('gasLimitControl'); }
-    get isValid(): boolean { return (this.amount && this.gasPrice && this.gasLimit && this.methodName && this.destinationAddress) ? true : false; }
+    get isValid(): boolean { 
+        if (this.mode === Mode.Call) {
+            return (this.amount && this.gasPrice && this.gasLimit && this.methodName && this.destinationAddress) ? true : false;
+        }
+        if (this.mode === Mode.Create) {
+            return (this.amount && this.gasPrice && this.gasLimit) ? true : false;
+        }
+    }
 
     ngOnInit() {
         this.registerControls();
