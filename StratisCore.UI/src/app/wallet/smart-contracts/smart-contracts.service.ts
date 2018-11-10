@@ -31,11 +31,12 @@ export abstract class SmartContractsServiceBase {
 @Injectable()
 export class SmartContractsService implements SmartContractsServiceBase
 {
+    constructor(private apiService: ApiService) { }
+
     GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> {
         return this.apiService.getAccountHistory(walletName, address)
             .map(response => response.json());
     }
-    constructor(private apiService: ApiService) { }
 
     GetBalance(walletName: string): Observable<number> {
         return this.apiService.getAccountBalance(walletName)

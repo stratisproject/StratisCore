@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SmartContractsServiceBase, ContractTransactionItem } from '../smart-contracts.service';
 import { GlobalService } from '../../../shared/services/global.service';
 import { TransactionComponent, Mode } from './modals/transaction/transaction.component';
+import { ModalService } from '../../../shared/services/modal.service';
 
 export class ContractItem {
     amountFormatted = '';
@@ -30,8 +31,11 @@ export class SmartContractsComponent implements OnInit {
     history: ContractTransactionItem[];
     coinUnit: string;
 
-    constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
-        private modalService: NgbModal) {
+    constructor(private globalService: GlobalService, 
+        private smartContractsService: SmartContractsServiceBase,
+        private clipboardService: ClipboardService,
+        private modalService: NgbModal,
+        private genericModalService: ModalService) {
         
         this.coinUnit = this.globalService.getCoinUnit();
         this.walletName = this.globalService.getWalletName();
@@ -39,41 +43,44 @@ export class SmartContractsComponent implements OnInit {
 
         this.smartContractsService
             .GetAddresses(this.walletName)
+            .catch(error => Observable.throw(error.json().errors[0].message))
             .subscribe(addresses => {
                 if (addresses && addresses.length > 0) {
                     this.addressChangedSubject.next(addresses[0]);
                     this.addresses = addresses;
                 }
-        });
+            },
+            error => this.showApiError("Error retrieving addresss. " + error));
 
         this.addressChangedSubject
-            .flatMap(x => this.smartContractsService.GetAddressBalance(x)
-                .catch(e => {
-                    console.log("Error retrieving balance");
-                    return Observable.of(0);
-                })
-            )
-            .subscribe(balance => this.balance = balance);
+                .flatMap(x => this.smartContractsService.GetAddressBalance(x)
+                    .catch(error => Observable.throw(error.json().errors[0].message))
+                )
+                .subscribe(balance => this.balance = balance,
+                    error => this.showApiError("Error retrieving balance. " + error)
+                );                
 
         this.addressChangedSubject
             .flatMap(address => this.smartContractsService.GetHistory(this.walletName, address)
-                .catch(e => {
-                    console.log("Error retrieving history");
-                    return Observable.of([]);
-                })
+                .catch(error => Observable.throw(error.json().errors[0].message))
             )
-            .subscribe(history => {
-                console.log("loading history");
-                this.history = history;
-            });
+            .subscribe(history => this.history = history,
+                error => this.showApiError("Error retrieving transactions. " + error));
 
 
         this.addressChangedSubject.subscribe(address => this.selectedAddress = address);
     }
 
     ngOnInit() {
-        this.smartContractsService.GetContracts(this.walletName).subscribe(x =>
-            this.contracts = x.map(c => new ContractItem(c.blockId, c.type, c.hash, c.destinationAddress, c.amount)));
+        this.smartContractsService
+            .GetContracts(this.walletName)
+            .subscribe(x =>
+                this.contracts = x.map(c => new ContractItem(c.blockId, c.type, c.hash, c.destinationAddress, c.amount)));
+    }
+
+    showApiError(error: string)
+    {
+        this.genericModalService.openModal("Error", error);
     }
 
     addressChanged(address: string) {
