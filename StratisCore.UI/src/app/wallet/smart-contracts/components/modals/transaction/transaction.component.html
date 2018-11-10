@@ -16,14 +16,26 @@
                         data-original-title="Set maximum amount" class="btn-link" [balance]="balance" [coinUnit]="coinUnit"></sc-balance>
                 </div>
                 <div class="form-group clearfix">
-                    <input formControlName="amount" type="text" class="form-control" placeholder="Amount">
+                    <input formControlName="amount" type="number" class="form-control" placeholder="Amount" [class.is-invalid]="amount.invalid && (amount.dirty || amount.touched)">
+                    <div *ngIf="amount.errors" class="invalid-feedback">
+                        <p *ngIf="amount.errors.amountError">Amount must be less than your balance</p>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-6 clearfix">
-                        <input formControlName="gasPrice" type="text" class="form-control" placeholder="Gas Price">
+                        <input formControlName="gasPrice" type="number" class="form-control" placeholder="Gas Price" [class.is-invalid]="gasPrice.invalid && (gasPrice.dirty || gasPrice.touched)">
+                        <div *ngIf="gasPrice.errors" class="invalid-feedback">
+                            <p *ngIf="gasPrice.errors.gasPriceTooLowError">Gas price must be greater than {{ gasPriceMinimum }}</p>
+                            <p *ngIf="gasPrice.errors.gasPriceTooHighError">Gas price must be less than {{ gasPriceMaximum }}</p>
+                        </div>
                     </div>
                     <div class="form-group col-6 clearfix">
-                        <input formControlName="gasLimit" type="text" class="form-control" placeholder="Gas Limit">
+                        <input formControlName="gasLimit" type="number" class="form-control" placeholder="Gas Limit" [class.is-invalid]="gasLimit.invalid && (gasLimit.dirty || gasLimit.touched)">
+                        <div *ngIf="gasLimit.errors" class="invalid-feedback">
+                            <p *ngIf="gasLimit.errors.gasCallLimitTooLowError">Gas call limit must be greater than {{ gasCallLimitMinimum }}</p>
+                            <p *ngIf="gasLimit.errors.gasCreateLimitTooLowError">Gas create limit must be greater than {{ gasCreateLimitMinimum }}</p>
+                            <p *ngIf="gasLimit.errors.gasLimitTooHighError">Gas limit must be less than {{ gasLimitMaximum }}</p>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -66,7 +78,8 @@
                                 type="text" 
                                 class="form-control"
                                 id=""
-                                placeholder="Method">
+                                placeholder="Method"
+                                [class.is-invalid]="methodName.invalid && (methodName.dirty || methodName.touched)">
                         </div>
                         <div class="form-group clearfix">
                             <!-- <label for="destinationAddress">Destination Address</label> -->
@@ -74,7 +87,8 @@
                                    formControlName="destinationAddress"
                                    class="form-control"
                                    id="destinationAddress"
-                                   placeholder="Destination Address">
+                                   placeholder="Destination Address"
+                                   [class.is-invalid]="destinationAddress.invalid && (destinationAddress.dirty || destinationAddress.touched)">
                         </div>
                     </div>
                     <div *ngIf="mode === modeEnum.Create">
@@ -84,7 +98,9 @@
                                 <button type="button" class="btn btn-link d-inline-block ml-2 btn-sm" data-toggle="tooltip"
                                     data-placement="right" title="" data-original-title="Copy to Clipboard">Copy</button>
                             </span>
-                            <textarea class="form-control form-control-sm" id="" rows="5" formControlName="byteCode">{{byteCode}}</textarea>
+                            <textarea class="form-control form-control-sm" id="" rows="5" formControlName="byteCode"
+                                [class.is-invalid]="byteCode.invalid && (byteCode.dirty || byteCode.touched)"
+                                >{{byteCode}}</textarea>
                         </div>
                     </div>
                 </div>

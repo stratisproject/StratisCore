@@ -36,6 +36,12 @@ export class TransactionComponent implements OnInit {
     coinUnit: string;
     @Input() mode: Mode;
 
+    gasCallLimitMinimum = 10000;
+    gasCreateLimitMinimum = 12000;
+    gasLimitMaximum = 100000;
+    gasPriceMinimum = 1;
+    gasPriceMaximum = 10000;
+
     get title(): string { return `${this.prefixText} Transaction`; }
     get buttonText(): string { return `${this.prefixText} transaction`; }
 
@@ -77,13 +83,20 @@ export class TransactionComponent implements OnInit {
     }
 
     private registerControls() {
-        const limitAmount = control => Number(control.value) > this.balance ? { amountError: true } : null;
+        const amountValidator = control => Number(control.value) > this.balance ? { amountError: true } : null;
+        const gasPriceTooLowValidator = control => Number(control.value) < this.gasPriceMinimum ? { gasPriceTooLowError: true } : null;
+        const gasPriceTooHighValidator = control => Number(control.value) > this.gasPriceMaximum  ? { gasPriceTooHighError: true } : null;
+        const gasLimitMaximumValidator = control => Number(control.value) > this.gasLimitMaximum  ? { gasLimitTooHighError: true } : null;
+        const gasCallLimitMinimumValidator = control => Number(control.value) < this.gasCallLimitMinimum  ? { gasCallLimitTooLowError: true } : null;
+        const gasCreateLimitMinimumValidator = control => Number(control.value) < this.gasCreateLimitMinimum ? { gasCreateLimitTooLowError: true } : null;
 
         const integerValidator = Validators.pattern('^[1-9][0-9]*$');
-        
-        this.amount = new FormControl('', [Validators.required, integerValidator, limitAmount]);
-        this.gasPrice = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$')]);
-        this.gasLimit = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$')]);
+
+        let gasLimitValidator = (this.mode === Mode.Call ? gasCallLimitMinimumValidator : gasCreateLimitMinimumValidator);
+
+        this.amount = new FormControl('', [Validators.required, integerValidator, amountValidator]);
+        this.gasPrice = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator]);
+        this.gasLimit = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator]);
         this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
         this.byteCode = new FormControl('', [Validators.required, Validators.nullValidator]);
         this.parameters = new FormArray([]);
