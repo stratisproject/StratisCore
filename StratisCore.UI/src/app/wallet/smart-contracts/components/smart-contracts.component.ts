@@ -28,10 +28,12 @@ export class SmartContractsComponent implements OnInit {
     contracts: ContractItem[];
     selectedAddress: string;
     history: ContractTransactionItem[];
+    coinUnit: string;
 
     constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
         private modalService: NgbModal) {
-
+        
+        this.coinUnit = this.globalService.getCoinUnit();
         this.walletName = this.globalService.getWalletName();
         this.addressChangedSubject = new Subject();
 
@@ -98,6 +100,7 @@ export class SmartContractsComponent implements OnInit {
         (<TransactionComponent>modal.componentInstance).mode = mode;
         (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
         (<TransactionComponent>modal.componentInstance).balance = this.balance;
+        (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
     }
 
     contractClicked(contract: ContractItem) {

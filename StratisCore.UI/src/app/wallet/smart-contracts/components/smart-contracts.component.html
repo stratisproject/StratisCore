@@ -10,8 +10,8 @@
                             <div class="card-header">Balance</div>
                             <div class="card-body d-flex align-items-center">
                                 <p class="sub">
-                                    
-                                    <strong>{{ (balance | coinNotation) || (0 | coinNotation)}}</strong><small> STRAT</small></p>
+                                    <sc-balance [balance]="balance" [coinUnit]="coinUnit"></sc-balance>                                    
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                                 <td><span class="badge badge-info">{{item.type}}</span></td>
                                 <td><a href="#" data-toggle="modal" data-target="#modalInfotx">{{item.hash}}</a></td>
                                 <td><code class="d-inline-block">{{item.to}}</code></td>
-                                <td><strong>{{ (item.amount | coinNotation)  || (0 | coinNotation)}}</strong><small> STRAT</small></td>
+                                <td><sc-balance [balance]="balance" [coinUnit]="coinUnit"></sc-balance></td>
                                 <td><button data-toggle="modal" data-target="#modalInfotx" data-toggle="tooltip"
                                         data-placement="top" title="" data-original-title="See details" class="btn btn-primary btn-sm"
                                         type="button" (click)="contractClicked(contract)">+</button></td>

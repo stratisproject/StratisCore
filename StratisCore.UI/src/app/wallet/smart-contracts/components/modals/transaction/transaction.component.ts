@@ -34,6 +34,7 @@ export class TransactionComponent implements OnInit {
     methodName = '';
     destinationAddress = '';
     byteCode = '';
+    coinUnit: string;
     @Input() mode: Mode;
 
     get title(): string { return `${this.prefixText} Transaction`; }
