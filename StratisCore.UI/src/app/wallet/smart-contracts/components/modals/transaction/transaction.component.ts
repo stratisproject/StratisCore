@@ -17,7 +17,6 @@ export class Parameter {
     styleUrls: ['./transaction.component.css']
 })
 export class TransactionComponent implements OnInit {
-    private balanceNumber: number;
 
     constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase,
                     private activeModal: NgbActiveModal, private formBuilder: FormBuilder) { }
@@ -28,7 +27,7 @@ export class TransactionComponent implements OnInit {
     parameterTypes: string[] = [];
     parameters: Parameter[] = [];
     selectedSenderAddress = '';
-    balance = '';
+    balance = 0;
     amount = '';
     gasPrice = '';
     gasLimit = '';
@@ -78,7 +77,7 @@ export class TransactionComponent implements OnInit {
     }
 
     private registerControls() {
-        const limitAmount = control => Number(control.value) > this.balanceNumber ? { amountError: true } : null;
+        const limitAmount = control => Number(control.value) > this.balance ? { amountError: true } : null;
 
         const integerValidator = Validators.pattern('^[1-9][0-9]*$');
         this.theFormGroup = this.formBuilder.group({

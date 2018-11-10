@@ -24,7 +24,7 @@ export class SmartContractsComponent implements OnInit {
     private walletName = '';
     addresses: string[];
     addressChangedSubject: Subject<string>;
-    balance: string;
+    balance: number;
     contracts: ContractItem[];
     selectedAddress: string;
     history: ContractTransactionItem[];
@@ -51,7 +51,6 @@ export class SmartContractsComponent implements OnInit {
                     return Observable.of(0);
                 })
             )
-            .map(balance => balance.toLocaleString())
             .subscribe(balance => this.balance = balance);
 
         this.addressChangedSubject
@@ -98,7 +97,7 @@ export class SmartContractsComponent implements OnInit {
         const modal = this.modalService.open(TransactionComponent);
         (<TransactionComponent>modal.componentInstance).mode = mode;
         (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
-        (<TransactionComponent>modal.componentInstance).balance = this.balance.toLocaleString();
+        (<TransactionComponent>modal.componentInstance).balance = this.balance;
     }
 
     contractClicked(contract: ContractItem) {
