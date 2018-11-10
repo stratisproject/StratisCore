@@ -10,6 +10,7 @@ import { TransactionComponent } from './components/modals/transaction/transactio
 import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ScBalanceComponent } from './components/balance/balance.component';
+import { ContractTypePipe } from './components/contract-type.pipe';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import { ScBalanceComponent } from './components/balance/balance.component';
     declarations: [
         SmartContractsComponent,
         TransactionComponent,
-        ScBalanceComponent
+        ScBalanceComponent,
+        ContractTypePipe
     ],
 
     entryComponents: [

@@ -66,7 +66,7 @@
 
                             <tr *ngFor="let item of history">
                                 <th scope="row"><strong>#{{item.blockHeight}}</strong></th>
-                                <td><span class="badge badge-info">{{item.type}}</span></td>
+                                <td><span class="badge badge-info">{{item.type | contractType}}</span></td>
                                 <td><a href="#" data-toggle="modal" data-target="#modalInfotx">{{item.hash}}</a></td>
                                 <td><code class="d-inline-block">{{item.to}}</code></td>
                                 <td><sc-balance [balance]="balance" [coinUnit]="coinUnit"></sc-balance></td>
