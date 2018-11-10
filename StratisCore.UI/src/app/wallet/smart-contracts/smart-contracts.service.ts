@@ -8,6 +8,15 @@ export class SmartContractsContractItem {
     constructor(public blockId: string, public type: string, public hash: string, public destinationAddress: string, public amount: number) { }
 }
 
+export class ContractTransactionItem
+{
+    blockHeight: number;
+    type: number;
+    hash: string;
+    to: string;
+    amount: number;
+}
+
 export abstract class SmartContractsServiceBase {
     GetAddresses(walletName: string): Observable<string[]> { return Observable.of(); }
     GetBalance(walletName: string): Observable<number> { return Observable.of(); }
@@ -16,11 +25,16 @@ export abstract class SmartContractsServiceBase {
     GetContracts(walletName: string): Observable<SmartContractsContractItem[]> { return Observable.of(); }
     GetSenderAddresses(walletName: string): Observable<string[]> { return Observable.of(); }
     GetParameterTypes(walletName: string): Observable<string[]> { return Observable.of(); }
+    GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> { return Observable.of(); }
 }
 
 @Injectable()
 export class SmartContractsService implements SmartContractsServiceBase
 {
+    GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> {
+        return this.apiService.getAccountHistory(walletName, address)
+            .map(response => response.json());
+    }
     constructor(private apiService: ApiService) { }
 
     GetBalance(walletName: string): Observable<number> {
@@ -73,6 +87,9 @@ export class SmartContractsService implements SmartContractsServiceBase
 
 @Injectable()
 export class FakeSmartContractsService implements SmartContractsServiceBase {
+    GetHistory(walletName: string, address: string): Observable<any> {
+        throw new Error("Method not implemented.");
+    }
     GetBalance(walletName: string): Observable<number> { return Observable.of(10898026); }
 
     GetAddress(walletName: string): Observable<string> { return Observable.of('SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn'); }

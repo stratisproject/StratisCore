@@ -345,7 +345,7 @@ export class ApiService {
         .get(this.stratisApiUrl + '/smartcontractwallet/account-balance', new RequestOptions({headers: this.headers, search: params}));
     }
 
-        /*
+    /*
      * Get the balance of the active smart contract address.
      */
     getAddressBalance(address: string): Observable<Response> {
@@ -355,5 +355,18 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/smartcontractwallet/address-balance', new RequestOptions({headers: this.headers, search: params}));
+    }
+
+    /*
+     * Gets the transaction history of the smart contract account.
+     */
+    getAccountHistory(walletName: string, address: string): Observable<Response> {
+
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', walletName);
+      params.set('address', address);
+
+      return this.http
+        .get(this.stratisApiUrl + '/smartcontractwallet/history', new RequestOptions({headers: this.headers, search: params}));
     }
 }

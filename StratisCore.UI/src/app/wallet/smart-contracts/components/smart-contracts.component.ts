@@ -3,7 +3,7 @@ import { Subscription, Observable, Subject } from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SmartContractsServiceBase } from '../smart-contracts.service';
+import { SmartContractsServiceBase, ContractTransactionItem } from '../smart-contracts.service';
 import { GlobalService } from '../../../shared/services/global.service';
 import { TransactionComponent, Mode } from './modals/transaction/transaction.component';
 
@@ -27,6 +27,7 @@ export class SmartContractsComponent implements OnInit {
     balance: string;
     contracts: ContractItem[];
     selectedAddress: string;
+    history: ContractTransactionItem[];
 
     constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
         private modalService: NgbModal) {
@@ -47,6 +48,11 @@ export class SmartContractsComponent implements OnInit {
             .flatMap(x => this.smartContractsService.GetAddressBalance(x))
             .map(balance => balance.toLocaleString())
             .subscribe(balance => this.balance = balance);
+
+        this.addressChangedSubject
+            .flatMap(address => this.smartContractsService.GetHistory(this.walletName, address))
+            .subscribe(history => this.history = history);
+
 
         this.addressChangedSubject.subscribe(address => this.selectedAddress = address);
     }
