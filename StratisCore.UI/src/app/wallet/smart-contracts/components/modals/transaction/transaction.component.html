@@ -44,7 +44,7 @@
                         <div class="row" formArrayName="parameters" *ngFor="let parameter of parameters.controls; let i = index;">
                             <div class="mb-2 col-6" [formGroupName]="i">
                                 <select class="form-control form-control-sm" formControlName="type">
-                                    <option *ngFor="let type of parameterTypes">{{type}}</option>
+                                    <option *ngFor="let parameterType of parameterTypes" [ngValue]="parameterType.type" >{{parameterType.value}}</option>
                                 </select>
                             </div>
                             <div class="mb-2 col-4" [formGroupName]="i">

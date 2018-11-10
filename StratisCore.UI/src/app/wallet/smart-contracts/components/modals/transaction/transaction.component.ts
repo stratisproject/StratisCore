@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 export enum Mode { Call, Create }
 export class Parameter {
-    constructor(public type: string, public value: string) {}
+    constructor(public type: number, public value: string) {}
 }
 
 @Component({
@@ -23,7 +23,18 @@ export class TransactionComponent implements OnInit {
 
     modeEnum = Mode;
     transactionForm: FormGroup;
-    parameterTypes: string[] = ['a', 'b', 'c'];
+    parameterTypes: Parameter[] = [
+        new Parameter(1, 'Bool'),
+        new Parameter(2, 'Byte'),
+        new Parameter(3, 'Char'),
+        new Parameter(4, 'String'),
+        new Parameter(5, 'UInt'),
+        new Parameter(6, 'Int'),
+        new Parameter(7, 'ULong'),
+        new Parameter(8, 'Long'),
+        new Parameter(9, 'Address'),
+        new Parameter(10, 'Byte Array')
+    ];
     parameters: FormArray;
     selectedSenderAddress = '';
     balance = 0;
@@ -47,7 +58,7 @@ export class TransactionComponent implements OnInit {
 
     ngOnInit() {
         this.registerControls();
-        const walletName = this.globalService.getWalletName();
+        const walletName = this.globalService.getWalletName();        
     }
 
     closeClicked() {
@@ -55,13 +66,11 @@ export class TransactionComponent implements OnInit {
     }
 
     addParameterClicked() {
-        console.log('add parameter clicked');
-
         this.parameters.push(this.createParameter());
     }
 
     createParameter() : FormGroup {
-        const defaultType = this.parameterTypes.length ? this.parameterTypes[0] : '';
+        const defaultType = this.parameterTypes.length ? this.parameterTypes[0].type : 1;
 
         return this.formBuilder.group({
             type: defaultType,
