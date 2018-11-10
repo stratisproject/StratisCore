@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, Validators, FormBuilder, AbstractControl, FormControl } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, AbstractControl, FormControl, FormArray } from '@angular/forms';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '../../../../../shared/services/global.service';
@@ -23,8 +23,8 @@ export class TransactionComponent implements OnInit {
 
     modeEnum = Mode;
     transactionForm: FormGroup;
-    parameterTypes: string[] = [];
-    parameters: Parameter[] = [];
+    parameterTypes: string[] = ['a', 'b', 'c'];
+    parameters: FormArray;
     selectedSenderAddress = '';
     balance = 0;
     amount: FormControl;
@@ -49,15 +49,22 @@ export class TransactionComponent implements OnInit {
     }
 
     addParameterClicked() {
-        const defaultType = this.parameterTypes.length ? this.parameterTypes[0] : '';
-        this.parameters.push(new Parameter(defaultType, ''));
+        console.log('add parameter clicked');
+
+        this.parameters.push(this.createParameter());
     }
 
-    removeParameterClicked(parameter: Parameter) {
-        const index = this.parameters.findIndex(x => x === parameter);
-        if (index >= 0) {
-            this.parameters.splice(index, 1);
-        }
+    createParameter() : FormGroup {
+        const defaultType = this.parameterTypes.length ? this.parameterTypes[0] : '';
+
+        return this.formBuilder.group({
+            type: defaultType,
+            value: ''
+        });
+    }
+
+    removeParameterClicked(index: number) {
+        this.parameters.removeAt(index);
     }
     
     onSubmit()
@@ -79,6 +86,7 @@ export class TransactionComponent implements OnInit {
         this.gasLimit = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$')]);
         this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
         this.byteCode = new FormControl('', [Validators.required, Validators.nullValidator]);
+        this.parameters = new FormArray([]);
 
         if (this.mode === Mode.Call) {
             this.destinationAddress = new FormControl('', [Validators.required, Validators.nullValidator]);
@@ -87,6 +95,7 @@ export class TransactionComponent implements OnInit {
                 amount: this.amount,
                 gasPrice: this.gasPrice,
                 gasLimit: this.gasLimit,
+                parameters: this.parameters,
                 methodName: this.methodName,
                 destinationAddress: this.destinationAddress
             });
@@ -96,6 +105,7 @@ export class TransactionComponent implements OnInit {
                 amount: this.amount,
                 gasPrice: this.gasPrice,
                 gasLimit: this.gasLimit,
+                parameters: this.parameters,
                 byteCode: this.byteCode
             });
         }

@@ -29,19 +29,24 @@
                 <div class="row">
                     <label class="col-12" for="">Parameters</label>
                     <div style="display:block; margin-left:auto; margin-right:auto">
-                        <div class="row" *ngFor="let parameter of parameters">
-                            <div class="mb-2 col-6">
-                                <select class="form-control form-control-sm">
+                        <div class="row" formArrayName="parameters" *ngFor="let parameter of parameters.controls; let i = index;">
+                            <div class="mb-2 col-6" [formGroupName]="i">
+                                <select class="form-control form-control-sm" formControlName="type">
                                     <option *ngFor="let type of parameterTypes">{{type}}</option>
                                 </select>
                             </div>
-                            <div class="mb-2 col-4">
-                                <input type="text" class="form-control form-control-sm" id="Value" placeholder="value"
-                                    value="" required>
+                            <div class="mb-2 col-4" [formGroupName]="i">
+                                <input type="text" 
+                                        class="form-control form-control-sm"
+                                        formControlName="value"
+                                        id="Value"
+                                        placeholder="value"
+                                        value=""
+                                        required>
                             </div>
                             <div class="col-2 d-flex align-items-start justify-content-center">
                                 <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal"
-                                    data-toggle="tooltip" (click)="removeParameterClicked(parameter)" data-placement="right"
+                                    data-toggle="tooltip" (click)="removeParameterClicked(i)" data-placement="right"
                                     title="" data-original-title="Remove"><i class="lnr lnr-cross"></i></button>
                             </div>
                         </div>
