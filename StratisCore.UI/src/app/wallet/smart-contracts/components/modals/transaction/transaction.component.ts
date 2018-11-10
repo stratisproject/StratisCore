@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, AbstractControl, FormControl } from '@angular/forms';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '../../../../../shared/services/global.service';
@@ -22,38 +22,25 @@ export class TransactionComponent implements OnInit {
                     private activeModal: NgbActiveModal, private formBuilder: FormBuilder) { }
 
     modeEnum = Mode;
-    theFormGroup: FormGroup;
-    senderAddresses: string[] = [];
+    transactionForm: FormGroup;
     parameterTypes: string[] = [];
     parameters: Parameter[] = [];
     selectedSenderAddress = '';
     balance = 0;
-    amount = '';
-    gasPrice = '';
-    gasLimit = '';
-    methodName = '';
-    destinationAddress = '';
-    byteCode = '';
+    amount: FormControl;
+    gasPrice: FormControl;
+    gasLimit: FormControl;
+    methodName: FormControl;
+    destinationAddress: FormControl;
+    byteCode: FormControl;
     coinUnit: string;
     @Input() mode: Mode;
 
     get title(): string { return `${this.prefixText} Transaction`; }
     get buttonText(): string { return `${this.prefixText} transaction`; }
-    get amountControl(): AbstractControl { return this.theFormGroup.get('amountControl'); }
-    get gasPriceControl(): AbstractControl { return this.theFormGroup.get('gasPriceControl'); }
-    get gasLimitControl(): AbstractControl { return this.theFormGroup.get('gasLimitControl'); }
-    get isValid(): boolean { 
-        if (this.mode === Mode.Call) {
-            return (this.amount && this.gasPrice && this.gasLimit && this.methodName && this.destinationAddress) ? true : false;
-        }
-        if (this.mode === Mode.Create) {
-            return (this.amount && this.gasPrice && this.gasLimit) ? true : false;
-        }
-    }
 
     ngOnInit() {
         this.registerControls();
-
         const walletName = this.globalService.getWalletName();
     }
 
@@ -86,28 +73,31 @@ export class TransactionComponent implements OnInit {
         const limitAmount = control => Number(control.value) > this.balance ? { amountError: true } : null;
 
         const integerValidator = Validators.pattern('^[1-9][0-9]*$');
-        this.theFormGroup = this.formBuilder.group({
-            amountControl: ['', [integerValidator, limitAmount]],
-            gasPriceControl: ['', [Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$')]],
-            gasLimitControl: ['', [integerValidator]]
-        });
+        
+        this.amount = new FormControl('', [Validators.required, integerValidator, limitAmount]);
+        this.gasPrice = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$')]);
+        this.gasLimit = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$')]);
+        this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
+        this.byteCode = new FormControl('', [Validators.required, Validators.nullValidator]);
 
-        TransactionComponent.watchControl<string>(this.amountControl).subscribe(x => this.amount = x);
-        TransactionComponent.watchControl<string>(this.gasPriceControl).subscribe(x => this.gasPrice = x);
-        TransactionComponent.watchControl<string>(this.gasLimitControl).subscribe(x => this.gasLimit = x);
-    }
+        if (this.mode === Mode.Call) {
+            this.destinationAddress = new FormControl('', [Validators.required, Validators.nullValidator]);
 
-    private static watchControl<T>(control: AbstractControl): Observable<T> {
-        return new Observable(x => {
-            var validValue: T;
-            control.valueChanges.subscribe(_ => {
-                if (control.invalid) {
-                    control.setValue(validValue);
-                } else {
-                    validValue = control.value;
-                    x.next(validValue);
-                }
+            this.transactionForm = new FormGroup({
+                amount: this.amount,
+                gasPrice: this.gasPrice,
+                gasLimit: this.gasLimit,
+                methodName: this.methodName,
+                destinationAddress: this.destinationAddress
             });
-        });
+        }
+        else {
+            this.transactionForm = new FormGroup({
+                amount: this.amount,
+                gasPrice: this.gasPrice,
+                gasLimit: this.gasLimit,
+                byteCode: this.byteCode
+            });
+        }
     }
 }
