@@ -45,13 +45,26 @@ export class SmartContractsComponent implements OnInit {
         });
 
         this.addressChangedSubject
-            .flatMap(x => this.smartContractsService.GetAddressBalance(x))
+            .flatMap(x => this.smartContractsService.GetAddressBalance(x)
+                .catch(e => {
+                    console.log("Error retrieving balance");
+                    return Observable.of(0);
+                })
+            )
             .map(balance => balance.toLocaleString())
             .subscribe(balance => this.balance = balance);
 
         this.addressChangedSubject
-            .flatMap(address => this.smartContractsService.GetHistory(this.walletName, address))
-            .subscribe(history => this.history = history);
+            .flatMap(address => this.smartContractsService.GetHistory(this.walletName, address)
+                .catch(e => {
+                    console.log("Error retrieving history");
+                    return Observable.of([]);
+                })
+            )
+            .subscribe(history => {
+                console.log("loading history");
+                this.history = history;
+            });
 
 
         this.addressChangedSubject.subscribe(address => this.selectedAddress = address);
