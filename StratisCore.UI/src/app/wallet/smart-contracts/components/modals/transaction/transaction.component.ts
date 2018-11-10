@@ -72,6 +72,11 @@ export class TransactionComponent implements OnInit {
             this.parameters.splice(index, 1);
         }
     }
+    
+    onSubmit()
+    {
+        console.log("Submit");
+    }
 
     private get prefixText(): string {
         return this.mode === Mode.Call ? "Call" : "Create";
