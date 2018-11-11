@@ -26,12 +26,19 @@ export abstract class SmartContractsServiceBase {
     GetSenderAddresses(walletName: string): Observable<string[]> { return Observable.of(); }
     GetParameterTypes(walletName: string): Observable<string[]> { return Observable.of(); }
     GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> { return Observable.of(); }
+    PostCreate(createTransaction: any): Observable<any> { return Observable.of(); }
 }
 
 @Injectable()
 export class SmartContractsService implements SmartContractsServiceBase
 {
     constructor(private apiService: ApiService) { }
+
+    PostCreate(createTransaction: any): Observable<any> {
+        return this.apiService.postCreateTransaction(createTransaction)
+            .delay(3000)
+            .map(response => response.json());
+    }
 
     GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> {
         return this.apiService.getAccountHistory(walletName, address)
@@ -88,6 +95,9 @@ export class SmartContractsService implements SmartContractsServiceBase
 
 @Injectable()
 export class FakeSmartContractsService implements SmartContractsServiceBase {
+    PostCreate(createTransaction: any): Observable<any> {
+        throw new Error("Method not implemented.");
+    }
     GetHistory(walletName: string, address: string): Observable<any> {
         throw new Error("Method not implemented.");
     }

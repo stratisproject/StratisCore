@@ -23,10 +23,10 @@
                     </div>
                 </div>
                 <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="The fee to send with this transaction ({{ coinUnit }}/bytes)">
-                    <label for="fee">Fee</label>
-                    <input formControlName="fee" id="fee" type="number" step="0.01" class="form-control" placeholder="Fee" [class.is-invalid]="fee.invalid && (fee.dirty || fee.touched)">
-                    <div *ngIf="fee.errors" class="invalid-feedback">
-                        <p *ngIf="fee.errors.feeError">Fee must be less than your balance</p>
+                    <label for="feeAmount">Fee</label>
+                    <input formControlName="feeAmount" id="feeAmount" type="number" step="0.01" class="form-control" placeholder="Fee" [class.is-invalid]="feeAmount.invalid && (feeAmount.dirty || feeAmount.touched)">
+                    <div *ngIf="feeAmount.errors" class="invalid-feedback">
+                        <p *ngIf="feeAmount.errors.feeError">Fee must be less than your balance</p>
                     </div>
                 </div>
                 <div class="row">
@@ -106,14 +106,13 @@
                     </div>
                     <div *ngIf="mode === modeEnum.Create">
                         <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="The bytecode of the contract to deploy">
-                            <label class="float-left" for="byteCode">Byte Code</label>
+                            <label class="float-left" for="contractCode">Byte Code</label>
                             <span class="float-right">
                                 <button type="button" class="btn btn-link d-inline-block ml-2 btn-sm" data-toggle="tooltip"
                                     data-placement="right" title="" data-original-title="Copy to Clipboard">Copy</button>
                             </span>
-                            <textarea class="form-control form-control-sm" id="byteCode" rows="5" formControlName="byteCode"
-                                [class.is-invalid]="byteCode.invalid && (byteCode.dirty || byteCode.touched)"
-                                >{{byteCode}}</textarea>
+                            <textarea class="form-control form-control-sm" id="contractCode" rows="5" formControlName="contractCode"
+                                [class.is-invalid]="contractCode.invalid && (contractCode.dirty || contractCode.touched)">{{contractCode}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -126,6 +125,8 @@
                     </div>
                 </div>
         </div>
+        
+        <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
 
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>

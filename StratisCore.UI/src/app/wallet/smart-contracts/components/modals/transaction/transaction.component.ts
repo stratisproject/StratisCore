@@ -40,15 +40,17 @@ export class TransactionComponent implements OnInit {
     selectedSenderAddress = '';
     balance = 0;
     amount: FormControl;
-    fee: FormControl;
+    feeAmount: FormControl;
     gasPrice: FormControl;
     gasLimit: FormControl;
     methodName: FormControl;
     destinationAddress: FormControl;
-    byteCode: FormControl;
+    contractCode: FormControl;
     password: FormControl;
     coinUnit: string;
+    loading: boolean;
     @Input() mode: Mode;
+    apiError: string;
 
     gasCallLimitMinimum = 10000;
     gasCreateLimitMinimum = 12000;
@@ -87,7 +89,25 @@ export class TransactionComponent implements OnInit {
     
     onSubmit()
     {
-        console.log("Submit");
+        // Hack the parameters into a format the API expects
+        let result =  {
+            ...this.transactionForm.value,
+            parameters: this.transactionForm.value.parameters.map(p => p.type + "#" + p.value),
+            walletName: this.walletName,
+            sender: this.selectedSenderAddress
+        };
+        
+        this.loading = true;
+        this.smartContractsService.PostCreate(result)
+            .toPromise()
+            .then(result => {
+                this.loading = false;
+                this.activeModal.close();
+            })
+            .catch(error => {
+                this.loading = false;
+                this.apiError = error.json().value.message;
+            });
     }
 
     private get prefixText(): string {
@@ -102,16 +122,16 @@ export class TransactionComponent implements OnInit {
         const gasCallLimitMinimumValidator = control => Number(control.value) < this.gasCallLimitMinimum  ? { gasCallLimitTooLowError: true } : null;
         const gasCreateLimitMinimumValidator = control => Number(control.value) < this.gasCreateLimitMinimum ? { gasCreateLimitTooLowError: true } : null;
 
-        const integerValidator = Validators.pattern('^[1-9][0-9]*$');
+        const integerValidator = Validators.pattern('^[0-9][0-9]*$');
 
         let gasLimitValidator = (this.mode === Mode.Call ? gasCallLimitMinimumValidator : gasCreateLimitMinimumValidator);
 
-        this.amount = new FormControl('', [integerValidator, amountValidator]);
-        this.fee = new FormControl(0.001, [Validators.required, amountValidator]);
-        this.gasPrice = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator]);
-        this.gasLimit = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator]);
+        this.amount = new FormControl(0, [integerValidator, amountValidator]);
+        this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator]);
+        this.gasPrice = new FormControl(1, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator]);
+        this.gasLimit = new FormControl(this.mode === Mode.Call ? this.gasCallLimitMinimum : this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator]);
         this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
-        this.byteCode = new FormControl('', [Validators.required, Validators.nullValidator]);
+        this.contractCode = new FormControl('', [Validators.required, Validators.nullValidator]);
         this.parameters = new FormArray([]);
         this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
 
@@ -120,7 +140,7 @@ export class TransactionComponent implements OnInit {
 
             this.transactionForm = new FormGroup({
                 amount: this.amount,
-                fee: this.fee,
+                feeAmount: this.feeAmount,
                 gasPrice: this.gasPrice,
                 gasLimit: this.gasLimit,
                 parameters: this.parameters,
@@ -132,11 +152,11 @@ export class TransactionComponent implements OnInit {
         else {
             this.transactionForm = new FormGroup({
                 amount: this.amount,
-                fee: this.fee,
+                feeAmount: this.feeAmount,
                 gasPrice: this.gasPrice,
                 gasLimit: this.gasLimit,
                 parameters: this.parameters,
-                byteCode: this.byteCode,
+                contractCode: this.contractCode,
                 password: this.password
             });
         }

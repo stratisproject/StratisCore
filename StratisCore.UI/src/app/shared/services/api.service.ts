@@ -369,4 +369,12 @@ export class ApiService {
       return this.http
         .get(this.stratisApiUrl + '/smartcontractwallet/history', new RequestOptions({headers: this.headers, search: params}));
     }
+
+    /*
+     * Posts a contract creation transaction
+     */
+    postCreateTransaction(transaction: any): Observable<Response> {
+      return this.http
+        .post(this.stratisApiUrl + '/smartcontractwallet/create', transaction, new RequestOptions({headers: this.headers}));
+    }    
 }
