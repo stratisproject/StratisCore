@@ -7,6 +7,7 @@ import { SmartContractsServiceBase, ContractTransactionItem } from '../smart-con
 import { GlobalService } from '../../../shared/services/global.service';
 import { TransactionComponent, Mode } from './modals/transaction/transaction.component';
 import { ModalService } from '../../../shared/services/modal.service';
+import { takeUntil } from 'rxjs/operators';
 
 export class ContractItem {
     amountFormatted = '';
@@ -30,6 +31,7 @@ export class SmartContractsComponent implements OnInit {
     selectedAddress: string;
     history: ContractTransactionItem[];
     coinUnit: string;
+    unsubscribe: Subject<void> = new Subject();
 
     constructor(private globalService: GlobalService, 
         private smartContractsService: SmartContractsServiceBase,
@@ -47,6 +49,7 @@ export class SmartContractsComponent implements OnInit {
                 this.showApiError("Error retrieving addressses. " + error);
                 return Observable.of([]);
             })
+            .pipe(takeUntil(this.unsubscribe))
             .subscribe(addresses => {
                 if (addresses && addresses.length > 0) {
                     this.addressChangedSubject.next(addresses[0]);
@@ -61,6 +64,7 @@ export class SmartContractsComponent implements OnInit {
                         return Observable.of(0);
                     })
                 )
+                .pipe(takeUntil(this.unsubscribe))
                 .subscribe(balance => this.balance = balance);                
 
         this.addressChangedSubject
@@ -70,14 +74,22 @@ export class SmartContractsComponent implements OnInit {
                     return Observable.of([]);
                 })
             )
+            .pipe(takeUntil(this.unsubscribe))
             .subscribe(history => this.history = history);
 
 
-        this.addressChangedSubject.subscribe(address => this.selectedAddress = address);
+        this.addressChangedSubject
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(address => this.selectedAddress = address);
     }
 
     ngOnInit() {
     }
+
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+      }
 
     showApiError(error: string)
     {
