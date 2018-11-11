@@ -17,6 +17,7 @@ export class Parameter {
     styleUrls: ['./transaction.component.css']
 })
 export class TransactionComponent implements OnInit {
+    walletName: string;
 
     constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase,
                     private activeModal: NgbActiveModal, private formBuilder: FormBuilder) { }
@@ -60,7 +61,7 @@ export class TransactionComponent implements OnInit {
 
     ngOnInit() {
         this.registerControls();
-        const walletName = this.globalService.getWalletName();        
+        this.walletName = this.globalService.getWalletName();        
     }
 
     closeClicked() {
