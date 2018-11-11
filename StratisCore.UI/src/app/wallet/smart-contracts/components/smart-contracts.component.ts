@@ -55,7 +55,7 @@ export class SmartContractsComponent implements OnInit {
             });
 
         this.addressChangedSubject
-                .flatMap(x => this.smartContractsService.GetAddressBalance(x)
+                .switchMap(x => this.smartContractsService.GetAddressBalance(x)
                     .catch(error => {
                         this.showApiError("Error retrieving balance. " + error);
                         return Observable.of(0);
@@ -64,7 +64,7 @@ export class SmartContractsComponent implements OnInit {
                 .subscribe(balance => this.balance = balance);                
 
         this.addressChangedSubject
-            .flatMap(address => this.smartContractsService.GetHistory(this.walletName, address)
+            .switchMap(address => this.smartContractsService.GetHistory(this.walletName, address)
                 .catch(error => {
                     this.showApiError("Error retrieving transactions. " + error);
                     return Observable.of([]);

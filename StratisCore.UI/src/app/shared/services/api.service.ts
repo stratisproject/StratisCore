@@ -353,8 +353,10 @@ export class ApiService {
       let params: URLSearchParams = new URLSearchParams();
       params.set('address', address);
 
-      return this.http
-        .get(this.stratisApiUrl + '/smartcontractwallet/address-balance', new RequestOptions({headers: this.headers, search: params}));
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/address-balance', new RequestOptions({headers: this.headers, search: params})));
     }
 
     /*
@@ -366,8 +368,10 @@ export class ApiService {
       params.set('walletName', walletName);
       params.set('address', address);
 
-      return this.http
-        .get(this.stratisApiUrl + '/smartcontractwallet/history', new RequestOptions({headers: this.headers, search: params}));
+      return Observable
+          .interval(this.pollingInterval)
+          .startWith(0)
+          .switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/history', new RequestOptions({headers: this.headers, search: params})));
     }
 
     /*
