@@ -61,7 +61,7 @@ export class TransactionComponent implements OnInit {
 
     ngOnInit() {
         this.registerControls();
-        this.walletName = this.globalService.getWalletName();        
+        this.walletName = this.globalService.getWalletName();
     }
 
     closeClicked() {
@@ -107,7 +107,7 @@ export class TransactionComponent implements OnInit {
         let gasLimitValidator = (this.mode === Mode.Call ? gasCallLimitMinimumValidator : gasCreateLimitMinimumValidator);
 
         this.amount = new FormControl('', [integerValidator, amountValidator]);
-        this.fee = new FormControl('', [Validators.required, amountValidator]);
+        this.fee = new FormControl(0.001, [Validators.required, amountValidator]);
         this.gasPrice = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator]);
         this.gasLimit = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator]);
         this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);

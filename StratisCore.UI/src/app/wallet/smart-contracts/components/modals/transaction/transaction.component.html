@@ -15,28 +15,32 @@
                 <div class="mt-1 mb-3">Balance : <sc-balance data-toggle="tooltip" data-placement="top" title=""
                         data-original-title="Set maximum amount" class="btn-link" [balance]="balance" [coinUnit]="coinUnit"></sc-balance>
                 </div>
-                <div class="form-group clearfix">
-                    <input formControlName="amount" type="number" class="form-control" placeholder="Amount" [class.is-invalid]="amount.invalid && (amount.dirty || amount.touched)">
+                <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="The amount of {{ coinUnit }} to send with this transaction">
+                    <label for="amount">Amount</label>
+                    <input formControlName="amount" id="amount" type="number" class="form-control" placeholder="Amount" [class.is-invalid]="amount.invalid && (amount.dirty || amount.touched)">
                     <div *ngIf="amount.errors" class="invalid-feedback">
                         <p *ngIf="amount.errors.amountError">Amount must be less than your balance</p>
                     </div>
                 </div>
-                <div class="form-group clearfix">
-                    <input formControlName="fee" type="number" step="0.01" class="form-control" placeholder="Fee" [class.is-invalid]="fee.invalid && (fee.dirty || fee.touched)">
+                <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="The fee to send with this transaction ({{ coinUnit }}/bytes)">
+                    <label for="fee">Fee</label>
+                    <input formControlName="fee" id="fee" type="number" step="0.01" class="form-control" placeholder="Fee" [class.is-invalid]="fee.invalid && (fee.dirty || fee.touched)">
                     <div *ngIf="fee.errors" class="invalid-feedback">
                         <p *ngIf="fee.errors.feeError">Fee must be less than your balance</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-6 clearfix">
-                        <input formControlName="gasPrice" type="number" class="form-control" placeholder="Gas Price" [class.is-invalid]="gasPrice.invalid && (gasPrice.dirty || gasPrice.touched)">
+                    <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right" title="The gas price to use with this transaction ({{ coinUnit }}/gas)">
+                        <label for="gasPrice">Gas price</label>
+                        <input formControlName="gasPrice" id="gasPrice" type="number" class="form-control" placeholder="Gas Price" [class.is-invalid]="gasPrice.invalid && (gasPrice.dirty || gasPrice.touched)">
                         <div *ngIf="gasPrice.errors" class="invalid-feedback">
                             <p *ngIf="gasPrice.errors.gasPriceTooLowError">Gas price must be greater than {{ gasPriceMinimum }}</p>
                             <p *ngIf="gasPrice.errors.gasPriceTooHighError">Gas price must be less than {{ gasPriceMaximum }}</p>
                         </div>
                     </div>
-                    <div class="form-group col-6 clearfix">
-                        <input formControlName="gasLimit" type="number" class="form-control" placeholder="Gas Limit" [class.is-invalid]="gasLimit.invalid && (gasLimit.dirty || gasLimit.touched)">
+                    <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right" title="The gas limit to use with this transaction">
+                        <label for="gasLimit">Gas limit</label>
+                        <input formControlName="gasLimit" id="gasLimit" type="number" class="form-control" placeholder="Gas Limit" [class.is-invalid]="gasLimit.invalid && (gasLimit.dirty || gasLimit.touched)">
                         <div *ngIf="gasLimit.errors" class="invalid-feedback">
                             <p *ngIf="gasLimit.errors.gasCallLimitTooLowError">Gas call limit must be greater than {{ gasCallLimitMinimum }}</p>
                             <p *ngIf="gasLimit.errors.gasCreateLimitTooLowError">Gas create limit must be greater than {{ gasCreateLimitMinimum }}</p>
@@ -78,43 +82,48 @@
                 <div>
                     <div *ngIf="mode === modeEnum.Call">
                         <div class="form-group clearfix">
-                            <!-- <label for="destinationAddress">Method Name</label> -->
+                            <label for="methodName">Method Name</label>
                             <input
                                 formControlName="methodName"
+                                id="methodName"
                                 type="text" 
                                 class="form-control"
                                 id=""
                                 placeholder="Method"
+                                data-toggle="tooltip" data-placement="right" title="The name of the method to invoke"
                                 [class.is-invalid]="methodName.invalid && (methodName.dirty || methodName.touched)">
                         </div>
                         <div class="form-group clearfix">
-                            <!-- <label for="destinationAddress">Destination Address</label> -->
+                            <label for="destinationAddress">Destination Address</label>
                             <input type="text"
                                    formControlName="destinationAddress"
-                                   class="form-control"
                                    id="destinationAddress"
+                                   class="form-control"                                   
                                    placeholder="Destination Address"
+                                   data-toggle="tooltip" data-placement="right" title="The address of the recipient contract"                                   
                                    [class.is-invalid]="destinationAddress.invalid && (destinationAddress.dirty || destinationAddress.touched)">
                         </div>
                     </div>
                     <div *ngIf="mode === modeEnum.Create">
-                        <div class="form-group clearfix">
-                            <label class="float-left" for="">Byte Code</label>
+                        <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="The bytecode of the contract to deploy">
+                            <label class="float-left" for="byteCode">Byte Code</label>
                             <span class="float-right">
                                 <button type="button" class="btn btn-link d-inline-block ml-2 btn-sm" data-toggle="tooltip"
                                     data-placement="right" title="" data-original-title="Copy to Clipboard">Copy</button>
                             </span>
-                            <textarea class="form-control form-control-sm" id="" rows="5" formControlName="byteCode"
+                            <textarea class="form-control form-control-sm" id="byteCode" rows="5" formControlName="byteCode"
                                 [class.is-invalid]="byteCode.invalid && (byteCode.dirty || byteCode.touched)"
                                 >{{byteCode}}</textarea>
                         </div>
                     </div>
                 </div>
                 <div class="form-group clearfix">
-                    <input formControlName="password" type="password" class="form-control" placeholder="Wallet Password" [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
+                    <label for="password">Wallet Password</label>
+                    <input formControlName="password" id="password" type="password" class="form-control" placeholder="Wallet Password" [class.is-invalid]="password.invalid && (password.dirty || password.touched)"
+                    data-toggle="tooltip" data-placement="right" title="The password for the current wallet">
                     <div *ngIf="password.errors" class="invalid-feedback">
                         <p *ngIf="password.errors.required">Please enter the password for wallet {{ walletName }}</p>
-                    </div>                    
+                    </div>
                 </div>
         </div>
 
