@@ -39,11 +39,13 @@ export class TransactionComponent implements OnInit {
     selectedSenderAddress = '';
     balance = 0;
     amount: FormControl;
+    fee: FormControl;
     gasPrice: FormControl;
     gasLimit: FormControl;
     methodName: FormControl;
     destinationAddress: FormControl;
     byteCode: FormControl;
+    password: FormControl;
     coinUnit: string;
     @Input() mode: Mode;
 
@@ -104,31 +106,37 @@ export class TransactionComponent implements OnInit {
         let gasLimitValidator = (this.mode === Mode.Call ? gasCallLimitMinimumValidator : gasCreateLimitMinimumValidator);
 
         this.amount = new FormControl('', [Validators.required, integerValidator, amountValidator]);
+        this.fee = new FormControl('', [Validators.required, amountValidator]);
         this.gasPrice = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator]);
         this.gasLimit = new FormControl('', [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator]);
         this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
         this.byteCode = new FormControl('', [Validators.required, Validators.nullValidator]);
         this.parameters = new FormArray([]);
+        this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
 
         if (this.mode === Mode.Call) {
             this.destinationAddress = new FormControl('', [Validators.required, Validators.nullValidator]);
 
             this.transactionForm = new FormGroup({
                 amount: this.amount,
+                fee: this.fee,
                 gasPrice: this.gasPrice,
                 gasLimit: this.gasLimit,
                 parameters: this.parameters,
                 methodName: this.methodName,
-                destinationAddress: this.destinationAddress
+                destinationAddress: this.destinationAddress,
+                password: this.password
             });
         }
         else {
             this.transactionForm = new FormGroup({
                 amount: this.amount,
+                fee: this.fee,
                 gasPrice: this.gasPrice,
                 gasLimit: this.gasLimit,
                 parameters: this.parameters,
-                byteCode: this.byteCode
+                byteCode: this.byteCode,
+                password: this.password
             });
         }
     }

@@ -21,6 +21,12 @@
                         <p *ngIf="amount.errors.amountError">Amount must be less than your balance</p>
                     </div>
                 </div>
+                <div class="form-group clearfix">
+                    <input formControlName="fee" type="number" step="0.01" class="form-control" placeholder="Fee" [class.is-invalid]="fee.invalid && (fee.dirty || fee.touched)">
+                    <div *ngIf="fee.errors" class="invalid-feedback">
+                        <p *ngIf="fee.errors.feeError">Fee must be less than your balance</p>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="form-group col-6 clearfix">
                         <input formControlName="gasPrice" type="number" class="form-control" placeholder="Gas Price" [class.is-invalid]="gasPrice.invalid && (gasPrice.dirty || gasPrice.touched)">
@@ -104,7 +110,9 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="form-group clearfix">
+                    <input formControlName="password" type="password" class="form-control" placeholder="Password" [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
+                </div>
         </div>
 
         <div class="modal-footer">
