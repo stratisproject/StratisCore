@@ -43,39 +43,40 @@ export class SmartContractsComponent implements OnInit {
 
         this.smartContractsService
             .GetAddresses(this.walletName)
-            .catch(error => Observable.throw(error.json().errors[0].message))
+            .catch(error => {
+                this.showApiError("Error retrieving addressses. " + error);
+                return Observable.of([]);
+            })
             .subscribe(addresses => {
                 if (addresses && addresses.length > 0) {
                     this.addressChangedSubject.next(addresses[0]);
                     this.addresses = addresses;
                 }
-            },
-            error => this.showApiError("Error retrieving addresss. " + error));
+            });
 
         this.addressChangedSubject
                 .flatMap(x => this.smartContractsService.GetAddressBalance(x)
-                    .catch(error => Observable.throw(error.json().errors[0].message))
+                    .catch(error => {
+                        this.showApiError("Error retrieving balance. " + error);
+                        return Observable.of(0);
+                    })
                 )
-                .subscribe(balance => this.balance = balance,
-                    error => this.showApiError("Error retrieving balance. " + error)
-                );                
+                .subscribe(balance => this.balance = balance);                
 
         this.addressChangedSubject
             .flatMap(address => this.smartContractsService.GetHistory(this.walletName, address)
-                .catch(error => Observable.throw(error.json().errors[0].message))
+                .catch(error => {
+                    this.showApiError("Error retrieving transactions. " + error);
+                    return Observable.of([]);
+                })
             )
-            .subscribe(history => this.history = history,
-                error => this.showApiError("Error retrieving transactions. " + error));
+            .subscribe(history => this.history = history);
 
 
         this.addressChangedSubject.subscribe(address => this.selectedAddress = address);
     }
 
     ngOnInit() {
-        this.smartContractsService
-            .GetContracts(this.walletName)
-            .subscribe(x =>
-                this.contracts = x.map(c => new ContractItem(c.blockId, c.type, c.hash, c.destinationAddress, c.amount)));
     }
 
     showApiError(error: string)
