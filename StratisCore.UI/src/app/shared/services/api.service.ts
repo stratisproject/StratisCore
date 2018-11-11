@@ -383,7 +383,7 @@ export class ApiService {
     }
 
     /*
-     * Posts a contract creation transaction
+     * Posts a contract call transaction
      */
     postCallTransaction(transaction: any): Observable<Response> {
       return this.http

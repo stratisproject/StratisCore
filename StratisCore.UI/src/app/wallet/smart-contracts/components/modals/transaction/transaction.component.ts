@@ -98,10 +98,12 @@ export class TransactionComponent implements OnInit {
         };
         
         this.loading = true;
+
+        // We don't need an observable here so let's treat it as a promise.
         (this.mode == Mode.Create 
             ? this.smartContractsService.PostCreate(result) 
             : this.smartContractsService.PostCall(result))
-            .toPromise()            
+            .toPromise()
             .then(result => {
                 this.loading = false;
                 this.activeModal.close();
