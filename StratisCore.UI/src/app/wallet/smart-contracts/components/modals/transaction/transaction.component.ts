@@ -99,14 +99,14 @@ export class TransactionComponent implements OnInit {
         
         this.loading = true;
         this.smartContractsService.PostCreate(result)
-            .toPromise()
+            .toPromise()            
             .then(result => {
                 this.loading = false;
                 this.activeModal.close();
-            })
-            .catch(error => {
+            },
+            error => {
                 this.loading = false;
-                this.apiError = error.json().value.message;
+                this.apiError = error.json().errors[0].message;
             });
     }
 
