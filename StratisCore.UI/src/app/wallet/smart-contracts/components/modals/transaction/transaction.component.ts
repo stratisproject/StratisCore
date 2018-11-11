@@ -44,7 +44,7 @@ export class TransactionComponent implements OnInit {
     gasPrice: FormControl;
     gasLimit: FormControl;
     methodName: FormControl;
-    destinationAddress: FormControl;
+    contractAddress: FormControl;
     contractCode: FormControl;
     password: FormControl;
     coinUnit: string;
@@ -98,7 +98,9 @@ export class TransactionComponent implements OnInit {
         };
         
         this.loading = true;
-        this.smartContractsService.PostCreate(result)
+        (this.mode == Mode.Create 
+            ? this.smartContractsService.PostCreate(result) 
+            : this.smartContractsService.PostCall(result))
             .toPromise()            
             .then(result => {
                 this.loading = false;
@@ -106,7 +108,7 @@ export class TransactionComponent implements OnInit {
             },
             error => {
                 this.loading = false;
-                if (!error.json().errors[0]) {
+                if (!error.json().errors) {
                     if (error.json().value.message) {
                         this.apiError = error.json().value.message;    
                     }
@@ -146,7 +148,7 @@ export class TransactionComponent implements OnInit {
         this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
 
         if (this.mode === Mode.Call) {
-            this.destinationAddress = new FormControl('', [Validators.required, Validators.nullValidator]);
+            this.contractAddress = new FormControl('', [Validators.required, Validators.nullValidator]);
 
             this.transactionForm = new FormGroup({
                 amount: this.amount,
@@ -155,7 +157,7 @@ export class TransactionComponent implements OnInit {
                 gasLimit: this.gasLimit,
                 parameters: this.parameters,
                 methodName: this.methodName,
-                destinationAddress: this.destinationAddress,
+                contractAddress: this.contractAddress,
                 password: this.password
             });
         }

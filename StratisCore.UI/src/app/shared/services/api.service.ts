@@ -376,5 +376,13 @@ export class ApiService {
     postCreateTransaction(transaction: any): Observable<Response> {
       return this.http
         .post(this.stratisApiUrl + '/smartcontractwallet/create', transaction, new RequestOptions({headers: this.headers}));
+    }
+
+    /*
+     * Posts a contract creation transaction
+     */
+    postCallTransaction(transaction: any): Observable<Response> {
+      return this.http
+        .post(this.stratisApiUrl + '/smartcontractwallet/call', transaction, new RequestOptions({headers: this.headers}));
     }    
 }

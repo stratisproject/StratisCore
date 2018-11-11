@@ -94,14 +94,14 @@
                                 [class.is-invalid]="methodName.invalid && (methodName.dirty || methodName.touched)">
                         </div>
                         <div class="form-group clearfix">
-                            <label for="destinationAddress">Destination Address</label>
+                            <label for="contractAddress">Contract Address</label>
                             <input type="text"
-                                   formControlName="destinationAddress"
-                                   id="destinationAddress"
+                                   formControlName="contractAddress"
+                                   id="contractAddress"
                                    class="form-control"                                   
-                                   placeholder="Destination Address"
+                                   placeholder="Contract Address"
                                    data-toggle="tooltip" data-placement="right" title="The address of the recipient contract"                                   
-                                   [class.is-invalid]="destinationAddress.invalid && (destinationAddress.dirty || destinationAddress.touched)">
+                                   [class.is-invalid]="contractAddress.invalid && (contractAddress.dirty || contractAddress.touched)">
                         </div>
                     </div>
                     <div *ngIf="mode === modeEnum.Create">
