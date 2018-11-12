@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit {
 
   private buildDecryptForm(): void {
     this.openWalletForm = this.fb.group({
-      "selectWallet": ["", Validators.required],
-      "password": ["", Validators.required]
+      "selectWallet": [{value: "", disabled: this.isDecrypting}, Validators.required],
+      "password": [{value: "", disabled: this.isDecrypting}, Validators.required]
     });
 
     this.openWalletForm.valueChanges

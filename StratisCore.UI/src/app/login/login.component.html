@@ -10,18 +10,18 @@
           <h3 class="display-4 mb-4">Welcome</h3>
         </div>
         <form *ngIf="hasWallet" class="form-group col-12" [formGroup]="openWalletForm">
-          <select [disabled]="isDecrypting" class="custom-select col-12" formControlName="selectWallet">
+          <select class="custom-select col-12" formControlName="selectWallet">
             <option value="" disabled selected>Choose a wallet</option>
             <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
           </select>
           <div class="form-group mt-3">
-            <input [disabled]="isDecrypting" type="password" class="form-control" id="Password" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
+            <input type="password" class="form-control" id="Password" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
             <div *ngIf="formErrors.password" class="invalid-feedback">{{ formErrors.password }}</div>
           </div>
         </form>
         <div class="col-12">
           <div *ngIf="hasWallet">
-            <button [disabled]="isDecrypting" type="submit" class="btn btn-block btn-lg btn-primary" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
+            <button type="submit" class="btn btn-block btn-lg btn-primary" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
           </div>
           <div class="row d-flex justify-content-center mt-3">
               <button [disabled]="isDecrypting" type="button" class="btn btn-block btn-link text-dark" (click)="onCreateClicked()">Create or restore a wallet</button>
