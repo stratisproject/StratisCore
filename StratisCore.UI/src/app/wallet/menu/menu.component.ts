@@ -56,10 +56,8 @@ export class MenuComponent implements OnInit, OnDestroy {
     ngOnInit() {
       if (this.globalService.getNetwork() === "StratisMain") {
         this.coldStakingEnabled = false;
-        console.log(this.coldStakingEnabled);
       } else {
         this.coldStakingEnabled = true;
-        console.log(this.coldStakingEnabled);
       }
     }
 
