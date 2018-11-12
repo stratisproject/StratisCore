@@ -1,9 +1,8 @@
 <section id="GUI" class="light">
     <nav class="navbar navbar-light bg-light justify-content-between">
-
         <ul class="nav list-inline col-5">
             <li *ngFor="let option of tabOptions" class="nav-item list-inline-item">
-                <a class="nav-link" routerLink="{{option.routerLink}}">{{option.displayName}}</a>
+                <a *ngIf="option.featureName === 'coldstakingfeature' ? coldStakingEnabled : true" class="nav-link" routerLink="{{option.routerLink}}">{{option.displayName}}</a>
             </li>
         </ul>
 
@@ -27,6 +26,5 @@
                 </div>
             </div>
         </form>
-
     </nav>
 </section>

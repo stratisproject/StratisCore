@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -14,14 +14,14 @@ type Option = { 'displayName': string, 'routerLink': string, 'isEnabled': boolea
     templateUrl: './menu.component.html',
     styleUrls: ['./menu.component.css'],
 })
-export class MenuComponent implements OnDestroy {
+export class MenuComponent implements OnInit, OnDestroy {
     private featureSubscription: Subscription;
 
     constructor(private modalService: NgbModal, private globalService: GlobalService, private featuresService: FeaturesService, private router: Router) {
 
         this.tabOptions = [
             { 'displayName': 'Dashboard', 'routerLink': '/wallet', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': true, 'featureName': 'coldstakingfeature' },
+            { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': this.coldStakingEnabled, 'featureName': 'coldstakingfeature' },
             { 'displayName': 'History', 'routerLink': '/wallet/history', 'isEnabled': true, 'featureName': '' },
             { 'displayName': 'Smart Contracts', 'routerLink': '/wallet/smart-contracts', 'isEnabled': true, 'featureName': '' }
         ];
@@ -51,6 +51,16 @@ export class MenuComponent implements OnDestroy {
             this.router.navigate([option.routerLink]).then(x =>
                 console.log(`Navigation to ${option.routerLink} succeeded: ${x}`));
         }
+    }
+
+    ngOnInit() {
+      if (this.globalService.getNetwork() === "StratisMain") {
+        this.coldStakingEnabled = false;
+        console.log(this.coldStakingEnabled);
+      } else {
+        this.coldStakingEnabled = true;
+        console.log(this.coldStakingEnabled);
+      }
     }
 
     ngOnDestroy() {
