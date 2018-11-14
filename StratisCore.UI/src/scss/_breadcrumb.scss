@@ -10,6 +10,7 @@
 .breadcrumb-item {
   // The separator between breadcrumbs (by default, a forward-slash: "/")
   color: $primary;
+  word-break: break-word !important;
   &:hover {
     cursor: pointer;
     text-decoration: underline;
