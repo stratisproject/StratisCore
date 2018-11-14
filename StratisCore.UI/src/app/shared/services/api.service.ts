@@ -388,5 +388,17 @@ export class ApiService {
     postCallTransaction(transaction: any): Observable<Response> {
       return this.http
         .post(this.stratisApiUrl + '/smartcontractwallet/call', transaction, new RequestOptions({headers: this.headers}));
-    }    
+    }
+
+    /*
+     * Returns the receipt for a particular txhash, or empty JSON.
+     */
+    getReceipt(hash: string): any {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('txHash', hash);
+
+      return this.http
+        .get(this.stratisApiUrl + '/smartcontracts/receipt', new RequestOptions({headers: this.headers, search: params}));
+    }
+
 }

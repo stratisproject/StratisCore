@@ -67,12 +67,15 @@
                             <tr *ngFor="let item of history">
                                 <th scope="row"><strong>#{{item.blockHeight}}</strong></th>
                                 <td><span class="badge badge-info">{{item.type | contractType}}</span></td>
-                                <td><a href="#" data-toggle="modal" data-target="#modalInfotx">{{item.hash}}</a></td>
+                                <td>
+                                    <span *ngIf="item.type != 3 && item.type != 4">{{item.hash}}</span>
+                                    <a href="javascript:void(0);" *ngIf="item.type == 3 || item.type == 4" (click)="txHashClicked(item)">{{item.hash}}</a>
+                                </td>
                                 <td><code class="d-inline-block">{{item.to}}</code></td>
                                 <td><sc-balance [balance]="balance" [coinUnit]="coinUnit"></sc-balance></td>
                                 <td><button data-toggle="modal" data-target="#modalInfotx" data-toggle="tooltip"
                                         data-placement="top" title="" data-original-title="See details" class="btn btn-primary btn-sm"
-                                        type="button" (click)="contractClicked(contract)">+</button></td>
+                                        type="button">+</button></td>
                             </tr>
 
                         </tbody>

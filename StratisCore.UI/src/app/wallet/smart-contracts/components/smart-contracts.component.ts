@@ -9,13 +9,6 @@ import { TransactionComponent, Mode } from './modals/transaction/transaction.com
 import { ModalService } from '../../../shared/services/modal.service';
 import { takeUntil } from 'rxjs/operators';
 
-export class ContractItem {
-    amountFormatted = '';
-    constructor(public blockId: string, public type: string, public hash: string, public destinationAddress: string, private amount: number) {
-        this.amountFormatted = amount.toLocaleString();
-    }
-}
-
 @Component({
     selector: 'app-smart-contracts',
     templateUrl: './smart-contracts.component.html',
@@ -27,7 +20,6 @@ export class SmartContractsComponent implements OnInit {
     addresses: string[];
     addressChangedSubject: Subject<string>;
     balance: number;
-    contracts: ContractItem[];
     selectedAddress: string;
     history: ContractTransactionItem[];
     coinUnit: string;
@@ -123,6 +115,16 @@ export class SmartContractsComponent implements OnInit {
         (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
     }
 
-    contractClicked(contract: ContractItem) {
+    txHashClicked(contract: ContractTransactionItem) {
+        console.log("txhash clicked");
+        this.smartContractsService
+            .GetReceipt(contract.hash)
+            .toPromise()    
+            .then(result => {
+                this.genericModalService.openModal("Receipt", "<pre>" + JSON.stringify(result, null,"    ") + "</pre>");
+            },
+                error => {
+                    this.showApiError("Error retrieving receipt. " + error);
+            });
     }
 }
