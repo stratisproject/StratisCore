@@ -197,21 +197,19 @@ export class SendComponent implements OnInit, OnDestroy {
       this.sendForm.get("password").value,
       this.sendForm.get("address").value.trim(),
       this.sendForm.get("amount").value,
-      this.sendForm.get("fee").value,
+      //this.sendForm.get("fee").value,
       // TO DO: use coin notation
       this.estimatedFee / 100000000,
       true,
       false
     );
-
-    let transactionData;
+    console.log(this.transaction);
 
     this.apiService
       .buildTransaction(this.transaction)
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
-            console.log(response);
             this.responseMessage = response.json();
           }
         },
