@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiService } from '../../shared/services/api.service';
 import { ModalService } from '../../shared/services/modal.service';
+import { SendComponent } from '../send/send.component';
 import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
 import { AddressLabel } from '../../shared/classes/address-label';
 
@@ -82,7 +83,8 @@ export class AddressBookComponent implements OnInit, OnDestroy {
     }
 
     sendClicked(address: AddressLabel) {
-        console.log(address.label);
+      const modalRef = this.modalService.open(SendComponent, { backdrop: "static" });
+      modalRef.componentInstance.address = address.address;
     }
 
     removeClicked(address: AddressLabel) {
@@ -111,6 +113,6 @@ export class AddressBookComponent implements OnInit, OnDestroy {
     }
 
     addNewAddressClicked() {
-        this.modalService.open(AddNewAddressComponent);
+        this.modalService.open(AddNewAddressComponent, { backdrop: "static" });
     }
 }

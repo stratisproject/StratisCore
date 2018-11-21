@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
 import { ApiService } from '../../shared/services/api.service';
@@ -24,7 +24,8 @@ import 'rxjs/add/operator/debounceTime';
   styleUrls: ['./send.component.css'],
 })
 
-export class SendComponent implements OnInit {
+export class SendComponent implements OnInit, OnDestroy {
+  @Input() address: string;
   constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, public activeModal: NgbActiveModal, private fb: FormBuilder) {
     this.buildSendForm();
   }
@@ -44,6 +45,9 @@ export class SendComponent implements OnInit {
   ngOnInit() {
     this.startSubscriptions();
     this.coinUnit = this.globalService.getCoinUnit();
+    if (this.address) {
+      this.sendForm.patchValue({'address': this.address})
+    }
   }
 
   ngOnDestroy() {
