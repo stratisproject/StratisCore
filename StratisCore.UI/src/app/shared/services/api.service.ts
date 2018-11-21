@@ -10,6 +10,7 @@ import 'rxjs/add/operator/startWith';
 import { GlobalService } from './global.service';
 import { ElectronService } from 'ngx-electron';
 
+import { AddressLabel } from '../classes/address-label';
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
@@ -39,35 +40,31 @@ export class ApiService {
     }
 
     getNodeStatus(): Observable<any> {
-        return this.http
-            .get(this.stratisApiUrl + '/node/status')
-            .map((response: Response) => response.json());
+      return this.http
+        .get(this.stratisApiUrl + '/node/status')
+        .map((response: Response) => response.json());
     }
 
-    getAddressBookAddresses(skip: number, take: number): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('skip', skip.toString());
-        params.set('take', take.toString());
-        return this.http
-            .get(this.stratisApiUrl + '/AddressBook', new RequestOptions({headers: this.headers, search: params}))
-            .map((response: Response) => response.json());
+    getAddressBookAddresses(): Observable<any> {
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/AddressBook'))
+        .map((response: Response) => response);
     }
 
-    addAddressBookAddress(label: string, address: string): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('label', label);
-        params.set('address', address);
-        return this.http
-            .post(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, search: params}))
-            .map((response: Response) => response.json());
+    addAddressBookAddress(data: AddressLabel): Observable<any> {
+      return this.http
+        .post(this.stratisApiUrl + '/AddressBook/address', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
     }
 
     removeAddressBookAddress(label: string): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('label', label);
-        return this.http
-            .post(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, search: params}))
-            .map((response: Response) => response.json());
+      const params: URLSearchParams = new URLSearchParams();
+      params.set('label', label);
+      return this.http
+        .delete(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, search: params}))
+        .map((response: Response) => response);
     }
 
     /**
@@ -85,7 +82,6 @@ export class ApiService {
     getNewMnemonic(): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
       params.set('language', 'English');
-
       params.set('wordCount', '12');
 
       return this.http
