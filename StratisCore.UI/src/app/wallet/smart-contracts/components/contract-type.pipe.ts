@@ -17,7 +17,9 @@ export class ContractTypePipe implements PipeTransform {
         case 3:
           return "Call";
         case 4:
-          return "Create";  
+          return "Create";
+        case 5:
+          return "Gas Refund";
         default:
             return "";                  
       }
