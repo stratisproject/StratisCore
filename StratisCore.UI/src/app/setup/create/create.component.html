@@ -17,18 +17,24 @@
         <!-- /form-group -->
         <div class="form-group col-12">
           <label for="walletPassword">Password</label>
-          <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && createWalletForm.get('walletPassword').valid" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password.">
+          <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && createWalletForm.get('walletPassword').valid" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password to encrypt your wallet file.">
           <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
         </div>
         <!-- /form-group -->
         <div class="form-group col-12">
           <label for="walletPasswordConfirmation">Confirm password</label>
-          <input type="password" class="form-control" [class.is-invalid]="formErrors.walletPasswordConfirmation" [class.is-valid]="!formErrors.walletPasswordConfirmation && createWalletForm.get('walletPassword').valid && createWalletForm.get('walletPasswordConfirmation').valid" formControlName="walletPasswordConfirmation" id="walletPasswordConfirmation" placeholder="Enter a password.">
+          <input type="password" class="form-control" [class.is-invalid]="formErrors.walletPasswordConfirmation" [class.is-valid]="!formErrors.walletPasswordConfirmation && createWalletForm.get('walletPassword').valid && createWalletForm.get('walletPasswordConfirmation').valid" formControlName="walletPasswordConfirmation" id="walletPasswordConfirmation" placeholder="Re-enter the password to encrypt your wallet file.">
           <div *ngIf="formErrors.walletPasswordConfirmation" class="invalid-feedback">{{ formErrors.walletPasswordConfirmation }}</div>
         </div>
         <!-- /form-group -->
+        <div class="form-group col-12">
+          <label for="walletPassphrase">Passphrase (optional)</label>
+          <!--[class.is-invalid]="formErrors.walletPassphrase" [class.is-valid]="!formErrors.walletPassphrase && createWalletForm.get('walletPassphrase').valid"-->
+          <input type="password" class="form-control form-control-success" formControlName="walletPassphrase" id="walletPassphrase" placeholder="Enter an optional passphrase.">
+          <div *ngIf="formErrors.walletPassphrase" class="invalid-feedback">{{ formErrors.walletPassphrase }}</div>
+        </div>
         <div class="col-12">
-          <div class="form-control-feedback">Your password will be required to recover your wallet in the future. Keep it safe.</div>
+          <div class="form-control-feedback">Your passphrase will be required to recover your wallet in the future. Keep it safe if you choose to have one.</div>
         </div>
         <div class="modal-footer col-12">
           <button type="button" class="btn btn-outline-light" (click)="onBackClicked()">Cancel</button>
