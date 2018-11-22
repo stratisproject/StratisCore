@@ -135,6 +135,7 @@ export class TransactionComponent implements OnInit {
         const gasLimitMaximumValidator = control => Number(control.value) > this.gasLimitMaximum  ? { gasLimitTooHighError: true } : null;
         const gasCallLimitMinimumValidator = control => Number(control.value) < this.gasCallLimitMinimum  ? { gasCallLimitTooLowError: true } : null;
         const gasCreateLimitMinimumValidator = control => Number(control.value) < this.gasCreateLimitMinimum ? { gasCreateLimitTooLowError: true } : null;
+        const oddValidator = control => String(control.value).length % 2 !== 0 ? { hasOddNumberOfCharacters: true } : null;
 
         const integerValidator = Validators.pattern('^[0-9][0-9]*$');
 
@@ -145,7 +146,7 @@ export class TransactionComponent implements OnInit {
         this.gasPrice = new FormControl(1, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator]);
         this.gasLimit = new FormControl(this.mode === Mode.Call ? this.gasCallLimitMinimum : this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator]);
         this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
-        this.contractCode = new FormControl('', [Validators.required, Validators.nullValidator]);
+        this.contractCode = new FormControl('', [Validators.required, Validators.nullValidator, Validators.pattern('[0-9a-fA-F]*'), oddValidator]);
         this.parameters = new FormArray([]);
         this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
 
