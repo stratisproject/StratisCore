@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "electron-context-menu": "0.9.1",
+    "ngx-pagination": "^3.2.1",
     "ngx-qrcode2": "0.1.0"
   },
   "devDependencies": {

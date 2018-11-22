@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { SharedModule } from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
@@ -28,6 +29,7 @@ import { AddNewAddressComponent } from './address-book/modals/add-new-address/ad
     FormsModule,
     SharedModule.forRoot(),
     NgbModule,
+    NgxPaginationModule,
     ReactiveFormsModule,
     WalletRoutingModule,
     ColdStakingModule,

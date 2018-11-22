@@ -23,7 +23,7 @@ export class MenuComponent implements OnInit, OnDestroy {
             { 'displayName': 'Dashboard', 'routerLink': '/wallet', 'isEnabled': true, 'featureName': '' },
             { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': this.coldStakingEnabled, 'featureName': 'coldstakingfeature' },
             { 'displayName': 'History', 'routerLink': '/wallet/history', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'Smart Contracts', 'routerLink': '/wallet/smart-contracts', 'isEnabled': true, 'featureName': '' }
+            //{ 'displayName': 'Smart Contracts', 'routerLink': '/wallet/smart-contracts', 'isEnabled': true, 'featureName': '' }
         ];
 
         this.dropdownOptions = [
