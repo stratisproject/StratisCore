@@ -37,7 +37,7 @@ export class ConfirmMnemonicComponent implements OnInit {
         params["name"],
         params["mnemonic"],
         params["password"],
-        params["password"]
+        params["passphrase"]
       )
     });
   }
@@ -129,7 +129,7 @@ export class ConfirmMnemonicComponent implements OnInit {
   }
 
   public onBackClicked() {
-    this.router.navigate(['/setup/create/show-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password }});
+    this.router.navigate(['/setup/create/show-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password, passphrase: this.newWallet.passphrase }});
   }
 
   private checkMnemonic(): boolean {
@@ -152,7 +152,7 @@ export class ConfirmMnemonicComponent implements OnInit {
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400){
-            this.genericModalService.openModal("Wallet Created", "Your wallet has been created.<br>Keep your secret words and password safe!");
+            this.genericModalService.openModal("Wallet Created", "Your wallet has been created.<br>Keep your secret words, password and passphrase safe!");
             this.router.navigate(['']);
           }
         },
