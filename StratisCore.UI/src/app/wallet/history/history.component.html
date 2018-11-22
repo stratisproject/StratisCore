@@ -1,7 +1,7 @@
 <section id="GUI" class="light">
  <!-- CONTAINER -->
   <section id="content" class="light col-10 mx-auto">
-    
+
     <!-- CONTENT -->
     <section class="col-12">
       <div class="row">
@@ -12,7 +12,7 @@
             <div class="card-body">
               <table class="table table-sm">
                 <tbody>
-                  <tr *ngFor="let transaction of transactions;">
+                  <tr *ngFor="let transaction of transactions | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
                     <th class="text-center" *ngIf="!transaction.transactionConfirmedInBlock"><span class="bubble bg-warning"></span></th>
                     <th class="text-center" *ngIf="transaction.transactionConfirmedInBlock"><span class="bubble bg-success"></span></th>
                     <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
@@ -24,6 +24,7 @@
                   </tr>
                 </tbody>
               </table>
+              <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
             </div>
           </div>
           <ng-template #noTransactions><em class="muted">Looks like you haven't made any transactions yet.</em></ng-template>
