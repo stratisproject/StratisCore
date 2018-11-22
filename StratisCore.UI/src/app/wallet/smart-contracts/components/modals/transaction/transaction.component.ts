@@ -140,7 +140,7 @@ export class TransactionComponent implements OnInit {
 
         let gasLimitValidator = (this.mode === Mode.Call ? gasCallLimitMinimumValidator : gasCreateLimitMinimumValidator);
 
-        this.amount = new FormControl(0, [integerValidator, amountValidator]);
+        this.amount = new FormControl(0, [amountValidator]);
         this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator]);
         this.gasPrice = new FormControl(1, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator]);
         this.gasLimit = new FormControl(this.mode === Mode.Call ? this.gasCallLimitMinimum : this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator]);
