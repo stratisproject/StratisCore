@@ -3583,7 +3583,7 @@ tbody.collapse.show {
 
 .nav-link {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   color: #98A3B3;
 }
 
@@ -3656,6 +3656,10 @@ tbody.collapse.show {
   flex-basis: 0;
   flex-grow: 1;
   text-align: center;
+}
+
+.tab-content {
+  padding: 1rem 0;
 }
 
 .tab-content > .tab-pane {
