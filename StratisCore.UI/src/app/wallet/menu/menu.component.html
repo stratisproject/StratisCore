@@ -17,11 +17,9 @@
                 <div ngbDropdown class="d-inline-block">
                     <button class="btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle>{{walletName}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button *ngFor="let option of dropdownOptions" class="dropdown-item d-flex align-items-center"
-                            type="button" (click)="optionClicked(option)">{{option.displayName}}</button>
+                        <button *ngFor="let option of dropdownOptions" class="dropdown-item d-flex align-items-center" type="button" (click)="optionClicked(option)">{{option.displayName}}</button>
                         <div class="dropdown-divider"></div>
-                        <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal"
-                            (click)="logoutClicked()" data-target="#modalLogout"><i class="lnr lnr-exit"></i> Logout</button>
+                        <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal" (click)="logoutClicked()" data-target="#modalLogout"><i class="lnr lnr-exit"></i> Logout</button>
                     </div>
                 </div>
             </div>
