@@ -48,8 +48,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     optionClicked(option: Option) {
         if (option.routerLink) {
-            this.router.navigate([option.routerLink]).then(x =>
-                console.log(`Navigation to ${option.routerLink} succeeded: ${x}`));
+            this.router.navigate([option.routerLink]);
         }
     }
 
