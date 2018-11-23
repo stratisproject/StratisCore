@@ -8557,6 +8557,11 @@ img {
   color: #adb5bd;
 }
 
+#GUI .navbar .form-inline .dropdown-menu.dropdown-menu-right {
+  right: 0 !important;
+  left: auto !important;
+}
+
 #GUI .jumbotron h5 {
   text-transform: uppercase;
   font-size: 0.8125rem;
@@ -8681,10 +8686,6 @@ img {
 #GUI .card .stake-type {
   padding: 1.125rem 1.25rem 0;
   background-color: #fff;
-}
-
-#GUI .card .card-body dl, #GUI .card .card-body dt, #GUI .card .card-body dd {
-  margin-bottom: 0;
 }
 
 #GUI .dropdown-menu-nocaret .dropdown-toggle::after {
@@ -8999,6 +9000,11 @@ img {
   overflow: auto;
 }
 
+.modal .modal-dialog .tab-content {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+}
+
 .modal .myAddress .btn:hover {
   cursor: pointer;
 }
@@ -9041,6 +9047,11 @@ img {
 .modal .tab-pane-line {
   padding: .5em;
   border-bottom: 1px dotted #ccc;
+}
+
+.purple-shadow .modal-content {
+  border: 1px solid #6f42c1 !important;
+  box-shadow: 0 5px 20px 0 rgba(111, 66, 193, 0.4) !important;
 }
 
 .purple-shadow .modal-content {
@@ -9091,10 +9102,6 @@ img {
 .smartcontracts .card .table td {
   padding: .75rem .25rem !important;
   vertical-align: middle;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 150px;
 }
 
 .smartcontracts .card .table td strong {
@@ -9225,26 +9232,6 @@ img {
 
 .details.modal-footer {
   padding: 0 15px;
-}
-
-.nav-item .nav-link.active.purple {
-  background-color: #6f42c1 !important;
-  color: #fff !important;
-}
-
-.nav-item .nav-link.active.blue {
-  background-color: #158BCF !important;
-  color: #fff !important;
-}
-
-.nav-item .nav-link.purple {
-  border-color: #6f42c1 !important;
-  color: #adb5bd !important;
-}
-
-.nav-item .nav-link.blue {
-  border-color: #158BCF !important;
-  color: #adb5bd !important;
 }
 
 .login {
