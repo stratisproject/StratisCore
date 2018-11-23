@@ -17,10 +17,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HistoryComponent } from './history/history.component';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 import { AdvancedComponent } from './advanced/advanced.component';
-import { AdvancedService } from '../wallet/advanced/advanced.service';
-import { FeedbackComponent } from './advanced/feedback/feedback.component';
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddNewAddressComponent } from './address-book/modals/add-new-address/add-new-address.component';
+import { ExtPubkeyComponent } from './advanced/components/ext-pubkey/ext-pubkey.component';
+import { AboutComponent } from './advanced/components/about/about.component';
+import { GenerateAddressesComponent } from './advanced/components/generate-addresses/generate-addresses.component';
+import { ResyncComponent } from './advanced/components/resync/resync.component';
 
 @NgModule({
   imports: [
@@ -43,13 +45,14 @@ import { AddNewAddressComponent } from './address-book/modals/add-new-address/ad
     HistoryComponent,
     StatusBarComponent,
     AdvancedComponent,
-    FeedbackComponent,
     AddressBookComponent,
-    AddNewAddressComponent
+    AddNewAddressComponent,
+    ExtPubkeyComponent,
+    AboutComponent,
+    GenerateAddressesComponent,
+    ResyncComponent
   ],
-  providers: [
-    AdvancedService
-  ],
+  providers: [],
   exports: []
 })
 
