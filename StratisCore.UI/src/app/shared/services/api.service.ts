@@ -76,6 +76,17 @@ export class ApiService {
         .map((response: Response) => response);
      }
 
+    /** Gets the extended public key from a certain wallet */
+    getExtPubkey(data: WalletInfo): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', 'account 0');
+
+      return this.http
+        .get(this.stratisApiUrl + '/wallet/extpubkey', new RequestOptions({headers: this.headers, params: params}))
+        .map((response: Response) => response);
+    }
+
      /**
       * Get a new mnemonic
       */

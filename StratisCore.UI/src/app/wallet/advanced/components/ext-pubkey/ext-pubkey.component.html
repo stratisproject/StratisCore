@@ -1,6 +1,7 @@
 <div class="card">
   <div class="card-header">Extended Public Key</div>
     <div class="card-body">
-      blabla
+      <p *ngIf="extPubKey">Extended Public Key: {{ extPubKey }}</p>
+      <p *ngIf="!extPubKey">Something went wrong while getting your Extended Public Key.</p>
     </div>
 </div>
