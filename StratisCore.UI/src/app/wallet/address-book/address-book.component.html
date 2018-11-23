@@ -13,11 +13,11 @@
           </div>
           <div *ngIf="addresses; else noAddresses">
             <div class="row" *ngFor="let addressRow of addresses">
-                <div class="card col-12 my-1">
+                <div class="card Addresses col-12 my-1">
                     <div class="card-body">
-                        <dl class="d-flex align-items-center">
-                            <dt class="col-3">{{addressRow.label}}</dt>
-                            <dd class="col-6">
+                        <dl class="d-flex align-items-center mb-0">
+                            <dt class="col-3 mb-0">{{addressRow.label}}</dt>
+                            <dd class="col-6 mb-0">
                                 <div class="myAddress d-inline">
                                     <code class="d-inline-block">{{addressRow.address}}</code>
                                     <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
@@ -26,7 +26,7 @@
                                     </button>
                                 </div>
                             </dd>
-                            <dd class="col-3 text-right">
+                            <dd class="col-3 mb-0 text-right">
                                 <button type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendClicked(addressRow)">Send</button>
                                 <button type="button" class="btn btn-lighter btn-sm ml-2" (click)="removeClicked(addressRow)"><i class="lnr lnr-trash"></i></button>
                             </dd>
