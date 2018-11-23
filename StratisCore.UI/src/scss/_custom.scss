@@ -506,6 +506,9 @@ img {pointer-events: none !important;}
     box-shadow: 0 5px 20px 0 rgba($purple,.4) !important;
   }
 }
+.modal-body {
+  .nav-tabs {border-bottom: 0 !important;}
+}
 
 ////// Smart Contracts
 .smartcontracts {
@@ -593,6 +596,19 @@ img {pointer-events: none !important;}
     padding-bottom: 2rem;
   }
   button {&:hover {cursor: pointer;}}
+}
+////// PAGINATION
+.ngx-pagination {
+    padding-left: 0 !important;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    li {
+      a {
+        color: $gray-700;
+        &:hover {text-decoration: none;}
+      }
+    }
 }
 // anim
 .Loading {
