@@ -34,8 +34,7 @@
   // as much space as possible, ensuring footers are aligned to the bottom.
   flex: 1 1 auto;
   padding: 0.85rem 1rem;
-  background-color: $card-bg;  
-  dl, dt, dd {margin-bottom: 0 !important;}
+  background-color: $card-bg;
 }
 
 .card-title {

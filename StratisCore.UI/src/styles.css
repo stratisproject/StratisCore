@@ -4295,6 +4295,7 @@ tbody.collapse.show {
 
 .breadcrumb-item {
   color: #158BCF;
+  word-break: break-word !important;
 }
 
 .breadcrumb-item:hover {
@@ -4320,6 +4321,7 @@ tbody.collapse.show {
 
 .breadcrumb-item.active {
   color: #98A3B3;
+  word-break: break-word !important;
 }
 
 .pagination {
@@ -9046,11 +9048,6 @@ img {
   box-shadow: 0 5px 20px 0 rgba(111, 66, 193, 0.4) !important;
 }
 
-.purple-shadow .modal-content {
-  border: 1px solid #6f42c1 !important;
-  box-shadow: 0 5px 20px 0 rgba(111, 66, 193, 0.4) !important;
-}
-
 .smartcontracts .card {
   min-height: 120px;
 }
@@ -9094,6 +9091,10 @@ img {
 .smartcontracts .card .table td {
   padding: .75rem .25rem !important;
   vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
 }
 
 .smartcontracts .card .table td strong {
@@ -9224,6 +9225,26 @@ img {
 
 .details.modal-footer {
   padding: 0 15px;
+}
+
+.nav-item .nav-link.active.purple {
+  background-color: #6f42c1 !important;
+  color: #fff !important;
+}
+
+.nav-item .nav-link.active.blue {
+  background-color: #158BCF !important;
+  color: #fff !important;
+}
+
+.nav-item .nav-link.purple {
+  border-color: #6f42c1 !important;
+  color: #adb5bd !important;
+}
+
+.nav-item .nav-link.blue {
+  border-color: #158BCF !important;
+  color: #adb5bd !important;
 }
 
 .login {

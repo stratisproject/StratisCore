@@ -175,6 +175,9 @@ img {pointer-events: none !important;}
       padding: 1.125rem 1.25rem 0;
       background-color: $white;
     }
+    .card-body {
+      dl, dt, dd {margin-bottom: 0;}
+    }
   }
 
   // no caret
@@ -446,11 +449,6 @@ img {pointer-events: none !important;}
     flex-direction: column;
     justify-content: center;
     overflow: auto;
-    // special addresses
-    .tab-content {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-    }  
   }
   .myAddress {
     .btn {&:hover {cursor: pointer;}}
@@ -495,14 +493,6 @@ img {pointer-events: none !important;}
   }
 }
 
-// for cross-chain modal look
-.purple-shadow {
-  .modal-content {
-    border: 1px solid $purple !important;
-    box-shadow: 0 5px 20px 0 rgba($purple,.4) !important;
-  }
-}
-
 ////// Smart Contracts
 .smartcontracts {
   .card {
@@ -531,6 +521,10 @@ img {pointer-events: none !important;}
       td {
         padding: .75rem .25rem !important;
         vertical-align: middle;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
         // amount
         strong {color: $black;}
         small {color: rgba($black, .7);}
@@ -646,6 +640,30 @@ img {pointer-events: none !important;}
     padding: .75rem .4rem;
   }
   &.modal-footer {padding: 0 15px;}
+}
+
+/// MODAL SEND
+.nav-item {
+  .nav-link {
+    &.active {
+      &.purple {
+        background-color: $purple !important;
+        color: $white !important;
+      }
+      &.blue {
+        background-color: $primary !important;
+        color: $white !important;
+      }
+    }
+    &.purple {
+      border-color: $purple !important;
+      color: $gray-500 !important;
+    }
+    &.blue {
+      border-color: $primary !important;
+      color: $gray-500 !important;
+    }
+  }
 }
 
 /// LOADING ANIM
