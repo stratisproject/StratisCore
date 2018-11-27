@@ -45,6 +45,14 @@ export class ApiService {
         .map((response: Response) => response.json());
     }
 
+    getNodeStatusInterval(): Observable<any> {
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/node/status'))
+        .map((response: Response) => response);
+    }
+
     getAddressBookAddresses(): Observable<any> {
       return Observable
         .interval(this.pollingInterval)

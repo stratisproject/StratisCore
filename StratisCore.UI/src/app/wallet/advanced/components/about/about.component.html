@@ -1,6 +1,61 @@
 <div class="card">
   <div class="card-header">About</div>
     <div class="card-body" style="min-height:200px;">
-      Wallet version: v{{ applicationVersion }}
+      <div class="row">
+        <div class='col'>
+          Client name:
+        </div>
+        <div class='col'>
+          {{ clientName }}
+        </div>
+      </div>
+      <div class="row">
+        <div class='col'>
+          Wallet version:
+        </div>
+        <div class='col'>
+          {{ applicationVersion }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Fullnode version:
+        </div>
+        <div class="col">
+          {{ fullNodeVersion }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Current network:
+        </div>
+        <div class="col">
+          {{ network }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Protocol version:
+        </div>
+        <div class="col">
+          {{ protocolVersion }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          Current block height:
+        </div>
+        <div class="col">
+          {{ blockHeight }}
+        </div>
+      </div>
+      <div clas="row">
+        <div class="col">
+          Wallet data directory:
+        </div>
+        <div class="col">
+          {{ dataDirectory }}
+        </div>
+      </div>
     </div>
 </div>
