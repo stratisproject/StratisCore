@@ -283,6 +283,18 @@ export class ApiService {
         .map((response: Response) => response);
     }
 
+    /** Remove transaction */
+    removeTransaction(walletName: string): Observable<any> {
+      const params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', walletName);
+      params.set('all', 'true');
+      params.set('resync', 'true');
+
+      return this.http
+        .delete(this.stratisApiUrl + '/wallet/remove-transactions', new RequestOptions({headers: this.headers, params: params}))
+        .map((response: Response) => response);
+    }
+
     /**
      * Start staking
      */
