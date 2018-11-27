@@ -7,7 +7,7 @@ import { GlobalService } from '../../shared/services/global.service';
 import { FeaturesService } from '../../shared/services/features.service';
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 
-type Option = { 'displayName': string, 'routerLink': string, 'isEnabled': boolean, 'featureName': string }
+type Option = { 'displayName': string, 'routerLink': string, 'isEnabled': boolean, 'featureName': string, 'icon': string }
 
 @Component({
     selector: 'app-menu',
@@ -20,15 +20,15 @@ export class MenuComponent implements OnInit, OnDestroy {
     constructor(private modalService: NgbModal, private globalService: GlobalService, private featuresService: FeaturesService, private router: Router) {
 
         this.tabOptions = [
-            { 'displayName': 'Dashboard', 'routerLink': '/wallet', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': this.coldStakingEnabled, 'featureName': 'coldstakingfeature' },
-            { 'displayName': 'History', 'routerLink': '/wallet/history', 'isEnabled': true, 'featureName': '' },
-            //{ 'displayName': 'Smart Contracts', 'routerLink': '/wallet/smart-contracts', 'isEnabled': true, 'featureName': '' }
+            { 'displayName': 'Dashboard', 'routerLink': '/wallet', 'isEnabled': true, 'featureName': '', icon: '' },
+            { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': this.coldStakingEnabled, 'featureName': 'coldstakingfeature', icon: '' },
+            { 'displayName': 'History', 'routerLink': '/wallet/history', 'isEnabled': true, 'featureName': '', icon: '' },
+            //{ 'displayName': 'Smart Contracts', 'routerLink': '/wallet/smart-contracts', 'isEnabled': true, 'featureName': '', icon: '' }
         ];
 
         this.dropdownOptions = [
-            { 'displayName': 'Advanced', 'routerLink': '/wallet/advanced', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'Address Book', 'routerLink': '/wallet/address-book', 'isEnabled': true, 'featureName': '' }
+            { 'displayName': 'Advanced', 'routerLink': '/wallet/advanced', 'isEnabled': true, 'featureName': '', icon: 'lnr-cog'},
+            { 'displayName': 'Address Book', 'routerLink': '/wallet/address-book', 'isEnabled': true, 'featureName': '', icon: 'lnr-book' }
         ];
 
         this.walletName = this.globalService.getWalletName();
