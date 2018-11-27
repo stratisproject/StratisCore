@@ -575,6 +575,15 @@ img {pointer-events: none !important;}
   display: inline-block;
   margin: .5rem 0 0;
 }
+.code-block-base {
+  padding: 1rem;
+  border-radius: $border-radius-lg;
+  background-color: rgba($gray-500, .05);
+  color: rgba($gray-700, .8);
+  overflow-wrap: break-word;
+  display: inline-block;
+  margin: .5rem 0 0;
+}
 
 ////// LOGIN
 .left-login {

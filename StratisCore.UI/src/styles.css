@@ -8632,7 +8632,7 @@ img {
   color: #fff;
 }
 
-#GUI .jumbotron .Addresses dl, #GUI .jumbotron .Addresses dt, #GUI .jumbotron .Addresses dd, #GUI .jumbotron .Addresses .col-3, #GUI .jumbotron .Addresses .col-6 {
+#GUI .jumbotron .Addresses dl, #GUI .jumbotron .Addresses dt, #GUI .jumbotron .Addresses dd {
   margin-bottom: 0 !important;
 }
 
@@ -9150,6 +9150,16 @@ img {
   border-radius: 0.3rem;
   background-color: rgba(111, 66, 193, 0.05);
   color: rgba(111, 66, 193, 0.8);
+  overflow-wrap: break-word;
+  display: inline-block;
+  margin: .5rem 0 0;
+}
+
+.code-block-base {
+  padding: 1rem;
+  border-radius: 0.3rem;
+  background-color: rgba(173, 181, 189, 0.05);
+  color: rgba(73, 80, 87, 0.8);
   overflow-wrap: break-word;
   display: inline-block;
   margin: .5rem 0 0;
