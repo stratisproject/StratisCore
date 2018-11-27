@@ -45,6 +45,14 @@ export class ApiService {
         .map((response: Response) => response.json());
     }
 
+    getNodeStatusInterval(): Observable<any> {
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/node/status'))
+        .map((response: Response) => response);
+    }
+
     getAddressBookAddresses(): Observable<any> {
       return Observable
         .interval(this.pollingInterval)
@@ -280,6 +288,18 @@ export class ApiService {
     sendTransaction(data: TransactionSending): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/wallet/send-transaction', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /** Remove transaction */
+    removeTransaction(walletName: string): Observable<any> {
+      const params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', walletName);
+      params.set('all', 'true');
+      params.set('resync', 'true');
+
+      return this.http
+        .delete(this.stratisApiUrl + '/wallet/remove-transactions', new RequestOptions({headers: this.headers, params: params}))
         .map((response: Response) => response);
     }
 

@@ -14,6 +14,7 @@ export class ExtPubkeyComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService) { }
 
   public extPubKey: string;
+  public copied: Boolean = false;
 
   ngOnInit() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName());
@@ -43,5 +44,9 @@ export class ExtPubkeyComponent implements OnInit {
         }
       )
     ;
+  }
+
+  public onCopiedClick() {
+    this.copied=true;
   }
 }

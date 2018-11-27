@@ -13,7 +13,7 @@
         <button type="submit" class="btn btn-primary btn-block" [disabled]="!generateAddressesForm.valid" (click)="onGenerateClicked()">Generate</button>
       </div>
     </div>
-    <div class="mt-4" *ngIf="addresses">
+    <div class="mt-4" *ngIf="addresses?.length > 0">
       <div class="col-12 my-2" *ngFor="let address of addresses">
         <code class="d-inline-block">{{ address }}</code>
         <button type="button" class="btn btn-outline-secondary ml-2 btn-sm" ngxClipboard [cbContent]="address"><i class="lnr lnr-file-add"></i> copy</button>
