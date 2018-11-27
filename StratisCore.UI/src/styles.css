@@ -3583,7 +3583,7 @@ tbody.collapse.show {
 
 .nav-link {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   color: #98A3B3;
 }
 
@@ -3656,6 +3656,10 @@ tbody.collapse.show {
   flex-basis: 0;
   flex-grow: 1;
   text-align: center;
+}
+
+.tab-content {
+  padding: 1rem 0;
 }
 
 .tab-content > .tab-pane {
@@ -4295,6 +4299,7 @@ tbody.collapse.show {
 
 .breadcrumb-item {
   color: #158BCF;
+  word-break: break-word !important;
 }
 
 .breadcrumb-item:hover {
@@ -4320,6 +4325,7 @@ tbody.collapse.show {
 
 .breadcrumb-item.active {
   color: #98A3B3;
+  word-break: break-word !important;
 }
 
 .pagination {
@@ -8555,6 +8561,11 @@ img {
   color: #adb5bd;
 }
 
+#GUI .navbar .form-inline .dropdown-menu.dropdown-menu-right {
+  right: 0 !important;
+  left: auto !important;
+}
+
 #GUI .jumbotron h5 {
   text-transform: uppercase;
   font-size: 0.8125rem;
@@ -8621,6 +8632,10 @@ img {
   color: #fff;
 }
 
+#GUI .jumbotron .Addresses dl, #GUI .jumbotron .Addresses dt, #GUI .jumbotron .Addresses dd {
+  margin-bottom: 0 !important;
+}
+
 #GUI #staking strong {
   font-weight: bold !important;
 }
@@ -8679,10 +8694,6 @@ img {
 #GUI .card .stake-type {
   padding: 1.125rem 1.25rem 0;
   background-color: #fff;
-}
-
-#GUI .card .card-body dl, #GUI .card .card-body dt, #GUI .card .card-body dd {
-  margin-bottom: 0;
 }
 
 #GUI .dropdown-menu-nocaret .dropdown-toggle::after {
@@ -8997,6 +9008,11 @@ img {
   overflow: auto;
 }
 
+.modal .modal-dialog .tab-content {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+}
+
 .modal .myAddress .btn:hover {
   cursor: pointer;
 }
@@ -9049,6 +9065,10 @@ img {
 .purple-shadow .modal-content {
   border: 1px solid #6f42c1 !important;
   box-shadow: 0 5px 20px 0 rgba(111, 66, 193, 0.4) !important;
+}
+
+.modal-body .nav-tabs {
+  border-bottom: 0 !important;
 }
 
 .smartcontracts .card {
@@ -9135,6 +9155,16 @@ img {
   margin: .5rem 0 0;
 }
 
+.code-block-base {
+  padding: 1rem;
+  border-radius: 0.3rem;
+  background-color: rgba(173, 181, 189, 0.05);
+  color: rgba(73, 80, 87, 0.8);
+  overflow-wrap: break-word;
+  display: inline-block;
+  margin: .5rem 0 0;
+}
+
 .left-login {
   height: 100vh;
   background: #158BCF;
@@ -9162,6 +9192,21 @@ img {
 
 .right-login button:hover {
   cursor: pointer;
+}
+
+.ngx-pagination {
+  padding-left: 0 !important;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.ngx-pagination li a {
+  color: #495057;
+}
+
+.ngx-pagination li a:hover {
+  text-decoration: none;
 }
 
 .Loading {
