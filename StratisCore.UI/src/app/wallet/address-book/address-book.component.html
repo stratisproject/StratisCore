@@ -20,9 +20,8 @@
                             <dd class="col-6 mb-0">
                                 <div class="myAddress d-inline">
                                     <code class="d-inline-block">{{addressRow.address}}</code>
-                                    <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
-                                        data-toggle="tooltip" data-placement="right" title="Copy to Clipboard" (click)="copyToClipboardClicked(addressRow)">
-                                        <i class="lnr lnr-file-add"></i>
+                                    <button class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" title="Copy to Clipboard" (click)="copyToClipboardClicked(addressRow)" type="button">
+                                      <i class="lnr lnr-file-add"></i> copy
                                     </button>
                                 </div>
                             </dd>
