@@ -5439,6 +5439,7 @@ button.close {
 }
 
 .tooltip-inner {
+  width: auto;
   max-width: 200px;
   padding: 3px 8px;
   color: #fff;
