@@ -18,7 +18,7 @@ export class GenerateAddressesComponent implements OnInit {
   }
 
   public generateAddressesForm: FormGroup;
-  public addresses: string[] = [''];
+  public addresses: string[];
 
   ngOnInit() {
   }
