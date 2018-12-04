@@ -1,6 +1,6 @@
 export class SecretWordIndexGenerator {
-    
-    private readonly textPrefix = 'Word n°';
+
+    private readonly textPrefix = 'Word number ';
 
     constructor() {
 
@@ -15,7 +15,7 @@ export class SecretWordIndexGenerator {
         const one = getRandom();
         const two = getRandom(one);
         const three = getRandom(one, two);
-        
+
         const indexes = [one, two, three].sort((a, b) => a - b);
         this.index1 = indexes[0];
         this.index2 = indexes[1];
