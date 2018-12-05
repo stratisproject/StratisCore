@@ -49,10 +49,10 @@ export class StatusBarComponent implements OnInit {
             this.chainTip = generalWalletInfoResponse.chainTip;
             this.isChainSynced = generalWalletInfoResponse.isChainSynced;
             this.connectedNodes = generalWalletInfoResponse.connectedNodes;
-          
-            const processedText = `Processed ${this.lastBlockSyncedHeight} blocks of transaction history.`;
+
+            const processedText = `Processed ${this.lastBlockSyncedHeight} out of ${this.chainTip} blocks.`;
             this.toolTip = `Synchronizing.  ${processedText}`;
-            
+
             if (this.connectedNodes == 1) {
                 this.connectedNodesTooltip = "1 connection";
             } else if (this.connectedNodes >= 0) {
@@ -128,7 +128,7 @@ export class StatusBarComponent implements OnInit {
     if(this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
     }
-    
+
     if (this.stakingInfoSubscription) {
       this.stakingInfoSubscription.unsubscribe();
     }
