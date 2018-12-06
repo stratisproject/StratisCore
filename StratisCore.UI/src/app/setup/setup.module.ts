@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { SetupComponent } from './setup.component';
 import { CreateComponent } from './create/create.component';
@@ -17,6 +18,7 @@ import { ConfirmMnemonicComponent } from './create/confirm-mnemonic/confirm-mnem
   imports: [
     BsDatepickerModule.forRoot(),
     CommonModule,
+    NgbModule,
     ReactiveFormsModule,
     SetupRoutingModule,
     SharedModule.forRoot()
