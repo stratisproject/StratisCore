@@ -586,6 +586,16 @@ img {pointer-events: none !important;}
 }
 
 ////// ADVANCED PAGE
+.card-body {
+  .blockLabel {
+    font-weight: 600;
+  }
+  .blockText {
+    font-weight: 500;
+    color: $gray-600;
+    user-select: auto !important;
+  }
+}
 
 ////// LOGIN
 .left-login {
@@ -621,6 +631,7 @@ img {pointer-events: none !important;}
       }
     }
 }
+
 // anim
 .Loading {
   padding: 30px;

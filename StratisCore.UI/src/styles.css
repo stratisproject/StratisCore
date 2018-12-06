@@ -9165,6 +9165,16 @@ img {
   margin: .5rem 0 0;
 }
 
+.card-body .blockLabel {
+  font-weight: 600;
+}
+
+.card-body .blockText {
+  font-weight: 500;
+  color: #98A3B3;
+  user-select: auto !important;
+}
+
 .left-login {
   height: 100vh;
   background: #158BCF;
