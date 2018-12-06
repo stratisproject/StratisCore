@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
 
     private subscription: Subscription;
-    private readonly MaxRetryCount = 20;
+    private readonly MaxRetryCount = 50;
     private readonly TryDelayMilliseconds = 3000;
 
     loading = true;

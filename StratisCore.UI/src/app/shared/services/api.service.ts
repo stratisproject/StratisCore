@@ -337,7 +337,7 @@ export class ApiService {
      */
     shutdownNode(): Observable<any> {
       return this.http
-        .post(this.stratisApiUrl + '/node/shutdown', {headers: this.headers})
+        .post(this.stratisApiUrl + '/node/shutdown', 'corsProtection:true', {headers: this.headers})
         .map((response: Response) => response);
     }
 
