@@ -14,7 +14,7 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
   templateUrl: './status-bar.component.html',
   styleUrls: ['./status-bar.component.css']
 })
-export class StatusBarComponent implements OnInit {
+export class StatusBarComponent implements OnInit, OnDestroy {
 
   private generalWalletInfoSubscription: Subscription;
   private stakingInfoSubscription: Subscription;
