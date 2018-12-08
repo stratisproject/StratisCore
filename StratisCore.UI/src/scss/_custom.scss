@@ -739,3 +739,10 @@ img {pointer-events: none !important;}
     fill-opacity:1;
   }
 }
+
+// Wallet creation
+.createWallet {
+  .bs-tooltip-right {
+    width: 260px;
+  }
+}
