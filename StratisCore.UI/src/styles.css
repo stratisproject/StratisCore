@@ -9338,6 +9338,10 @@ img {
   }
 }
 
+.createWallet .bs-tooltip-right, .createWallet .tooltip.bs-tooltip-auto[x-placement^="right"] {
+  width: 260px;
+}
+
 @font-face {
   font-family: 'Linearicons-Free';
   src: url("./assets/fonts/Linearicons-Free.eot?w118d");
