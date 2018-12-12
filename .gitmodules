@@ -5,3 +5,4 @@
 [submodule "FederatedSidechains"]
 	path = FederatedSidechains
 	url = https://github.com/stratisproject/FederatedSidechains
+	
