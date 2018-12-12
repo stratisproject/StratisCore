@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
 
     private subscription: Subscription;
-    private readonly MaxRetryCount = 50;
+    private readonly MaxRetryCount = 2;
     private readonly TryDelayMilliseconds = 3000;
 
     loading = true;
@@ -65,5 +65,9 @@ export class AppComponent implements OnInit, OnDestroy {
         let applicationVersion = this.electronService.remote.app.getVersion();
         let newTitle = applicationName + " " + applicationVersion;
         this.titleService.setTitle(newTitle);
+    }
+
+    public openSupport() {
+      this.electronService.shell.openExternal("http://www.stratisplatform.com");
     }
 }
