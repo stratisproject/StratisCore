@@ -19,13 +19,14 @@ export class GenerateAddressesComponent implements OnInit {
 
   public generateAddressesForm: FormGroup;
   public addresses: string[];
+  public pageNumber: number = 1;
 
   ngOnInit() {
   }
 
   private buildGenerateAddressesForm() {
     this.generateAddressesForm= this.fb.group({
-      "generateAddresses": ["", Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(10)])]
+      "generateAddresses": ["", Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(1000)])]
     });
 
     this.generateAddressesForm.valueChanges
@@ -58,7 +59,7 @@ export class GenerateAddressesComponent implements OnInit {
       'required': 'Please enter an amount to generate.',
       'pattern': 'Please enter a number between 1 and 10.',
       'min': 'Please generate at least one address.',
-      'max': 'You can only generate 10 addresses at once.'
+      'max': 'You can only generate 1000 addresses at once.'
     }
   };
 
