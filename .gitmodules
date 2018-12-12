@@ -1,7 +1,9 @@
 [submodule "StratisBitcoinFullNode"]
 	path = StratisBitcoinFullNode
 	url = https://github.com/stratisproject/StratisBitcoinFullNode/
+	branch = "release/3.0.0.0"
 
 [submodule "FederatedSidechains"]
 	path = FederatedSidechains
 	url = https://github.com/stratisproject/FederatedSidechains
+	
