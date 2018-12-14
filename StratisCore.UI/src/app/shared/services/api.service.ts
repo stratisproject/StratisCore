@@ -15,6 +15,7 @@ import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
 import { WalletInfo } from '../classes/wallet-info';
+import { SidechainFeeEstimation } from '../classes/sidechain-fee-estimation';
 import { FeeEstimation } from '../classes/fee-estimation';
 import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
@@ -259,6 +260,24 @@ export class ApiService {
      * Estimate the fee of a transaction
      */
     estimateFee(data: FeeEstimation): Observable<any> {
+      // let params = data;
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', data.accountName);
+      params.set('recipients[0].destinationAddress', data.recipients[0].destinationAddress);
+      params.set('recipients[0].amount', data.recipients[0].amount);
+      params.set('feeType', data.feeType);
+      params.set('allowUnconfirmed', "true");
+
+      return this.http
+        .get(this.stratisApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, params: params}))
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Estimate the fee of a sidechain transaction
+     */
+    estimateSidechainFee(data: SidechainFeeEstimation): Observable<any> {
       // let params = data;
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
