@@ -9219,6 +9219,18 @@ img {
   text-decoration: none;
 }
 
+.ModalSend .tab-content {
+  padding-bottom: 0 !important;
+}
+
+.ModalSend .nav-link.active {
+  color: #fff !important;
+}
+
+.ModalSend .nav-link.active.purple-bg {
+  background-color: #6f42c1 !important;
+}
+
 .Loading {
   padding: 30px;
   text-align: center;

@@ -632,6 +632,13 @@ img {pointer-events: none !important;}
     }
 }
 
+// Modal Send
+.ModalSend {
+  .tab-content {padding-bottom: 0 !important;}
+  .nav-link {&.active {color: $white !important;}}
+  .nav-link {&.active {&.purple-bg {background-color: $purple !important;}}} // for active sidechains pill
+}
+
 // anim
 .Loading {
   padding: 30px;
