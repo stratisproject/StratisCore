@@ -1,0 +1,62 @@
+<div class="card p-4">
+  <div class="card-header">About</div>
+    <div class="card-body" style="min-height:200px;">
+
+      <div class="row">
+        <div class='col-4 blockLabel'>
+          Client name:
+        </div>
+        <div class='col blockText'>
+          <strong class="text-primary">{{ clientName }}</strong>
+        </div>
+      </div>
+      <div class="row">
+        <div class='col-4 blockLabel'>
+          Wallet version:
+        </div>
+        <div class='col blockText'>
+          {{ applicationVersion }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4 blockLabel">
+          Fullnode version:
+        </div>
+        <div class="col blockText">
+          {{ fullNodeVersion }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4 blockLabel">
+          Current network:
+        </div>
+        <div class="col blockText">
+          {{ network }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4 blockLabel">
+          Protocol version:
+        </div>
+        <div class="col blockText">
+          {{ protocolVersion }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4 blockLabel">
+          Current block height:
+        </div>
+        <div class="col blockText">
+          {{ blockHeight }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4 blockLabel">
+          Wallet data directory:
+        </div>
+        <div class="col blockText">
+          <em>{{ dataDirectory }}</em>
+        </div>
+      </div>
+    </div>
+</div>

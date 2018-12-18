@@ -42,6 +42,7 @@ export class RecoverComponent implements OnInit {
       ],
       "walletMnemonic": ["", Validators.required],
       "walletDate": ["", Validators.required],
+      "walletPassphrase": [""],
       "walletPassword": ["", Validators.required],
       "selectNetwork": ["test", Validators.required]
     });
@@ -72,6 +73,7 @@ export class RecoverComponent implements OnInit {
     'walletMnemonic': '',
     'walletDate': '',
     'walletPassword': '',
+    'walletPassphrase': '',
 
   };
 
@@ -108,7 +110,7 @@ export class RecoverComponent implements OnInit {
       this.recoverWalletForm.get("walletName").value,
       this.recoverWalletForm.get("walletMnemonic").value,
       this.recoverWalletForm.get("walletPassword").value,
-      this.recoverWalletForm.get("walletPassword").value,
+      this.recoverWalletForm.get("walletPassphrase").value,
       recoveryDate
     );
     this.recoverWallet(this.walletRecovery);

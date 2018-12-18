@@ -25,6 +25,7 @@ export class HistoryComponent {
 
   public transactions: TransactionInfo[];
   public coinUnit: string;
+  public pageNumber: number = 1;
   private errorMessage: string;
   private walletHistorySubscription: Subscription;
 

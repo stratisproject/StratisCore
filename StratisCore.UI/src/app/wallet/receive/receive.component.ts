@@ -25,6 +25,9 @@ export class ReceiveComponent {
   public usedAddresses: string[];
   public unusedAddresses: string[];
   public changeAddresses: string[];
+  public pageNumberUsed: number = 1;
+  public pageNumberUnused: number = 1;
+  public pageNumberChange: number = 1;
   private errorMessage: string;
 
   ngOnInit() {

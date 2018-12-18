@@ -25,7 +25,7 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
         params["name"],
         params["mnemonic"],
         params["password"],
-        params["password"]
+        params["passphrase"]
       )
     });
 
@@ -38,7 +38,7 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
   }
 
   public onContinueClicked() {
-    this.router.navigate(['/setup/create/confirm-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password }});
+    this.router.navigate(['/setup/create/confirm-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password, passphrase: this.newWallet.passphrase }});
   }
 
   public onCancelClicked() {

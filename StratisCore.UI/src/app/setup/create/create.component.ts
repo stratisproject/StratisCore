@@ -40,6 +40,7 @@ export class CreateComponent implements OnInit {
           Validators.pattern(/^[a-zA-Z0-9]*$/)
         ])
       ],
+      "walletPassphrase" : [""],
       "walletPassword": ["",
         Validators.required,
         // Validators.compose([
@@ -75,6 +76,7 @@ export class CreateComponent implements OnInit {
 
   formErrors = {
     'walletName': '',
+    'walletPassphrase': '',
     'walletPassword': '',
     'walletPasswordConfirmation': ''
   };
@@ -106,9 +108,9 @@ export class CreateComponent implements OnInit {
         this.createWalletForm.get("walletName").value,
         this.mnemonic,
         this.createWalletForm.get("walletPassword").value,
-        this.createWalletForm.get("walletPassword").value,
+        this.createWalletForm.get("walletPassphrase").value,
       );
-      this.router.navigate(['/setup/create/show-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password }});
+      this.router.navigate(['/setup/create/show-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password, passphrase: this.newWallet.passphrase }});
     }
   }
 

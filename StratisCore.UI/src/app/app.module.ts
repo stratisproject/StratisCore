@@ -9,6 +9,7 @@ import { NgxElectronModule } from 'ngx-electron';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -37,6 +38,7 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     NgbModule.forRoot(),
     NgxElectronModule,
     NgxQRCodeModule,
+    NgxPaginationModule,
     SharedModule.forRoot()
   ],
   declarations: [

@@ -1,14 +1,13 @@
 <section id="GUI" class="light">
     <nav class="navbar navbar-light bg-light justify-content-between">
-
         <ul class="nav list-inline col-5">
             <li *ngFor="let option of tabOptions" class="nav-item list-inline-item">
-                <a class="nav-link" routerLink="{{option.routerLink}}">{{option.displayName}}</a>
+                <a *ngIf="option.featureName === 'coldstakingfeature' ? coldStakingEnabled : true" class="nav-link" routerLink="{{option.routerLink}}">{{option.displayName}}</a>
             </li>
         </ul>
 
         <span class="navbar-brand mx-auto">
-            <a href="dashboard.html">
+            <a>
                 <img src="./assets/images/logo.svg" width="36" height="36" alt="Stratis">
             </a>
         </span>
@@ -17,16 +16,13 @@
             <div class="btn-group navbar-text ml-auto">
                 <div ngbDropdown class="d-inline-block">
                     <button class="btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle>{{walletName}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button *ngFor="let option of dropdownOptions" class="dropdown-item d-flex align-items-center"
-                            type="button" (click)="optionClicked(option)">{{option.displayName}}</button>
+                    <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBasic1">
+                        <button *ngFor="let option of dropdownOptions" class="dropdown-item d-flex align-items-center" type="button" (click)="optionClicked(option)"><i class="lnr {{option.icon}}"></i> {{option.displayName}}</button>
                         <div class="dropdown-divider"></div>
-                        <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal"
-                            (click)="logoutClicked()" data-target="#modalLogout"><i class="lnr lnr-exit"></i> Logout</button>
+                        <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal" (click)="logoutClicked()" data-target="#modalLogout"><i class="lnr lnr-exit"></i> Logout</button>
                     </div>
                 </div>
             </div>
         </form>
-
     </nav>
 </section>

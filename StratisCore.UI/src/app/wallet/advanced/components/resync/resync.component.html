@@ -1,0 +1,11 @@
+<div class="card p-4">
+  <div class="card-header">Resync Wallet</div>
+    <div class="card-body" style="min-height:200px;">
+      <div class="alert alert-info" role="alert">
+        If you have any inconsitencies in your wallet, it is a good idea to resync it. Click the resync button below if you wish to do so.
+      </div>
+      <div>
+        <button type="button" [disabled]="isSyncing" class="btn btn-primary btn-block" (click)="onResyncClicked()">Resync</button>
+      </div>
+    </div>
+</div>

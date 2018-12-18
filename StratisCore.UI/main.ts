@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray, ClientRequest, net } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
@@ -114,33 +114,19 @@ app.on('activate', () => {
 });
 
 function closeStratisApi() {
-  // if (process.platform !== 'darwin' && !serve) {
-    if (process.platform !== 'darwin' && !serve && !testnet) {
-    var http2 = require('http');
-    const options1 = {
+  if (process.platform !== 'darwin' && !serve ) {
+    const portNumber = testnet ? 38221 : 37221
+    const request = net.request({
+      method: 'POST',
       hostname: 'localhost',
-      port: 37221,
+      port: portNumber,
       path: '/api/node/shutdown',
-      method: 'POST'
-    };
+    })
 
-   const req = http2.request(options1, (res) => {});
-   req.write('');
-   req.end();
-
-   } else if (process.platform !== 'darwin' && !serve && testnet) {
-     var http2 = require('http');
-     const options2 = {
-       hostname: 'localhost',
-       port: 38221,
-       path: '/api/node/shutdown',
-       method: 'POST'
-     };
-
-   const req = http2.request(options2, (res) => {});
-   req.write('');
-   req.end();
-   }
+    request.setHeader("content-type", "application/json-patch+json");
+    request.write('true');
+    request.end();
+  }
 };
 
 function startStratisApi() {

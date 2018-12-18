@@ -39,5 +39,6 @@
 
   &.active {
     color: $breadcrumb-active-color;
+    word-break: break-word !important;
   }
 }

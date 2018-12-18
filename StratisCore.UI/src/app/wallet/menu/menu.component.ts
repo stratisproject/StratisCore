@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -7,28 +7,28 @@ import { GlobalService } from '../../shared/services/global.service';
 import { FeaturesService } from '../../shared/services/features.service';
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 
-type Option = { 'displayName': string, 'routerLink': string, 'isEnabled': boolean, 'featureName': string }
+type Option = { 'displayName': string, 'routerLink': string, 'isEnabled': boolean, 'featureName': string, 'icon': string }
 
 @Component({
     selector: 'app-menu',
     templateUrl: './menu.component.html',
     styleUrls: ['./menu.component.css'],
 })
-export class MenuComponent implements OnDestroy {
+export class MenuComponent implements OnInit, OnDestroy {
     private featureSubscription: Subscription;
 
     constructor(private modalService: NgbModal, private globalService: GlobalService, private featuresService: FeaturesService, private router: Router) {
 
         this.tabOptions = [
-            { 'displayName': 'Dashboard', 'routerLink': '/wallet', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': true, 'featureName': 'coldstakingfeature' },
-            { 'displayName': 'History', 'routerLink': '/wallet/history', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'Smart Contracts', 'routerLink': '/wallet/smart-contracts', 'isEnabled': true, 'featureName': '' }
+            { 'displayName': 'Dashboard', 'routerLink': '/wallet', 'isEnabled': true, 'featureName': '', icon: '' },
+            { 'displayName': 'Cold Staking', 'routerLink': '/wallet/staking', 'isEnabled': this.coldStakingEnabled, 'featureName': 'coldstakingfeature', icon: '' },
+            { 'displayName': 'History', 'routerLink': '/wallet/history', 'isEnabled': true, 'featureName': '', icon: '' },
+            //{ 'displayName': 'Smart Contracts', 'routerLink': '/wallet/smart-contracts', 'isEnabled': true, 'featureName': '', icon: '' }
         ];
 
         this.dropdownOptions = [
-            { 'displayName': 'Advanced', 'routerLink': '/wallet/advanced', 'isEnabled': true, 'featureName': '' },
-            { 'displayName': 'Address Book', 'routerLink': '/wallet/address-book', 'isEnabled': true, 'featureName': '' }
+            { 'displayName': 'Advanced', 'routerLink': '/wallet/advanced', 'isEnabled': true, 'featureName': '', icon: 'lnr-cog'},
+            { 'displayName': 'Address Book', 'routerLink': '/wallet/address-book', 'isEnabled': true, 'featureName': '', icon: 'lnr-book' }
         ];
 
         this.walletName = this.globalService.getWalletName();
@@ -48,9 +48,16 @@ export class MenuComponent implements OnDestroy {
 
     optionClicked(option: Option) {
         if (option.routerLink) {
-            this.router.navigate([option.routerLink]).then(x =>
-                console.log(`Navigation to ${option.routerLink} succeeded: ${x}`));
+            this.router.navigate([option.routerLink]);
         }
+    }
+
+    ngOnInit() {
+      if (this.globalService.getNetwork() === "StratisMain") {
+        this.coldStakingEnabled = false;
+      } else {
+        this.coldStakingEnabled = true;
+      }
     }
 
     ngOnDestroy() {

@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { SharedModule } from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
@@ -16,11 +17,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HistoryComponent } from './history/history.component';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 import { AdvancedComponent } from './advanced/advanced.component';
-import { AdvancedService } from '../wallet/advanced/advanced.service';
-import { FeedbackComponent } from './advanced/feedback/feedback.component';
 import { AddressBookComponent } from './address-book/address-book.component';
-import { AddressBookService } from './address-book/address-book-service';
 import { AddNewAddressComponent } from './address-book/modals/add-new-address/add-new-address.component';
+import { ExtPubkeyComponent } from './advanced/components/ext-pubkey/ext-pubkey.component';
+import { AboutComponent } from './advanced/components/about/about.component';
+import { GenerateAddressesComponent } from './advanced/components/generate-addresses/generate-addresses.component';
+import { ResyncComponent } from './advanced/components/resync/resync.component';
 
 @NgModule({
   imports: [
@@ -29,6 +31,7 @@ import { AddNewAddressComponent } from './address-book/modals/add-new-address/ad
     FormsModule,
     SharedModule.forRoot(),
     NgbModule,
+    NgxPaginationModule,
     ReactiveFormsModule,
     WalletRoutingModule,
     ColdStakingModule,
@@ -42,13 +45,14 @@ import { AddNewAddressComponent } from './address-book/modals/add-new-address/ad
     HistoryComponent,
     StatusBarComponent,
     AdvancedComponent,
-    FeedbackComponent,
     AddressBookComponent,
-    AddNewAddressComponent
+    AddNewAddressComponent,
+    ExtPubkeyComponent,
+    AboutComponent,
+    GenerateAddressesComponent,
+    ResyncComponent
   ],
-  providers: [
-    AdvancedService, AddressBookService
-  ],
+  providers: [],
   exports: []
 })
 

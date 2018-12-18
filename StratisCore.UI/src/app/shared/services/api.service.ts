@@ -10,10 +10,12 @@ import 'rxjs/add/operator/startWith';
 import { GlobalService } from './global.service';
 import { ElectronService } from 'ngx-electron';
 
+import { AddressLabel } from '../classes/address-label';
 import { WalletCreation } from '../classes/wallet-creation';
 import { WalletRecovery } from '../classes/wallet-recovery';
 import { WalletLoad } from '../classes/wallet-load';
 import { WalletInfo } from '../classes/wallet-info';
+import { SidechainFeeEstimation } from '../classes/sidechain-fee-estimation';
 import { FeeEstimation } from '../classes/fee-estimation';
 import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
@@ -39,35 +41,39 @@ export class ApiService {
     }
 
     getNodeStatus(): Observable<any> {
-        return this.http
-            .get(this.stratisApiUrl + '/node/status')
-            .map((response: Response) => response.json());
+      return this.http
+        .get(this.stratisApiUrl + '/node/status')
+        .map((response: Response) => response.json());
     }
 
-    getAddressBookAddresses(skip: number, take: number): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('skip', skip.toString());
-        params.set('take', take.toString());
-        return this.http
-            .get(this.stratisApiUrl + '/AddressBook', new RequestOptions({headers: this.headers, search: params}))
-            .map((response: Response) => response.json());
+    getNodeStatusInterval(): Observable<any> {
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/node/status'))
+        .map((response: Response) => response);
     }
 
-    addAddressBookAddress(label: string, address: string): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('label', label);
-        params.set('address', address);
-        return this.http
-            .post(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, search: params}))
-            .map((response: Response) => response.json());
+    getAddressBookAddresses(): Observable<any> {
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/AddressBook'))
+        .map((response: Response) => response);
+    }
+
+    addAddressBookAddress(data: AddressLabel): Observable<any> {
+      return this.http
+        .post(this.stratisApiUrl + '/AddressBook/address', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
     }
 
     removeAddressBookAddress(label: string): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('label', label);
-        return this.http
-            .post(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, search: params}))
-            .map((response: Response) => response.json());
+      const params: URLSearchParams = new URLSearchParams();
+      params.set('label', label);
+      return this.http
+        .delete(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, params: params}))
+        .map((response: Response) => response);
     }
 
     /**
@@ -79,17 +85,27 @@ export class ApiService {
         .map((response: Response) => response);
      }
 
+    /** Gets the extended public key from a certain wallet */
+    getExtPubkey(data: WalletInfo): Observable<any> {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', 'account 0');
+
+      return this.http
+        .get(this.stratisApiUrl + '/wallet/extpubkey', new RequestOptions({headers: this.headers, params: params}))
+        .map((response: Response) => response);
+    }
+
      /**
       * Get a new mnemonic
       */
     getNewMnemonic(): Observable<any> {
       let params: URLSearchParams = new URLSearchParams();
       params.set('language', 'English');
-
       params.set('wordCount', '12');
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/mnemonic', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.stratisApiUrl + '/wallet/mnemonic', new RequestOptions({headers: this.headers, params: params}))
         .map((response: Response) => response);
     }
 
@@ -137,7 +153,7 @@ export class ApiService {
       params.set('Name', data.walletName);
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, params: params}))
         .map((response: Response) => response);
     }
 
@@ -151,7 +167,7 @@ export class ApiService {
       return Observable
         .interval(this.pollingInterval)
         .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, search: params})))
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, params: params})))
         .map((response: Response) => response);
     }
 
@@ -166,7 +182,7 @@ export class ApiService {
       return Observable
         .interval(this.pollingInterval)
         .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, search: params})))
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, params: params})))
         .map((response: Response) => response);
     }
 
@@ -181,7 +197,7 @@ export class ApiService {
       params.set('allowUnconfirmed', "true");
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/maxbalance', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.stratisApiUrl + '/wallet/maxbalance', new RequestOptions({headers: this.headers, params: params}))
         .map((response: Response) => response);
     }
 
@@ -196,7 +212,7 @@ export class ApiService {
       return Observable
         .interval(this.pollingInterval)
         .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, search: params})))
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, params: params})))
         .map((response: Response) => response);
     }
 
@@ -209,7 +225,7 @@ export class ApiService {
       params.set('accountName', "account 0"); //temporary
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/unusedaddress', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.stratisApiUrl + '/wallet/unusedaddress', new RequestOptions({headers: this.headers, params: params}))
         .map((response: Response) => response);
     }
 
@@ -223,7 +239,7 @@ export class ApiService {
       params.set('count', count);
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/unusedaddresses', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.stratisApiUrl + '/wallet/unusedaddresses', new RequestOptions({headers: this.headers, params: params}))
         .map((response: Response) => response);
     }
 
@@ -236,7 +252,7 @@ export class ApiService {
       params.set('accountName', "account 0"); //temporary
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/addresses', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.stratisApiUrl + '/wallet/addresses', new RequestOptions({headers: this.headers, params: params}))
         .map((response: Response) => response);
     }
 
@@ -244,16 +260,35 @@ export class ApiService {
      * Estimate the fee of a transaction
      */
     estimateFee(data: FeeEstimation): Observable<any> {
+      // let params = data;
       let params: URLSearchParams = new URLSearchParams();
       params.set('walletName', data.walletName);
       params.set('accountName', data.accountName);
-      params.set('destinationAddress', data.destinationAddress);
-      params.set('amount', data.amount);
+      params.set('recipients[0].destinationAddress', data.recipients[0].destinationAddress);
+      params.set('recipients[0].amount', data.recipients[0].amount);
       params.set('feeType', data.feeType);
       params.set('allowUnconfirmed', "true");
 
       return this.http
-        .get(this.stratisApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, search: params}))
+        .get(this.stratisApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, params: params}))
+        .map((response: Response) => response);
+    }
+
+    /**
+     * Estimate the fee of a sidechain transaction
+     */
+    estimateSidechainFee(data: SidechainFeeEstimation): Observable<any> {
+      // let params = data;
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', data.walletName);
+      params.set('accountName', data.accountName);
+      params.set('recipients[0].destinationAddress', data.recipients[0].destinationAddress);
+      params.set('recipients[0].amount', data.recipients[0].amount);
+      params.set('feeType', data.feeType);
+      params.set('allowUnconfirmed', "true");
+
+      return this.http
+        .get(this.stratisApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, params: params}))
         .map((response: Response) => response);
     }
 
@@ -272,6 +307,18 @@ export class ApiService {
     sendTransaction(data: TransactionSending): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/wallet/send-transaction', JSON.stringify(data), {headers: this.headers})
+        .map((response: Response) => response);
+    }
+
+    /** Remove transaction */
+    removeTransaction(walletName: string): Observable<any> {
+      const params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', walletName);
+      params.set('all', 'true');
+      params.set('resync', 'true');
+
+      return this.http
+        .delete(this.stratisApiUrl + '/wallet/remove-transactions', new RequestOptions({headers: this.headers, params: params}))
         .map((response: Response) => response);
     }
 
@@ -309,7 +356,7 @@ export class ApiService {
      */
     shutdownNode(): Observable<any> {
       return this.http
-        .post(this.stratisApiUrl + '/node/shutdown', {headers: this.headers})
+        .post(this.stratisApiUrl + '/node/shutdown', 'corsProtection:true', {headers: this.headers})
         .map((response: Response) => response);
     }
 
@@ -322,7 +369,7 @@ export class ApiService {
       params.set('walletName', walletName);
 
       return this.http
-        .get(this.stratisApiUrl + '/smartcontractwallet/account-address', new RequestOptions({headers: this.headers, search: params}));
+        .get(this.stratisApiUrl + '/smartcontractwallet/account-address', new RequestOptions({headers: this.headers, params: params}));
     }
 
     getAccountAddresses(walletName: string): any {
@@ -330,7 +377,7 @@ export class ApiService {
       params.set('walletName', walletName);
 
       return this.http
-        .get(this.stratisApiUrl + '/smartcontractwallet/account-addresses', new RequestOptions({headers: this.headers, search: params}));
+        .get(this.stratisApiUrl + '/smartcontractwallet/account-addresses', new RequestOptions({headers: this.headers, params: params}));
     }
 
     /*
@@ -342,7 +389,7 @@ export class ApiService {
       params.set('walletName', walletName);
 
       return this.http
-        .get(this.stratisApiUrl + '/smartcontractwallet/account-balance', new RequestOptions({headers: this.headers, search: params}));
+        .get(this.stratisApiUrl + '/smartcontractwallet/account-balance', new RequestOptions({headers: this.headers, params: params}));
     }
 
     /*

@@ -71,6 +71,10 @@ img {pointer-events: none !important;}
           font-size: 1rem;
           color: $gray-500;
         }
+        &.dropdown-menu-right {
+          right: 0 !important;
+          left: auto !important;
+        }
       }
     }
   }
@@ -128,7 +132,7 @@ img {pointer-events: none !important;}
         color: $white;
       }
     }
-
+    .Addresses {dl, dt, dd {margin-bottom: 0 !important;}}
   }
 
   ///// STAKING
@@ -450,7 +454,7 @@ img {pointer-events: none !important;}
     .tab-content {
         flex: 0 0 100% !important;
         max-width: 100% !important;
-    }  
+    }
   }
   .myAddress {
     .btn {&:hover {cursor: pointer;}}
@@ -501,6 +505,9 @@ img {pointer-events: none !important;}
     border: 1px solid $purple !important;
     box-shadow: 0 5px 20px 0 rgba($purple,.4) !important;
   }
+}
+.modal-body {
+  .nav-tabs {border-bottom: 0 !important;}
 }
 
 ////// Smart Contracts
@@ -572,6 +579,27 @@ img {pointer-events: none !important;}
   display: inline-block;
   margin: .5rem 0 0;
 }
+.code-block-base {
+  padding: 1rem;
+  border-radius: $border-radius-lg;
+  background-color: rgba($gray-500, .05);
+  color: rgba($gray-700, .8);
+  overflow-wrap: break-word;
+  display: inline-block;
+  margin: .5rem 0 0;
+}
+
+////// ADVANCED PAGE
+.card-body {
+  .blockLabel {
+    font-weight: 600;
+  }
+  .blockText {
+    font-weight: 500;
+    color: $gray-600;
+    user-select: auto !important;
+  }
+}
 
 ////// LOGIN
 .left-login {
@@ -594,6 +622,20 @@ img {pointer-events: none !important;}
   }
   button {&:hover {cursor: pointer;}}
 }
+////// PAGINATION
+.ngx-pagination {
+    padding-left: 0 !important;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    li {
+      a {
+        color: $gray-700;
+        &:hover {text-decoration: none;}
+      }
+    }
+}
+
 // anim
 .Loading {
   padding: 30px;
@@ -699,5 +741,12 @@ img {pointer-events: none !important;}
     opacity:1;
     stroke:#1794C8;
     fill-opacity:1;
+  }
+}
+
+// Wallet creation
+.createWallet {
+  .bs-tooltip-right {
+    width: 260px;
   }
 }

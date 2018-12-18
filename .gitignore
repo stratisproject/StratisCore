@@ -245,6 +245,7 @@ ModelManifest.xml
 **/dist
 **/tmp
 **/build
+main.js
 
 # dependencies
 **/node_modules

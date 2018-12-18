@@ -3658,6 +3658,10 @@ tbody.collapse.show {
   text-align: center;
 }
 
+.tab-content {
+  padding: 1rem 0;
+}
+
 .tab-content > .tab-pane {
   display: none;
 }
@@ -4325,6 +4329,7 @@ tbody.collapse.show {
 
 .breadcrumb-item.active {
   color: #98A3B3;
+  word-break: break-word !important;
 }
 
 .pagination {
@@ -8560,6 +8565,11 @@ img {
   color: #adb5bd;
 }
 
+#GUI .navbar .form-inline .dropdown-menu.dropdown-menu-right {
+  right: 0 !important;
+  left: auto !important;
+}
+
 #GUI .jumbotron h5 {
   text-transform: uppercase;
   font-size: 0.8125rem;
@@ -8624,6 +8634,10 @@ img {
   font-size: .9rem;
   font-weight: 400;
   color: #fff;
+}
+
+#GUI .jumbotron .Addresses dl, #GUI .jumbotron .Addresses dt, #GUI .jumbotron .Addresses dd {
+  margin-bottom: 0 !important;
 }
 
 #GUI #staking strong {
@@ -9057,6 +9071,10 @@ img {
   box-shadow: 0 5px 20px 0 rgba(111, 66, 193, 0.4) !important;
 }
 
+.modal-body .nav-tabs {
+  border-bottom: 0 !important;
+}
+
 .smartcontracts .card {
   min-height: 120px;
 }
@@ -9145,6 +9163,26 @@ img {
   margin: .5rem 0 0;
 }
 
+.code-block-base {
+  padding: 1rem;
+  border-radius: 0.3rem;
+  background-color: rgba(173, 181, 189, 0.05);
+  color: rgba(73, 80, 87, 0.8);
+  overflow-wrap: break-word;
+  display: inline-block;
+  margin: .5rem 0 0;
+}
+
+.card-body .blockLabel {
+  font-weight: 600;
+}
+
+.card-body .blockText {
+  font-weight: 500;
+  color: #98A3B3;
+  user-select: auto !important;
+}
+
 .left-login {
   height: 100vh;
   background: #158BCF;
@@ -9172,6 +9210,21 @@ img {
 
 .right-login button:hover {
   cursor: pointer;
+}
+
+.ngx-pagination {
+  padding-left: 0 !important;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.ngx-pagination li a {
+  color: #495057;
+}
+
+.ngx-pagination li a:hover {
+  text-decoration: none;
 }
 
 .Loading {
@@ -9291,6 +9344,10 @@ img {
     stroke: #1794C8;
     fill-opacity: 1;
   }
+}
+
+.createWallet .bs-tooltip-right, .createWallet .tooltip.bs-tooltip-auto[x-placement^="right"] {
+  width: 260px;
 }
 
 @font-face {

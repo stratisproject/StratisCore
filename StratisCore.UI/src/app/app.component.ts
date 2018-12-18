@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
 
     private subscription: Subscription;
-    private readonly MaxRetryCount = 20;
+    private readonly MaxRetryCount = 50;
     private readonly TryDelayMilliseconds = 3000;
 
     loading = true;
@@ -63,8 +63,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private setTitle() {
         let applicationName = "Stratis Core";
         let applicationVersion = this.electronService.remote.app.getVersion();
-        let releaseCycle = "beta";
-        let newTitle = applicationName + " v" + applicationVersion + " " + releaseCycle;
+        let newTitle = applicationName + " " + applicationVersion;
         this.titleService.setTitle(newTitle);
+    }
+
+    public openSupport() {
+      this.electronService.shell.openExternal("https://github.com/stratisproject/StratisCore/releases/tag/v1.0.0.0");
     }
 }

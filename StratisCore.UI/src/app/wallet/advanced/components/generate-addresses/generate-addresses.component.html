@@ -1,0 +1,24 @@
+<div class="card p-4">
+  <div class="card-header">Generate Addresses</div>
+  <div class="card-body" style="min-height:200px;">
+    <div>
+      <form class="form-group" [formGroup]="generateAddressesForm">
+        <div class="form-group mt-3">
+          <label for="generateAddresses">Amount of generated addresses:</label>
+          <input type="text" class="form-control" id="generateAddresses" [class.is-invalid]="formErrors.generateAddresses" [class.is-valid]="!formErrors.generateAddresses && generateAddressesForm.get('generateAddresses').valid" formControlName="generateAddresses" placeholder="Enter the amount of addresses you want to generate.">
+          <div *ngIf="formErrors.generateAddresses" class="invalid-feedback">{{ formErrors.generateAddresses }}</div>
+        </div>
+      </form>
+      <div>
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="!generateAddressesForm.valid" (click)="onGenerateClicked()">Generate</button>
+      </div>
+    </div>
+    <div class="mt-4" *ngIf="addresses?.length > 0">
+      <div class="my-2" *ngFor="let address of addresses | paginate: { itemsPerPage: 5, currentPage: pageNumber }">
+        <code class="d-inline-block">{{ address }}</code>
+        <button type="button" class="btn btn-outline-secondary ml-2 btn-sm" ngxClipboard [cbContent]="address"><i class="lnr lnr-file-add"></i> copy</button>
+      </div>
+      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+    </div>
+  </div>
+</div>

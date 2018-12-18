@@ -1,42 +1,41 @@
-<div class="mainDiv">
-    <form [formGroup]='icoFormGroup'>
-        <div style="margin-top:20px">
-
-            <div>
-                <label class="label">Extended Public Key</label>
-                <div class="myAddress" *ngIf="extPubKeyLoadingState.success; else elseFeedback">
-                    <code style="overflow-wrap: break-word">{{ extPubKey }}</code>
-                </div>
-                <ng-template #elseFeedback>
-                    <app-feedback [loading]="extPubKeyLoadingState.loading" [errored]="extPubKeyLoadingState.errored" [erroredText]="'Failed to get Extended Public Key'"></app-feedback>
-                </ng-template>
+<section id="GUI" class="light">
+  <!-- CONTAINER -->
+    <section id="content" class="light col-10 mx-auto">
+      <!-- CONTENT -->
+      <section class="col-12">
+        <div class="row">
+          <div class="col-3">
+            <!-- card -->
+            <div class="card">
+              <div class="card-body my-4 d-flex justify-content-center">
+                <!-- ul -->
+                <ul class="nav flex-column">
+                  <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/wallet/advanced/about']" routerLinkActive="active">About</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/wallet/advanced/extpubkey']" routerLinkActive="active">Extended Public Key</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/wallet/advanced/generate-addresses']" routerLinkActive="active">Generate Addresses</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/wallet/advanced/resync']" routerLinkActive="active">Resync</a>
+                  </li>
+                </ul>
+                <!-- /ul -->
+              </div>
             </div>
-
-            <div style="display: flex; flex-direction: row; margin-top:30px">
-                <div style="width:275px">
-                    <label class="label">Generate Addresses</label>
-                    <div style="display:flex; flex-direction:row; height:34px">
-                        <input formControlName="addressCountControl" type="text" class="form-control" placeholder="Number to generate..." style="border-radius: 0px; width: 163px">
-                        <button *ngIf="!addressCountControl.invalid && addressCount" [disabled]="addressCountControl.invalid || !addressCount" (click)="generateAddresses()"
-                            class="btn btn-darkgray btn-sm" type="button" style="margin-left: 5px">Go</button>
-                        <app-feedback style="margin-left:5px; width:115px" [loading]="generateAddressesLoadingState.loading" [success]="showAddressesTick"
-                            [errored]="generateAddressesLoadingState.errored" [erroredText]="'Failed'" [showSuccessTick]="true"></app-feedback>
-                    </div>
-                </div>
-
-                <div style="margin-left: 30px">
-                    <label class="label">Resync</label>
-                    <div style="display:flex; flex-direction:row">
-                        <ngb-datepicker [(ngModel)]="resyncDate" [minDate]="minResyncDate" [maxDate]="maxResyncDate" style="outline:none; border:none"
-                            formControlName="datePickerControl"></ngb-datepicker>
-                        <button [disabled]="!resyncDate" style="margin-left: 5px; align-self:flex-start; height:34px" (click)="resync()" class="btn btn-darkgray btn-sm"
-                            type="button">Go</button>
-                        <app-feedback style="margin-left:5px; width:65px" [loading]="resyncLoadingState.loading" [showSuccessTick]="true" [errored]="resyncLoadingState.errored"
-                            [erroredText]="'Failed'" [success]="showResyncTick"></app-feedback>
-                    </div>
-                </div>
-            </div>
-
+            <!-- /card -->
+          </div>
+          <!-- /col -->
+          <div class="col-9">
+            <router-outlet></router-outlet>
+          </div>
+          <!-- /col -->
         </div>
-    </form>
-</div>
+        <!-- /row -->
+      </section>
+      <!-- /CONTENT -->
+    </section>
+</section>
