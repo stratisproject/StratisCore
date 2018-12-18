@@ -4,7 +4,8 @@ import { ElectronService } from 'ngx-electron';
 @Injectable()
 export class GlobalService {
   constructor(private electronService: ElectronService) {
-    this.setSidechainEnabled()
+    this.setSidechainEnabled();
+    this.setTestnetEnabled();
   }
 
   private testnet: boolean;
