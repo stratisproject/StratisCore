@@ -636,7 +636,20 @@ img {pointer-events: none !important;}
 .ModalSend {
   .tab-content {padding-bottom: 0 !important;}
   .nav-link {&.active {color: $white !important;}}
-  .nav-link {&.active {&.purple-bg {background-color: $purple !important;}}} // for active sidechains pill
+  #purple-bg {
+    &.nav-link {
+      background-color: $white !important;
+      color: $primary !important;
+    }
+  } // for none active sidechains pill
+  #purple-bg {
+    &.nav-link {
+      &.active {
+        background-color: $purple !important;
+        color: $white !important;
+      }
+    }
+  } // for none active sidechains pill
 }
 
 // anim

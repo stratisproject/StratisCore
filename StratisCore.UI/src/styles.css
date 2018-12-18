@@ -9227,8 +9227,14 @@ img {
   color: #fff !important;
 }
 
-.ModalSend .nav-link.active.purple-bg {
+.ModalSend #purple-bg.nav-link {
+  background-color: #fff !important;
+  color: #158BCF !important;
+}
+
+.ModalSend #purple-bg.nav-link.active {
   background-color: #6f42c1 !important;
+  color: #fff !important;
 }
 
 .Loading {
