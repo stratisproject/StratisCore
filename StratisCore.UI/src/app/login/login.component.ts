@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { GlobalService } from '../shared/services/global.service';
@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.getWalletFiles();
+    this.getCurrentNetwork();
   }
 
   private buildDecryptForm(): void {
@@ -113,9 +114,6 @@ export class LoginComponent implements OnInit {
   public onDecryptClicked() {
     this.isDecrypting = true;
     this.globalService.setWalletName(this.openWalletForm.get("selectWallet").value);
-    this.globalService.setCoinName("TestStratis");
-    this.globalService.setCoinUnit("TSTRAT");
-    this.getCurrentNetwork();
     let walletLoad = new WalletLoad(
       this.openWalletForm.get("selectWallet").value,
       this.openWalletForm.get("password").value
@@ -150,20 +148,13 @@ export class LoginComponent implements OnInit {
   }
 
   private getCurrentNetwork() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName())
-    this.apiService.getGeneralInfoOnce(walletInfo)
+    this.apiService.getNodeStatus()
       .subscribe(
         response => {
           if (response.status >= 200 && response.status < 400) {
             let responseMessage = response.json();
+            this.globalService.setCoinUnit(responseMessage.coinTicker);
             this.globalService.setNetwork(responseMessage.network);
-            if (responseMessage.network === "StratisMain") {
-              this.globalService.setCoinName("Stratis");
-              this.globalService.setCoinUnit("STRAT");
-            } else if (responseMessage.network === "StratisTest") {
-              this.globalService.setCoinName("TestStratis");
-              this.globalService.setCoinUnit("TSTRAT");
-            }
           }
         },
         error => {

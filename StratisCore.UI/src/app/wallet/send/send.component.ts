@@ -215,7 +215,7 @@ export class SendComponent implements OnInit, OnDestroy {
           }
         },
         () => {
-          this.sendForm.patchValue({amount: +new CoinNotationPipe(this.globalService).transform(balanceResponse.maxSpendableAmount)});
+          this.sendForm.patchValue({amount: +new CoinNotationPipe().transform(balanceResponse.maxSpendableAmount)});
           this.estimatedFee = balanceResponse.fee;
         }
       )

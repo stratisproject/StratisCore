@@ -11,7 +11,6 @@ export class GlobalService {
   private sidechain: boolean;
   private walletPath: string;
   private currentWalletName: string;
-  private coinName: string;
   private coinUnit: string;
   private network: string;
 
@@ -53,14 +52,6 @@ export class GlobalService {
 
   setWalletName(currentWalletName: string) {
     this.currentWalletName = currentWalletName;
-  }
-
-  getCoinName() {
-    return this.coinName;
-  }
-
-  setCoinName(coinName: string) {
-    this.coinName = coinName;
   }
 
   getCoinUnit() {
