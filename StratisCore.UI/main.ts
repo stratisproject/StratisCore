@@ -1,23 +1,37 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, Tray, ClientRequest, net } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray, net } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 
 let serve;
 let testnet;
+let sidechain;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve" || val === "-serve");
 testnet = args.some(val => val === "--testnet" || val === "-testnet");
+sidechain = args.some(val => val === "--sidechain" || val === "-sidechain");
 
 let apiPort;
-if (testnet) {
+if (testnet && !sidechain) {
   apiPort = 38221;
-} else {
+} else if (!testnet && !sidechain) {
   apiPort = 37221;
+} else if (sidechain && testnet) {
+  apiPort = 38225;
+} else if (sidechain && !testnet) {
+  apiPort = 37225;
 }
 
 ipcMain.on('get-port', (event, arg) => {
   event.returnValue = apiPort;
+});
+
+ipcMain.on('get-testnet', (event, arg) => {
+  event.returnValue = testnet;
+});
+
+ipcMain.on('get-sidechain', (event, arg) => {
+  event.returnValue = sidechain;
 });
 
 try {
@@ -83,7 +97,11 @@ app.on('ready', () => {
     console.log("Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.")
   }
   else {
-    startStratisApi();
+    if (sidechain) {
+      startDaemon("Stratis.SidechainD");
+    } else {
+      startDaemon("Stratis.StratisD")
+    }
   }
   createTray();
   createWindow();
@@ -92,8 +110,10 @@ app.on('ready', () => {
   }
 });
 
-app.on('before-quit', () => {
-  closeStratisApi();
+app.on('quit', () => {
+  if (!serve) {
+    shutdownDaemon(this.portNumber);
+  }
 });
 
 // Quit when all windows are closed.
@@ -113,47 +133,43 @@ app.on('activate', () => {
   }
 });
 
-function closeStratisApi() {
-  if (process.platform !== 'darwin' && !serve ) {
-    const portNumber = testnet ? 38221 : 37221
-    const request = net.request({
-      method: 'POST',
-      hostname: 'localhost',
-      port: portNumber,
-      path: '/api/node/shutdown',
-    })
+function shutdownDaemon(portNumber) {
+  const request = net.request({
+    method: 'POST',
+    hostname: 'localhost',
+    port: portNumber,
+    path: '/api/node/shutdown',
+  })
 
-    request.setHeader("content-type", "application/json-patch+json");
-    request.write('true');
-    request.end();
-  }
+  request.setHeader("content-type", "application/json-patch+json");
+  request.write('true');
+  request.end();
 };
 
-function startStratisApi() {
-  var stratisProcess;
-  const spawnStratis = require('child_process').spawn;
+function startDaemon(daemonName) {
+  var daemonProcess;
+  var spawnDaemon = require('child_process').spawn;
 
-  //Start Stratis Daemon
-  let apiPath = path.resolve(__dirname, 'assets//daemon//Stratis.StratisD');
+  var daemonPath;
   if (os.platform() === 'win32') {
-    apiPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\Stratis.StratisD.exe');
+    daemonPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\' + daemonName + '.exe');
   } else if(os.platform() === 'linux') {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
+	  daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
   } else {
-	  apiPath = path.resolve(__dirname, '..//..//resources//daemon//Stratis.StratisD');
+	  daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
   }
 
   if (!testnet) {
-    stratisProcess = spawnStratis(apiPath, {
+    daemonProcess = spawnDaemon(daemonPath, {
       detached: true
     });
   } else if (testnet) {
-    stratisProcess = spawnStratis(apiPath, ['-testnet'], {
+    daemonProcess = spawnDaemon(daemonPath, ['-testnet'], {
       detached: true
     });
   }
 
-  stratisProcess.stdout.on('data', (data) => {
+  daemonProcess.stdout.on('data', (data) => {
     writeLog(`Stratis: ${data}`);
   });
 }
