@@ -25,12 +25,14 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   private percentSyncedNumber: number = 0;
   public percentSynced: string;
   public stakingEnabled: boolean;
+  public sidechainsEnabled: boolean;
   toolTip = '';
   connectedNodesTooltip = '';
 
   constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService) { }
 
   ngOnInit() {
+    this.sidechainsEnabled = this.globalService.getSidechainEnabled();
     this.startSubscriptions();
   }
 
@@ -136,6 +138,8 @@ export class StatusBarComponent implements OnInit, OnDestroy {
 
   private startSubscriptions() {
     this.getGeneralWalletInfo();
-    this.getStakingInfo();
+    if (!this.sidechainsEnabled) {
+      this.getStakingInfo();
+    }
   }
 }

@@ -116,7 +116,7 @@
               </div>
             </div>
           </div> -->
-          <section class="col-4" *ngIf="hasBalance">
+          <section class="col-4" *ngIf="hasBalance && !sidechainEnabled">
             <div class="card" *ngIf="!stakingEnabled">
               <div class="card-header">Staking</div>
               <div class="card-body">

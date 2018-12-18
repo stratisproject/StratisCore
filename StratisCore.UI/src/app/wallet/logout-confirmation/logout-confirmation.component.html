@@ -11,7 +11,7 @@
   <form>
     <div class="form-group clearfix">
       <p class="text-muted">Are you sure you want to log out?</p>
-      <div class="alert alert-warning text-center" role="alert">Be aware that this will also <strong>stop the staking process</strong>.</div>
+      <div *ngIf="!sidechainEnabled" class="alert alert-warning text-center" role="alert">Be aware that this will also <strong>stop the staking process</strong>.</div>
     </div>
     <div class="modal-footer row">
       <button type="button" class="btn btn-outline-light col" data-dismiss="modal" aria-label="Close" (click)="activeModal.close('Close click')">Cancel</button>

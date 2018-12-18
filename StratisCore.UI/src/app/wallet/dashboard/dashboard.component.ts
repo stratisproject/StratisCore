@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
     this.buildStakingForm();
   }
 
+  public sidechainEnabled: boolean;
   public walletName: string;
   public coinUnit: string;
   public confirmedBalance: number;
@@ -47,6 +48,7 @@ export class DashboardComponent implements OnInit {
   public hasBalance: boolean = false;
 
   ngOnInit() {
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.startSubscriptions();
     this.walletName = this.globalService.getWalletName();
     this.coinUnit = this.globalService.getCoinUnit();
@@ -336,6 +338,8 @@ export class DashboardComponent implements OnInit {
   private startSubscriptions() {
     this.getWalletBalance();
     this.getHistory();
-    this.getStakingInfo();
+    if (!this.sidechainEnabled) {
+      this.getStakingInfo();
+    }
   }
 }
