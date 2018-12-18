@@ -3,16 +3,11 @@ import { Subscription, Observable, Subject } from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SmartContractsServiceBase } from '../smart-contracts.service';
+import { SmartContractsServiceBase, ContractTransactionItem } from '../smart-contracts.service';
 import { GlobalService } from '../../../shared/services/global.service';
 import { TransactionComponent, Mode } from './modals/transaction/transaction.component';
-
-export class ContractItem {
-    amountFormatted = '';
-    constructor(public blockId: string, public type: string, public hash: string, public destinationAddress: string, private amount: number) {
-        this.amountFormatted = amount.toLocaleString();
-    }
-}
+import { ModalService } from '../../../shared/services/modal.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-smart-contracts',
@@ -24,36 +19,73 @@ export class SmartContractsComponent implements OnInit {
     private walletName = '';
     addresses: string[];
     addressChangedSubject: Subject<string>;
-    balance: string;
-    contracts: ContractItem[];
+    balance: number;
     selectedAddress: string;
+    history: ContractTransactionItem[];
+    coinUnit: string;
+    unsubscribe: Subject<void> = new Subject();
 
-    constructor(private globalService: GlobalService, private smartContractsService: SmartContractsServiceBase, private clipboardService: ClipboardService,
-        private modalService: NgbModal) {
-
+    constructor(private globalService: GlobalService, 
+        private smartContractsService: SmartContractsServiceBase,
+        private clipboardService: ClipboardService,
+        private modalService: NgbModal,
+        private genericModalService: ModalService) {
+        
+        this.coinUnit = this.globalService.getCoinUnit();
         this.walletName = this.globalService.getWalletName();
         this.addressChangedSubject = new Subject();
 
         this.smartContractsService
             .GetAddresses(this.walletName)
+            .catch(error => {
+                this.showApiError("Error retrieving addressses. " + error);
+                return Observable.of([]);
+            })
+            .pipe(takeUntil(this.unsubscribe))
             .subscribe(addresses => {
                 if (addresses && addresses.length > 0) {
                     this.addressChangedSubject.next(addresses[0]);
                     this.addresses = addresses;
                 }
-        });
+            });
 
         this.addressChangedSubject
-            .flatMap(x => this.smartContractsService.GetAddressBalance(x))
-            .map(balance => balance.toLocaleString())
-            .subscribe(balance => this.balance = balance);
+                .switchMap(x => this.smartContractsService.GetAddressBalance(x)
+                    .catch(error => {
+                        this.showApiError("Error retrieving balance. " + error);
+                        return Observable.of(0);
+                    })
+                )
+                .pipe(takeUntil(this.unsubscribe))
+                .subscribe(balance => this.balance = balance);                
 
-        this.addressChangedSubject.subscribe(address => this.selectedAddress = address);
+        this.addressChangedSubject
+            .switchMap(address => this.smartContractsService.GetHistory(this.walletName, address)
+                .catch(error => {
+                    this.showApiError("Error retrieving transactions. " + error);
+                    return Observable.of([]);
+                })
+            )
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(history => this.history = history);
+
+
+        this.addressChangedSubject
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe(address => this.selectedAddress = address);
     }
 
     ngOnInit() {
-        this.smartContractsService.GetContracts(this.walletName).subscribe(x =>
-            this.contracts = x.map(c => new ContractItem(c.blockId, c.type, c.hash, c.destinationAddress, c.amount)));
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+      }
+
+    showApiError(error: string)
+    {
+        this.genericModalService.openModal("Error", error);
     }
 
     addressChanged(address: string) {
@@ -79,9 +111,20 @@ export class SmartContractsComponent implements OnInit {
         const modal = this.modalService.open(TransactionComponent);
         (<TransactionComponent>modal.componentInstance).mode = mode;
         (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
-        (<TransactionComponent>modal.componentInstance).balance = this.balance.toLocaleString();
+        (<TransactionComponent>modal.componentInstance).balance = this.balance;
+        (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
     }
 
-    contractClicked(contract: ContractItem) {
+    txHashClicked(contract: ContractTransactionItem) {
+        console.log("txhash clicked");
+        this.smartContractsService
+            .GetReceipt(contract.hash)
+            .toPromise()    
+            .then(result => {
+                this.genericModalService.openModal("Receipt", "<pre>" + JSON.stringify(result, null,"    ") + "</pre>");
+            },
+                error => {
+                    this.showApiError("Error retrieving receipt. " + error);
+            });
     }
 }
