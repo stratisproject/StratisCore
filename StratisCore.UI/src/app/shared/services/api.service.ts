@@ -43,7 +43,7 @@ export class ApiService {
     getNodeStatus(): Observable<any> {
       return this.http
         .get(this.stratisApiUrl + '/node/status')
-        .map((response: Response) => response.json());
+        .map((response: Response) => response);
     }
 
     getNodeStatusInterval(): Observable<any> {
@@ -392,7 +392,7 @@ export class ApiService {
         .get(this.stratisApiUrl + '/smartcontractwallet/account-balance', new RequestOptions({headers: this.headers, params: params}));
     }
 
-        /*
+    /*
      * Get the balance of the active smart contract address.
      */
     getAddressBalance(address: string): Observable<Response> {
@@ -400,7 +400,52 @@ export class ApiService {
       let params: URLSearchParams = new URLSearchParams();
       params.set('address', address);
 
-      return this.http
-        .get(this.stratisApiUrl + '/smartcontractwallet/address-balance', new RequestOptions({headers: this.headers, params: params}));
+      return Observable
+        .interval(this.pollingInterval)
+        .startWith(0)
+        .switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/address-balance', new RequestOptions({headers: this.headers, search: params})));
     }
+
+    /*
+     * Gets the transaction history of the smart contract account.
+     */
+    getAccountHistory(walletName: string, address: string): Observable<Response> {
+
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('walletName', walletName);
+      params.set('address', address);
+
+      return Observable
+          .interval(this.pollingInterval)
+          .startWith(0)
+          .switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/history', new RequestOptions({headers: this.headers, search: params})));
+    }
+
+    /*
+     * Posts a contract creation transaction
+     */
+    postCreateTransaction(transaction: any): Observable<Response> {
+      return this.http
+        .post(this.stratisApiUrl + '/smartcontractwallet/create', transaction, new RequestOptions({headers: this.headers}));
+    }
+
+    /*
+     * Posts a contract call transaction
+     */
+    postCallTransaction(transaction: any): Observable<Response> {
+      return this.http
+        .post(this.stratisApiUrl + '/smartcontractwallet/call', transaction, new RequestOptions({headers: this.headers}));
+    }
+
+    /*
+     * Returns the receipt for a particular txhash, or empty JSON.
+     */
+    getReceipt(hash: string): any {
+      let params: URLSearchParams = new URLSearchParams();
+      params.set('txHash', hash);
+
+      return this.http
+        .get(this.stratisApiUrl + '/smartcontracts/receipt', new RequestOptions({headers: this.headers, search: params}));
+    }
+
 }

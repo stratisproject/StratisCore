@@ -8,17 +8,22 @@ import { SmartContractsServiceBase, SmartContractsService, FakeSmartContractsSer
 import { SmartContractsComponent } from './components/smart-contracts.component';
 import { TransactionComponent } from './components/modals/transaction/transaction.component';
 import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
+import { SharedModule } from '../../shared/shared.module';
+import { ScBalanceComponent } from './components/balance/balance.component';
+import { ContractTypePipe } from './components/contract-type.pipe';
 
 @NgModule({
     imports: [
-        CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule
+        CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule, SharedModule
     ],
 
-    providers: [{ provide: SmartContractsServiceBase, useClass: FakeSmartContractsService }],
+    providers: [{ provide: SmartContractsServiceBase, useClass: SmartContractsService }],
 
     declarations: [
         SmartContractsComponent,
-        TransactionComponent
+        TransactionComponent,
+        ScBalanceComponent,
+        ContractTypePipe
     ],
 
     entryComponents: [

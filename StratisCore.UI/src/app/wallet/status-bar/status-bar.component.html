@@ -13,10 +13,10 @@
       <i class="lnr lnr-earth text-black"></i>
       <small class="text-black">{{ connectedNodes }}</small>
     </li>
-    <li *ngIf="!stakingEnabled" class="list-inline-item mx-1" placement="top" ngbTooltip="Not staking">
+    <li *ngIf="!stakingEnabled && !sidechainsEnabled" class="list-inline-item mx-1" placement="top" ngbTooltip="Not staking">
       <i class="lnr lnr-lock text-danger"></i>
     </li>
-    <li *ngIf="stakingEnabled" class="list-inline-item mx-1" placement="top" ngbTooltip="Staking">
+    <li *ngIf="stakingEnabled && !sidechainsEnabled" class="list-inline-item mx-1" placement="top" ngbTooltip="Staking">
       <i class="lnr lnr-lock text-success"></i>
     </li>
   </ul>

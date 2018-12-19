@@ -8,7 +8,17 @@ export class SmartContractsContractItem {
     constructor(public blockId: string, public type: string, public hash: string, public destinationAddress: string, public amount: number) { }
 }
 
+export class ContractTransactionItem
+{
+    blockHeight: number;
+    type: number;
+    hash: string;
+    to: string;
+    amount: number;
+}
+
 export abstract class SmartContractsServiceBase {
+    GetReceipt(hash: string): Observable<string> { return Observable.of(); }
     GetAddresses(walletName: string): Observable<string[]> { return Observable.of(); }
     GetBalance(walletName: string): Observable<number> { return Observable.of(); }
     GetAddressBalance(address: string): Observable<number> { return Observable.of(); }
@@ -16,13 +26,35 @@ export abstract class SmartContractsServiceBase {
     GetContracts(walletName: string): Observable<SmartContractsContractItem[]> { return Observable.of(); }
     GetSenderAddresses(walletName: string): Observable<string[]> { return Observable.of(); }
     GetParameterTypes(walletName: string): Observable<string[]> { return Observable.of(); }
-    GetByteCode(walletName: string): Observable<string> { return Observable.of(); }
+    GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> { return Observable.of(); }
+    PostCreate(createTransaction: any): Observable<any> { return Observable.of(); }
+    PostCall(createTransaction: any): Observable<any> { return Observable.of(); }
 }
 
 @Injectable()
 export class SmartContractsService implements SmartContractsServiceBase
 {
     constructor(private apiService: ApiService) { }
+
+    GetReceipt(hash: string): Observable<string> {
+        return this.apiService.getReceipt(hash)
+            .map(response => response.json());
+    }
+
+    PostCall(createTransaction: any): Observable<any> {
+        return this.apiService.postCallTransaction(createTransaction)
+            .map(response => response.json());
+    }
+
+    PostCreate(createTransaction: any): Observable<any> {
+        return this.apiService.postCreateTransaction(createTransaction)
+            .map(response => response.json());
+    }
+
+    GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> {
+        return this.apiService.getAccountHistory(walletName, address)
+            .map(response => response.json());
+    }
 
     GetBalance(walletName: string): Observable<number> {
         return this.apiService.getAccountBalance(walletName)
@@ -70,14 +102,22 @@ export class SmartContractsService implements SmartContractsServiceBase
             'Type 3'
         ]);
     }
-
-    GetByteCode(walletName: string): Observable<string> {
-        return Observable.of('4D5A90000300000004000000FFFF0000B800000000000000400000000000000000000000000000000000000000000000000000000000000000000000800000000E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F742062652072756E20696E20444F53206D6F64652E0D0D0A240000000000000050');
-    }
 }
 
 @Injectable()
 export class FakeSmartContractsService implements SmartContractsServiceBase {
+    GetReceipt(hash: string): Observable<string> {
+        throw new Error("Method not implemented.");
+    }
+    PostCall(createTransaction: any): Observable<any> {
+        throw new Error("Method not implemented.");
+    }
+    PostCreate(createTransaction: any): Observable<any> {
+        throw new Error("Method not implemented.");
+    }
+    GetHistory(walletName: string, address: string): Observable<any> {
+        throw new Error("Method not implemented.");
+    }
     GetBalance(walletName: string): Observable<number> { return Observable.of(10898026); }
 
     GetAddress(walletName: string): Observable<string> { return Observable.of('SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn'); }
@@ -107,10 +147,6 @@ export class FakeSmartContractsService implements SmartContractsServiceBase {
             'Type 2',
             'Type 3'
         ]);
-    }
-
-    GetByteCode(walletName: string): Observable<string> {
-        return Observable.of('4D5A90000300000004000000FFFF0000B800000000000000400000000000000000000000000000000000000000000000000000000000000000000000800000000E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F742062652072756E20696E20444F53206D6F64652E0D0D0A240000000000000050');
     }
 
     GetAddresses(walletName: string): Observable<string[]> { 
