@@ -1,28 +1,38 @@
 <section id="GUI" class="light">
-    <nav class="navbar navbar-light bg-light justify-content-between">
-        <ul class="nav list-inline col-5">
-            <li *ngFor="let option of tabOptions" class="nav-item list-inline-item">
-                <a *ngIf="option.featureName === 'coldstakingfeature' ? coldStakingEnabled : true" class="nav-link" routerLink="{{option.routerLink}}">{{option.displayName}}</a>
-            </li>
-        </ul>
+  <nav class="navbar navbar-light bg-light justify-content-between">
+      <ul class="nav list-inline col-5">
+        <li class="nav-item list-inline-item">
+            <a class="nav-link" routerLink="/wallet">Dashboard</a>
+        </li>
+        <li class="nav-item list-inline-item">
+          <a class="nav-link" routerLink="/wallet/history">History</a>
+        </li>
+        <li *ngIf="testnet && !sidechainEnabled" class="nav-item list-inline-item">
+          <a class="nav-link" routerLink="/wallet/staking">Cold Staking</a>
+        </li>
+        <li *ngIf="testnet && sidechainEnabled" class="nav-item list-inline-item">
+          <a class="nav-link" routerLink="/wallet/smart-contracts">Smart Contracts</a>
+        </li>
+      </ul>
 
-        <span class="navbar-brand mx-auto">
-            <a>
-                <img src="./assets/images/logo.svg" width="36" height="36" alt="Stratis">
-            </a>
-        </span>
+      <span class="navbar-brand mx-auto">
+        <a>
+          <img src="./assets/images/logo.svg" width="36" height="36" alt="Stratis">
+        </a>
+      </span>
 
-        <form class="form-inline col-5" style="max-width: none">
-            <div class="btn-group navbar-text ml-auto">
-                <div ngbDropdown class="d-inline-block">
-                    <button class="btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle>{{walletName}}</button>
-                    <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBasic1">
-                        <button *ngFor="let option of dropdownOptions" class="dropdown-item d-flex align-items-center" type="button" (click)="optionClicked(option)"><i class="lnr {{option.icon}}"></i> {{option.displayName}}</button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal" (click)="logoutClicked()" data-target="#modalLogout"><i class="lnr lnr-exit"></i> Logout</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </nav>
+      <form class="form-inline col-5" style="max-width: none">
+          <div class="btn-group navbar-text ml-auto">
+              <div ngbDropdown class="d-inline-block">
+                  <button class="btn btn-outline-light" ngbDropdownToggle>{{walletName}}</button>
+                  <div ngbDropdownMenu class="dropdown-menu-right">
+                      <button class="dropdown-item d-flex align-items-center" type="button" (click)="openAddressBook()"><i class="lnr lnr-book"></i>Address Book</button>
+                      <button class="dropdown-item d-flex align-items-center" type="button" (click)="openAdvanced()"><i class="lnr lnr-cog"></i>Advanced</button>
+                      <div class="dropdown-divider"></div>
+                      <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal" (click)="logoutClicked()" data-target="#modalLogout"><i class="lnr lnr-exit"></i> Logout</button>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </nav>
 </section>
