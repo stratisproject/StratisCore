@@ -1,28 +1,24 @@
 <!-- MODAL SEND -->
 <div class="modal-header">
-  <h5 class="modal-title">Send</h5>
+  <h5 class="modal-title">Send to</h5>
   <!-- button close -->
   <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
     <i class="lnr lnr-cross-circle"></i>
   </button>
   <!-- /button close -->
 </div>
-<div class="modal-body">
-  <p>
-    <strong>Amount available: {{ totalBalance | coinNotation }} {{ coinUnit }}</strong>
-  <p>
-
+<div class="modal-body ModalSend pt-0">
   <!-- TABS -->
-  <div class="form-group clearfix">
-    <label for="SendTo">Send to</label>
-    <div class="col-12">
-      <ngb-tabset type="pills" class="nav nav-pills nav-fill row mb-4">
+  <div class="form-group clearfix mb-0">
+    <div>
+      <ngb-tabset type="pills" class="nav-fill">
         <ngb-tab class="nav-link blue" title="Mainchain">
           <ng-template ngbTabContent>
             <form [formGroup]="sendForm">
               <!--<div class="form-group has-danger clearfix">-->
               <div class="form-group clearfix">
                 <label class="float-left" for="amount">Amount</label>
+                <label class="float-right" for="totalAmount">Available: {{ totalBalance | coinNotation }} {{ coinUnit }}</label>
                 <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
                 <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.amount" [class.is-valid]="!sendFormErrors.amount && sendForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
                 <div *ngIf="sendFormErrors.amount" class="invalid-feedback">{{ sendFormErrors.amount }}</div>
@@ -36,7 +32,7 @@
               <div class="form-group clearfix">
                 <label>Transaction Fee</label>
                 <div>
-                  <label *ngIf="!estimatedFee" class="blockText text-danger">Please enter a valid amount and destination address to calculate the fee.</label>
+                  <small *ngIf="!estimatedFee" class="blockText text-danger">Please enter a valid amount and destination address to calculate the fee.</small>
                   <label *ngIf="estimatedFee" class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
                 </div>
                 <!-- fee buttons -->
@@ -65,9 +61,9 @@
                 <input type="password" class="form-control" [class.is-invalid]="sendFormErrors.password" [class.is-valid]="!sendFormErrors.password && sendForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
                 <div *ngIf="sendFormErrors.password" class="invalid-feedback">{{sendFormErrors.password}}</div>
               </div>
-              <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
+              <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
             </form>
-            <div class="modal-footer">
+            <div class="modal-footer p-0">
               <button *ngIf="!isSending" type="button" [disabled]="isSending" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
               <button *ngIf="!isSending" type="button" class="btn btn-primary btn-block" [disabled]="!sendForm.valid || isSending || !estimatedFee" (click)="send()">Send</button>
               <!-- SVG -->
@@ -84,12 +80,13 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab class="nav-link purple" title="Sidechain">
+        <ngb-tab id="purple-bg" class="nav-link purple" title="Sidechain">
           <ng-template ngbTabContent>
             <form [formGroup]="sendToSidechainForm">
               <!--<div class="form-group has-danger clearfix">-->
               <div class="form-group clearfix">
                 <label class="float-left" for="amount">Amount</label>
+                <label class="float-right" for="totalAmount">Available: {{ totalBalance | coinNotation }} {{ coinUnit }}</label>
                 <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
                 <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.amount" [class.is-valid]="!sendToSidechainFormErrors.amount && sendToSidechainForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
                 <div *ngIf="sendToSidechainFormErrors.amount" class="invalid-feedback">{{ sendToSidechainFormErrors.amount }}</div>
@@ -109,7 +106,7 @@
               <div class="form-group clearfix">
                 <label>Transaction Fee</label>
                 <div>
-                  <label *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount, federation and destination address to calculate the fee.</label>
+                  <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount, federation and destination address to calculate the fee.</small>
                   <label *ngIf="estimatedSidechainFee" class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
                 </div>
                 <!-- fee buttons -->
@@ -138,11 +135,11 @@
                 <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password" [class.is-valid]="!sendToSidechainFormErrors.password && sendToSidechainForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
                 <div *ngIf="sendToSidechainFormErrors.password" class="invalid-feedback">{{sendToSidechainFormErrors.password}}</div>
               </div>
-              <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
+              <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
             </form>
-            <div class="modal-footer">
+            <div class="modal-footer p-0">
               <button *ngIf="!isSending" type="button" [disabled]="isSending" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
-              <button *ngIf="!isSending" type="button" class="btn btn-primary btn-block" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee" (click)="sendToSidechain()">Send</button>
+              <button *ngIf="!isSending" type="button" class="btn btn-purple btn-block" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee" (click)="sendToSidechain()">Send</button>
               <!-- SVG -->
               <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
                 <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

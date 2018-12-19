@@ -9227,6 +9227,24 @@ img {
   text-decoration: none;
 }
 
+.ModalSend .tab-content {
+  padding-bottom: 0 !important;
+}
+
+.ModalSend .nav-link.active {
+  color: #fff !important;
+}
+
+.ModalSend #purple-bg.nav-link {
+  background-color: #fff !important;
+  color: #158BCF !important;
+}
+
+.ModalSend #purple-bg.nav-link.active {
+  background-color: #6f42c1 !important;
+  color: #fff !important;
+}
+
 .Loading {
   padding: 30px;
   text-align: center;
