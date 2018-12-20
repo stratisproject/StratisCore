@@ -23,6 +23,7 @@ export class RecoverComponent implements OnInit {
   public recoverWalletForm: FormGroup;
   public creationDate: Date;
   public isRecovering: boolean = false;
+  public minDate = new Date("2009-08-09");
   public maxDate = new Date();
   public bsConfig: Partial<BsDatepickerConfig>;
   private walletRecovery: WalletRecovery;
