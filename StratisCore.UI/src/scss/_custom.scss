@@ -798,7 +798,8 @@ img {pointer-events: none !important;}
   td {
     text-align: center;
     padding: .5rem;
-    color: $gray-600;
+    color: $gray-700;
+    .is-other-month {color: $gray-500;}
     &:hover {
       background-color: $primary;
       cursor: pointer;

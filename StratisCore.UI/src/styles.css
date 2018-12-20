@@ -9609,7 +9609,11 @@ img {
 .bs-datepicker-body td {
   text-align: center;
   padding: .5rem;
-  color: #98A3B3;
+  color: #495057;
+}
+
+.bs-datepicker-body td .is-other-month {
+  color: #adb5bd;
 }
 
 .bs-datepicker-body td:hover {
