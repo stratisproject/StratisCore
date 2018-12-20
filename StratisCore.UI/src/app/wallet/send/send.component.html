@@ -12,7 +12,7 @@
   <div class="form-group clearfix mb-0">
     <div>
       <ngb-tabset type="pills" class="nav-fill">
-        <ngb-tab class="nav-link blue" title="Mainchain">
+        <ngb-tab class="nav-link blue" title="{{ firstTitle }}">
           <ng-template ngbTabContent>
             <form [formGroup]="sendForm">
               <!--<div class="form-group has-danger clearfix">-->
@@ -80,7 +80,7 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab id="purple-bg" class="nav-link purple" title="Sidechain">
+        <ngb-tab id="purple-bg" class="nav-link purple" title="{{ secondTitle }}">
           <ng-template ngbTabContent>
             <form [formGroup]="sendToSidechainForm">
               <!--<div class="form-group has-danger clearfix">-->

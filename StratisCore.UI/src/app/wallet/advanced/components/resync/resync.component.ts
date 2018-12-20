@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 import { Subscription } from 'rxjs/Subscription';
 
