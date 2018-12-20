@@ -34,18 +34,29 @@ export class SendComponent implements OnInit, OnDestroy {
 
   public sendForm: FormGroup;
   public sendToSidechainForm: FormGroup;
+  public sidechainEnabled: boolean;
   public coinUnit: string;
   public isSending: boolean = false;
   public estimatedFee: number = 0;
   public estimatedSidechainFee: number = 0;
   public totalBalance: number = 0;
   public apiError: string;
+  public firstTitle: string;
+  public secondTitle: string;
   private transactionHex: string;
   private responseMessage: any;
   private transaction: TransactionBuilding;
   private walletBalanceSubscription: Subscription;
 
   ngOnInit() {
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    if (this.sidechainEnabled) {
+      this.firstTitle = "Sidechain";
+      this.secondTitle = "Mainchain";
+    } else {
+      this.firstTitle = "Mainchain";
+      this.secondTitle = "Sidechain";
+    }
     this.startSubscriptions();
     this.coinUnit = this.globalService.getCoinUnit();
     if (this.address) {
