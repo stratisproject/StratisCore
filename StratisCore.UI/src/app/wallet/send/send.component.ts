@@ -35,6 +35,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public sendForm: FormGroup;
   public sendToSidechainForm: FormGroup;
   public sidechainEnabled: boolean;
+  public hasOpReturn: boolean;
   public coinUnit: string;
   public isSending: boolean = false;
   public estimatedFee: number = 0;
@@ -43,6 +44,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public apiError: string;
   public firstTitle: string;
   public secondTitle: string;
+  public opReturnAmount: number = 1000;
   private transactionHex: string;
   private responseMessage: any;
   private transaction: TransactionBuilding;
@@ -352,6 +354,7 @@ export class SendComponent implements OnInit, OnDestroy {
           this.estimatedFee = this.responseMessage.fee;
           this.transactionHex = this.responseMessage.hex;
           if (this.isSending) {
+            this.hasOpReturn = false;
             this.sendTransaction(this.transactionHex);
           }
         }
@@ -372,6 +375,7 @@ export class SendComponent implements OnInit, OnDestroy {
       true,
       false,
       this.sendToSidechainForm.get("destinationAddress").value.trim(),
+      this.opReturnAmount / 100000000
     );
     console.log(this.transaction);
 
@@ -403,6 +407,7 @@ export class SendComponent implements OnInit, OnDestroy {
           this.estimatedSidechainFee = this.responseMessage.fee;
           this.transactionHex = this.responseMessage.hex;
           if (this.isSending) {
+            this.hasOpReturn = true;
             this.sendTransaction(this.transactionHex);
           }
         }
@@ -490,6 +495,9 @@ export class SendComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(SendConfirmationComponent, { backdrop: "static" });
     modalRef.componentInstance.transaction = this.transaction;
     modalRef.componentInstance.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
+    modalRef.componentInstance.sidechainEnabled = this.sidechainEnabled;
+    modalRef.componentInstance.opReturnAmount = this.opReturnAmount;
+    modalRef.componentInstance.hasOpReturn = this.hasOpReturn;
   }
 
   private cancelSubscriptions() {
