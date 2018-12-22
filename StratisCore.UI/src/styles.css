@@ -74,7 +74,7 @@ html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -ms-overflow-style: scrollbar;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 @-ms-viewport {
@@ -1831,16 +1831,16 @@ select.form-control:focus::-ms-value {
 
 .form-control-plaintext.form-control-sm, .input-group-sm > .form-control-plaintext.form-control,
 .input-group-sm > .form-control-plaintext.input-group-addon,
-.input-group-sm > .input-group-btn > .form-control-plaintext.btn, .form-control-plaintext.form-control-lg, .input-group-lg > .form-control-plaintext.form-control,
+.input-group-sm > .input-group-btn > .form-control-plaintext.btn, .bs-datepicker-head .input-group-sm > .input-group-btn > .form-control-plaintext.current, .bs-datepicker-head .input-group-sm > .input-group-btn > .form-control-plaintext.previous, .bs-datepicker-head .input-group-sm > .input-group-btn > .form-control-plaintext.next, .form-control-plaintext.form-control-lg, .input-group-lg > .form-control-plaintext.form-control,
 .input-group-lg > .form-control-plaintext.input-group-addon,
-.input-group-lg > .input-group-btn > .form-control-plaintext.btn {
+.input-group-lg > .input-group-btn > .form-control-plaintext.btn, .bs-datepicker-head .input-group-lg > .input-group-btn > .form-control-plaintext.current, .bs-datepicker-head .input-group-lg > .input-group-btn > .form-control-plaintext.previous, .bs-datepicker-head .input-group-lg > .input-group-btn > .form-control-plaintext.next {
   padding-right: 0;
   padding-left: 0;
 }
 
 .form-control-sm, .input-group-sm > .form-control,
 .input-group-sm > .input-group-addon,
-.input-group-sm > .input-group-btn > .btn {
+.input-group-sm > .input-group-btn > .btn, .bs-datepicker-head .input-group-sm > .input-group-btn > .current, .bs-datepicker-head .input-group-sm > .input-group-btn > .previous, .bs-datepicker-head .input-group-sm > .input-group-btn > .next {
   padding: 0.25rem 0.5rem;
   font-size: 0.609375rem;
   line-height: 1.5;
@@ -1849,13 +1849,13 @@ select.form-control:focus::-ms-value {
 
 select.form-control-sm:not([size]):not([multiple]), .input-group-sm > select.form-control:not([size]):not([multiple]),
 .input-group-sm > select.input-group-addon:not([size]):not([multiple]),
-.input-group-sm > .input-group-btn > select.btn:not([size]):not([multiple]) {
-  height: calc(1.414063rem + 2px);
+.input-group-sm > .input-group-btn > select.btn:not([size]):not([multiple]), .bs-datepicker-head .input-group-sm > .input-group-btn > select.current:not([size]):not([multiple]), .bs-datepicker-head .input-group-sm > .input-group-btn > select.previous:not([size]):not([multiple]), .bs-datepicker-head .input-group-sm > .input-group-btn > select.next:not([size]):not([multiple]) {
+  height: calc(1.414062rem + 2px);
 }
 
 .form-control-lg, .input-group-lg > .form-control,
 .input-group-lg > .input-group-addon,
-.input-group-lg > .input-group-btn > .btn {
+.input-group-lg > .input-group-btn > .btn, .bs-datepicker-head .input-group-lg > .input-group-btn > .current, .bs-datepicker-head .input-group-lg > .input-group-btn > .previous, .bs-datepicker-head .input-group-lg > .input-group-btn > .next {
   padding: 0.5rem 1rem;
   font-size: 0.934375rem;
   line-height: 1.5;
@@ -1864,7 +1864,7 @@ select.form-control-sm:not([size]):not([multiple]), .input-group-sm > select.for
 
 select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.form-control:not([size]):not([multiple]),
 .input-group-lg > select.input-group-addon:not([size]):not([multiple]),
-.input-group-lg > .input-group-btn > select.btn:not([size]):not([multiple]) {
+.input-group-lg > .input-group-btn > select.btn:not([size]):not([multiple]), .bs-datepicker-head .input-group-lg > .input-group-btn > select.current:not([size]):not([multiple]), .bs-datepicker-head .input-group-lg > .input-group-btn > select.previous:not([size]):not([multiple]), .bs-datepicker-head .input-group-lg > .input-group-btn > select.next:not([size]):not([multiple]) {
   height: calc(2.401562rem + 2px);
 }
 
@@ -2127,7 +2127,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   }
 }
 
-.btn {
+.btn, .bs-datepicker-head .current, .bs-datepicker-head .previous, .bs-datepicker-head .next {
   display: inline-block;
   font-weight: normal;
   text-align: center;
@@ -2142,51 +2142,60 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.btn:focus, .btn:hover {
+.btn:focus, .bs-datepicker-head .current:focus, .bs-datepicker-head .previous:focus, .bs-datepicker-head .next:focus, .btn:hover, .bs-datepicker-head .current:hover, .bs-datepicker-head .previous:hover, .bs-datepicker-head .next:hover {
   text-decoration: none;
 }
 
-.btn:focus, .btn.focus {
+.btn:focus, .bs-datepicker-head .current:focus, .bs-datepicker-head .previous:focus, .bs-datepicker-head .next:focus, .btn.focus, .bs-datepicker-head .focus.current, .bs-datepicker-head .focus.previous, .bs-datepicker-head .focus.next {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(21, 139, 207, 0.25);
 }
 
-.btn.disabled, .btn:disabled {
+.btn.disabled, .bs-datepicker-head .disabled.current, .bs-datepicker-head .disabled.previous, .bs-datepicker-head .disabled.next, .btn:disabled, .bs-datepicker-head .current:disabled, .bs-datepicker-head .previous:disabled, .bs-datepicker-head .next:disabled {
   opacity: .65;
 }
 
-.btn:not([disabled]):not(.disabled):active, .btn:not([disabled]):not(.disabled).active {
+.btn:not([disabled]):not(.disabled):active, .bs-datepicker-head .current:not([disabled]):not(.disabled):active, .bs-datepicker-head .previous:not([disabled]):not(.disabled):active, .bs-datepicker-head .next:not([disabled]):not(.disabled):active, .btn:not([disabled]):not(.disabled).active, .bs-datepicker-head .current:not([disabled]):not(.disabled).active, .bs-datepicker-head .previous:not([disabled]):not(.disabled).active, .bs-datepicker-head .next:not([disabled]):not(.disabled).active {
   background-image: none;
 }
 
-a.btn.disabled,
-fieldset[disabled] a.btn {
+a.btn.disabled, .bs-datepicker-head a.disabled.current, .bs-datepicker-head a.disabled.previous, .bs-datepicker-head a.disabled.next,
+fieldset[disabled] a.btn,
+fieldset[disabled] .bs-datepicker-head a.current,
+.bs-datepicker-head fieldset[disabled] a.current,
+fieldset[disabled] .bs-datepicker-head a.previous,
+.bs-datepicker-head fieldset[disabled] a.previous,
+fieldset[disabled] .bs-datepicker-head a.next,
+.bs-datepicker-head fieldset[disabled] a.next {
   pointer-events: none;
 }
 
-.btn-primary {
+.btn-primary, .bs-datepicker-head .current, .bs-datepicker-head .previous, .bs-datepicker-head .next {
   color: #fff;
   background-color: #158BCF;
   border-color: #158BCF;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .bs-datepicker-head .current:hover, .bs-datepicker-head .previous:hover, .bs-datepicker-head .next:hover {
   color: #fff;
   background-color: #1174ac;
   border-color: #106ca1;
 }
 
-.btn-primary:focus, .btn-primary.focus {
+.btn-primary:focus, .bs-datepicker-head .current:focus, .bs-datepicker-head .previous:focus, .bs-datepicker-head .next:focus, .btn-primary.focus, .bs-datepicker-head .focus.current, .bs-datepicker-head .focus.previous, .bs-datepicker-head .focus.next {
   box-shadow: 0 0 0 0.2rem rgba(21, 139, 207, 0.5);
 }
 
-.btn-primary.disabled, .btn-primary:disabled {
+.btn-primary.disabled, .bs-datepicker-head .disabled.current, .bs-datepicker-head .disabled.previous, .bs-datepicker-head .disabled.next, .btn-primary:disabled, .bs-datepicker-head .current:disabled, .bs-datepicker-head .previous:disabled, .bs-datepicker-head .next:disabled {
   background-color: #158BCF;
   border-color: #158BCF;
 }
 
-.btn-primary:not([disabled]):not(.disabled):active, .btn-primary:not([disabled]):not(.disabled).active,
-.show > .btn-primary.dropdown-toggle {
+.btn-primary:not([disabled]):not(.disabled):active, .bs-datepicker-head .current:not([disabled]):not(.disabled):active, .bs-datepicker-head .previous:not([disabled]):not(.disabled):active, .bs-datepicker-head .next:not([disabled]):not(.disabled):active, .btn-primary:not([disabled]):not(.disabled).active, .bs-datepicker-head .current:not([disabled]):not(.disabled).active, .bs-datepicker-head .previous:not([disabled]):not(.disabled).active, .bs-datepicker-head .next:not([disabled]):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle,
+.bs-datepicker-head .show > .dropdown-toggle.current,
+.bs-datepicker-head .show > .dropdown-toggle.previous,
+.bs-datepicker-head .show > .dropdown-toggle.next {
   color: #fff;
   background-color: #106ca1;
   border-color: #0f6495;
@@ -2894,14 +2903,14 @@ fieldset[disabled] a.btn {
   color: #98A3B3;
 }
 
-.btn-lg, .btn-group-lg > .btn {
+.btn-lg, .btn-group-lg > .btn, .bs-datepicker-head .btn-group-lg > .current, .bs-datepicker-head .btn-group-lg > .previous, .bs-datepicker-head .btn-group-lg > .next {
   padding: 0.5rem 1rem;
   font-size: 0.934375rem;
   line-height: 1.5;
   border-radius: 0.3rem;
 }
 
-.btn-sm, .btn-group-sm > .btn {
+.btn-sm, .btn-group-sm > .btn, .bs-datepicker-head .btn-group-sm > .current, .bs-datepicker-head .btn-group-sm > .previous, .bs-datepicker-head .btn-group-sm > .next {
   padding: 0.25rem 0.5rem;
   font-size: 0.609375rem;
   line-height: 1.5;
@@ -2999,7 +3008,7 @@ tbody.collapse.show {
 
 .dropdown-menu.dropdown-menu-right {
   right: 0 !important;
-  left: auto !important;
+  left: auto;
 }
 
 .dropup .dropdown-menu {
@@ -3074,39 +3083,150 @@ tbody.collapse.show {
   white-space: nowrap;
 }
 
-.btn-group,
+.btn-group, .bs-datepicker-head,
 .btn-group-vertical {
   position: relative;
   display: inline-flex;
   vertical-align: middle;
 }
 
-.btn-group > .btn,
-.btn-group-vertical > .btn {
+.btn-group > .btn, .bs-datepicker-head > .btn, .bs-datepicker-head .btn-group > .current, .bs-datepicker-head > .current, .bs-datepicker-head .btn-group > .previous, .bs-datepicker-head > .previous, .bs-datepicker-head .btn-group > .next, .bs-datepicker-head > .next,
+.btn-group-vertical > .btn,
+.bs-datepicker-head .btn-group-vertical > .current,
+.bs-datepicker-head .btn-group-vertical > .previous,
+.bs-datepicker-head .btn-group-vertical > .next {
   position: relative;
   flex: 0 1 auto;
 }
 
-.btn-group > .btn:hover,
-.btn-group-vertical > .btn:hover {
+.btn-group > .btn:hover, .bs-datepicker-head > .btn:hover, .bs-datepicker-head .btn-group > .current:hover, .bs-datepicker-head > .current:hover, .bs-datepicker-head .btn-group > .previous:hover, .bs-datepicker-head > .previous:hover, .bs-datepicker-head .btn-group > .next:hover, .bs-datepicker-head > .next:hover,
+.btn-group-vertical > .btn:hover,
+.bs-datepicker-head .btn-group-vertical > .current:hover,
+.bs-datepicker-head .btn-group-vertical > .previous:hover,
+.bs-datepicker-head .btn-group-vertical > .next:hover {
   z-index: 2;
 }
 
-.btn-group > .btn:focus, .btn-group > .btn:active, .btn-group > .btn.active,
+.btn-group > .btn:focus, .bs-datepicker-head > .btn:focus, .bs-datepicker-head .btn-group > .current:focus, .bs-datepicker-head > .current:focus, .bs-datepicker-head .btn-group > .previous:focus, .bs-datepicker-head > .previous:focus, .bs-datepicker-head .btn-group > .next:focus, .bs-datepicker-head > .next:focus, .btn-group > .btn:active, .bs-datepicker-head > .btn:active, .bs-datepicker-head .btn-group > .current:active, .bs-datepicker-head > .current:active, .bs-datepicker-head .btn-group > .previous:active, .bs-datepicker-head > .previous:active, .bs-datepicker-head .btn-group > .next:active, .bs-datepicker-head > .next:active, .btn-group > .btn.active, .bs-datepicker-head > .btn.active, .bs-datepicker-head .btn-group > .active.current, .bs-datepicker-head > .active.current, .bs-datepicker-head .btn-group > .active.previous, .bs-datepicker-head > .active.previous, .bs-datepicker-head .btn-group > .active.next, .bs-datepicker-head > .active.next,
 .btn-group-vertical > .btn:focus,
+.bs-datepicker-head .btn-group-vertical > .current:focus,
+.bs-datepicker-head .btn-group-vertical > .previous:focus,
+.bs-datepicker-head .btn-group-vertical > .next:focus,
 .btn-group-vertical > .btn:active,
-.btn-group-vertical > .btn.active {
+.bs-datepicker-head .btn-group-vertical > .current:active,
+.bs-datepicker-head .btn-group-vertical > .previous:active,
+.bs-datepicker-head .btn-group-vertical > .next:active,
+.btn-group-vertical > .btn.active,
+.bs-datepicker-head .btn-group-vertical > .active.current,
+.bs-datepicker-head .btn-group-vertical > .active.previous,
+.bs-datepicker-head .btn-group-vertical > .active.next {
   z-index: 2;
 }
 
-.btn-group .btn + .btn,
+.btn-group .btn + .btn, .bs-datepicker-head .btn + .btn, .bs-datepicker-head .btn-group .current + .btn, .bs-datepicker-head .current + .btn, .bs-datepicker-head .btn-group .previous + .btn, .bs-datepicker-head .previous + .btn, .bs-datepicker-head .btn-group .next + .btn, .bs-datepicker-head .next + .btn, .bs-datepicker-head .btn-group .btn + .current, .bs-datepicker-head .btn + .current, .bs-datepicker-head .btn-group .current + .current, .bs-datepicker-head .current + .current, .bs-datepicker-head .btn-group .previous + .current, .bs-datepicker-head .previous + .current, .bs-datepicker-head .btn-group .next + .current, .bs-datepicker-head .next + .current, .bs-datepicker-head .btn-group .btn + .previous, .bs-datepicker-head .btn + .previous, .bs-datepicker-head .btn-group .current + .previous, .bs-datepicker-head .current + .previous, .bs-datepicker-head .btn-group .previous + .previous, .bs-datepicker-head .previous + .previous, .bs-datepicker-head .btn-group .next + .previous, .bs-datepicker-head .next + .previous, .bs-datepicker-head .btn-group .btn + .next, .bs-datepicker-head .btn + .next, .bs-datepicker-head .btn-group .current + .next, .bs-datepicker-head .current + .next, .bs-datepicker-head .btn-group .previous + .next, .bs-datepicker-head .previous + .next, .bs-datepicker-head .btn-group .next + .next, .bs-datepicker-head .next + .next,
 .btn-group .btn + .btn-group,
+.bs-datepicker-head .btn + .btn-group,
+.bs-datepicker-head .btn-group .current + .btn-group,
+.bs-datepicker-head .current + .btn-group,
+.bs-datepicker-head .btn-group .previous + .btn-group,
+.bs-datepicker-head .previous + .btn-group,
+.bs-datepicker-head .btn-group .next + .btn-group,
+.bs-datepicker-head .next + .btn-group,
+.btn-group .btn + .bs-datepicker-head,
+.bs-datepicker-head .btn + .bs-datepicker-head,
+.bs-datepicker-head .btn-group .current + .bs-datepicker-head,
+.bs-datepicker-head .current + .bs-datepicker-head,
+.bs-datepicker-head .btn-group .previous + .bs-datepicker-head,
+.bs-datepicker-head .previous + .bs-datepicker-head,
+.bs-datepicker-head .btn-group .next + .bs-datepicker-head,
+.bs-datepicker-head .next + .bs-datepicker-head,
 .btn-group .btn-group + .btn,
+.bs-datepicker-head .btn-group + .btn,
+.btn-group .bs-datepicker-head + .btn,
+.bs-datepicker-head .bs-datepicker-head + .btn,
+.bs-datepicker-head .btn-group .btn-group + .current,
+.bs-datepicker-head .btn-group + .current,
+.bs-datepicker-head .btn-group .bs-datepicker-head + .current,
+.bs-datepicker-head .bs-datepicker-head + .current,
+.bs-datepicker-head .btn-group .btn-group + .previous,
+.bs-datepicker-head .btn-group + .previous,
+.bs-datepicker-head .btn-group .bs-datepicker-head + .previous,
+.bs-datepicker-head .bs-datepicker-head + .previous,
+.bs-datepicker-head .btn-group .btn-group + .next,
+.bs-datepicker-head .btn-group + .next,
+.bs-datepicker-head .btn-group .bs-datepicker-head + .next,
+.bs-datepicker-head .bs-datepicker-head + .next,
 .btn-group .btn-group + .btn-group,
+.bs-datepicker-head .btn-group + .btn-group,
+.btn-group .bs-datepicker-head + .btn-group,
+.bs-datepicker-head .bs-datepicker-head + .btn-group,
+.btn-group .btn-group + .bs-datepicker-head,
+.bs-datepicker-head .btn-group + .bs-datepicker-head,
+.btn-group .bs-datepicker-head + .bs-datepicker-head,
+.bs-datepicker-head .bs-datepicker-head + .bs-datepicker-head,
 .btn-group-vertical .btn + .btn,
+.btn-group-vertical .bs-datepicker-head .current + .btn,
+.bs-datepicker-head .btn-group-vertical .current + .btn,
+.btn-group-vertical .bs-datepicker-head .previous + .btn,
+.bs-datepicker-head .btn-group-vertical .previous + .btn,
+.btn-group-vertical .bs-datepicker-head .next + .btn,
+.bs-datepicker-head .btn-group-vertical .next + .btn,
+.btn-group-vertical .bs-datepicker-head .btn + .current,
+.bs-datepicker-head .btn-group-vertical .btn + .current,
+.btn-group-vertical .bs-datepicker-head .current + .current,
+.bs-datepicker-head .btn-group-vertical .current + .current,
+.btn-group-vertical .bs-datepicker-head .previous + .current,
+.bs-datepicker-head .btn-group-vertical .previous + .current,
+.btn-group-vertical .bs-datepicker-head .next + .current,
+.bs-datepicker-head .btn-group-vertical .next + .current,
+.btn-group-vertical .bs-datepicker-head .btn + .previous,
+.bs-datepicker-head .btn-group-vertical .btn + .previous,
+.btn-group-vertical .bs-datepicker-head .current + .previous,
+.bs-datepicker-head .btn-group-vertical .current + .previous,
+.btn-group-vertical .bs-datepicker-head .previous + .previous,
+.bs-datepicker-head .btn-group-vertical .previous + .previous,
+.btn-group-vertical .bs-datepicker-head .next + .previous,
+.bs-datepicker-head .btn-group-vertical .next + .previous,
+.btn-group-vertical .bs-datepicker-head .btn + .next,
+.bs-datepicker-head .btn-group-vertical .btn + .next,
+.btn-group-vertical .bs-datepicker-head .current + .next,
+.bs-datepicker-head .btn-group-vertical .current + .next,
+.btn-group-vertical .bs-datepicker-head .previous + .next,
+.bs-datepicker-head .btn-group-vertical .previous + .next,
+.btn-group-vertical .bs-datepicker-head .next + .next,
+.bs-datepicker-head .btn-group-vertical .next + .next,
 .btn-group-vertical .btn + .btn-group,
+.btn-group-vertical .bs-datepicker-head .current + .btn-group,
+.bs-datepicker-head .btn-group-vertical .current + .btn-group,
+.btn-group-vertical .bs-datepicker-head .previous + .btn-group,
+.bs-datepicker-head .btn-group-vertical .previous + .btn-group,
+.btn-group-vertical .bs-datepicker-head .next + .btn-group,
+.bs-datepicker-head .btn-group-vertical .next + .btn-group,
+.btn-group-vertical .btn + .bs-datepicker-head,
+.btn-group-vertical .bs-datepicker-head .current + .bs-datepicker-head,
+.bs-datepicker-head .btn-group-vertical .current + .bs-datepicker-head,
+.btn-group-vertical .bs-datepicker-head .previous + .bs-datepicker-head,
+.bs-datepicker-head .btn-group-vertical .previous + .bs-datepicker-head,
+.btn-group-vertical .bs-datepicker-head .next + .bs-datepicker-head,
+.bs-datepicker-head .btn-group-vertical .next + .bs-datepicker-head,
 .btn-group-vertical .btn-group + .btn,
-.btn-group-vertical .btn-group + .btn-group {
+.btn-group-vertical .bs-datepicker-head + .btn,
+.btn-group-vertical .bs-datepicker-head .btn-group + .current,
+.bs-datepicker-head .btn-group-vertical .btn-group + .current,
+.btn-group-vertical .bs-datepicker-head .bs-datepicker-head + .current,
+.bs-datepicker-head .btn-group-vertical .bs-datepicker-head + .current,
+.btn-group-vertical .bs-datepicker-head .btn-group + .previous,
+.bs-datepicker-head .btn-group-vertical .btn-group + .previous,
+.btn-group-vertical .bs-datepicker-head .bs-datepicker-head + .previous,
+.bs-datepicker-head .btn-group-vertical .bs-datepicker-head + .previous,
+.btn-group-vertical .bs-datepicker-head .btn-group + .next,
+.bs-datepicker-head .btn-group-vertical .btn-group + .next,
+.btn-group-vertical .bs-datepicker-head .bs-datepicker-head + .next,
+.bs-datepicker-head .btn-group-vertical .bs-datepicker-head + .next,
+.btn-group-vertical .btn-group + .btn-group,
+.btn-group-vertical .bs-datepicker-head + .btn-group,
+.btn-group-vertical .btn-group + .bs-datepicker-head,
+.btn-group-vertical .bs-datepicker-head + .bs-datepicker-head {
   margin-left: -1px;
 }
 
@@ -3120,59 +3240,63 @@ tbody.collapse.show {
   width: auto;
 }
 
-.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle), .bs-datepicker-head > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle), .bs-datepicker-head .btn-group > .current:not(:first-child):not(:last-child):not(.dropdown-toggle), .bs-datepicker-head > .current:not(:first-child):not(:last-child):not(.dropdown-toggle), .bs-datepicker-head .btn-group > .previous:not(:first-child):not(:last-child):not(.dropdown-toggle), .bs-datepicker-head > .previous:not(:first-child):not(:last-child):not(.dropdown-toggle), .bs-datepicker-head .btn-group > .next:not(:first-child):not(:last-child):not(.dropdown-toggle), .bs-datepicker-head > .next:not(:first-child):not(:last-child):not(.dropdown-toggle) {
   border-radius: 0;
 }
 
-.btn-group > .btn:first-child {
+.btn-group > .btn:first-child, .bs-datepicker-head > .btn:first-child, .bs-datepicker-head .btn-group > .current:first-child, .bs-datepicker-head > .current:first-child, .bs-datepicker-head .btn-group > .previous:first-child, .bs-datepicker-head > .previous:first-child, .bs-datepicker-head .btn-group > .next:first-child, .bs-datepicker-head > .next:first-child {
   margin-left: 0;
 }
 
-.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle), .bs-datepicker-head > .btn:first-child:not(:last-child):not(.dropdown-toggle), .bs-datepicker-head .btn-group > .current:first-child:not(:last-child):not(.dropdown-toggle), .bs-datepicker-head > .current:first-child:not(:last-child):not(.dropdown-toggle), .bs-datepicker-head .btn-group > .previous:first-child:not(:last-child):not(.dropdown-toggle), .bs-datepicker-head > .previous:first-child:not(:last-child):not(.dropdown-toggle), .bs-datepicker-head .btn-group > .next:first-child:not(:last-child):not(.dropdown-toggle), .bs-datepicker-head > .next:first-child:not(:last-child):not(.dropdown-toggle) {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.btn-group > .btn:last-child:not(:first-child),
-.btn-group > .dropdown-toggle:not(:first-child) {
+.btn-group > .btn:last-child:not(:first-child), .bs-datepicker-head > .btn:last-child:not(:first-child), .bs-datepicker-head .btn-group > .current:last-child:not(:first-child), .bs-datepicker-head > .current:last-child:not(:first-child), .bs-datepicker-head .btn-group > .previous:last-child:not(:first-child), .bs-datepicker-head > .previous:last-child:not(:first-child), .bs-datepicker-head .btn-group > .next:last-child:not(:first-child), .bs-datepicker-head > .next:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child),
+.bs-datepicker-head > .dropdown-toggle:not(:first-child) {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.btn-group > .btn-group {
+.btn-group > .btn-group, .bs-datepicker-head > .btn-group, .btn-group > .bs-datepicker-head, .bs-datepicker-head > .bs-datepicker-head {
   float: left;
 }
 
-.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {
+.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn, .bs-datepicker-head > .btn-group:not(:first-child):not(:last-child) > .btn, .btn-group > .bs-datepicker-head:not(:first-child):not(:last-child) > .btn, .bs-datepicker-head > .bs-datepicker-head:not(:first-child):not(:last-child) > .btn, .bs-datepicker-head .btn-group > .btn-group:not(:first-child):not(:last-child) > .current, .bs-datepicker-head > .btn-group:not(:first-child):not(:last-child) > .current, .btn-group > .bs-datepicker-head:not(:first-child):not(:last-child) > .current, .bs-datepicker-head > .bs-datepicker-head:not(:first-child):not(:last-child) > .current, .bs-datepicker-head .btn-group > .btn-group:not(:first-child):not(:last-child) > .previous, .bs-datepicker-head > .btn-group:not(:first-child):not(:last-child) > .previous, .btn-group > .bs-datepicker-head:not(:first-child):not(:last-child) > .previous, .bs-datepicker-head > .bs-datepicker-head:not(:first-child):not(:last-child) > .previous, .bs-datepicker-head .btn-group > .btn-group:not(:first-child):not(:last-child) > .next, .bs-datepicker-head > .btn-group:not(:first-child):not(:last-child) > .next, .btn-group > .bs-datepicker-head:not(:first-child):not(:last-child) > .next, .bs-datepicker-head > .bs-datepicker-head:not(:first-child):not(:last-child) > .next {
   border-radius: 0;
 }
 
-.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child,
-.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
+.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child, .bs-datepicker-head > .btn-group:first-child:not(:last-child) > .btn:last-child, .btn-group > .bs-datepicker-head:first-child:not(:last-child) > .btn:last-child, .bs-datepicker-head > .bs-datepicker-head:first-child:not(:last-child) > .btn:last-child, .bs-datepicker-head .btn-group > .btn-group:first-child:not(:last-child) > .current:last-child, .bs-datepicker-head > .btn-group:first-child:not(:last-child) > .current:last-child, .btn-group > .bs-datepicker-head:first-child:not(:last-child) > .current:last-child, .bs-datepicker-head > .bs-datepicker-head:first-child:not(:last-child) > .current:last-child, .bs-datepicker-head .btn-group > .btn-group:first-child:not(:last-child) > .previous:last-child, .bs-datepicker-head > .btn-group:first-child:not(:last-child) > .previous:last-child, .btn-group > .bs-datepicker-head:first-child:not(:last-child) > .previous:last-child, .bs-datepicker-head > .bs-datepicker-head:first-child:not(:last-child) > .previous:last-child, .bs-datepicker-head .btn-group > .btn-group:first-child:not(:last-child) > .next:last-child, .bs-datepicker-head > .btn-group:first-child:not(:last-child) > .next:last-child, .btn-group > .bs-datepicker-head:first-child:not(:last-child) > .next:last-child, .bs-datepicker-head > .bs-datepicker-head:first-child:not(:last-child) > .next:last-child,
+.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle,
+.bs-datepicker-head > .btn-group:first-child:not(:last-child) > .dropdown-toggle,
+.btn-group > .bs-datepicker-head:first-child:not(:last-child) > .dropdown-toggle,
+.bs-datepicker-head > .bs-datepicker-head:first-child:not(:last-child) > .dropdown-toggle {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child {
+.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child, .bs-datepicker-head > .btn-group:last-child:not(:first-child) > .btn:first-child, .btn-group > .bs-datepicker-head:last-child:not(:first-child) > .btn:first-child, .bs-datepicker-head > .bs-datepicker-head:last-child:not(:first-child) > .btn:first-child, .bs-datepicker-head .btn-group > .btn-group:last-child:not(:first-child) > .current:first-child, .bs-datepicker-head > .btn-group:last-child:not(:first-child) > .current:first-child, .btn-group > .bs-datepicker-head:last-child:not(:first-child) > .current:first-child, .bs-datepicker-head > .bs-datepicker-head:last-child:not(:first-child) > .current:first-child, .bs-datepicker-head .btn-group > .btn-group:last-child:not(:first-child) > .previous:first-child, .bs-datepicker-head > .btn-group:last-child:not(:first-child) > .previous:first-child, .btn-group > .bs-datepicker-head:last-child:not(:first-child) > .previous:first-child, .bs-datepicker-head > .bs-datepicker-head:last-child:not(:first-child) > .previous:first-child, .bs-datepicker-head .btn-group > .btn-group:last-child:not(:first-child) > .next:first-child, .bs-datepicker-head > .btn-group:last-child:not(:first-child) > .next:first-child, .btn-group > .bs-datepicker-head:last-child:not(:first-child) > .next:first-child, .bs-datepicker-head > .bs-datepicker-head:last-child:not(:first-child) > .next:first-child {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.btn + .dropdown-toggle-split {
+.btn + .dropdown-toggle-split, .bs-datepicker-head .current + .dropdown-toggle-split, .bs-datepicker-head .previous + .dropdown-toggle-split, .bs-datepicker-head .next + .dropdown-toggle-split {
   padding-right: 0.5625rem;
   padding-left: 0.5625rem;
 }
 
-.btn + .dropdown-toggle-split::after {
+.btn + .dropdown-toggle-split::after, .bs-datepicker-head .current + .dropdown-toggle-split::after, .bs-datepicker-head .previous + .dropdown-toggle-split::after, .bs-datepicker-head .next + .dropdown-toggle-split::after {
   margin-left: 0;
 }
 
-.btn-sm + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split {
+.btn-sm + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split, .bs-datepicker-head .btn-group-sm > .current + .dropdown-toggle-split, .bs-datepicker-head .btn-group-sm > .previous + .dropdown-toggle-split, .bs-datepicker-head .btn-group-sm > .next + .dropdown-toggle-split {
   padding-right: 0.375rem;
   padding-left: 0.375rem;
 }
 
-.btn-lg + .dropdown-toggle-split, .btn-group-lg > .btn + .dropdown-toggle-split {
+.btn-lg + .dropdown-toggle-split, .btn-group-lg > .btn + .dropdown-toggle-split, .bs-datepicker-head .btn-group-lg > .current + .dropdown-toggle-split, .bs-datepicker-head .btn-group-lg > .previous + .dropdown-toggle-split, .bs-datepicker-head .btn-group-lg > .next + .dropdown-toggle-split {
   padding-right: 0.75rem;
   padding-left: 0.75rem;
 }
@@ -3183,52 +3307,88 @@ tbody.collapse.show {
   justify-content: center;
 }
 
-.btn-group-vertical .btn,
-.btn-group-vertical .btn-group {
+.btn-group-vertical .btn, .btn-group-vertical .bs-datepicker-head .current, .bs-datepicker-head .btn-group-vertical .current, .btn-group-vertical .bs-datepicker-head .previous, .bs-datepicker-head .btn-group-vertical .previous, .btn-group-vertical .bs-datepicker-head .next, .bs-datepicker-head .btn-group-vertical .next,
+.btn-group-vertical .btn-group,
+.btn-group-vertical .bs-datepicker-head {
   width: 100%;
 }
 
-.btn-group-vertical > .btn + .btn,
+.btn-group-vertical > .btn + .btn, .bs-datepicker-head .btn-group-vertical > .current + .btn, .bs-datepicker-head .btn-group-vertical > .previous + .btn, .bs-datepicker-head .btn-group-vertical > .next + .btn, .bs-datepicker-head .btn-group-vertical > .btn + .current, .bs-datepicker-head .btn-group-vertical > .current + .current, .bs-datepicker-head .btn-group-vertical > .previous + .current, .bs-datepicker-head .btn-group-vertical > .next + .current, .bs-datepicker-head .btn-group-vertical > .btn + .previous, .bs-datepicker-head .btn-group-vertical > .current + .previous, .bs-datepicker-head .btn-group-vertical > .previous + .previous, .bs-datepicker-head .btn-group-vertical > .next + .previous, .bs-datepicker-head .btn-group-vertical > .btn + .next, .bs-datepicker-head .btn-group-vertical > .current + .next, .bs-datepicker-head .btn-group-vertical > .previous + .next, .bs-datepicker-head .btn-group-vertical > .next + .next,
 .btn-group-vertical > .btn + .btn-group,
+.bs-datepicker-head .btn-group-vertical > .current + .btn-group,
+.bs-datepicker-head .btn-group-vertical > .previous + .btn-group,
+.bs-datepicker-head .btn-group-vertical > .next + .btn-group,
+.btn-group-vertical > .btn + .bs-datepicker-head,
+.bs-datepicker-head .btn-group-vertical > .current + .bs-datepicker-head,
+.bs-datepicker-head .btn-group-vertical > .previous + .bs-datepicker-head,
+.bs-datepicker-head .btn-group-vertical > .next + .bs-datepicker-head,
 .btn-group-vertical > .btn-group + .btn,
-.btn-group-vertical > .btn-group + .btn-group {
+.btn-group-vertical > .bs-datepicker-head + .btn,
+.bs-datepicker-head .btn-group-vertical > .btn-group + .current,
+.bs-datepicker-head .btn-group-vertical > .bs-datepicker-head + .current,
+.bs-datepicker-head .btn-group-vertical > .btn-group + .previous,
+.bs-datepicker-head .btn-group-vertical > .bs-datepicker-head + .previous,
+.bs-datepicker-head .btn-group-vertical > .btn-group + .next,
+.bs-datepicker-head .btn-group-vertical > .bs-datepicker-head + .next,
+.btn-group-vertical > .btn-group + .btn-group,
+.btn-group-vertical > .bs-datepicker-head + .btn-group,
+.btn-group-vertical > .btn-group + .bs-datepicker-head,
+.btn-group-vertical > .bs-datepicker-head + .bs-datepicker-head {
   margin-top: -1px;
   margin-left: 0;
 }
 
-.btn-group-vertical > .btn:not(:first-child):not(:last-child) {
+.btn-group-vertical > .btn:not(:first-child):not(:last-child), .bs-datepicker-head .btn-group-vertical > .current:not(:first-child):not(:last-child), .bs-datepicker-head .btn-group-vertical > .previous:not(:first-child):not(:last-child), .bs-datepicker-head .btn-group-vertical > .next:not(:first-child):not(:last-child) {
   border-radius: 0;
 }
 
-.btn-group-vertical > .btn:first-child:not(:last-child) {
+.btn-group-vertical > .btn:first-child:not(:last-child), .bs-datepicker-head .btn-group-vertical > .current:first-child:not(:last-child), .bs-datepicker-head .btn-group-vertical > .previous:first-child:not(:last-child), .bs-datepicker-head .btn-group-vertical > .next:first-child:not(:last-child) {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.btn-group-vertical > .btn:last-child:not(:first-child) {
+.btn-group-vertical > .btn:last-child:not(:first-child), .bs-datepicker-head .btn-group-vertical > .current:last-child:not(:first-child), .bs-datepicker-head .btn-group-vertical > .previous:last-child:not(:first-child), .bs-datepicker-head .btn-group-vertical > .next:last-child:not(:first-child) {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
 
-.btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .btn {
+.btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .btn, .btn-group-vertical > .bs-datepicker-head:not(:first-child):not(:last-child) > .btn, .bs-datepicker-head .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .current, .btn-group-vertical > .bs-datepicker-head:not(:first-child):not(:last-child) > .current, .bs-datepicker-head .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .previous, .btn-group-vertical > .bs-datepicker-head:not(:first-child):not(:last-child) > .previous, .bs-datepicker-head .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .next, .btn-group-vertical > .bs-datepicker-head:not(:first-child):not(:last-child) > .next {
   border-radius: 0;
 }
 
-.btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child,
-.btn-group-vertical > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
+.btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child, .btn-group-vertical > .bs-datepicker-head:first-child:not(:last-child) > .btn:last-child, .bs-datepicker-head .btn-group-vertical > .btn-group:first-child:not(:last-child) > .current:last-child, .btn-group-vertical > .bs-datepicker-head:first-child:not(:last-child) > .current:last-child, .bs-datepicker-head .btn-group-vertical > .btn-group:first-child:not(:last-child) > .previous:last-child, .btn-group-vertical > .bs-datepicker-head:first-child:not(:last-child) > .previous:last-child, .bs-datepicker-head .btn-group-vertical > .btn-group:first-child:not(:last-child) > .next:last-child, .btn-group-vertical > .bs-datepicker-head:first-child:not(:last-child) > .next:last-child,
+.btn-group-vertical > .btn-group:first-child:not(:last-child) > .dropdown-toggle,
+.btn-group-vertical > .bs-datepicker-head:first-child:not(:last-child) > .dropdown-toggle {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.btn-group-vertical > .btn-group:last-child:not(:first-child) > .btn:first-child {
+.btn-group-vertical > .btn-group:last-child:not(:first-child) > .btn:first-child, .btn-group-vertical > .bs-datepicker-head:last-child:not(:first-child) > .btn:first-child, .bs-datepicker-head .btn-group-vertical > .btn-group:last-child:not(:first-child) > .current:first-child, .btn-group-vertical > .bs-datepicker-head:last-child:not(:first-child) > .current:first-child, .bs-datepicker-head .btn-group-vertical > .btn-group:last-child:not(:first-child) > .previous:first-child, .btn-group-vertical > .bs-datepicker-head:last-child:not(:first-child) > .previous:first-child, .bs-datepicker-head .btn-group-vertical > .btn-group:last-child:not(:first-child) > .next:first-child, .btn-group-vertical > .bs-datepicker-head:last-child:not(:first-child) > .next:first-child {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
 
-[data-toggle="buttons"] > .btn input[type="radio"],
+[data-toggle="buttons"] > .btn input[type="radio"], .bs-datepicker-head [data-toggle="buttons"] > .current input[type="radio"], .bs-datepicker-head [data-toggle="buttons"] > .previous input[type="radio"], .bs-datepicker-head [data-toggle="buttons"] > .next input[type="radio"],
 [data-toggle="buttons"] > .btn input[type="checkbox"],
+.bs-datepicker-head [data-toggle="buttons"] > .current input[type="checkbox"],
+.bs-datepicker-head [data-toggle="buttons"] > .previous input[type="checkbox"],
+.bs-datepicker-head [data-toggle="buttons"] > .next input[type="checkbox"],
 [data-toggle="buttons"] > .btn-group > .btn input[type="radio"],
-[data-toggle="buttons"] > .btn-group > .btn input[type="checkbox"] {
+[data-toggle="buttons"] > .bs-datepicker-head > .btn input[type="radio"],
+.bs-datepicker-head [data-toggle="buttons"] > .btn-group > .current input[type="radio"],
+[data-toggle="buttons"] > .bs-datepicker-head > .current input[type="radio"],
+.bs-datepicker-head [data-toggle="buttons"] > .btn-group > .previous input[type="radio"],
+[data-toggle="buttons"] > .bs-datepicker-head > .previous input[type="radio"],
+.bs-datepicker-head [data-toggle="buttons"] > .btn-group > .next input[type="radio"],
+[data-toggle="buttons"] > .bs-datepicker-head > .next input[type="radio"],
+[data-toggle="buttons"] > .btn-group > .btn input[type="checkbox"],
+[data-toggle="buttons"] > .bs-datepicker-head > .btn input[type="checkbox"],
+.bs-datepicker-head [data-toggle="buttons"] > .btn-group > .current input[type="checkbox"],
+[data-toggle="buttons"] > .bs-datepicker-head > .current input[type="checkbox"],
+.bs-datepicker-head [data-toggle="buttons"] > .btn-group > .previous input[type="checkbox"],
+[data-toggle="buttons"] > .bs-datepicker-head > .previous input[type="checkbox"],
+.bs-datepicker-head [data-toggle="buttons"] > .btn-group > .next input[type="checkbox"],
+[data-toggle="buttons"] > .bs-datepicker-head > .next input[type="checkbox"] {
   position: absolute;
   clip: rect(0, 0, 0, 0);
   pointer-events: none;
@@ -3286,7 +3446,7 @@ tbody.collapse.show {
 
 .input-group-addon.form-control-sm,
 .input-group-sm > .input-group-addon,
-.input-group-sm > .input-group-btn > .input-group-addon.btn {
+.input-group-sm > .input-group-btn > .input-group-addon.btn, .bs-datepicker-head .input-group-sm > .input-group-btn > .input-group-addon.current, .bs-datepicker-head .input-group-sm > .input-group-btn > .input-group-addon.previous, .bs-datepicker-head .input-group-sm > .input-group-btn > .input-group-addon.next {
   padding: 0.25rem 0.5rem;
   font-size: 0.609375rem;
   border-radius: 0.2rem;
@@ -3294,7 +3454,7 @@ tbody.collapse.show {
 
 .input-group-addon.form-control-lg,
 .input-group-lg > .input-group-addon,
-.input-group-lg > .input-group-btn > .input-group-addon.btn {
+.input-group-lg > .input-group-btn > .input-group-addon.btn, .bs-datepicker-head .input-group-lg > .input-group-btn > .input-group-addon.current, .bs-datepicker-head .input-group-lg > .input-group-btn > .input-group-addon.previous, .bs-datepicker-head .input-group-lg > .input-group-btn > .input-group-addon.next {
   padding: 0.5rem 1rem;
   font-size: 0.934375rem;
   border-radius: 0.3rem;
@@ -3308,10 +3468,30 @@ tbody.collapse.show {
 .input-group .form-control:not(:last-child),
 .input-group-addon:not(:last-child),
 .input-group-btn:not(:last-child) > .btn,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .current,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .previous,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .next,
 .input-group-btn:not(:last-child) > .btn-group > .btn,
+.input-group-btn:not(:last-child) > .bs-datepicker-head > .btn,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .btn-group > .current,
+.input-group-btn:not(:last-child) > .bs-datepicker-head > .current,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .btn-group > .previous,
+.input-group-btn:not(:last-child) > .bs-datepicker-head > .previous,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .btn-group > .next,
+.input-group-btn:not(:last-child) > .bs-datepicker-head > .next,
 .input-group-btn:not(:last-child) > .dropdown-toggle,
 .input-group-btn:not(:first-child) > .btn:not(:last-child):not(.dropdown-toggle),
-.input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .btn {
+.bs-datepicker-head .input-group-btn:not(:first-child) > .current:not(:last-child):not(.dropdown-toggle),
+.bs-datepicker-head .input-group-btn:not(:first-child) > .previous:not(:last-child):not(.dropdown-toggle),
+.bs-datepicker-head .input-group-btn:not(:first-child) > .next:not(:last-child):not(.dropdown-toggle),
+.input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .btn,
+.input-group-btn:not(:first-child) > .bs-datepicker-head:not(:last-child) > .btn,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .current,
+.input-group-btn:not(:first-child) > .bs-datepicker-head:not(:last-child) > .current,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .previous,
+.input-group-btn:not(:first-child) > .bs-datepicker-head:not(:last-child) > .previous,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .next,
+.input-group-btn:not(:first-child) > .bs-datepicker-head:not(:last-child) > .next {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -3323,10 +3503,30 @@ tbody.collapse.show {
 .input-group .form-control:not(:first-child),
 .input-group-addon:not(:first-child),
 .input-group-btn:not(:first-child) > .btn,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .current,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .previous,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .next,
 .input-group-btn:not(:first-child) > .btn-group > .btn,
+.input-group-btn:not(:first-child) > .bs-datepicker-head > .btn,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .btn-group > .current,
+.input-group-btn:not(:first-child) > .bs-datepicker-head > .current,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .btn-group > .previous,
+.input-group-btn:not(:first-child) > .bs-datepicker-head > .previous,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .btn-group > .next,
+.input-group-btn:not(:first-child) > .bs-datepicker-head > .next,
 .input-group-btn:not(:first-child) > .dropdown-toggle,
 .input-group-btn:not(:last-child) > .btn:not(:first-child),
-.input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .btn {
+.bs-datepicker-head .input-group-btn:not(:last-child) > .current:not(:first-child),
+.bs-datepicker-head .input-group-btn:not(:last-child) > .previous:not(:first-child),
+.bs-datepicker-head .input-group-btn:not(:last-child) > .next:not(:first-child),
+.input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .btn,
+.input-group-btn:not(:last-child) > .bs-datepicker-head:not(:first-child) > .btn,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .current,
+.input-group-btn:not(:last-child) > .bs-datepicker-head:not(:first-child) > .current,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .previous,
+.input-group-btn:not(:last-child) > .bs-datepicker-head:not(:first-child) > .previous,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .next,
+.input-group-btn:not(:last-child) > .bs-datepicker-head:not(:first-child) > .next {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
@@ -3342,42 +3542,56 @@ tbody.collapse.show {
   white-space: nowrap;
 }
 
-.input-group-btn > .btn {
+.input-group-btn > .btn, .bs-datepicker-head .input-group-btn > .current, .bs-datepicker-head .input-group-btn > .previous, .bs-datepicker-head .input-group-btn > .next {
   position: relative;
 }
 
-.input-group-btn > .btn + .btn {
+.input-group-btn > .btn + .btn, .bs-datepicker-head .input-group-btn > .current + .btn, .bs-datepicker-head .input-group-btn > .previous + .btn, .bs-datepicker-head .input-group-btn > .next + .btn, .bs-datepicker-head .input-group-btn > .btn + .current, .bs-datepicker-head .input-group-btn > .current + .current, .bs-datepicker-head .input-group-btn > .previous + .current, .bs-datepicker-head .input-group-btn > .next + .current, .bs-datepicker-head .input-group-btn > .btn + .previous, .bs-datepicker-head .input-group-btn > .current + .previous, .bs-datepicker-head .input-group-btn > .previous + .previous, .bs-datepicker-head .input-group-btn > .next + .previous, .bs-datepicker-head .input-group-btn > .btn + .next, .bs-datepicker-head .input-group-btn > .current + .next, .bs-datepicker-head .input-group-btn > .previous + .next, .bs-datepicker-head .input-group-btn > .next + .next {
   margin-left: -1px;
 }
 
-.input-group-btn > .btn:focus, .input-group-btn > .btn:active, .input-group-btn > .btn:hover {
+.input-group-btn > .btn:focus, .bs-datepicker-head .input-group-btn > .current:focus, .bs-datepicker-head .input-group-btn > .previous:focus, .bs-datepicker-head .input-group-btn > .next:focus, .input-group-btn > .btn:active, .bs-datepicker-head .input-group-btn > .current:active, .bs-datepicker-head .input-group-btn > .previous:active, .bs-datepicker-head .input-group-btn > .next:active, .input-group-btn > .btn:hover, .bs-datepicker-head .input-group-btn > .current:hover, .bs-datepicker-head .input-group-btn > .previous:hover, .bs-datepicker-head .input-group-btn > .next:hover {
   z-index: 3;
 }
 
-.input-group-btn:first-child > .btn + .btn {
+.input-group-btn:first-child > .btn + .btn, .bs-datepicker-head .input-group-btn:first-child > .current + .btn, .bs-datepicker-head .input-group-btn:first-child > .previous + .btn, .bs-datepicker-head .input-group-btn:first-child > .next + .btn, .bs-datepicker-head .input-group-btn:first-child > .btn + .current, .bs-datepicker-head .input-group-btn:first-child > .current + .current, .bs-datepicker-head .input-group-btn:first-child > .previous + .current, .bs-datepicker-head .input-group-btn:first-child > .next + .current, .bs-datepicker-head .input-group-btn:first-child > .btn + .previous, .bs-datepicker-head .input-group-btn:first-child > .current + .previous, .bs-datepicker-head .input-group-btn:first-child > .previous + .previous, .bs-datepicker-head .input-group-btn:first-child > .next + .previous, .bs-datepicker-head .input-group-btn:first-child > .btn + .next, .bs-datepicker-head .input-group-btn:first-child > .current + .next, .bs-datepicker-head .input-group-btn:first-child > .previous + .next, .bs-datepicker-head .input-group-btn:first-child > .next + .next {
   margin-left: 0;
 }
 
+
 .input-group-btn:not(:last-child) > .btn,
-.input-group-btn:not(:last-child) > .btn-group {
+.bs-datepicker-head .input-group-btn:not(:last-child) > .current,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .previous,
+.bs-datepicker-head .input-group-btn:not(:last-child) > .next,
+.input-group-btn:not(:last-child) > .btn-group,
+.input-group-btn:not(:last-child) > .bs-datepicker-head {
   margin-right: -1px;
 }
 
+
 .input-group-btn:not(:first-child) > .btn,
-.input-group-btn:not(:first-child) > .btn-group {
+.bs-datepicker-head .input-group-btn:not(:first-child) > .current,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .previous,
+.bs-datepicker-head .input-group-btn:not(:first-child) > .next,
+.input-group-btn:not(:first-child) > .btn-group,
+.input-group-btn:not(:first-child) > .bs-datepicker-head {
   z-index: 2;
   margin-left: 0;
 }
 
-.input-group-btn:not(:first-child) > .btn:first-child,
-.input-group-btn:not(:first-child) > .btn-group:first-child {
+.input-group-btn:not(:first-child) > .btn:first-child, .bs-datepicker-head .input-group-btn:not(:first-child) > .current:first-child, .bs-datepicker-head .input-group-btn:not(:first-child) > .previous:first-child, .bs-datepicker-head .input-group-btn:not(:first-child) > .next:first-child,
+.input-group-btn:not(:first-child) > .btn-group:first-child,
+.input-group-btn:not(:first-child) > .bs-datepicker-head:first-child {
   margin-left: -1px;
 }
 
-.input-group-btn:not(:first-child) > .btn:focus, .input-group-btn:not(:first-child) > .btn:active, .input-group-btn:not(:first-child) > .btn:hover,
+.input-group-btn:not(:first-child) > .btn:focus, .bs-datepicker-head .input-group-btn:not(:first-child) > .current:focus, .bs-datepicker-head .input-group-btn:not(:first-child) > .previous:focus, .bs-datepicker-head .input-group-btn:not(:first-child) > .next:focus, .input-group-btn:not(:first-child) > .btn:active, .bs-datepicker-head .input-group-btn:not(:first-child) > .current:active, .bs-datepicker-head .input-group-btn:not(:first-child) > .previous:active, .bs-datepicker-head .input-group-btn:not(:first-child) > .next:active, .input-group-btn:not(:first-child) > .btn:hover, .bs-datepicker-head .input-group-btn:not(:first-child) > .current:hover, .bs-datepicker-head .input-group-btn:not(:first-child) > .previous:hover, .bs-datepicker-head .input-group-btn:not(:first-child) > .next:hover,
 .input-group-btn:not(:first-child) > .btn-group:focus,
+.input-group-btn:not(:first-child) > .bs-datepicker-head:focus,
 .input-group-btn:not(:first-child) > .btn-group:active,
-.input-group-btn:not(:first-child) > .btn-group:hover {
+.input-group-btn:not(:first-child) > .bs-datepicker-head:active,
+.input-group-btn:not(:first-child) > .btn-group:hover,
+.input-group-btn:not(:first-child) > .bs-datepicker-head:hover {
   z-index: 3;
 }
 
@@ -3506,7 +3720,7 @@ tbody.collapse.show {
 }
 
 .custom-select-sm {
-  height: calc(1.414063rem + 2px);
+  height: calc(1.414062rem + 2px);
   padding-top: 0.375rem;
   padding-bottom: 0.375rem;
   font-size: 75%;
@@ -4105,10 +4319,6 @@ tbody.collapse.show {
   background-color: #fff;
 }
 
-.card-body dl, .card-body dt, .card-body dd {
-  margin-bottom: 0 !important;
-}
-
 .card-title {
   margin-bottom: 0.75rem;
 }
@@ -4430,7 +4640,7 @@ tbody.collapse.show {
   display: none;
 }
 
-.btn .badge {
+.btn .badge, .bs-datepicker-head .current .badge, .bs-datepicker-head .previous .badge, .bs-datepicker-head .next .badge {
   position: relative;
   top: -1px;
 }
@@ -6092,7 +6302,7 @@ a.bg-purple:focus, a.bg-purple:hover {
   display: table-cell !important;
 }
 
-.d-flex {
+.d-flex, .bs-datepicker-head {
   display: flex !important;
 }
 
@@ -6335,7 +6545,7 @@ a.bg-purple:focus, a.bg-purple:hover {
   justify-content: flex-end !important;
 }
 
-.justify-content-center {
+.justify-content-center, .bs-datepicker-head {
   justify-content: center !important;
 }
 
@@ -8598,36 +8808,36 @@ img {
   font-weight: light;
 }
 
-#GUI .jumbotron .btn-lg, #GUI .jumbotron .btn-group-lg > .btn {
+#GUI .jumbotron .btn-lg, #GUI .jumbotron .btn-group-lg > .btn, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .current, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .current, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .previous, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .previous, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .next, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .next {
   border-radius: 0;
   padding: 1.25rem 0 0 0;
   height: 80px;
   width: 80px;
 }
 
-#GUI .jumbotron .btn-lg:hover, #GUI .jumbotron .btn-group-lg > .btn:hover {
+#GUI .jumbotron .btn-lg:hover, #GUI .jumbotron .btn-group-lg > .btn:hover, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .current:hover, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .current:hover, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .previous:hover, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .previous:hover, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .next:hover, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .next:hover {
   cursor: pointer;
 }
 
-#GUI .jumbotron .btn-lg:hover .icon, #GUI .jumbotron .btn-group-lg > .btn:hover .icon {
+#GUI .jumbotron .btn-lg:hover .icon, #GUI .jumbotron .btn-group-lg > .btn:hover .icon, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .current:hover .icon, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .current:hover .icon, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .previous:hover .icon, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .previous:hover .icon, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .next:hover .icon, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .next:hover .icon {
   font-size: 20px;
   transition-duration: .5s;
 }
 
-#GUI .jumbotron .btn-lg:hover .text-uppercase, #GUI .jumbotron .btn-group-lg > .btn:hover .text-uppercase {
+#GUI .jumbotron .btn-lg:hover .text-uppercase, #GUI .jumbotron .btn-group-lg > .btn:hover .text-uppercase, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .current:hover .text-uppercase, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .current:hover .text-uppercase, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .previous:hover .text-uppercase, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .previous:hover .text-uppercase, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .next:hover .text-uppercase, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .next:hover .text-uppercase {
   display: block;
   opacity: 1;
   transition-duration: .5s;
 }
 
-#GUI .jumbotron .btn-lg .icon, #GUI .jumbotron .btn-group-lg > .btn .icon {
+#GUI .jumbotron .btn-lg .icon, #GUI .jumbotron .btn-group-lg > .btn .icon, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .current .icon, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .current .icon, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .previous .icon, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .previous .icon, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .next .icon, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .next .icon {
   font-size: 40px;
   color: #fff;
   transition-duration: .5s;
   font-weight: 300;
 }
 
-#GUI .jumbotron .btn-lg .text-uppercase, #GUI .jumbotron .btn-group-lg > .btn .text-uppercase {
+#GUI .jumbotron .btn-lg .text-uppercase, #GUI .jumbotron .btn-group-lg > .btn .text-uppercase, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .current .text-uppercase, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .current .text-uppercase, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .previous .text-uppercase, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .previous .text-uppercase, #GUI .jumbotron .bs-datepicker-head .btn-group-lg > .next .text-uppercase, .bs-datepicker-head #GUI .jumbotron .btn-group-lg > .next .text-uppercase {
   display: block;
   opacity: 0;
   transition-duration: .5s;
@@ -8766,7 +8976,7 @@ img {
   /* Firefox */
   -ms-user-select: none;
   /* IE10+ */
-  color: transparent;
+  color: rgba(0, 0, 0, 0);
 }
 
 #GUI .toggle-on .toggle-text-on {
@@ -8795,7 +9005,7 @@ img {
 }
 
 #GUI .toggle-on .toggle-text-off {
-  color: transparent;
+  color: rgba(0, 0, 0, 0);
 }
 
 #GUI .glow-comp {
@@ -8954,35 +9164,35 @@ img {
   user-select: auto !important;
 }
 
-.modal .btn-group label {
+.modal .btn-group label, .modal .bs-datepicker-head label {
   color: #fff;
 }
 
-.modal .btn-group.fee label {
+.modal .btn-group.fee label, .modal .fee.bs-datepicker-head label {
   margin-bottom: 0 !important;
 }
 
-.modal .btn-group.fee label.btn-outline-danger {
+.modal .btn-group.fee label.btn-outline-danger, .modal .fee.bs-datepicker-head label.btn-outline-danger {
   color: #dc3545;
 }
 
-.modal .btn-group.fee label.btn-outline-warning {
+.modal .btn-group.fee label.btn-outline-warning, .modal .fee.bs-datepicker-head label.btn-outline-warning {
   color: #ffc107;
 }
 
-.modal .btn-group.fee label.btn-outline-success {
+.modal .btn-group.fee label.btn-outline-success, .modal .fee.bs-datepicker-head label.btn-outline-success {
   color: #28a745;
 }
 
-.modal .btn-group.fee label.active {
+.modal .btn-group.fee label.active, .modal .fee.bs-datepicker-head label.active {
   color: #fff !important;
 }
 
-.modal .btn-group label:hover {
+.modal .btn-group label:hover, .modal .bs-datepicker-head label:hover {
   color: #fff;
 }
 
-.modal .btn-group label input {
+.modal .btn-group label input, .modal .bs-datepicker-head label input {
   position: absolute;
   opacity: 0;
 }
@@ -9017,7 +9227,7 @@ img {
   max-width: 100% !important;
 }
 
-.modal .myAddress .btn:hover {
+.modal .myAddress .btn:hover, .modal .myAddress .bs-datepicker-head .current:hover, .bs-datepicker-head .modal .myAddress .current:hover, .modal .myAddress .bs-datepicker-head .previous:hover, .bs-datepicker-head .modal .myAddress .previous:hover, .modal .myAddress .bs-datepicker-head .next:hover, .bs-datepicker-head .modal .myAddress .next:hover {
   cursor: pointer;
 }
 
@@ -9132,7 +9342,7 @@ img {
   color: rgba(53, 64, 82, 0.7);
 }
 
-.smartcontracts .card .table td .btn-primary {
+.smartcontracts .card .table td .btn-primary, .smartcontracts .card .table td .bs-datepicker-head .current, .bs-datepicker-head .smartcontracts .card .table td .current, .smartcontracts .card .table td .bs-datepicker-head .previous, .bs-datepicker-head .smartcontracts .card .table td .previous, .smartcontracts .card .table td .bs-datepicker-head .next, .bs-datepicker-head .smartcontracts .card .table td .next {
   border-radius: 50%;
   background-color: rgba(21, 139, 207, 0.1);
   color: #158BCF;
@@ -9142,7 +9352,7 @@ img {
   height: 18px;
 }
 
-.smartcontracts .card .table td .btn-primary:hover {
+.smartcontracts .card .table td .btn-primary:hover, .smartcontracts .card .table td .bs-datepicker-head .current:hover, .bs-datepicker-head .smartcontracts .card .table td .current:hover, .smartcontracts .card .table td .bs-datepicker-head .previous:hover, .bs-datepicker-head .smartcontracts .card .table td .previous:hover, .smartcontracts .card .table td .bs-datepicker-head .next:hover, .bs-datepicker-head .smartcontracts .card .table td .next:hover {
   background-color: #158BCF;
   color: #fff;
 }
@@ -9366,6 +9576,50 @@ img {
 
 .createWallet .bs-tooltip-right, .createWallet .tooltip.bs-tooltip-auto[x-placement^="right"] {
   width: 260px;
+}
+
+.bs-datepicker-head {
+  background-color: #158BCF;
+  width: 100%;
+  display: block;
+}
+
+.bs-datepicker-head .current {
+  border-radius: 0;
+}
+
+.bs-datepicker-head .next {
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.bs-datepicker-head .previous {
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.bs-datepicker-body {
+  background-color: #fff;
+  padding: .75rem;
+  border-radius: 0 0 .25rem .25rem;
+}
+
+.bs-datepicker-body th {
+  text-align: center;
+}
+
+.bs-datepicker-body td {
+  text-align: center;
+  padding: .5rem;
+  color: #495057;
+}
+
+.bs-datepicker-body td .is-other-month {
+  color: #adb5bd;
+}
+
+.bs-datepicker-body td:hover {
+  background-color: #158BCF;
+  cursor: pointer;
+  color: #fff;
 }
 
 @font-face {

@@ -770,3 +770,40 @@ img {pointer-events: none !important;}
     width: 260px;
   }
 }
+
+// Datepicker
+.bs-datepicker-head {
+  background-color: $primary;
+  width: 100%;
+  display: block;
+  @extend .btn-group;
+  @extend .d-flex;
+  @extend .justify-content-center;
+
+  .current, .previous, .next {
+    @extend .btn;
+    @extend .btn-primary;
+  }
+  .current {border-radius: 0;}
+  .next {border-radius: 0 0.25rem 0.25rem 0;}
+  .previous {border-radius: 0.25rem 0 0 0.25rem;}
+
+
+}
+.bs-datepicker-body {
+  background-color: $white;
+  padding: .75rem;
+  border-radius: 0 0 .25rem .25rem;
+  th {text-align: center;}
+  td {
+    text-align: center;
+    padding: .5rem;
+    color: $gray-700;
+    .is-other-month {color: $gray-500;}
+    &:hover {
+      background-color: $primary;
+      cursor: pointer;
+      color: $white;
+    }
+  }
+}
