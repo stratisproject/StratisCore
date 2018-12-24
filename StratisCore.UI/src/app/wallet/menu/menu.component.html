@@ -10,7 +10,7 @@
         <li *ngIf="testnet && !sidechainEnabled" class="nav-item list-inline-item">
           <a class="nav-link" routerLink="/wallet/staking">Cold Staking</a>
         </li>
-        <li *ngIf="testnet && sidechainEnabled" class="nav-item list-inline-item">
+        <li *ngIf="sidechainEnabled" class="nav-item list-inline-item">
           <a class="nav-link" routerLink="/wallet/smart-contracts">Smart Contracts</a>
         </li>
       </ul>
