@@ -19,7 +19,7 @@ if (testnet && !sidechain) {
 } else if (sidechain && testnet) {
   apiPort = 38225;
 } else if (sidechain && !testnet) {
-  apiPort = 37225;
+  apiPort = 38225;
 }
 
 ipcMain.on('get-port', (event, arg) => {
