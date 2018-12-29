@@ -34,12 +34,6 @@ ipcMain.on('get-sidechain', (event, arg) => {
   event.returnValue = sidechain;
 });
 
-try {
-  require('dotenv').config();
-} catch {
-  console.log('asar');
-}
-
 require('electron-context-menu')({
   showInspectElement: serve
 });

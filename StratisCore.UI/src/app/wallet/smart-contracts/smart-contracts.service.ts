@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import { inherits } from 'util';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ApiService } from '../../shared/services/api.service';
 
 export class SmartContractsContractItem {
@@ -18,17 +17,17 @@ export class ContractTransactionItem
 }
 
 export abstract class SmartContractsServiceBase {
-    GetReceipt(hash: string): Observable<string> { return Observable.of(); }
-    GetAddresses(walletName: string): Observable<string[]> { return Observable.of(); }
-    GetBalance(walletName: string): Observable<number> { return Observable.of(); }
-    GetAddressBalance(address: string): Observable<number> { return Observable.of(); }
-    GetAddress(walletName: string): Observable<string> { return Observable.of(); }
-    GetContracts(walletName: string): Observable<SmartContractsContractItem[]> { return Observable.of(); }
-    GetSenderAddresses(walletName: string): Observable<string[]> { return Observable.of(); }
-    GetParameterTypes(walletName: string): Observable<string[]> { return Observable.of(); }
-    GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> { return Observable.of(); }
-    PostCreate(createTransaction: any): Observable<any> { return Observable.of(); }
-    PostCall(createTransaction: any): Observable<any> { return Observable.of(); }
+    GetReceipt(hash: string): Observable<string> { return of(); }
+    GetAddresses(walletName: string): Observable<string[]> { return of(); }
+    GetBalance(walletName: string): Observable<number> { return of(); }
+    GetAddressBalance(address: string): Observable<number> { return of(); }
+    GetAddress(walletName: string): Observable<string> { return of(); }
+    GetContracts(walletName: string): Observable<SmartContractsContractItem[]> { return of(); }
+    GetSenderAddresses(walletName: string): Observable<string[]> { return of(); }
+    GetParameterTypes(walletName: string): Observable<string[]> { return of(); }
+    GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> { return of(); }
+    PostCreate(createTransaction: any): Observable<any> { return of(); }
+    PostCall(createTransaction: any): Observable<any> { return of(); }
 }
 
 @Injectable()
@@ -38,46 +37,38 @@ export class SmartContractsService implements SmartContractsServiceBase
 
     GetReceipt(hash: string): Observable<string> {
         return this.apiService.getReceipt(hash)
-            .map(response => response.json());
     }
 
     PostCall(createTransaction: any): Observable<any> {
         return this.apiService.postCallTransaction(createTransaction)
-            .map(response => response.json());
     }
 
     PostCreate(createTransaction: any): Observable<any> {
         return this.apiService.postCreateTransaction(createTransaction)
-            .map(response => response.json());
     }
 
-    GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> {
+    GetHistory(walletName: string, address: string): Observable<any> {
         return this.apiService.getAccountHistory(walletName, address)
-            .map(response => response.json());
     }
 
-    GetBalance(walletName: string): Observable<number> {
+    GetBalance(walletName: string): Observable<any> {
         return this.apiService.getAccountBalance(walletName)
-            .map(response => response.json());
     }
 
-    GetAddressBalance(address: string): Observable<number> {
+    GetAddressBalance(address: string): Observable<any> {
         return this.apiService.getAddressBalance(address)
-            .map(response => response.json());
-    }
-    
-    GetAddress(walletName: string): Observable<string> {
-        return this.apiService.getAccountAddress(walletName)
-            .map(response => response.json());
     }
 
-    GetAddresses(walletName: string): Observable<string[]> {
+    GetAddress(walletName: string): Observable<any> {
+        return this.apiService.getAccountAddress(walletName)
+    }
+
+    GetAddresses(walletName: string): Observable<any> {
         return this.apiService.getAccountAddresses(walletName)
-            .map(response => response.json());
     }
 
     GetContracts(walletName: string): Observable<SmartContractsContractItem[]> {
-        return Observable.of([
+        return of([
             new SmartContractsContractItem('7809', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 10898025),
             new SmartContractsContractItem('7810', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 11898025),
             new SmartContractsContractItem('7811', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 12898025),
@@ -88,7 +79,7 @@ export class SmartContractsService implements SmartContractsServiceBase
     }
 
     GetSenderAddresses(walletName: string): Observable<string[]> {
-        return Observable.of([
+        return of([
             'SarP7wvxZmaG7t1UAjaxyB6RNT9FV1Z2Sn',
             'SbrP8wvxZmaG7t2UAjbxyB7RNT9FV1Z2Sn',
             'ScrP9wvxZmaG7t3UAjcxyB8RNT9FV1Z2Sn'
@@ -96,7 +87,7 @@ export class SmartContractsService implements SmartContractsServiceBase
     }
 
     GetParameterTypes(walletName: string): Observable<string[]> {
-        return Observable.of([
+        return of([
             'Type 1',
             'Type 2',
             'Type 3'
@@ -118,12 +109,12 @@ export class FakeSmartContractsService implements SmartContractsServiceBase {
     GetHistory(walletName: string, address: string): Observable<any> {
         throw new Error("Method not implemented.");
     }
-    GetBalance(walletName: string): Observable<number> { return Observable.of(10898026); }
+    GetBalance(walletName: string): Observable<number> { return of(10898026); }
 
-    GetAddress(walletName: string): Observable<string> { return Observable.of('SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn'); }
+    GetAddress(walletName: string): Observable<string> { return of('SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn'); }
 
     GetContracts(walletName: string): Observable<SmartContractsContractItem[]> {
-        return Observable.of([
+        return of([
             new SmartContractsContractItem('7809', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 10898025),
             new SmartContractsContractItem('7810', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 11898025),
             new SmartContractsContractItem('7811', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 12898025),
@@ -134,7 +125,7 @@ export class FakeSmartContractsService implements SmartContractsServiceBase {
     }
 
     GetSenderAddresses(walletName: string): Observable<string[]> {
-        return Observable.of([
+        return of([
             'SarP7wvxZmaG7t1UAjaxyB6RNT9FV1Z2Sn',
             'SbrP8wvxZmaG7t2UAjbxyB7RNT9FV1Z2Sn',
             'ScrP9wvxZmaG7t3UAjcxyB8RNT9FV1Z2Sn'
@@ -142,22 +133,22 @@ export class FakeSmartContractsService implements SmartContractsServiceBase {
     }
 
     GetParameterTypes(walletName: string): Observable<string[]> {
-        return Observable.of([
+        return of([
             'Type 1',
             'Type 2',
             'Type 3'
         ]);
     }
 
-    GetAddresses(walletName: string): Observable<string[]> { 
-        return Observable.of([
+    GetAddresses(walletName: string): Observable<string[]> {
+        return of([
             'SarP7wvxZmaG7t1UAjaxyB6RNT9FV1Z2Sn',
             'SbrP8wvxZmaG7t2UAjbxyB7RNT9FV1Z2Sn',
             'ScrP9wvxZmaG7t3UAjcxyB8RNT9FV1Z2Sn'
-        ]); 
+        ]);
     }
 
-    GetAddressBalance(address: string): Observable<number> { 
-        return Observable.of(10898026);
+    GetAddressBalance(address: string): Observable<number> {
+        return of(10898026);
     }
 }

@@ -9,8 +9,7 @@ import { ModalService } from '../../shared/services/modal.service';
 import { WalletInfo } from '../../shared/classes/wallet-info';
 import { TransactionInfo } from '../../shared/classes/transaction-info';
 
-import { Observable } from 'rxjs/Rx';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
 

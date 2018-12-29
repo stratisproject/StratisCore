@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription, Observable, Subject } from 'rxjs';
+import { Subscription, Observable, Subject, of, fromEventPattern } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -15,7 +16,7 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['./smart-contracts.component.css']
 })
 export class SmartContractsComponent implements OnInit {
-    
+
     private walletName = '';
     addresses: string[];
     addressChangedSubject: Subject<string>;
@@ -25,23 +26,24 @@ export class SmartContractsComponent implements OnInit {
     coinUnit: string;
     unsubscribe: Subject<void> = new Subject();
 
-    constructor(private globalService: GlobalService, 
+    constructor(private globalService: GlobalService,
         private smartContractsService: SmartContractsServiceBase,
         private clipboardService: ClipboardService,
         private modalService: NgbModal,
         private genericModalService: ModalService) {
-        
+
         this.coinUnit = this.globalService.getCoinUnit();
         this.walletName = this.globalService.getWalletName();
         this.addressChangedSubject = new Subject();
 
         this.smartContractsService
             .GetAddresses(this.walletName)
-            .catch(error => {
+            .pipe(
+              catchError(error => {
                 this.showApiError("Error retrieving addressses. " + error);
-                return Observable.of([]);
-            })
-            .pipe(takeUntil(this.unsubscribe))
+                return of([]);
+              }),
+              takeUntil(this.unsubscribe))
             .subscribe(addresses => {
                 if (addresses && addresses.length > 0) {
                     this.addressChangedSubject.next(addresses[0]);
@@ -50,23 +52,30 @@ export class SmartContractsComponent implements OnInit {
             });
 
         this.addressChangedSubject
-                .switchMap(x => this.smartContractsService.GetAddressBalance(x)
-                    .catch(error => {
-                        this.showApiError("Error retrieving balance. " + error);
-                        return Observable.of(0);
-                    })
+                .pipe(
+                  switchMap(x => this.smartContractsService.GetAddressBalance(x)
+                    .pipe(
+                      catchError(error => {
+                          this.showApiError("Error retrieving balance. " + error);
+                          return of(0);
+                      })
+                    )
+                  ),
+                  takeUntil(this.unsubscribe)
                 )
-                .pipe(takeUntil(this.unsubscribe))
-                .subscribe(balance => this.balance = balance);                
+                .subscribe(balance => this.balance = balance);
 
         this.addressChangedSubject
-            .switchMap(address => this.smartContractsService.GetHistory(this.walletName, address)
-                .catch(error => {
+            .pipe(
+              switchMap(address => this.smartContractsService.GetHistory(this.walletName, address)
+                .pipe(catchError(error => {
                     this.showApiError("Error retrieving transactions. " + error);
-                    return Observable.of([]);
-                })
+                    return of([]);
+                  })
+                )
+              ),
+              takeUntil(this.unsubscribe)
             )
-            .pipe(takeUntil(this.unsubscribe))
             .subscribe(history => this.history = history);
 
 
@@ -119,7 +128,7 @@ export class SmartContractsComponent implements OnInit {
         console.log("txhash clicked");
         this.smartContractsService
             .GetReceipt(contract.hash)
-            .toPromise()    
+            .toPromise()
             .then(result => {
                 this.genericModalService.openModal("Receipt", "<pre>" + JSON.stringify(result, null,"    ") + "</pre>");
             },

@@ -8,7 +8,7 @@ import { SendComponent } from '../send/send.component';
 import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
 import { AddressLabel } from '../../shared/classes/address-label';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-address-book',

@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, URLSearchParams} from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
-import "rxjs/add/observable/interval";
-import 'rxjs/add/operator/startWith';
+import { Observable, interval } from 'rxjs';
+import { switchMap, startWith} from 'rxjs/operators';
 
 import { GlobalService } from './global.service';
 import { ElectronService } from 'ngx-electron';
@@ -20,9 +16,6 @@ import { FeeEstimation } from '../classes/fee-estimation';
 import { TransactionBuilding } from '../classes/transaction-building';
 import { TransactionSending } from '../classes/transaction-sending';
 
-/**
- * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
- */
 @Injectable()
 export class ApiService {
 
@@ -31,7 +24,7 @@ export class ApiService {
     };
 
     private headers = new Headers({'Content-Type': 'application/json'});
-    private pollingInterval = 3000;
+    private pollingInterval = interval(3000);
     private apiPort;
     private stratisApiUrl;
 
@@ -43,29 +36,27 @@ export class ApiService {
     getNodeStatus(): Observable<any> {
       return this.http
         .get(this.stratisApiUrl + '/node/status')
-        .map((response: Response) => response);
     }
 
     getNodeStatusInterval(): Observable<any> {
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/node/status'))
-        .map((response: Response) => response);
+      return this.pollingInterval
+        .pipe(
+          startWith(0),
+          switchMap(() => this.http.get(this.stratisApiUrl + '/node/status'))
+        )
     }
 
     getAddressBookAddresses(): Observable<any> {
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/AddressBook'))
-        .map((response: Response) => response);
+      return this.pollingInterval
+      .pipe(
+        startWith(0),
+        switchMap(() => this.http.get(this.stratisApiUrl + '/AddressBook'))
+      )
     }
 
     addAddressBookAddress(data: AddressLabel): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/AddressBook/address', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
     }
 
     removeAddressBookAddress(label: string): Observable<any> {
@@ -73,7 +64,6 @@ export class ApiService {
       params.set('label', label);
       return this.http
         .delete(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -82,7 +72,6 @@ export class ApiService {
     getWalletFiles(): Observable<any> {
       return this.http
         .get(this.stratisApiUrl + '/wallet/files')
-        .map((response: Response) => response);
      }
 
     /** Gets the extended public key from a certain wallet */
@@ -93,7 +82,6 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/extpubkey', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
      /**
@@ -106,7 +94,6 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/mnemonic', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -115,7 +102,6 @@ export class ApiService {
     createStratisWallet(data: WalletCreation): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
     }
 
     /**
@@ -124,7 +110,6 @@ export class ApiService {
     recoverStratisWallet(data: WalletRecovery): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
     }
 
     /**
@@ -133,7 +118,6 @@ export class ApiService {
     loadStratisWallet(data: WalletLoad): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/wallet/load/', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
     }
 
     /**
@@ -142,7 +126,6 @@ export class ApiService {
     getWalletStatus(): Observable<any> {
       return this.http
         .get(this.stratisApiUrl + '/wallet/status')
-        .map((response: Response) => response);
     }
 
     /**
@@ -154,7 +137,6 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -164,11 +146,11 @@ export class ApiService {
       let params: URLSearchParams = new URLSearchParams();
       params.set('Name', data.walletName);
 
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, params: params})))
-        .map((response: Response) => response);
+      return this.pollingInterval
+        .pipe(
+          startWith(0),
+          switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, params: params})))
+        )
     }
 
     /**
@@ -179,11 +161,11 @@ export class ApiService {
       params.set('walletName', data.walletName);
       params.set('accountName', "account 0");
 
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, params: params})))
-        .map((response: Response) => response);
+      return this.pollingInterval
+        .pipe(
+          startWith(0),
+          switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, params: params})))
+        )
     }
 
     /**
@@ -198,7 +180,6 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/maxbalance', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -209,11 +190,11 @@ export class ApiService {
       params.set('walletName', data.walletName);
       params.set('accountName', "account 0");
 
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, params: params})))
-        .map((response: Response) => response);
+      return this.pollingInterval
+        .pipe(
+          startWith(0),
+          switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, params: params})))
+        )
     }
 
     /**
@@ -226,7 +207,6 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/unusedaddress', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -240,7 +220,6 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/unusedaddresses', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -253,7 +232,6 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/addresses', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -271,7 +249,6 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -289,7 +266,6 @@ export class ApiService {
 
       return this.http
         .get(this.stratisApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -298,7 +274,6 @@ export class ApiService {
     buildTransaction(data: TransactionBuilding): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/wallet/build-transaction', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
     }
 
     /**
@@ -307,7 +282,6 @@ export class ApiService {
     sendTransaction(data: TransactionSending): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/wallet/send-transaction', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
     }
 
     /** Remove transaction */
@@ -319,7 +293,6 @@ export class ApiService {
 
       return this.http
         .delete(this.stratisApiUrl + '/wallet/remove-transactions', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
     }
 
     /**
@@ -328,18 +301,17 @@ export class ApiService {
     startStaking(data: any): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/staking/startstaking', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
     }
 
     /**
      * Get staking info
      */
     getStakingInfo(): Observable<any> {
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/staking/getstakinginfo'))
-        .map((response: Response) => response);
+      return this.pollingInterval
+        .pipe(
+          startWith(0),
+          switchMap(() => this.http.get(this.stratisApiUrl + '/staking/getstakinginfo'))
+        )
     }
 
     /**
@@ -348,7 +320,6 @@ export class ApiService {
     stopStaking(): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/staking/stopstaking', {headers: this.headers})
-        .map((response: Response) => response);
     }
 
     /**
@@ -357,7 +328,6 @@ export class ApiService {
     shutdownNode(): Observable<any> {
       return this.http
         .post(this.stratisApiUrl + '/node/shutdown', 'corsProtection:true', {headers: this.headers})
-        .map((response: Response) => response);
     }
 
     /*
@@ -400,10 +370,11 @@ export class ApiService {
       let params: URLSearchParams = new URLSearchParams();
       params.set('address', address);
 
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/address-balance', new RequestOptions({headers: this.headers, search: params})));
+      return this.pollingInterval
+        .pipe(
+          startWith(0),
+          switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/address-balance', new RequestOptions({headers: this.headers, search: params})))
+        )
     }
 
     /*
@@ -415,10 +386,11 @@ export class ApiService {
       params.set('walletName', walletName);
       params.set('address', address);
 
-      return Observable
-          .interval(this.pollingInterval)
-          .startWith(0)
-          .switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/history', new RequestOptions({headers: this.headers, search: params})));
+      return this.pollingInterval
+        .pipe(
+          startWith(0),
+          switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/history', new RequestOptions({headers: this.headers, search: params})))
+        )
     }
 
     /*

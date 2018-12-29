@@ -8,8 +8,7 @@ import { ModalService } from '../../../shared/services/modal.service';
 
 import { WalletCreation } from '../../../shared/classes/wallet-creation';
 
-import { Subscription } from 'rxjs/Subscription';
-import { Subscribable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs';
 
 import { SecretWordIndexGenerator } from './secret-word-index-generator';
 
@@ -25,8 +24,8 @@ export class ConfirmMnemonicComponent implements OnInit {
   constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder) {
     this.buildMnemonicForm();
   }
-  private subscription: Subscription;
   private newWallet: WalletCreation;
+  private subscription: Subscription;
   public mnemonicForm: FormGroup;
   public matchError: string = "";
   public isCreating: boolean;

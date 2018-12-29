@@ -16,8 +16,8 @@ import { WalletInfo } from '../../shared/classes/wallet-info';
 
 import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
 
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/debounceTime';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'send-component',
@@ -79,7 +79,9 @@ export class SendComponent implements OnInit, OnDestroy {
     });
 
     this.sendForm.valueChanges
-      .debounceTime(300)
+      .pipe(
+        debounceTime(300)
+      )
       .subscribe(data => this.onSendValueChanged(data));
   }
 
@@ -93,7 +95,9 @@ export class SendComponent implements OnInit, OnDestroy {
     });
 
     this.sendToSidechainForm.valueChanges
-      .debounceTime(300)
+      .pipe(
+        debounceTime(300)
+      )
       .subscribe(data => this.onSendToSidechainValueChanged(data));
   }
 

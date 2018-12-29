@@ -4,9 +4,7 @@ import { Title } from '@angular/platform-browser';
 
 import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs';
-import 'rxjs/add/operator/retryWhen';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/do';
+import { retryWhen, delay, tap } from 'rxjs/operators';
 
 import { ApiService } from './shared/services/api.service';
 import { GlobalService } from './shared/services/global.service';
@@ -36,19 +34,22 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    //Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
+    // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
     private tryStart() {
         let retry = 0;
-        const stream$ = this.apiService.getWalletFiles().
+        const stream$ = this.apiService.getWalletFiles()
+          .pipe(
             retryWhen(errors =>
-                errors.delay(this.TryDelayMilliseconds)
-                    .do(errorStatus => {
-                        if (retry++ === this.MaxRetryCount) {
-                            throw errorStatus;
-                        }
-                        console.log(`Retrying ${retry}...`);
-                    })
-            );
+              errors.pipe(delay(this.TryDelayMilliseconds)).pipe(
+                tap(errorStatus => {
+                  if (retry++ === this.MaxRetryCount) {
+                      throw errorStatus;
+                  }
+                  console.log(`Retrying ${retry}...`);
+                })
+              )
+            )
+          )
 
         this.subscription = stream$.subscribe(_ =>
             this.router.navigate(['/login']),

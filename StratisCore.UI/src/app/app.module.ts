@@ -1,6 +1,9 @@
+import 'reflect-metadata';
+import '../polyfills';
 import { NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -18,7 +21,6 @@ import { GenericModalComponent } from './shared/components/generic-modal/generic
 import { ApiService } from './shared/services/api.service';
 import { GlobalService } from './shared/services/global.service';
 import { ModalService } from './shared/services/modal.service';
-import { FeaturesService } from './shared/services/features.service';
 
 import { SendComponent } from './wallet/send/send.component';
 import { SendConfirmationComponent } from './wallet/send/send-confirmation/send-confirmation.component';
@@ -59,7 +61,7 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     TransactionDetailsComponent,
     LogoutConfirmationComponent
   ],
-  providers: [ ApiService, GlobalService, ModalService, Title, FeaturesService ],
+  providers: [ ApiService, GlobalService, ModalService, Title ],
   bootstrap: [ AppComponent ]
 })
 

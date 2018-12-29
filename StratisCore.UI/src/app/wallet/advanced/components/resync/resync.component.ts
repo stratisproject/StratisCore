@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { WalletInfo } from '../../../../shared/classes/wallet-info';
 import { ApiService } from '../../../../shared/services/api.service';
