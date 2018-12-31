@@ -44,9 +44,9 @@
     "electron:serve:sidechain": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve --sidechain",
     "electron:serve:sidechain:testnet": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve --sidechain --testnet",
     "electron:local": "npm run build:prod && electron .",
-    "package:linux": "npm run build:prod && npx electron-builder build --linux",
-    "package:windows": "npm run build:prod && npx electron-builder build --windows",
-    "package:mac": "npm run build:prod && npx electron-builder build --mac",
+    "package:linux": "npm run build:prod && electron-builder build --linux",
+    "package:windows": "npm run build:prod && electron-builder build --windows",
+    "package:mac": "npm run build:prod && electron-builder build --mac",
     "test": "npm run postinstall:web && ng test",
     "e2e": "npm run postinstall:web && ng e2e"
   },
