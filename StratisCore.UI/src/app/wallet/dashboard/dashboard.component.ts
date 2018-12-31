@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit {
   public stakingEnabled: boolean;
   public stakingActive: boolean;
   public stakingWeight: number;
+  public awaitingMaturity: number;
   public netStakingWeight: number;
   public expectedTime: number;
   public dateTime: string;
@@ -192,6 +193,7 @@ export class DashboardComponent implements OnInit {
           this.stakingActive = stakingResponse.staking;
           this.stakingWeight = stakingResponse.weight;
           this.netStakingWeight = stakingResponse.netStakeWeight;
+          this.awaitingMaturity = (this.unconfirmedBalance + this.confirmedBalance) - this.stakingWeight;
           this.expectedTime = stakingResponse.expectedTime;
           this.dateTime = this.secondsToString(this.expectedTime);
           if (this.stakingActive) {
