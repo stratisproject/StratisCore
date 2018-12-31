@@ -6,7 +6,7 @@ import { ApiService } from '../../shared/services/api.service';
 import { ModalService } from '../../shared/services/modal.service';
 import { SendComponent } from '../send/send.component';
 import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
-import { AddressLabel } from '../../shared/classes/address-label';
+import { AddressLabel } from '../../shared/models/address-label';
 
 import { Subscription } from 'rxjs';
 
@@ -43,35 +43,17 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       this.addressBookSubcription = this.apiService.getAddressBookAddresses()
         .subscribe(
           response => {
-            if (response.status >= 200 && response.status < 400) {
-              this.addresses = null;
-              if (response.json().addresses[0]) {
-                this.addresses = [];
-                let addressResponse = response.json().addresses;
-                for (let address of addressResponse) {
-                  this.addresses.push(new AddressLabel(address.label, address.address));
-                }
+            this.addresses = null;
+            if (response.addresses[0]) {
+              this.addresses = [];
+              let addressResponse = response.addresses;
+              for (let address of addressResponse) {
+                this.addresses.push(new AddressLabel(address.label, address.address));
               }
             }
           },
           error => {
-            console.log(error);
-            if (error.status === 0) {
-              this.cancelSubscriptions();
-              this.genericModalService.openModal(null, null);
-            } else if (error.status >= 400) {
-              if (!error.json().errors[0]) {
-                console.log(error);
-              }
-              else {
-                if (error.json().errors[0].description) {
-                  this.genericModalService.openModal(null, error.json().errors[0].message);
-                } else {
-                  this.cancelSubscriptions();
-                  this.startSubscriptions();
-                }
-              }
-            }
+            this.cancelSubscriptions();
           }
         )
       ;
@@ -91,25 +73,10 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       this.apiService.removeAddressBookAddress(address.label)
         .subscribe(
           response =>  {
-            if (response.status >= 200 && response.status < 400) {
-              this.cancelSubscriptions();
-              this.startSubscriptions();
-            }
-          },
-          error => {
-            if (error.status === 0) {
-              this.genericModalService.openModal(null, null);
-            } else if (error.status >= 400) {
-              if (!error.json().errors[0]) {
-                console.log(error);
-              }
-              else {
-                this.genericModalService.openModal(null, error.json().errors[0].message);
-              }
-            }
+            this.cancelSubscriptions();
+            this.startSubscriptions();
           }
-        )
-      ;
+        );
     }
 
     addNewAddressClicked() {

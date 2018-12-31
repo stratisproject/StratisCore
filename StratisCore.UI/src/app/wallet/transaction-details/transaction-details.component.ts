@@ -6,8 +6,8 @@ import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { ModalService } from '../../shared/services/modal.service';
 
-import { WalletInfo } from '../../shared/classes/wallet-info';
-import { TransactionInfo } from '../../shared/classes/transaction-info';
+import { WalletInfo } from '../../shared/models/wallet-info';
+import { TransactionInfo } from '../../shared/models/transaction-info';
 
 @Component({
   selector: 'transaction-details',
@@ -43,32 +43,14 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     this.generalWalletInfoSubscription = this.apiService.getGeneralInfo(walletInfo)
       .subscribe(
         response =>  {
-          if (response.status >= 200 && response.status < 400) {
-            let generalWalletInfoResponse = response.json();
-            this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
-            this.getConfirmations(this.transaction);
-          }
+          let generalWalletInfoResponse = response;
+          this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
+          this.getConfirmations(this.transaction);
         },
         error => {
-          console.log(error);
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              if (error.json().errors[0].description) {
-                this.genericModalService.openModal(null, error.json().errors[0].message);
-              } else {
-                this.cancelSubscriptions();
-                this.startSubscriptions();
-              }
-            }
-          }
+          this.cancelSubscriptions();
         }
-      )
-    ;
+      );
   };
 
   private getConfirmations(transaction: TransactionInfo) {

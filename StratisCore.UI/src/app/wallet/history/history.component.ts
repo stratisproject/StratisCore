@@ -6,8 +6,8 @@ import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { ModalService } from '../../shared/services/modal.service';
 
-import { WalletInfo } from '../../shared/classes/wallet-info';
-import { TransactionInfo } from '../../shared/classes/transaction-info';
+import { WalletInfo } from '../../shared/models/wallet-info';
+import { TransactionInfo } from '../../shared/models/transaction-info';
 
 import { Subscription } from 'rxjs';
 
@@ -53,32 +53,14 @@ export class HistoryComponent {
     this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
-          if (response.status >= 200 && response.status < 400) {
-            //TO DO - add account feature instead of using first entry in array
-            if (!!response.json().history && response.json().history[0].transactionsHistory.length > 0) {
-              historyResponse = response.json().history[0].transactionsHistory;
-              this.getTransactionInfo(historyResponse);
-            }
+          //TO DO - add account feature instead of using first entry in array
+          if (!!response.history && response.history[0].transactionsHistory.length > 0) {
+            historyResponse = response.history[0].transactionsHistory;
+            this.getTransactionInfo(historyResponse);
           }
         },
         error => {
-          console.log(error);
-          if (error.status === 0) {
-            this.cancelSubscriptions();
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              if (error.json().errors[0].description) {
-                this.genericModalService.openModal(null, error.json().errors[0].message);
-              } else {
-                this.cancelSubscriptions();
-                this.startSubscriptions();
-              }
-            }
-          }
+          this.cancelSubscriptions();
         }
       )
     ;

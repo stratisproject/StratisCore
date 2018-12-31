@@ -3,8 +3,7 @@ import '../polyfills';
 import { NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -18,15 +17,12 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { GenericModalComponent } from './shared/components/generic-modal/generic-modal.component';
 
-import { ApiService } from './shared/services/api.service';
-import { GlobalService } from './shared/services/global.service';
-import { ModalService } from './shared/services/modal.service';
-
 import { SendComponent } from './wallet/send/send.component';
 import { SendConfirmationComponent } from './wallet/send/send-confirmation/send-confirmation.component';
 import { ReceiveComponent } from './wallet/receive/receive.component';
 import { TransactionDetailsComponent } from './wallet/transaction-details/transaction-details.component';
 import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout-confirmation.component';
+import { ApiInterceptor } from './shared/http-interceptors/api-interceptor';
 
 @NgModule({
   imports: [
@@ -36,12 +32,12 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     ClipboardModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpModule,
-    NgbModule.forRoot(),
+    HttpClientModule,
+    NgbModule,
     NgxElectronModule,
     NgxQRCodeModule,
     NgxPaginationModule,
-    SharedModule.forRoot()
+    SharedModule
   ],
   declarations: [
     AppComponent,
@@ -61,7 +57,7 @@ import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout
     TransactionDetailsComponent,
     LogoutConfirmationComponent
   ],
-  providers: [ ApiService, GlobalService, ModalService, Title ],
+  providers: [ Title, { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true} ],
   bootstrap: [ AppComponent ]
 })
 

@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { ApiService } from '../../../../shared/services/api.service';
 import { GlobalService } from '../../../../shared/services/global.service';
 import { ModalService } from '../../../../shared/services/modal.service';
-import { WalletInfo } from '../../../../shared/classes/wallet-info';
+import { WalletInfo } from '../../../../shared/models/wallet-info';
 
 @Component({
   selector: 'app-generate-addresses',
@@ -12,7 +12,6 @@ import { WalletInfo } from '../../../../shared/classes/wallet-info';
   styleUrls: ['./generate-addresses.component.css']
 })
 export class GenerateAddressesComponent implements OnInit {
-
   constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService, private fb: FormBuilder) {
     this.buildGenerateAddressesForm();
   }
@@ -68,25 +67,9 @@ export class GenerateAddressesComponent implements OnInit {
     this.apiService.getUnusedReceiveAddresses(walletInfo, this.generateAddressesForm.get("generateAddresses").value)
       .subscribe(
         response => {
-          if (response.status >= 200 && response.status < 400) {
-            this.addresses = response.json();
-          }
-        },
-        error => {
-          console.log(error);
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
-          }
+          this.addresses = response;
         }
-      )
-    ;
+      );
   }
 
   public onBackClicked() {
