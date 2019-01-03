@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
   public stakingEnabled: boolean;
   public stakingActive: boolean;
   public stakingWeight: number;
-  public awaitingMaturity: number;
+  public awaitingMaturity: number = 0;
   public netStakingWeight: number;
   public expectedTime: number;
   public dateTime: string;
