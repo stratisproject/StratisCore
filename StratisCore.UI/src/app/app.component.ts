@@ -66,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private setTitle() {
     let applicationName = "Stratis Core";
-    let applicationVersion = this.electronService.remote.app.getVersion();
+    let applicationVersion = this.globalService.getApplicationVersion();
     let newTitle = applicationName + " " + applicationVersion;
     this.titleService.setTitle(newTitle);
   }

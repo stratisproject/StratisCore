@@ -4,8 +4,8 @@ import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http'
 import { Observable, interval, throwError } from 'rxjs';
 import { catchError, switchMap, startWith} from 'rxjs/operators';
 
+import { GlobalService } from './global.service';
 import { ModalService } from './modal.service';
-import { ElectronService } from 'ngx-electron';
 
 import { AddressLabel } from '../models/address-label';
 import { WalletCreation } from '../models/wallet-creation';
@@ -22,16 +22,16 @@ import { NodeStatus } from '../models/node-status';
   providedIn: 'root'
 })
 export class ApiService {
-  constructor(private http: HttpClient, private modalService: ModalService, private electronService: ElectronService, private router: Router) {
-    this.setApiPort();
+  constructor(private http: HttpClient, private globalService: GlobalService, private modalService: ModalService, private router: Router) {
+    this.setApiUrl();
   };
 
   private pollingInterval = interval(3000);
   private apiPort;
   private stratisApiUrl;
 
-  setApiPort() {
-    this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
+  setApiUrl() {
+    this.apiPort = this.globalService.getApiPort();
     this.stratisApiUrl = 'http://localhost:' + this.apiPort + '/api';
   }
 

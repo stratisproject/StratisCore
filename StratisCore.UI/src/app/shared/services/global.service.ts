@@ -6,23 +6,44 @@ import { ElectronService } from 'ngx-electron';
 })
 export class GlobalService {
   constructor(private electronService: ElectronService) {
+    this.setApplicationVersion();
     this.setSidechainEnabled();
     this.setTestnetEnabled();
+    this.setApiPort();
   }
 
-  private testnet: boolean;
-  private sidechain: boolean;
+  private applicationVersion: string = "1.0.0";
+  private mainApiPort: number = 37221;
+  private testApiPort: number = 38221;
+  private mainSideChainApiPort: number = 38225;
+  private testSideChainApiPort: number = 38225;
+  private testnet: boolean = false;
+  private sidechain: boolean = false;
+  private apiPort: number;
   private walletPath: string;
   private currentWalletName: string;
   private coinUnit: string;
   private network: string;
+
+
+  getApplicationVersion() {
+    return this.applicationVersion;
+  }
+
+  setApplicationVersion() {
+    if (this.electronService.isElectronApp) {
+      this.applicationVersion = this.electronService.remote.app.getVersion();
+    }
+  }
 
   getTestnetEnabled() {
     return this.testnet;
   }
 
   setTestnetEnabled() {
-    this.testnet = this.electronService.ipcRenderer.sendSync('get-testnet');
+    if (this.electronService.isElectronApp) {
+      this.testnet = this.electronService.ipcRenderer.sendSync('get-testnet');
+    }
   }
 
   getSidechainEnabled() {
@@ -30,7 +51,27 @@ export class GlobalService {
   }
 
   setSidechainEnabled() {
-    this.sidechain = this.electronService.ipcRenderer.sendSync('get-sidechain');
+    if (this.electronService.isElectronApp) {
+      this.sidechain = this.electronService.ipcRenderer.sendSync('get-sidechain');
+    }
+  }
+
+  getApiPort() {
+    return this.apiPort;
+  }
+
+  setApiPort() {
+    if (this.electronService.isElectronApp) {
+      this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
+    } else if (this.testnet && !this.sidechain) {
+      this.apiPort = this.testApiPort;
+    } else if (!this.testnet && !this.sidechain) {
+      this.apiPort = this.mainApiPort;
+    } else if (this.testnet && this.sidechain) {
+      this.apiPort = this.testSideChainApiPort;
+    } else if (!this.testnet && this.sidechain) {
+      this.apiPort = this.mainSideChainApiPort;
+    }
   }
 
   getWalletPath() {

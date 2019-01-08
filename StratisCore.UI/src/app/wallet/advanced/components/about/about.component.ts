@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ElectronService } from 'ngx-electron';
 import { ApiService } from '../../../../shared/services/api.service';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { NodeStatus } from '../../../../shared/models/node-status';
+import { GlobalService } from '../../../../shared/services/global.service';
 
 @Component({
   selector: 'app-about',
@@ -12,7 +12,7 @@ import { NodeStatus } from '../../../../shared/models/node-status';
 })
 export class AboutComponent implements OnInit, OnDestroy {
 
-  constructor(private electronService: ElectronService, private apiService: ApiService, private genericModalService: ModalService) { }
+  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService) { }
 
   private nodeStatusSubscription: Subscription;
   public clientName: string;
@@ -24,7 +24,7 @@ export class AboutComponent implements OnInit, OnDestroy {
   public dataDirectory: string;
 
   ngOnInit() {
-    this.applicationVersion = this.electronService.remote.app.getVersion();
+    this.applicationVersion = this.globalService.getApplicationVersion();
     this.startSubscriptions();
   }
 
