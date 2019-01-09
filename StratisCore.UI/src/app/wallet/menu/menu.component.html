@@ -2,16 +2,16 @@
   <nav class="navbar navbar-light bg-light justify-content-between">
       <ul class="nav list-inline col-5">
         <li class="nav-item list-inline-item">
-            <a class="nav-link" routerLink="/wallet">Dashboard</a>
+            <a class="nav-link" routerLink="/wallet/dashboard" routerLinkActive="active">Dashboard</a>
         </li>
         <li class="nav-item list-inline-item">
-          <a class="nav-link" routerLink="/wallet/history">History</a>
+          <a class="nav-link" routerLink="/wallet/history" routerLinkActive="active">History</a>
         </li>
         <li *ngIf="testnet && !sidechainEnabled" class="nav-item list-inline-item">
-          <a class="nav-link" routerLink="/wallet/staking">Cold Staking</a>
+          <a class="nav-link" routerLink="/wallet/staking" routerLinkActive="active">Cold Staking</a>
         </li>
         <li *ngIf="sidechainEnabled" class="nav-item list-inline-item">
-          <a class="nav-link" routerLink="/wallet/smart-contracts">Smart Contracts</a>
+          <a class="nav-link" routerLink="/wallet/smart-contracts" routerLinkActive="active">Smart Contracts</a>
         </li>
       </ul>
 
