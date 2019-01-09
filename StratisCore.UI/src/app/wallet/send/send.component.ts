@@ -362,7 +362,14 @@ export class SendComponent implements OnInit, OnDestroy {
             this.totalBalance = balanceResponse.balances[0].amountConfirmed + balanceResponse.balances[0].amountUnconfirmed;
         },
         error => {
-          this.cancelSubscriptions();
+          if (error.status === 0) {
+            this.cancelSubscriptions();
+          } else if (error.status >= 400) {
+            if (!error.error.errors[0].message) {
+              this.cancelSubscriptions();
+              this.startSubscriptions();
+            }
+          }
         }
       );
   };

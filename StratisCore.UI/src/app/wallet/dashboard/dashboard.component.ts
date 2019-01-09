@@ -97,7 +97,14 @@ export class DashboardComponent implements OnInit {
           }
         },
         error => {
-          this.walletBalanceSubscription.unsubscribe();
+          if (error.status === 0) {
+            this.cancelSubscriptions();
+          } else if (error.status >= 400) {
+            if (!error.error.errors[0].message) {
+              this.cancelSubscriptions();
+              this.startSubscriptions();
+            }
+          }
         }
       )
     ;
@@ -117,7 +124,14 @@ export class DashboardComponent implements OnInit {
           }
         },
         error => {
-          this.walletHistorySubscription.unsubscribe();
+          if (error.status === 0) {
+            this.cancelSubscriptions();
+          } else if (error.status >= 400) {
+            if (!error.error.errors[0].message) {
+              this.cancelSubscriptions();
+              this.startSubscriptions();
+            }
+          }
         }
       )
     ;
@@ -202,6 +216,15 @@ export class DashboardComponent implements OnInit {
             this.isStarting = false;
           } else {
             this.isStopping = false;
+          }
+        }, error => {
+          if (error.status === 0) {
+            this.cancelSubscriptions();
+          } else if (error.status >= 400) {
+            if (!error.error.errors[0].message) {
+              this.cancelSubscriptions();
+              this.startSubscriptions();
+            }
           }
         }
       )

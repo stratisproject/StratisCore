@@ -427,7 +427,7 @@ export class ApiService {
     if (error.status === 0) {
       if(!silent) {
         this.modalService.openModal(null, null);
-        this.router.navigate(['/login']);
+        this.router.navigate(['app']);
       }
     } else if (error.status >= 400) {
       if (!error.error.errors[0].message) {
