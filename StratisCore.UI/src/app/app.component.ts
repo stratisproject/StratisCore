@@ -55,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription = stream$.subscribe(
       (data: NodeStatus) => {
         this.loading = false;
-        this.router.navigate(['/login'])
+        this.router.navigate(['login'])
       }, (error: any) => {
         console.log('Failed to start wallet');
         this.loading = false;

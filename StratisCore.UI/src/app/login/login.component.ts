@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
   }
 
   public onCreateClicked() {
-    this.router.navigate(['/setup']);
+    this.router.navigate(['setup']);
   }
 
   public onEnter() {
@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit {
     this.apiService.loadStratisWallet(walletLoad)
       .subscribe(
         response => {
-          this.router.navigate(['/wallet']);
+          this.router.navigate(['wallet/dashboard']);
         },
         error => {
           this.isDecrypting = false;

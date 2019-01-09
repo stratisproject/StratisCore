@@ -1,7 +1,5 @@
 import {Injectable} from "@angular/core";
-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
 import { GenericModalComponent } from '../components/generic-modal/generic-modal.component';
 
 @Injectable({

@@ -13,12 +13,12 @@ export class GlobalService {
   }
 
   private applicationVersion: string = "1.0.0";
+  private testnet: boolean = false;
+  private sidechain: boolean = false;
   private mainApiPort: number = 37221;
   private testApiPort: number = 38221;
   private mainSideChainApiPort: number = 38225;
   private testSideChainApiPort: number = 38225;
-  private testnet: boolean = false;
-  private sidechain: boolean = false;
   private apiPort: number;
   private walletPath: string;
   private currentWalletName: string;
