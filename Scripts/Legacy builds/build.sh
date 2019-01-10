@@ -28,7 +28,6 @@ git submodule update --init --recursive
 cd $TRAVIS_BUILD_DIR/StratisCore.UI
 
 npm install
-npm install -g npx
 echo $log_prefix FINISHED restoring dotnet and npm packages
 
 # dotnet publish
@@ -39,18 +38,14 @@ dotnet publish -c $configuration -r $TRAVIS_OS_NAME-$arch -v m -o $TRAVIS_BUILD_
 echo $log_prefix chmoding the Stratis.StratisD file
 chmod +x $TRAVIS_BUILD_DIR/StratisCore.UI/daemon/Stratis.StratisD
 
-# node Build
-cd $TRAVIS_BUILD_DIR/StratisCore.UI
-echo $log_prefix running 'npm run'
-npm run build:prod
-
 # node packaging
-echo $log_prefix packaging StratisCore.UI 
+echo $log_prefix Building and packaging StratisCore.UI 
+cd $TRAVIS_BUILD_DIR/StratisCore.UI
 if [ "$TRAVIS_OS_NAME" = "osx" ]
 then
-  npx electron-builder build --mac --$arch
+  npm run package:mac
 else
-  npx electron-builder build --linux --$arch
+  npm run package:linux
 fi
 
 echo $log_prefix finished packaging
