@@ -1,451 +1,442 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions, URLSearchParams} from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
-import "rxjs/add/observable/interval";
-import 'rxjs/add/operator/startWith';
+import { Router } from '@angular/router';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { Observable, interval, throwError } from 'rxjs';
+import { catchError, switchMap, startWith} from 'rxjs/operators';
 
 import { GlobalService } from './global.service';
-import { ElectronService } from 'ngx-electron';
+import { ModalService } from './modal.service';
 
-import { AddressLabel } from '../classes/address-label';
-import { WalletCreation } from '../classes/wallet-creation';
-import { WalletRecovery } from '../classes/wallet-recovery';
-import { WalletLoad } from '../classes/wallet-load';
-import { WalletInfo } from '../classes/wallet-info';
-import { SidechainFeeEstimation } from '../classes/sidechain-fee-estimation';
-import { FeeEstimation } from '../classes/fee-estimation';
-import { TransactionBuilding } from '../classes/transaction-building';
-import { TransactionSending } from '../classes/transaction-sending';
+import { AddressLabel } from '../models/address-label';
+import { WalletCreation } from '../models/wallet-creation';
+import { WalletRecovery } from '../models/wallet-recovery';
+import { WalletLoad } from '../models/wallet-load';
+import { WalletInfo } from '../models/wallet-info';
+import { SidechainFeeEstimation } from '../models/sidechain-fee-estimation';
+import { FeeEstimation } from '../models/fee-estimation';
+import { TransactionBuilding } from '../models/transaction-building';
+import { TransactionSending } from '../models/transaction-sending';
+import { NodeStatus } from '../models/node-status';
 
-/**
- * For information on the API specification have a look at our swagger files located at http://localhost:5000/swagger/ when running the daemon
- */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiService {
+  constructor(private http: HttpClient, private globalService: GlobalService, private modalService: ModalService, private router: Router) {
+    this.setApiUrl();
+  };
 
-    constructor(private http: Http, private globalService: GlobalService, private electronService: ElectronService) {
-      this.setApiPort();
-    };
+  private pollingInterval = interval(3000);
+  private apiPort;
+  private stratisApiUrl;
 
-    private headers = new Headers({'Content-Type': 'application/json'});
-    private pollingInterval = 3000;
-    private apiPort;
-    private stratisApiUrl;
+  setApiUrl() {
+    this.apiPort = this.globalService.getApiPort();
+    this.stratisApiUrl = 'http://localhost:' + this.apiPort + '/api';
+  }
 
-    setApiPort() {
-      this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
-      this.stratisApiUrl = 'http://localhost:' + this.apiPort + '/api';
-    }
+  getNodeStatus(silent?: boolean): Observable<NodeStatus> {
+    return this.http.get<NodeStatus>(this.stratisApiUrl + '/node/status').pipe(
+      catchError(err => this.handleHttpError(err, silent))
+    );
+  }
 
-    getNodeStatus(): Observable<any> {
-      return this.http
-        .get(this.stratisApiUrl + '/node/status')
-        .map((response: Response) => response);
-    }
+  getNodeStatusInterval(): Observable<NodeStatus> {
+    return this.pollingInterval.pipe(
+      startWith(0),
+      switchMap(() => this.http.get<NodeStatus>(this.stratisApiUrl + '/node/status')),
+      catchError(err => this.handleHttpError(err))
+    )
+  }
 
-    getNodeStatusInterval(): Observable<any> {
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/node/status'))
-        .map((response: Response) => response);
-    }
+  getAddressBookAddresses(): Observable<any> {
+    return this.pollingInterval.pipe(
+      startWith(0),
+      switchMap(() => this.http.get(this.stratisApiUrl + '/AddressBook')),
+      catchError(err => this.handleHttpError(err))
+    )
+  }
 
-    getAddressBookAddresses(): Observable<any> {
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/AddressBook'))
-        .map((response: Response) => response);
-    }
+  addAddressBookAddress(data: AddressLabel): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/AddressBook/address', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
 
-    addAddressBookAddress(data: AddressLabel): Observable<any> {
-      return this.http
-        .post(this.stratisApiUrl + '/AddressBook/address', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
-    }
+  removeAddressBookAddress(label: string): Observable<any> {
+    let params = new HttpParams().set('label', label);
+    return this.http.delete(this.stratisApiUrl + '/AddressBook/address', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
 
-    removeAddressBookAddress(label: string): Observable<any> {
-      const params: URLSearchParams = new URLSearchParams();
-      params.set('label', label);
-      return this.http
-        .delete(this.stratisApiUrl + '/AddressBook/address', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
+  /**
+   * Gets available wallets at the default path
+   */
+  getWalletFiles(): Observable<any> {
+    return this.http.get(this.stratisApiUrl + '/wallet/files').pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
 
-    /**
-     * Gets available wallets at the default path
-     */
-    getWalletFiles(): Observable<any> {
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/files')
-        .map((response: Response) => response);
-     }
+  /** Gets the extended public key from a certain wallet */
+  getExtPubkey(data: WalletInfo): Observable<any> {
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', 'account 0');
 
-    /** Gets the extended public key from a certain wallet */
-    getExtPubkey(data: WalletInfo): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', data.walletName);
-      params.set('accountName', 'account 0');
-
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/extpubkey', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
-
-     /**
-      * Get a new mnemonic
-      */
-    getNewMnemonic(): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('language', 'English');
-      params.set('wordCount', '12');
-
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/mnemonic', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
+    return this.http.get(this.stratisApiUrl + '/wallet/extpubkey', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
 
     /**
-     * Create a new Stratis wallet.
-     */
-    createStratisWallet(data: WalletCreation): Observable<any> {
-      return this.http
-        .post(this.stratisApiUrl + '/wallet/create/', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
+    * Get a new mnemonic
+    */
+  getNewMnemonic(): Observable<any> {
+    let params = new HttpParams()
+      .set('language', 'English')
+      .set('wordCount', '12');
+
+    return this.http.get(this.stratisApiUrl + '/wallet/mnemonic', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Create a new Stratis wallet.
+   */
+  createStratisWallet(data: WalletCreation): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/wallet/create/', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Recover a Stratis wallet.
+   */
+  recoverStratisWallet(data: WalletRecovery): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/wallet/recover/', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Load a Stratis wallet
+   */
+  loadStratisWallet(data: WalletLoad): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/wallet/load/', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Get wallet status info from the API.
+   */
+  getWalletStatus(): Observable<any> {
+    return this.http.get(this.stratisApiUrl + '/wallet/status').pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Get general wallet info from the API once.
+   */
+  getGeneralInfoOnce(data: WalletInfo): Observable<any> {
+    let params = new HttpParams().set('Name', data.walletName);
+    return this.http.get(this.stratisApiUrl + '/wallet/general-info', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Get general wallet info from the API.
+   */
+  getGeneralInfo(data: WalletInfo): Observable<any> {
+    let params = new HttpParams().set('Name', data.walletName);
+    return this.pollingInterval.pipe(
+      startWith(0),
+      switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', { params })),
+      catchError(err => this.handleHttpError(err))
+    )
+  }
+
+  /**
+   * Get wallet balance info from the API.
+   */
+  getWalletBalance(data: WalletInfo): Observable<any> {
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', "account 0");
+    return this.pollingInterval.pipe(
+      startWith(0),
+      switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', { params })),
+      catchError(err => this.handleHttpError(err))
+    )
+  }
+
+  /**
+   * Get the maximum sendable amount for a given fee from the API
+   */
+  getMaximumBalance(data): Observable<any> {
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', "account 0")
+      .set('feeType', data.feeType)
+      .set('allowUnconfirmed', "true");
+    return this.http.get(this.stratisApiUrl + '/wallet/maxbalance', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Get a wallets transaction history info from the API.
+   */
+  getWalletHistory(data: WalletInfo): Observable<any> {
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', "account 0");
+    return this.pollingInterval.pipe(
+      startWith(0),
+      switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', { params: params })),
+      catchError(err => this.handleHttpError(err))
+    )
+  }
+
+  /**
+   * Get an unused receive address for a certain wallet from the API.
+   */
+  getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', "account 0");
+    return this.http.get(this.stratisApiUrl + '/wallet/unusedaddress', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Get multiple unused receive addresses for a certain wallet from the API.
+   */
+  getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any> {
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', "account 0")
+      .set('count', count);
+    return this.http.get(this.stratisApiUrl + '/wallet/unusedaddresses', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Get get all addresses for an account of a wallet from the API.
+   */
+  getAllAddresses(data: WalletInfo): Observable<any> {
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', "account 0");
+    return this.http.get(this.stratisApiUrl + '/wallet/addresses', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Estimate the fee of a transaction
+   */
+  estimateFee(data: FeeEstimation): Observable<any> {
+    // let params = data;
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', data.accountName)
+      .set('recipients[0].destinationAddress', data.recipients[0].destinationAddress)
+      .set('recipients[0].amount', data.recipients[0].amount)
+      .set('feeType', data.feeType)
+      .set('allowUnconfirmed', "true");
+    return this.http.get(this.stratisApiUrl + '/wallet/estimate-txfee', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Estimate the fee of a sidechain transaction
+   */
+  estimateSidechainFee(data: SidechainFeeEstimation): Observable<any> {
+    // let params = data;
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', data.accountName)
+      .set('recipients[0].destinationAddress', data.recipients[0].destinationAddress)
+      .set('recipients[0].amount', data.recipients[0].amount)
+      .set('feeType', data.feeType)
+      .set('allowUnconfirmed', "true");
+    return this.http.get(this.stratisApiUrl + '/wallet/estimate-txfee', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Build a transaction
+   */
+  buildTransaction(data: TransactionBuilding): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/wallet/build-transaction', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Send transaction
+   */
+  sendTransaction(data: TransactionSending): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/wallet/send-transaction', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /** Remove transaction */
+  removeTransaction(walletName: string): Observable<any> {
+    let params = new HttpParams()
+      .set('walletName', walletName)
+      .set('all', 'true')
+      .set('resync', 'true');
+    return this.http.delete(this.stratisApiUrl + '/wallet/remove-transactions', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Start staking
+   */
+  startStaking(data: any): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/staking/startstaking', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Get staking info
+   */
+  getStakingInfo(): Observable<any> {
+    return this.pollingInterval.pipe(
+      startWith(0),
+      switchMap(() => this.http.get(this.stratisApiUrl + '/staking/getstakinginfo')),
+      catchError(err => this.handleHttpError(err))
+    )
+  }
+
+  /**
+    * Stop staking
+    */
+  stopStaking(): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/staking/stopstaking', 'true').pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Send shutdown signal to the daemon
+   */
+  shutdownNode(): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/node/shutdown', 'corsProtection:true').pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /*
+    * Get the active smart contract wallet address.
+    */
+  getAccountAddress(walletName: string): Observable<any> {
+    let params = new HttpParams().set('walletName', walletName);
+    return this.http.get(this.stratisApiUrl + '/smartcontractwallet/account-address', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  getAccountAddresses(walletName: string): any {
+    let params = new HttpParams().set('walletName', walletName);
+    return this.http.get(this.stratisApiUrl + '/smartcontractwallet/account-addresses', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /*
+    * Get the balance of the active smart contract address.
+    */
+  getAccountBalance(walletName: string): Observable<any> {
+    let params = new HttpParams().set('walletName', walletName);
+    return this.http.get(this.stratisApiUrl + '/smartcontractwallet/account-balance', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /*
+    * Get the balance of the active smart contract address.
+    */
+  getAddressBalance(address: string): Observable<any> {
+    let params = new HttpParams().set('address', address);
+    return this.pollingInterval.pipe(
+      startWith(0),
+      switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/address-balance', { params })),
+      catchError(err => this.handleHttpError(err))
+    )
+  }
+
+  /*
+    * Gets the transaction history of the smart contract account.
+    */
+  getAccountHistory(walletName: string, address: string): Observable<any> {
+    let params = new HttpParams()
+      .set('walletName', walletName)
+      .set('address', address);
+    return this.pollingInterval.pipe(
+      startWith(0),
+      switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/history', { params })),
+      catchError(err => this.handleHttpError(err))
+    )
+  }
+
+  /*
+    * Posts a contract creation transaction
+    */
+  postCreateTransaction(transaction: any): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/smartcontractwallet/create', transaction).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /*
+    * Posts a contract call transaction
+    */
+  postCallTransaction(transaction: any): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/smartcontractwallet/call', transaction).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /*
+    * Returns the receipt for a particular txhash, or empty JSON.
+    */
+  getReceipt(hash: string): any {
+    let params = new HttpParams().set('txHash', hash);
+    return this.http.get(this.stratisApiUrl + '/smartcontracts/receipt', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  private handleHttpError(error: HttpErrorResponse, silent?: boolean) {
+    console.log(error);
+    if (error.status === 0) {
+      if(!silent) {
+        this.modalService.openModal(null, null);
+        this.router.navigate(['app']);
+      }
+    } else if (error.status >= 400) {
+      if (!error.error.errors[0].message) {
+        console.log(error);
+      }
+      else {
+        this.modalService.openModal(null, error.error.errors[0].message);
+      }
     }
-
-    /**
-     * Recover a Stratis wallet.
-     */
-    recoverStratisWallet(data: WalletRecovery): Observable<any> {
-      return this.http
-        .post(this.stratisApiUrl + '/wallet/recover/', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Load a Stratis wallet
-     */
-    loadStratisWallet(data: WalletLoad): Observable<any> {
-      return this.http
-        .post(this.stratisApiUrl + '/wallet/load/', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get wallet status info from the API.
-     */
-    getWalletStatus(): Observable<any> {
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/status')
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get general wallet info from the API once.
-     */
-    getGeneralInfoOnce(data: WalletInfo): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('Name', data.walletName);
-
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get general wallet info from the API.
-     */
-    getGeneralInfo(data: WalletInfo): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('Name', data.walletName);
-
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', new RequestOptions({headers: this.headers, params: params})))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get wallet balance info from the API.
-     */
-    getWalletBalance(data: WalletInfo): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', data.walletName);
-      params.set('accountName', "account 0");
-
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', new RequestOptions({headers: this.headers, params: params})))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get the maximum sendable amount for a given fee from the API
-     */
-    getMaximumBalance(data): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', data.walletName);
-      params.set('accountName', "account 0");
-      params.set('feeType', data.feeType);
-      params.set('allowUnconfirmed', "true");
-
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/maxbalance', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get a wallets transaction history info from the API.
-     */
-    getWalletHistory(data: WalletInfo): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', data.walletName);
-      params.set('accountName', "account 0");
-
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', new RequestOptions({headers: this.headers, params: params})))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get an unused receive address for a certain wallet from the API.
-     */
-    getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', data.walletName);
-      params.set('accountName', "account 0"); //temporary
-
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/unusedaddress', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get multiple unused receive addresses for a certain wallet from the API.
-     */
-    getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', data.walletName);
-      params.set('accountName', "account 0"); //temporary
-      params.set('count', count);
-
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/unusedaddresses', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get get all addresses for an account of a wallet from the API.
-     */
-    getAllAddresses(data: WalletInfo): Observable<any> {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', data.walletName);
-      params.set('accountName', "account 0"); //temporary
-
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/addresses', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Estimate the fee of a transaction
-     */
-    estimateFee(data: FeeEstimation): Observable<any> {
-      // let params = data;
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', data.walletName);
-      params.set('accountName', data.accountName);
-      params.set('recipients[0].destinationAddress', data.recipients[0].destinationAddress);
-      params.set('recipients[0].amount', data.recipients[0].amount);
-      params.set('feeType', data.feeType);
-      params.set('allowUnconfirmed', "true");
-
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Estimate the fee of a sidechain transaction
-     */
-    estimateSidechainFee(data: SidechainFeeEstimation): Observable<any> {
-      // let params = data;
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', data.walletName);
-      params.set('accountName', data.accountName);
-      params.set('recipients[0].destinationAddress', data.recipients[0].destinationAddress);
-      params.set('recipients[0].amount', data.recipients[0].amount);
-      params.set('feeType', data.feeType);
-      params.set('allowUnconfirmed', "true");
-
-      return this.http
-        .get(this.stratisApiUrl + '/wallet/estimate-txfee', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Build a transaction
-     */
-    buildTransaction(data: TransactionBuilding): Observable<any> {
-      return this.http
-        .post(this.stratisApiUrl + '/wallet/build-transaction', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Send transaction
-     */
-    sendTransaction(data: TransactionSending): Observable<any> {
-      return this.http
-        .post(this.stratisApiUrl + '/wallet/send-transaction', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
-    }
-
-    /** Remove transaction */
-    removeTransaction(walletName: string): Observable<any> {
-      const params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', walletName);
-      params.set('all', 'true');
-      params.set('resync', 'true');
-
-      return this.http
-        .delete(this.stratisApiUrl + '/wallet/remove-transactions', new RequestOptions({headers: this.headers, params: params}))
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Start staking
-     */
-    startStaking(data: any): Observable<any> {
-      return this.http
-        .post(this.stratisApiUrl + '/staking/startstaking', JSON.stringify(data), {headers: this.headers})
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Get staking info
-     */
-    getStakingInfo(): Observable<any> {
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/staking/getstakinginfo'))
-        .map((response: Response) => response);
-    }
-
-    /**
-      * Stop staking
-      */
-    stopStaking(): Observable<any> {
-      return this.http
-        .post(this.stratisApiUrl + '/staking/stopstaking', {headers: this.headers})
-        .map((response: Response) => response);
-    }
-
-    /**
-     * Send shutdown signal to the daemon
-     */
-    shutdownNode(): Observable<any> {
-      return this.http
-        .post(this.stratisApiUrl + '/node/shutdown', 'corsProtection:true', {headers: this.headers})
-        .map((response: Response) => response);
-    }
-
-    /*
-     * Get the active smart contract wallet address.
-     */
-    getAccountAddress(walletName: string): Observable<Response> {
-
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', walletName);
-
-      return this.http
-        .get(this.stratisApiUrl + '/smartcontractwallet/account-address', new RequestOptions({headers: this.headers, params: params}));
-    }
-
-    getAccountAddresses(walletName: string): any {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', walletName);
-
-      return this.http
-        .get(this.stratisApiUrl + '/smartcontractwallet/account-addresses', new RequestOptions({headers: this.headers, params: params}));
-    }
-
-    /*
-     * Get the balance of the active smart contract address.
-     */
-    getAccountBalance(walletName: string): Observable<Response> {
-
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', walletName);
-
-      return this.http
-        .get(this.stratisApiUrl + '/smartcontractwallet/account-balance', new RequestOptions({headers: this.headers, params: params}));
-    }
-
-    /*
-     * Get the balance of the active smart contract address.
-     */
-    getAddressBalance(address: string): Observable<Response> {
-
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('address', address);
-
-      return Observable
-        .interval(this.pollingInterval)
-        .startWith(0)
-        .switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/address-balance', new RequestOptions({headers: this.headers, search: params})));
-    }
-
-    /*
-     * Gets the transaction history of the smart contract account.
-     */
-    getAccountHistory(walletName: string, address: string): Observable<Response> {
-
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('walletName', walletName);
-      params.set('address', address);
-
-      return Observable
-          .interval(this.pollingInterval)
-          .startWith(0)
-          .switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/history', new RequestOptions({headers: this.headers, search: params})));
-    }
-
-    /*
-     * Posts a contract creation transaction
-     */
-    postCreateTransaction(transaction: any): Observable<Response> {
-      return this.http
-        .post(this.stratisApiUrl + '/smartcontractwallet/create', transaction, new RequestOptions({headers: this.headers}));
-    }
-
-    /*
-     * Posts a contract call transaction
-     */
-    postCallTransaction(transaction: any): Observable<Response> {
-      return this.http
-        .post(this.stratisApiUrl + '/smartcontractwallet/call', transaction, new RequestOptions({headers: this.headers}));
-    }
-
-    /*
-     * Returns the receipt for a particular txhash, or empty JSON.
-     */
-    getReceipt(hash: string): any {
-      let params: URLSearchParams = new URLSearchParams();
-      params.set('txHash', hash);
-
-      return this.http
-        .get(this.stratisApiUrl + '/smartcontracts/receipt', new RequestOptions({headers: this.headers, search: params}));
-    }
-
+    return throwError(error);
+  }
 }

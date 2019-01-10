@@ -26,9 +26,6 @@ Write-Host "--> npm install" -foregroundcolor "magenta"
 cd $env:BUILD_FOLDER/StratisCore.UI
 npm install --verbose
 
-Write-Host "--> npm install npx" -foregroundcolor "magenta"
-npm install npx --verbose
-
 Write-Host "FINISHED restoring dotnet and npm packages" -foregroundcolor "magenta"
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 
@@ -49,14 +46,10 @@ Write-Host "running 'dotnet publish'" -foregroundcolor "magenta"
 cd $env:BUILD_FOLDER/StratisBitcoinFullNode/src/Stratis.StratisD
 dotnet publish -c $env:configuration -v m -r $env:win_runtime -o $env:BUILD_FOLDER\StratisCore.UI\daemon
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
-
-Write-Host "building StratisCore.UI" -foregroundcolor "magenta"
+   
+Write-Host "Building and packaging StratisCore.UI" -foregroundcolor "magenta"
 cd $env:BUILD_FOLDER/StratisCore.UI
-npm run build:prod
-if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
-      
-Write-Host "packaging StratisCore.UI" -foregroundcolor "magenta"
-npx electron-builder build --windows --$env:arch
+npm run package:windows64
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }     
 Write-Host "[$env:configuration][$env:win_runtime] FINISHED StratisCore.UI packaging" -foregroundcolor "magenta"
 

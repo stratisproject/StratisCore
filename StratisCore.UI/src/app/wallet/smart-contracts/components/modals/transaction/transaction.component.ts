@@ -86,7 +86,7 @@ export class TransactionComponent implements OnInit {
     removeParameterClicked(index: number) {
         this.parameters.removeAt(index);
     }
-    
+
     onSubmit()
     {
         // Hack the parameters into a format the API expects
@@ -96,12 +96,12 @@ export class TransactionComponent implements OnInit {
             walletName: this.walletName,
             sender: this.selectedSenderAddress
         };
-        
+
         this.loading = true;
 
         // We don't need an observable here so let's treat it as a promise.
-        (this.mode == Mode.Create 
-            ? this.smartContractsService.PostCreate(result) 
+        (this.mode == Mode.Create
+            ? this.smartContractsService.PostCreate(result)
             : this.smartContractsService.PostCall(result))
             .toPromise()
             .then(result => {
@@ -110,16 +110,16 @@ export class TransactionComponent implements OnInit {
             },
             error => {
                 this.loading = false;
-                if (!error.json().errors) {
-                    if (error.json().value.message) {
-                        this.apiError = error.json().value.message;    
+                if (!error.errors) {
+                    if (error.value.message) {
+                        this.apiError = error.value.message;
                     }
                     else {
                         console.log(error);
                     }
                   }
                   else {
-                    this.apiError = error.json().errors[0] .message;
+                    this.apiError = error.errors[0] .message;
                   }
             });
     }

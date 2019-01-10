@@ -1,65 +1,28 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, Title } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { HttpModule } from '@angular/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ClipboardModule } from 'ngx-clipboard';
-import { NgxElectronModule } from 'ngx-electron';
-import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
-import { NgxPaginationModule } from 'ngx-pagination';
-
 import { AppComponent } from './app.component';
+import { ApiInterceptor } from './shared/http-interceptors/api-interceptor';
 import { LoginComponent } from './login/login.component';
-import { GenericModalComponent } from './shared/components/generic-modal/generic-modal.component';
-
-import { ApiService } from './shared/services/api.service';
-import { GlobalService } from './shared/services/global.service';
-import { ModalService } from './shared/services/modal.service';
-import { FeaturesService } from './shared/services/features.service';
-
-import { SendComponent } from './wallet/send/send.component';
-import { SendConfirmationComponent } from './wallet/send/send-confirmation/send-confirmation.component';
-import { ReceiveComponent } from './wallet/receive/receive.component';
-import { TransactionDetailsComponent } from './wallet/transaction-details/transaction-details.component';
-import { LogoutConfirmationComponent } from './wallet/logout-confirmation/logout-confirmation.component';
+import { SetupModule } from './setup/setup.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @NgModule({
   imports: [
-    AppRoutingModule,
     BrowserModule,
-    BrowserAnimationsModule,
-    ClipboardModule,
-    ReactiveFormsModule,
-    FormsModule,
-    HttpModule,
-    NgbModule.forRoot(),
-    NgxElectronModule,
-    NgxQRCodeModule,
-    NgxPaginationModule,
-    SharedModule.forRoot()
+    HttpClientModule,
+    SharedModule,
+    SetupModule,
+    WalletModule,
+    AppRoutingModule
   ],
   declarations: [
     AppComponent,
-    GenericModalComponent,
-    LoginComponent,
-    LogoutConfirmationComponent,
-    SendComponent,
-    SendConfirmationComponent,
-    ReceiveComponent,
-    TransactionDetailsComponent
+    LoginComponent
   ],
-  entryComponents: [
-    GenericModalComponent,
-    SendComponent,
-    SendConfirmationComponent,
-    ReceiveComponent,
-    TransactionDetailsComponent,
-    LogoutConfirmationComponent
-  ],
-  providers: [ ApiService, GlobalService, ModalService, Title, FeaturesService ],
+  providers: [ { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true} ],
   bootstrap: [ AppComponent ]
 })
 

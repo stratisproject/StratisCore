@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import 'rxjs/add/operator/filter';
 
 
 @Component({

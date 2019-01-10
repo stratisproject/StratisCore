@@ -4,7 +4,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { ApiService } from '../../../../shared/services/api.service';
 import { ModalService } from '../../../../shared/services/modal.service';
-import { AddressLabel } from '../../../../shared/classes/address-label';
+import { AddressLabel } from '../../../../shared/models/address-label';
 
 @Component({
     selector: 'app-add-new-address',
@@ -64,24 +64,9 @@ export class AddNewAddressComponent {
       this.apiService.addAddressBookAddress(addressLabel)
         .subscribe(
           response =>  {
-            if (response.status >= 200 && response.status < 400) {
-              this.activeModel.close();
-            }
-          },
-          error => {
-            if (error.status === 0) {
-              this.genericModalService.openModal(null, null);
-            } else if (error.status >= 400) {
-              if (!error.json().errors[0]) {
-                console.log(error);
-              }
-              else {
-                this.genericModalService.openModal(null, error.json().errors[0].message);
-              }
-            }
+            this.activeModel.close();
           }
-        )
-      ;
+        );
     }
 
     closeClicked() {

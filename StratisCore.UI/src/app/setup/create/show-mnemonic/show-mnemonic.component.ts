@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
-import { WalletCreation } from '../../../shared/classes/wallet-creation';
-
-import { Subscription } from 'rxjs/Subscription';
+import { WalletCreation } from '../../../shared/models/wallet-creation';
 
 @Component({
   selector: 'app-show-mnemonic',
@@ -11,9 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./show-mnemonic.component.css']
 })
 export class ShowMnemonicComponent implements OnInit, OnDestroy {
-
   constructor(private route: ActivatedRoute, private router: Router) { }
-  private parameters: any;
   private mnemonic: string;
   private subscription: Subscription;
   private newWallet: WalletCreation;

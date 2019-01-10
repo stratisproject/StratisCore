@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs/Rx';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { ModalService } from '../../shared/services/modal.service';
 
-import { WalletInfo } from '../../shared/classes/wallet-info';
+import { WalletInfo } from '../../shared/models/wallet-info';
 
 @Component({
   selector: 'status-bar',
@@ -45,55 +44,44 @@ export class StatusBarComponent implements OnInit, OnDestroy {
     this.generalWalletInfoSubscription = this.apiService.getGeneralInfo(walletInfo)
       .subscribe(
         response =>  {
-          if (response.status >= 200 && response.status < 400) {
-            let generalWalletInfoResponse = response.json();
-            this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
-            this.chainTip = generalWalletInfoResponse.chainTip;
-            this.isChainSynced = generalWalletInfoResponse.isChainSynced;
-            this.connectedNodes = generalWalletInfoResponse.connectedNodes;
+          let generalWalletInfoResponse = response;
+          this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
+          this.chainTip = generalWalletInfoResponse.chainTip;
+          this.isChainSynced = generalWalletInfoResponse.isChainSynced;
+          this.connectedNodes = generalWalletInfoResponse.connectedNodes;
 
-            const processedText = `Processed ${this.lastBlockSyncedHeight} out of ${this.chainTip} blocks.`;
-            this.toolTip = `Synchronizing.  ${processedText}`;
+          const processedText = `Processed ${this.lastBlockSyncedHeight} out of ${this.chainTip} blocks.`;
+          this.toolTip = `Synchronizing.  ${processedText}`;
 
-            if (this.connectedNodes == 1) {
-                this.connectedNodesTooltip = "1 connection";
-            } else if (this.connectedNodes >= 0) {
-                this.connectedNodesTooltip = `${this.connectedNodes} connections`;
+          if (this.connectedNodes == 1) {
+              this.connectedNodesTooltip = "1 connection";
+          } else if (this.connectedNodes >= 0) {
+              this.connectedNodesTooltip = `${this.connectedNodes} connections`;
+          }
+
+          if(!this.isChainSynced) {
+            this.percentSynced = "syncing...";
+          }
+          else {
+            this.percentSyncedNumber = ((this.lastBlockSyncedHeight / this.chainTip) * 100);
+            if (this.percentSyncedNumber.toFixed(0) === "100" && this.lastBlockSyncedHeight != this.chainTip) {
+              this.percentSyncedNumber = 99;
             }
 
-            if(!this.isChainSynced) {
-              this.percentSynced = "syncing...";
-            }
-            else {
-              this.percentSyncedNumber = ((this.lastBlockSyncedHeight / this.chainTip) * 100);
-              if (this.percentSyncedNumber.toFixed(0) === "100" && this.lastBlockSyncedHeight != this.chainTip) {
-                this.percentSyncedNumber = 99;
-              }
+            this.percentSynced = this.percentSyncedNumber.toFixed(0) + '%';
 
-              this.percentSynced = this.percentSyncedNumber.toFixed(0) + '%';
-
-              if (this.percentSynced === '100%') {
-                this.toolTip = `Up to date.  ${processedText}`;
-              }
+            if (this.percentSynced === '100%') {
+              this.toolTip = `Up to date.  ${processedText}`;
             }
           }
         },
         error => {
-          console.log(error);
           if (error.status === 0) {
             this.cancelSubscriptions();
-            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              if (error.json().errors[0].description) {
-                this.genericModalService.openModal(null, error.json().errors[0].message);
-              } else {
-                this.cancelSubscriptions();
-                this.startSubscriptions();
-              }
+            if (!error.error.errors[0].message) {
+              this.cancelSubscriptions();
+              this.startSubscriptions();
             }
           }
         }
@@ -102,23 +90,18 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   };
 
   private getStakingInfo() {
-    this.apiService.getStakingInfo()
+    this.stakingInfoSubscription = this.apiService.getStakingInfo()
       .subscribe(
         response =>  {
-          if (response.status >= 200 && response.status < 400) {
-            let stakingResponse = response.json()
-            this.stakingEnabled = stakingResponse.enabled;
-          }
-        },
-        error => {
+          let stakingResponse = response
+          this.stakingEnabled = stakingResponse.enabled;
+        }, error => {
           if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
+            this.cancelSubscriptions();
           } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
+            if (!error.error.errors[0].message) {
+              this.cancelSubscriptions();
+              this.startSubscriptions();
             }
           }
         }

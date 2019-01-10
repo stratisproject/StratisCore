@@ -5,15 +5,14 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { ApiService } from '../../shared/services/api.service';
 import { GlobalService } from '../../shared/services/global.service';
 import { ModalService } from '../../shared/services/modal.service';
-import { WalletInfo } from '../../shared/classes/wallet-info';
-import { TransactionInfo } from '../../shared/classes/transaction-info';
+import { WalletInfo } from '../../shared/models/wallet-info';
+import { TransactionInfo } from '../../shared/models/transaction-info';
 
 import { SendComponent } from '../send/send.component';
 import { ReceiveComponent } from '../receive/receive.component';
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
 
-import { Observable } from 'rxjs/Rx';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -40,6 +39,7 @@ export class DashboardComponent implements OnInit {
   public stakingEnabled: boolean;
   public stakingActive: boolean;
   public stakingWeight: number;
+  public awaitingMaturity: number = 0;
   public netStakingWeight: number;
   public expectedTime: number;
   public dateTime: string;
@@ -49,9 +49,9 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
-    this.startSubscriptions();
     this.walletName = this.globalService.getWalletName();
     this.coinUnit = this.globalService.getCoinUnit();
+    this.startSubscriptions();
   };
 
   ngOnDestroy() {
@@ -86,34 +86,23 @@ export class DashboardComponent implements OnInit {
     this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
         response =>  {
-          if (response.status >= 200 && response.status < 400) {
-              let balanceResponse = response.json();
-              //TO DO - add account feature instead of using first entry in array
-              this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
-              this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
-              if ((this.confirmedBalance + this.unconfirmedBalance) > 0) {
-                this.hasBalance = true;
-              } else {
-                this.hasBalance = false;
-              }
+          let balanceResponse = response;
+          //TO DO - add account feature instead of using first entry in array
+          this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
+          this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
+          if ((this.confirmedBalance + this.unconfirmedBalance) > 0) {
+            this.hasBalance = true;
+          } else {
+            this.hasBalance = false;
           }
         },
         error => {
-          console.log(error);
           if (error.status === 0) {
             this.cancelSubscriptions();
-            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              if (error.json().errors[0].description) {
-                this.genericModalService.openModal(null, error.json().errors[0].message);
-              } else {
-                this.cancelSubscriptions();
-                this.startSubscriptions();
-              }
+            if (!error.error.errors[0].message) {
+              this.cancelSubscriptions();
+              this.startSubscriptions();
             }
           }
         }
@@ -128,30 +117,19 @@ export class DashboardComponent implements OnInit {
     this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
-          if (response.status >= 200 && response.status < 400) {
-            //TO DO - add account feature instead of using first entry in array
-            if (!!response.json().history && response.json().history[0].transactionsHistory.length > 0) {
-              historyResponse = response.json().history[0].transactionsHistory;
-              this.getTransactionInfo(historyResponse);
-            }
+          //TO DO - add account feature instead of using first entry in array
+          if (!!response.history && response.history[0].transactionsHistory.length > 0) {
+            historyResponse = response.history[0].transactionsHistory;
+            this.getTransactionInfo(historyResponse);
           }
         },
         error => {
-          console.log(error);
           if (error.status === 0) {
             this.cancelSubscriptions();
-            this.genericModalService.openModal(null, null);
           } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              if (error.json().errors[0].description) {
-                this.genericModalService.openModal(null, error.json().errors[0].message);
-              } else {
-                this.cancelSubscriptions();
-                this.startSubscriptions();
-              }
+            if (!error.error.errors[0].message) {
+              this.cancelSubscriptions();
+              this.startSubscriptions();
             }
           }
         }
@@ -181,7 +159,6 @@ export class DashboardComponent implements OnInit {
       }
       let transactionConfirmedInBlock = transaction.confirmedInBlock;
       let transactionTimestamp = transaction.timestamp;
-      let transactionConfirmed;
 
       this.transactionArray.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
     }
@@ -197,25 +174,13 @@ export class DashboardComponent implements OnInit {
     this.apiService.startStaking(walletData)
       .subscribe(
         response =>  {
-          if (response.status >= 200 && response.status < 400) {
-            this.stakingEnabled = true;
-            this.stakingForm.patchValue({ walletPassword: "" });
-          }
+          this.stakingEnabled = true;
+          this.stakingForm.patchValue({ walletPassword: "" });
         },
         error => {
           this.isStarting = false;
           this.stakingEnabled = false;
           this.stakingForm.patchValue({ walletPassword: "" });
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
-          }
         }
       )
     ;
@@ -227,21 +192,7 @@ export class DashboardComponent implements OnInit {
     this.apiService.stopStaking()
       .subscribe(
         response =>  {
-          if (response.status >= 200 && response.status < 400) {
-            this.stakingEnabled = false;
-          }
-        },
-        error => {
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
-          }
+          this.stakingEnabled = false;
         }
       )
     ;
@@ -251,30 +202,28 @@ export class DashboardComponent implements OnInit {
     this.stakingInfoSubscription = this.apiService.getStakingInfo()
       .subscribe(
         response =>  {
-          if (response.status >= 200 && response.status < 400) {
-            let stakingResponse = response.json()
-            this.stakingEnabled = stakingResponse.enabled;
-            this.stakingActive = stakingResponse.staking;
-            this.stakingWeight = stakingResponse.weight;
-            this.netStakingWeight = stakingResponse.netStakeWeight;
-            this.expectedTime = stakingResponse.expectedTime;
-            this.dateTime = this.secondsToString(this.expectedTime);
-            if (this.stakingActive) {
-              this.isStarting = false;
-            } else {
-              this.isStopping = false;
-            }
+          let stakingResponse = response
+          this.stakingEnabled = stakingResponse.enabled;
+          this.stakingActive = stakingResponse.staking;
+          this.stakingWeight = stakingResponse.weight;
+          this.netStakingWeight = stakingResponse.netStakeWeight;
+          if (this.unconfirmedBalance && this.confirmedBalance) {
+            this.awaitingMaturity = (this.unconfirmedBalance + this.confirmedBalance) - this.stakingWeight;
           }
-        },
-        error => {
+          this.expectedTime = stakingResponse.expectedTime;
+          this.dateTime = this.secondsToString(this.expectedTime);
+          if (this.stakingActive) {
+            this.isStarting = false;
+          } else {
+            this.isStopping = false;
+          }
+        }, error => {
           if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
+            this.cancelSubscriptions();
           } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
+            if (!error.error.errors[0].message) {
+              this.cancelSubscriptions();
+              this.startSubscriptions();
             }
           }
         }

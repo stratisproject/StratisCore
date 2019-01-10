@@ -1,5 +1,5 @@
-import { Component, Injectable, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { GlobalService } from '../../shared/services/global.service';
@@ -8,8 +8,7 @@ import { ModalService } from '../../shared/services/modal.service';
 
 import { PasswordValidationDirective } from '../../shared/directives/password-validation.directive';
 
-import { WalletCreation } from '../../shared/classes/wallet-creation';
-import { Mnemonic } from '../../shared/classes/mnemonic';
+import { WalletCreation } from '../../shared/models/wallet-creation';
 
 @Component({
   selector: 'create-component',
@@ -115,28 +114,11 @@ export class CreateComponent implements OnInit {
   }
 
   private getNewMnemonic() {
-    this.apiService
-      .getNewMnemonic()
+    this.apiService.getNewMnemonic()
       .subscribe(
         response => {
-          if (response.status >= 200 && response.status < 400){
-            this.mnemonic = response.json();
-          }
-        },
-        error => {
-          console.log(error);
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
-          }
+          this.mnemonic = response;
         }
-      )
-    ;
+      );
   }
 }

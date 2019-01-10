@@ -25,25 +25,7 @@ export class LogoutConfirmationComponent implements OnInit {
   public onLogout() {
     if (!this.sidechainEnabled) {
       this.apiService.stopStaking()
-        .subscribe(
-          response =>  {
-            if (response.status >= 200 && response.status < 400) {
-            }
-          },
-          error => {
-            if (error.status === 0) {
-              this.genericModalService.openModal(null, null);
-            } else if (error.status >= 400) {
-              if (!error.json().errors[0]) {
-                console.log(error);
-              }
-              else {
-                this.genericModalService.openModal(null, error.json().errors[0].message);
-              }
-            }
-          }
-        )
-      ;
+        .subscribe();
     }
     this.activeModal.close();
     this.router.navigate(['/login']);

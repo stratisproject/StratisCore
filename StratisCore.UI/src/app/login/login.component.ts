@@ -6,8 +6,7 @@ import { GlobalService } from '../shared/services/global.service';
 import { ApiService } from '../shared/services/api.service';
 import { ModalService } from '../shared/services/modal.service';
 
-import { WalletLoad } from '../shared/classes/wallet-load';
-import { WalletInfo } from '../shared/classes/wallet-info';
+import { WalletLoad } from '../shared/models/wallet-load';
 
 @Component({
   selector: 'app-login',
@@ -71,30 +70,15 @@ export class LoginComponent implements OnInit {
     this.apiService.getWalletFiles()
       .subscribe(
         response => {
-          if (response.status >= 200 && response.status < 400) {
-            let responseMessage = response.json();
-            this.wallets = responseMessage.walletsFiles;
-            this.globalService.setWalletPath(responseMessage.walletsPath);
-            if (this.wallets.length > 0) {
-              this.hasWallet = true;
-              for (let wallet in this.wallets) {
-                this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
-              }
-            } else {
-              this.hasWallet = false;
+          this.wallets = response.walletsFiles;
+          this.globalService.setWalletPath(response.walletsPath);
+          if (this.wallets.length > 0) {
+            this.hasWallet = true;
+            for (let wallet in this.wallets) {
+              this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
             }
-          }
-        },
-        error => {
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
+          } else {
+            this.hasWallet = false;
           }
         }
       )
@@ -102,7 +86,7 @@ export class LoginComponent implements OnInit {
   }
 
   public onCreateClicked() {
-    this.router.navigate(['/setup']);
+    this.router.navigate(['setup']);
   }
 
   public onEnter() {
@@ -125,23 +109,10 @@ export class LoginComponent implements OnInit {
     this.apiService.loadStratisWallet(walletLoad)
       .subscribe(
         response => {
-          if (response.status >= 200 && response.status < 400) {
-            // Navigate to the wallet section
-            this.router.navigate(['/wallet']);
-          }
+          this.router.navigate(['wallet/dashboard']);
         },
         error => {
           this.isDecrypting = false;
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
-          }
         }
       )
     ;
@@ -151,23 +122,9 @@ export class LoginComponent implements OnInit {
     this.apiService.getNodeStatus()
       .subscribe(
         response => {
-          if (response.status >= 200 && response.status < 400) {
-            let responseMessage = response.json();
-            this.globalService.setCoinUnit(responseMessage.coinTicker);
-            this.globalService.setNetwork(responseMessage.network);
-          }
-        },
-        error => {
-          if (error.status === 0) {
-            this.genericModalService.openModal(null, null);
-          } else if (error.status >= 400) {
-            if (!error.json().errors[0]) {
-              console.log(error);
-            }
-            else {
-              this.genericModalService.openModal(null, error.json().errors[0].message);
-            }
-          }
+          let responseMessage = response;
+          this.globalService.setCoinUnit(responseMessage.coinTicker);
+          this.globalService.setNetwork(responseMessage.network);
         }
       )
     ;

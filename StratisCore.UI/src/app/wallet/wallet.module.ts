@@ -1,11 +1,4 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ClipboardModule } from 'ngx-clipboard';
-import { HttpClientModule } from '@angular/common/http';
-import { NgxPaginationModule } from 'ngx-pagination';
-
 import { SharedModule } from '../shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { ColdStakingModule } from './cold-staking/cold-staking.module';
@@ -23,25 +16,28 @@ import { ExtPubkeyComponent } from './advanced/components/ext-pubkey/ext-pubkey.
 import { AboutComponent } from './advanced/components/about/about.component';
 import { GenerateAddressesComponent } from './advanced/components/generate-addresses/generate-addresses.component';
 import { ResyncComponent } from './advanced/components/resync/resync.component';
+import { SendComponent } from './send/send.component';
+import { ReceiveComponent } from './receive/receive.component';
+import { SendConfirmationComponent } from './send/send-confirmation/send-confirmation.component';
+import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
+import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-    ClipboardModule,
-    FormsModule,
-    SharedModule.forRoot(),
-    NgbModule,
-    NgxPaginationModule,
-    ReactiveFormsModule,
+    SharedModule,
     WalletRoutingModule,
     ColdStakingModule,
-    SmartContractsModule,
-    HttpClientModule,
+    SmartContractsModule
   ],
   declarations: [
     WalletComponent,
     MenuComponent,
     DashboardComponent,
+    SendComponent,
+    ReceiveComponent,
+    SendConfirmationComponent,
+    TransactionDetailsComponent,
+    LogoutConfirmationComponent,
     HistoryComponent,
     StatusBarComponent,
     AdvancedComponent,
@@ -52,8 +48,13 @@ import { ResyncComponent } from './advanced/components/resync/resync.component';
     GenerateAddressesComponent,
     ResyncComponent
   ],
-  providers: [],
-  exports: []
+  entryComponents: [
+    SendComponent,
+    SendConfirmationComponent,
+    ReceiveComponent,
+    TransactionDetailsComponent,
+    LogoutConfirmationComponent
+  ]
 })
 
 export class WalletModule { }

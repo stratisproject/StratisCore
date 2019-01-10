@@ -15,7 +15,7 @@
             <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
           </select>
           <div class="form-group mt-3">
-            <input type="password" class="form-control" id="Password" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" placeholder="Enter your password." formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
+            <input type="password" class="form-control" id="Password" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
             <div *ngIf="formErrors.password" class="invalid-feedback">{{ formErrors.password }}</div>
           </div>
         </form>

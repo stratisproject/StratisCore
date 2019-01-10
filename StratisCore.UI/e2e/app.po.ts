@@ -1,13 +1,10 @@
-import { browser, element, by } from 'protractor';
+import { browser } from 'protractor';
 
-export class BreezePage {
-  navigateTo() {
-    return browser.get('/');
+/* tslint:disable */
+export class AngularElectronPage {
+  navigateTo(route: string) {
+    return browser.get(route);
   }
-
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
-}
 
   getTitle() {
     let title: string;

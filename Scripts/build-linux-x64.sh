@@ -28,9 +28,6 @@ cd $build_directory/StratisCore.UI
 echo $log_prefix Running npm install
 npm install --verbose
 
-echo $log_prefix Running npm install npx
-npm install -g npx --verbose
-
 echo $log_prefix FINISHED restoring dotnet and npm packages
 
 # dotnet publish
@@ -44,12 +41,8 @@ chmod +x $build_directory/StratisCore.UI/daemon/Stratis.StratisD
 
 # node Build
 cd $build_directory/StratisCore.UI
-echo $log_prefix running 'npm run'
-npm run build:prod
-
-# node packaging
-echo $log_prefix packaging StratisCore.UI 
-npx electron-builder build --linux --$arch
+echo $log_prefix Building and packaging StratisCore.UI
+npm run package:linux
 echo $log_prefix finished packaging
 
 echo $log_prefix contents of build_directory

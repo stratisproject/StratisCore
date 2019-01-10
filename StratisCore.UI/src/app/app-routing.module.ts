@@ -1,18 +1,18 @@
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { LoginComponent } from './login/login.component';
+import { AppComponent } from './app.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full'},
-  { path: 'login', component: LoginComponent},
-  { path: 'setup', loadChildren: 'app/setup/setup.module#SetupModule'},
-  { path: 'wallet', loadChildren: 'app/wallet/wallet.module#WalletModule'}
+  { path: 'app', component: AppComponent},
+  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: 'app', pathMatch: 'full' },
+  { path: '**', redirectTo: 'app', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes, {useHash: true}) ],
+  imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ]
 })
 
-export class AppRoutingModule {}
+export class AppRoutingModule { }

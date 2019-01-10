@@ -6,7 +6,6 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
-import { Observable } from 'rxjs/Observable';
 
 declare const require: any;
 
