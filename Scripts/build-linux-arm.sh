@@ -4,7 +4,7 @@ arch=arm
 configuration=Release  
 os_platform=linux
 log_prefix=LINUX-BUILD
-build_directory=$(dirname $(dirname "$0"))
+build_directory=$(dirname $PWD)
 
 # exit if error
 set -o errexit
