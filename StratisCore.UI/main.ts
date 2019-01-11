@@ -1,4 +1,7 @@
 import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray, net } from 'electron';
+if (os.arch() == 'arm') {
+  app.disableHardwareAcceleration();
+}
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
