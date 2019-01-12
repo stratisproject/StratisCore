@@ -9,10 +9,12 @@ if (os.arch() == 'arm') {
 let serve;
 let testnet;
 let sidechain;
+let nodaemon;
 const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve" || val === "-serve");
 testnet = args.some(val => val === "--testnet" || val === "-testnet");
 sidechain = args.some(val => val === "--sidechain" || val === "-sidechain");
+nodaemon = args.some(val => val === "--nodaemon" || val === "-nodaemon");
 
 let apiPort;
 if (testnet && !sidechain) {
@@ -94,9 +96,9 @@ app.on('ready', () => {
     console.log("Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.")
   }
   else {
-    if (sidechain) {
+    if (sidechain && !nodaemon) {
       startDaemon("Stratis.SidechainD");
-    } else {
+    } else if (!nodaemon) {
       startDaemon("Stratis.StratisD")
     }
   }
@@ -108,7 +110,7 @@ app.on('ready', () => {
 });
 
 app.on('quit', () => {
-  if (!serve) {
+  if (!serve && !nodaemon) {
     shutdownDaemon(this.portNumber);
   }
 });
