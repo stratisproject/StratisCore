@@ -3,7 +3,7 @@
 arch=arm
 configuration=Release  
 os_platform=linux
-log_prefix=LINUX-BUILD
+log_prefix=LINUXARM-BUILD
 build_directory=$(dirname $PWD)
 
 # exit if error
