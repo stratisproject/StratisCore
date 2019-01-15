@@ -53,10 +53,11 @@ This will compile the Angular code and spawn the Electron process.
 |--|--|
 |`npm run build:prod`| Compiles the application for production. Output files can be found in the dist folder |
 |`npm run package:linux`| Builds your application and creates an app consumable on linux system |
+|`npm run package:linuxarm`| Builds your application and creates an app consumable on linux-arm system (i.e., Raspberry Pi) |
 |`npm run package:windows`| On a Windows OS, builds your application and creates an app consumable in windows 32/64 bit systems |
 |`npm run package:mac`|  On a MAC OS, builds your application and generates a `.app` file of your application that can be run on Mac |
 
-**The application is optimised. Only the files of /dist folder are included in the executable.**
+**The application is optimised. Only the files of /dist folder are included in the executable. Distributable packages can be found in the StratisCore.UI/app-builds/ folder**
 
 ## CI Build
 -----------

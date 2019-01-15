@@ -1,9 +1,9 @@
 #!/bin/bash
 
-arch=x64
+arch=arm
 configuration=Release  
 os_platform=linux
-log_prefix=LINUX-BUILD
+log_prefix=LINUXARM-BUILD
 build_directory=$(dirname $PWD)
 
 # exit if error
@@ -42,7 +42,7 @@ chmod +x $build_directory/StratisCore.UI/daemon/Stratis.StratisD
 # node Build
 cd $build_directory/StratisCore.UI
 echo $log_prefix Building and packaging StratisCore.UI
-npm run package:linux
+npm run package:linuxarm
 echo $log_prefix finished packaging
 
 echo $log_prefix contents of build_directory
