@@ -111,7 +111,7 @@ app.on('ready', () => {
 
 app.on('quit', () => {
   if (!serve && !nodaemon) {
-    shutdownDaemon(this.portNumber);
+    shutdownDaemon(apiPort);
   }
 });
 
@@ -133,16 +133,26 @@ app.on('activate', () => {
 });
 
 function shutdownDaemon(portNumber) {
-  const request = net.request({
+  var http = require('http');
+  var body = JSON.stringify({});
+
+  var request = new http.ClientRequest({
     method: 'POST',
     hostname: 'localhost',
     port: portNumber,
     path: '/api/node/shutdown',
+    headers: {
+      "Content-Type": "application/json",
+      "Content-Length": Buffer.byteLength(body)
+    }
   })
 
-  request.setHeader("content-type", "application/json-patch+json");
   request.write('true');
-  request.end();
+  request.on('error', function (e) { });
+  request.on('timeout', function (e) { request.abort(); });
+  request.on('uncaughtException', function (e) { request.abort(); });
+
+  request.end(body);
 };
 
 function startDaemon(daemonName) {
