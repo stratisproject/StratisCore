@@ -110,6 +110,12 @@ app.on('ready', () => {
   }
 });
 
+/* 'before-quit' is emitted when Electron receives 
+ * the signal to exit and wants to start closing windows */
+app.on('before-quit', () => {
+  shutdownDaemon(apiPort);
+});
+
 app.on('quit', () => {
   if (!serve && !nodaemon) {
     shutdownDaemon(apiPort);
