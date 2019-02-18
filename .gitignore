@@ -288,12 +288,11 @@ Thumbs.db
 ################################################################################
 
 *.user
-
-# DNX
 project.lock.json
 /StratisCore/.vscode
 /StratisCore.UI/daemon
 /StratisCore.UI/app-builds
 /StratisCore.UI/dist
 /StratisCore.UI/main.js
+/StratisCore.UI/main.js.map
 .vscode/
