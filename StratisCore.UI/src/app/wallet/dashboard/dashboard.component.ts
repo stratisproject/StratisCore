@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   public coinUnit: string;
   public confirmedBalance: number;
   public unconfirmedBalance: number;
+  public spendableBalance: number;
   public transactionArray: TransactionInfo[];
   private stakingForm: FormGroup;
   private walletBalanceSubscription: Subscription;
@@ -90,6 +91,7 @@ export class DashboardComponent implements OnInit {
           //TO DO - add account feature instead of using first entry in array
           this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
           this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
+          this.spendableBalance = balanceResponse.balances[0].spendableAmount;
           if ((this.confirmedBalance + this.unconfirmedBalance) > 0) {
             this.hasBalance = true;
           } else {
@@ -202,14 +204,12 @@ export class DashboardComponent implements OnInit {
     this.stakingInfoSubscription = this.apiService.getStakingInfo()
       .subscribe(
         response =>  {
-          let stakingResponse = response
+          let stakingResponse = response;
           this.stakingEnabled = stakingResponse.enabled;
           this.stakingActive = stakingResponse.staking;
           this.stakingWeight = stakingResponse.weight;
           this.netStakingWeight = stakingResponse.netStakeWeight;
-          if (this.unconfirmedBalance && this.confirmedBalance) {
-            this.awaitingMaturity = (this.unconfirmedBalance + this.confirmedBalance) - this.stakingWeight;
-          }
+          this.awaitingMaturity = (this.unconfirmedBalance + this.confirmedBalance) - this.spendableBalance;
           this.expectedTime = stakingResponse.expectedTime;
           this.dateTime = this.secondsToString(this.expectedTime);
           if (this.stakingActive) {
