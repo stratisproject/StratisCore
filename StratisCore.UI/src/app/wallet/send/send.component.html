@@ -18,7 +18,7 @@
               <!--<div class="form-group has-danger clearfix">-->
               <div class="form-group clearfix">
                 <label class="float-left" for="amount">Amount</label>
-                <label class="float-right" for="totalAmount">Available: {{ totalBalance | coinNotation }} {{ coinUnit }}</label>
+                <label class="float-right" for="totalAmount">Spendable: {{ spendableBalance | coinNotation }} {{ coinUnit }}</label>
                 <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
                 <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.amount" [class.is-valid]="!sendFormErrors.amount && sendForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
                 <div *ngIf="sendFormErrors.amount" class="invalid-feedback">{{ sendFormErrors.amount }}</div>
