@@ -17,6 +17,7 @@ import { FeeEstimation } from '../models/fee-estimation';
 import { TransactionBuilding } from '../models/transaction-building';
 import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
+import { WalletRescan } from '../models/wallet-rescan';
 
 @Injectable({
   providedIn: 'root'
@@ -299,6 +300,18 @@ export class ApiService {
       .set('all', 'true')
       .set('resync', 'true');
     return this.http.delete(this.stratisApiUrl + '/wallet/remove-transactions', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /** Rescan wallet from a certain date using remove-transactions */
+  rescanWallet(data: WalletRescan): Observable<any> {
+    console.log(data.fromDate.toDateString());
+    let params = new HttpParams()
+      .set('walletName', data.name)
+      .set('fromDate', data.fromDate.toDateString())
+      .set('reSync', 'true');
+    return this.http.delete(this.stratisApiUrl + '/wallet/remove-transactions/', { params }).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }

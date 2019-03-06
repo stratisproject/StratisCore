@@ -12,6 +12,7 @@
                 <small class="text-uppercase"> {{ coinUnit }}</small>
               </p>
               <ul class="list-unstyled">
+                <!-- <li><strong>{{ (awaitingMaturity | coinNotation) || (0 | coinNotation) }}</strong><em> (staking)</em></li> -->
                 <li><strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong><em> (unconfirmed)</em></li>
                 <!-- <li><strong>805.65900153</strong> <em>(staking)</em></li> -->
               </ul>

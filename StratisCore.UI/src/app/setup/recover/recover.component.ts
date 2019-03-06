@@ -29,7 +29,7 @@ export class RecoverComponent implements OnInit {
   private walletRecovery: WalletRecovery;
 
   ngOnInit() {
-    this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-blue'});
+    this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
   }
 
   private buildRecoverForm(): void {
