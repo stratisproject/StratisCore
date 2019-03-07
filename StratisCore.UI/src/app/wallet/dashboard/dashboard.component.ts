@@ -294,12 +294,14 @@ export class DashboardComponent implements OnInit {
   }
 
   private refreshStakingSubscription() {
+    if (this.sidechainEnabled) {
+      return;
+    }
+
     if (this.stakingInfoSubscription) {
       this.stakingInfoSubscription.unsubscribe();
     }
 
-    if (!this.sidechainEnabled) {
-      this.getStakingInfo();
-    }
+    this.getStakingInfo();
   }
 }
