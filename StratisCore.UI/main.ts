@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray, net } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
@@ -110,10 +110,12 @@ app.on('ready', () => {
   }
 });
 
-/* 'before-quit' is emitted when Electron receives 
+/* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', () => {
-  shutdownDaemon(apiPort);
+  if (!serve && !nodaemon) {
+    shutdownDaemon(apiPort);
+  }
 });
 
 app.on('quit', () => {
@@ -124,11 +126,7 @@ app.on('quit', () => {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  app.quit();
 });
 
 app.on('activate', () => {
