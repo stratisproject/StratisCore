@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray, net } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
@@ -110,10 +110,12 @@ app.on('ready', () => {
   }
 });
 
-/* 'before-quit' is emitted when Electron receives 
+/* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', () => {
-  shutdownDaemon(apiPort);
+  if (!serve && !nodaemon) {
+    shutdownDaemon(apiPort);
+  }
 });
 
 app.on('quit', () => {
