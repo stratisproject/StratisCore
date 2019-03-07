@@ -169,10 +169,10 @@ export class DashboardComponent implements OnInit {
   private startStaking() {
     this.isStarting = true;
     this.isStopping = false;
-    let walletData = {
+    const walletData = {
       name: this.globalService.getWalletName(),
       password: this.stakingForm.get('walletPassword').value
-    }
+    };
     this.apiService.startStaking(walletData)
       .subscribe(
         response =>  {
