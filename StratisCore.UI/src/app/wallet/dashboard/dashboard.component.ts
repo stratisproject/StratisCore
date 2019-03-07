@@ -178,6 +178,7 @@ export class DashboardComponent implements OnInit {
         response =>  {
           this.stakingEnabled = true;
           this.stakingForm.patchValue({ walletPassword: "" });
+          this.refreshStakingSubscription();
         },
         error => {
           this.isStarting = false;
@@ -287,6 +288,16 @@ export class DashboardComponent implements OnInit {
   private startSubscriptions() {
     this.getWalletBalance();
     this.getHistory();
+    if (!this.sidechainEnabled) {
+      this.getStakingInfo();
+    }
+  }
+
+  private refreshStakingSubscription() {
+    if (this.stakingInfoSubscription) {
+      this.stakingInfoSubscription.unsubscribe();
+    }
+
     if (!this.sidechainEnabled) {
       this.getStakingInfo();
     }
