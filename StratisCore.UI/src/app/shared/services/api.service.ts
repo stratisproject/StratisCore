@@ -306,7 +306,6 @@ export class ApiService {
 
   /** Rescan wallet from a certain date using remove-transactions */
   rescanWallet(data: WalletRescan): Observable<any> {
-    console.log(data.fromDate.toDateString());
     let params = new HttpParams()
       .set('walletName', data.name)
       .set('fromDate', data.fromDate.toDateString())
