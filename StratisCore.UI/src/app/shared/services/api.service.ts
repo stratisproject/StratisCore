@@ -27,7 +27,7 @@ export class ApiService {
     this.setApiUrl();
   };
 
-  private pollingInterval = interval(3000);
+  private pollingInterval = interval(5000);
   private apiPort;
   private stratisApiUrl;
 
