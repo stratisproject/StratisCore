@@ -90,7 +90,7 @@ export class ResyncComponent implements OnInit, OnDestroy {
       .rescanWallet(rescanData)
       .subscribe(
         response => {
-          this.genericModalService.openModal("Resyncing", "Your wallet is now resyncing. The time remaining depends on the size and creation time of your wallet. The wallet dashboards shows your progress.");
+          this.genericModalService.openModal("Resyncing", "Your wallet is now resyncing. The time remaining depends on the size and creation time of your wallet. The wallet dashboard shows your progress.");
         }
       );
   }

@@ -7,9 +7,9 @@
         <li class="nav-item list-inline-item">
           <a class="nav-link" routerLink="history" routerLinkActive="active">History</a>
         </li>
-        <li *ngIf="testnet && !sidechainEnabled" class="nav-item list-inline-item">
+        <!-- <li *ngIf="testnet && !sidechainEnabled" class="nav-item list-inline-item">
           <a class="nav-link" routerLink="staking" routerLinkActive="active">Cold Staking</a>
-        </li>
+        </li> -->
         <li *ngIf="sidechainEnabled" class="nav-item list-inline-item">
           <a class="nav-link" routerLink="smart-contracts" routerLinkActive="active">Smart Contracts</a>
         </li>
