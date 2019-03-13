@@ -11,11 +11,12 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GenericModalComponent } from './components/generic-modal/generic-modal.component';
 import { CoinsComponent } from './coins/coins.component';
+import { PrefixCoinUnitPipe } from './pipes/prefix-coin-unit.pipe';
 
 @NgModule({
   imports: [ CommonModule ],
-  declarations: [ CoinNotationPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent, CoinsComponent ],
-  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, AutoFocusDirective, PasswordValidationDirective, CoinsComponent ],
+  declarations: [ CoinNotationPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent, CoinsComponent, PrefixCoinUnitPipe ],
+  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, AutoFocusDirective, PasswordValidationDirective, CoinsComponent, PrefixCoinUnitPipe ],
   entryComponents: [ GenericModalComponent ]
 })
 

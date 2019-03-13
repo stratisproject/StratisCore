@@ -11,7 +11,6 @@ import { take } from 'rxjs/operators';
 export class CoinUnitComponent implements OnInit {
   coinUnit: string;
   baseUnits: BaseUnit[];
-  units: BaseUnit[];
 
   constructor(private globalService: GlobalService) {
     // Set the initial value  
@@ -21,7 +20,6 @@ export class CoinUnitComponent implements OnInit {
 
     this.coinUnit = this.globalService.getCoinUnit();
     this.baseUnits = this.globalService.getBaseUnits();
-    this.units = this.baseUnits;
   }
 
   selectedCoinUnit: BaseUnit;

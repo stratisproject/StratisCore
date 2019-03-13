@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'coins',
   template: `
-    <span>{{ amount | coinNotation:(baseUnit | async)?.multiple }} {{ this.coinUnit }}</span>
+    <span>{{ amount | coinNotation:(baseUnit | async)?.multiple }} {{ this.coinUnit|prefixCoinUnit:(baseUnit | async)?.name }}</span>
   `
 })
 export class CoinsComponent implements OnInit {
