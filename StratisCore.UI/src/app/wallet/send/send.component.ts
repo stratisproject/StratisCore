@@ -212,7 +212,7 @@ export class SendComponent implements OnInit, OnDestroy {
           this.apiError = error.error.errors[0].message;
         },
         () => {
-          this.sendForm.patchValue({amount: +new CoinNotationPipe(this.globalService).transform(balanceResponse.maxSpendableAmount)});
+          this.sendForm.patchValue({amount: +new CoinNotationPipe().transform(balanceResponse.maxSpendableAmount)});
           this.estimatedFee = balanceResponse.fee;
         }
       )

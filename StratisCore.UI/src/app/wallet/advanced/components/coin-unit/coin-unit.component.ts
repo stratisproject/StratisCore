@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { GlobalService, BaseUnit } from '../../../../shared/services/global.service';
+import { GlobalService } from '../../../../shared/services/global.service';
+import { BaseUnit } from '../../../../shared/BaseUnit';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-coin-unit',
@@ -13,24 +14,22 @@ export class CoinUnitComponent implements OnInit {
   units: BaseUnit[];
 
   constructor(private globalService: GlobalService) {
+    // Set the initial value  
+    this.globalService.baseUnit.pipe(take(1)).subscribe(b => {
+      this.selectedCoinUnit = b;
+    });
+
     this.coinUnit = this.globalService.getCoinUnit();
-    this.selectedCoinUnit = this.globalService.getBaseUnit();
     this.baseUnits = this.globalService.getBaseUnits();
-
-    // Map to our own baseunit + coinunit suffix eg. mSTRAT
-    this.units = this.baseUnits.map(b => b.addCoinUnit(this.coinUnit));
-    console.log(this.units);
+    this.units = this.baseUnits;
   }
-
-  private selectCoinUnitForm: FormGroup;
 
   selectedCoinUnit: BaseUnit;
 
   ngOnInit() {
   }
 
-  onBaseUnitChanged()
-  {
+  onBaseUnitChanged() {
     this.globalService.setBaseUnit(this.selectedCoinUnit);
   }
 

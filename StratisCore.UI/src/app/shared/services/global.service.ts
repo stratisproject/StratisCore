@@ -1,5 +1,8 @@
 import {Injectable} from "@angular/core";
 import { ElectronService } from 'ngx-electron';
+import { BehaviorSubject } from "rxjs";
+import { take } from "rxjs/operators";
+import { BaseUnit } from "../BaseUnit";
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +36,7 @@ export class GlobalService {
     new BaseUnit('sats', 1) // Defaults are in sats
   ];
 
-  private baseUnit: BaseUnit = this.baseUnits[0]; // Default to COIN
+  public baseUnit: BehaviorSubject<BaseUnit> = new BehaviorSubject<BaseUnit>(this.baseUnits[0]);
 
   getApplicationVersion() {
     return this.applicationVersion;
@@ -115,34 +118,12 @@ export class GlobalService {
     this.coinUnit = coinUnit;
   }
 
-  getBaseUnit() {
-    return this.baseUnit;
-  }
-
   setBaseUnit(baseUnit: BaseUnit) {
-    console.log("Set baseunit");
-    console.log(baseUnit);
     //localStorage.setItem('baseUnit', JSON.stringify(baseUnit));
-    this.baseUnit = baseUnit;
+    this.baseUnit.next(baseUnit);
   }
 
   getBaseUnits() {
     return this.baseUnits;
-  }
-}
-
-export class BaseUnit {
-  constructor(public name: string, public multiple: number) {}
-
-  addCoinUnit(unit: string): BaseUnit {
-
-    // Some base units look funny with a prefix
-    if (this.name === 'sats') {
-      return this;
-    }
-
-    let newName = this.name + unit;
-
-    return new BaseUnit(newName, this.multiple);
   }
 }
