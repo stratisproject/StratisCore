@@ -25,6 +25,15 @@ export class GlobalService {
   private coinUnit: string;
   private network: string;
 
+  // Base units relative to sats
+  private baseUnits = [
+    new BaseUnit('', 100000000), // BTC = 100,000,000 sats
+    new BaseUnit('m', 100000), // mBTC = 100,000 sats
+    new BaseUnit('μ', 100), // μBTC = 100 sats
+    new BaseUnit('sats', 1) // Defaults are in sats
+  ];
+
+  private baseUnit: BaseUnit = this.baseUnits[0]; // Default to COIN
 
   getApplicationVersion() {
     return this.applicationVersion;
@@ -104,5 +113,36 @@ export class GlobalService {
 
   setCoinUnit(coinUnit: string) {
     this.coinUnit = coinUnit;
+  }
+
+  getBaseUnit() {
+    return this.baseUnit;
+  }
+
+  setBaseUnit(baseUnit: BaseUnit) {
+    console.log("Set baseunit");
+    console.log(baseUnit);
+    //localStorage.setItem('baseUnit', JSON.stringify(baseUnit));
+    this.baseUnit = baseUnit;
+  }
+
+  getBaseUnits() {
+    return this.baseUnits;
+  }
+}
+
+export class BaseUnit {
+  constructor(public name: string, public multiple: number) {}
+
+  addCoinUnit(unit: string): BaseUnit {
+
+    // Some base units look funny with a prefix
+    if (this.name === 'sats') {
+      return this;
+    }
+
+    let newName = this.name + unit;
+
+    return new BaseUnit(newName, this.multiple);
   }
 }

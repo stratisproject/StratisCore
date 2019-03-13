@@ -6,12 +6,10 @@
           Change:
         </div>
         <div class='col blockText'>
-          <form class="form-group col-12">
-              <select class="custom-select col-12" [(ngModel)]="unit" name="selectUnit">
-                <option *ngFor="let unit of units" [value]="unit">{{ unit }}</option>
-              </select>
-          </form>
-          <span style="padding-left: 15px;">1 Strat = {{ 1 | coinNotation }} {{ unit }}</span>
+            <select class="custom-select col-12" [(ngModel)]="selectedCoinUnit" [ngModelOptions]="{standalone: true}" (change)="onBaseUnitChanged()">
+              <option *ngFor="let unit of units" [ngValue]="unit">{{ unit.name }}</option>
+            </select>
+          <span style="padding-left: 15px;">1 Strat = {{ 100000000 | coinNotation:selectedCoinUnit.multiple }} {{ selectedCoinUnit.name }}</span> 
         </div>      
       </div>    
     </div>
