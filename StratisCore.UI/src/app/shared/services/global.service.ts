@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import { ElectronService } from 'ngx-electron';
-import { BehaviorSubject } from "rxjs";
-import { take } from "rxjs/operators";
+import { BehaviorSubject, Observable } from "rxjs";
+import { take, map } from "rxjs/operators";
 import { BaseUnit } from "../BaseUnit";
 
 @Injectable({
@@ -37,6 +37,14 @@ export class GlobalService {
   ];
 
   public baseUnit: BehaviorSubject<BaseUnit> = new BehaviorSubject<BaseUnit>(this.baseUnits[0]);
+
+  public formattedBaseUnit: Observable<string> = this.baseUnit.pipe(map(baseUnit => {
+    if (baseUnit.name === 'sats') {
+      return baseUnit.name;      
+    }
+
+    return baseUnit.name + this.coinUnit;
+  }));
 
   getApplicationVersion() {
     return this.applicationVersion;

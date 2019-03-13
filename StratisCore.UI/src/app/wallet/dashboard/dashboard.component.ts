@@ -50,7 +50,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.walletName = this.globalService.getWalletName();
-    this.coinUnit = this.globalService.getCoinUnit();
+    
+    this.globalService.formattedBaseUnit
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(baseUnit => this.coinUnit = baseUnit);
+    
     this.refreshData();
   };
 

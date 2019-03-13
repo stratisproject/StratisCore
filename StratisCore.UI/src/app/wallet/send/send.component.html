@@ -18,7 +18,7 @@
               <!--<div class="form-group has-danger clearfix">-->
               <div class="form-group clearfix">
                 <label class="float-left" for="amount">Amount</label>
-                <label class="float-right" for="totalAmount">Spendable: {{ spendableBalance | coinNotation }} {{ coinUnit }}</label>
+                <label class="float-right" for="totalAmount">Spendable: <coins [amount]="spendableBalance"></coins></label>
                 <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
                 <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.amount" [class.is-valid]="!sendFormErrors.amount && sendForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
                 <div *ngIf="sendFormErrors.amount" class="invalid-feedback">{{ sendFormErrors.amount }}</div>
@@ -33,7 +33,7 @@
                 <label>Transaction Fee</label>
                 <div>
                   <small *ngIf="!estimatedFee" class="blockText text-danger">Please enter a valid amount and destination address to calculate the fee.</small>
-                  <label *ngIf="estimatedFee" class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+                  <label *ngIf="estimatedFee" class="blockText text-danger"><coins [amount]="estimatedFee"></coins></label>
                 </div>
                 <!-- fee buttons -->
                 <!-- <div class="col row">
@@ -86,7 +86,7 @@
               <!--<div class="form-group has-danger clearfix">-->
               <div class="form-group clearfix">
                 <label class="float-left" for="amount">Amount</label>
-                <label class="float-right" for="totalAmount">Available: {{ totalBalance | coinNotation }} {{ coinUnit }}</label>
+                <label class="float-right" for="totalAmount">Available: <coins [amount]="totalBalance"></coins></label>
                 <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
                 <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.amount" [class.is-valid]="!sendToSidechainFormErrors.amount && sendToSidechainForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
                 <div *ngIf="sendToSidechainFormErrors.amount" class="invalid-feedback">{{ sendToSidechainFormErrors.amount }}</div>
@@ -107,7 +107,7 @@
                 <label>Transaction Fee</label>
                 <div>
                   <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount, federation and destination address to calculate the fee.</small>
-                  <label *ngIf="estimatedSidechainFee" class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
+                  <label *ngIf="estimatedSidechainFee" class="blockText text-danger"><coins [amount]="estimatedSidechainFee"></coins></label>
                 </div>
                 <!-- fee buttons -->
                 <!-- <div class="col row">
@@ -132,7 +132,7 @@
               </div>
               <div class="form-group clearfix">
                 <div>
-                  <label class="blockText text-danger">An additional amount of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.</label>
+                  <label class="blockText text-danger">An additional amount of <coins [amount]="opReturnAmount"></coins> will be used to send this transaction.</label>
                 </div>
               </div>
               <div class="form-group clearfix">

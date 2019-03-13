@@ -17,6 +17,7 @@ import { TransactionInfo } from '../../shared/models/transaction-info';
 export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   @Input() transaction: TransactionInfo;
+  baseUnitSubscription: Subscription;
   constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService, public activeModal: NgbActiveModal) {}
 
   public copied: boolean = false;
@@ -27,7 +28,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.startSubscriptions();
-    this.coinUnit = this.globalService.getCoinUnit();
+    this.baseUnitSubscription = this.globalService.formattedBaseUnit.subscribe(s => this.coinUnit = s);
   }
 
   ngOnDestroy() {
@@ -71,6 +72,10 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   private cancelSubscriptions() {
     if(this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
+    }
+
+    if (this.baseUnitSubscription) {
+      this.baseUnitSubscription.unsubscribe();
     }
   };
 
