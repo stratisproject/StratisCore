@@ -15,7 +15,7 @@ import { CoinsComponent } from './coins/coins.component';
 @NgModule({
   imports: [ CommonModule ],
   declarations: [ CoinNotationPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent, CoinsComponent ],
-  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, AutoFocusDirective, PasswordValidationDirective ],
+  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, AutoFocusDirective, PasswordValidationDirective, CoinsComponent ],
   entryComponents: [ GenericModalComponent ]
 })
 

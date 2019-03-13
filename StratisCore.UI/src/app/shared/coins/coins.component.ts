@@ -1,13 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { GlobalService, BaseUnit } from '../services/global.service';
 
 @Component({
-  selector: 'app-coins',
-  templateUrl: './coins.component.html',
-  styleUrls: ['./coins.component.css']
+  selector: 'coins',
+  template: `
+    <span>{{ (amount | coinNotation:baseUnit.multiplier) | number : '1.2' }} {{ baseUnit.name }}</span>
+  `
 })
 export class CoinsComponent implements OnInit {
 
-  constructor() { }
+  @Input()
+  amount: number = 0;
+  baseUnit: BaseUnit;
+
+  constructor(private globalService: GlobalService) {
+    this.baseUnit = globalService.getBaseUnit();
+    console.log(this.baseUnit);
+  }
 
   ngOnInit() {
   }
