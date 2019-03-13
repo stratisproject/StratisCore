@@ -13,6 +13,15 @@ export class GlobalService {
     this.setSidechainEnabled();
     this.setTestnetEnabled();
     this.setApiPort();
+
+    // Store by name so we can match the object and populate the settings list correctly.
+    let storedBaseUnitName = localStorage.getItem('baseUnit');
+
+    if (storedBaseUnitName) {
+      let baseUnit = this.baseUnits.find(b => b.name === storedBaseUnitName);
+      if (baseUnit)
+        this.baseUnit.next(baseUnit);
+    }
   }
 
   private applicationVersion: string = "1.0.0";
@@ -127,7 +136,7 @@ export class GlobalService {
   }
 
   setBaseUnit(baseUnit: BaseUnit) {
-    //localStorage.setItem('baseUnit', JSON.stringify(baseUnit));
+    localStorage.setItem('baseUnit', baseUnit.name);
     this.baseUnit.next(baseUnit);
   }
 
