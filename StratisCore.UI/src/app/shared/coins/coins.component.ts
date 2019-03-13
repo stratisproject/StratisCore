@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'coins',
   template: `
-    <span>{{ amount | coinNotation:baseUnit.multiple | number:format }}</span><span *ngIf="showUnit"> {{ this.coinUnit | prefixCoinUnit:baseUnit.name }}</span>
+    <span>{{ (amount ? amount : 0) | coinNotation:baseUnit.multiple | number:format }}</span><span *ngIf="showUnit"> {{ this.coinUnit | prefixCoinUnit:baseUnit.name }}</span>
   `
 })
 export class CoinsComponent implements OnInit {
