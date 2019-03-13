@@ -1,3 +1,18 @@
-<p>
-  coin-unit works!
-</p>
+<div class="card p-4">
+  <div class="card-header">Change Coin Unit</div>
+    <div class="card-body" style="min-height:200px;">
+      <div class="row">
+        <div class='col-4 blockLabel'>
+          Change:
+        </div>
+        <div class='col blockText'>
+          <form class="form-group col-12">
+              <select class="custom-select col-12" [(ngModel)]="unit" name="selectUnit">
+                <option *ngFor="let unit of units" [value]="unit">{{ unit }}</option>
+              </select>
+          </form>
+          <span style="padding-left: 15px;">1 Strat = {{ 1 | coinNotation }} {{ unit }}</span>
+        </div>      
+      </div>    
+    </div>
+</div>
