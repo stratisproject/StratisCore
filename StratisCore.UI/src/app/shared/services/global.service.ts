@@ -30,10 +30,10 @@ export class GlobalService {
 
   // Base units relative to sats
   private baseUnits = [
-    new BaseUnit('', 100000000), // BTC = 100,000,000 sats
-    new BaseUnit('m', 100000), // mBTC = 100,000 sats
-    new BaseUnit('μ', 100), // μBTC = 100 sats
-    new BaseUnit('sats', 1) // Defaults are in sats
+    new BaseUnit('', 100000000, '1.8-8'), // BTC = 100,000,000 sats
+    new BaseUnit('m', 100000, '1.5-8'), // mBTC = 100,000 sats
+    new BaseUnit('μ', 100, '1.2-8'), // μBTC = 100 sats
+    new BaseUnit('sats', 1, '1.0-0') // Defaults are in sats, no decimal places
   ];
 
   public baseUnit: BehaviorSubject<BaseUnit> = new BehaviorSubject<BaseUnit>(this.baseUnits[0]);

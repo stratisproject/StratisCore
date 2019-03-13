@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'coins',
   template: `
-    <span>{{ amount | coinNotation:(baseUnit | async)?.multiple | number:format }}</span><span *ngIf="showUnit"> {{ this.coinUnit|prefixCoinUnit:(baseUnit | async)?.name }}</span>
+    <span>{{ amount | coinNotation:baseUnit.multiple | number:format }}</span><span *ngIf="showUnit"> {{ this.coinUnit | prefixCoinUnit:baseUnit.name }}</span>
   `
 })
 export class CoinsComponent implements OnInit {
@@ -20,15 +20,24 @@ export class CoinsComponent implements OnInit {
   @Input()
   format: string = undefined;
 
-  baseUnit: Subject<BaseUnit>;
+  baseUnit: BaseUnit;
   coinUnit: string;
+  baseUnitSubscription: any;
 
   constructor(private globalService: GlobalService) {
-    this.baseUnit = this.globalService.baseUnit;
+    this.baseUnitSubscription = this.globalService.baseUnit.subscribe(b => {
+      this.baseUnit = b;
+      this.format = this.format != undefined ? this.format : b.defaultFormat;
+    });
+
     this.coinUnit = this.globalService.getCoinUnit();
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.baseUnitSubscription.unsubscribe();
   }
 
 }
