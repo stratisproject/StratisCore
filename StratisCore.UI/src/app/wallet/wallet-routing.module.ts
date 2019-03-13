@@ -11,6 +11,7 @@ import { ExtPubkeyComponent } from './advanced/components/ext-pubkey/ext-pubkey.
 import { AboutComponent } from './advanced/components/about/about.component';
 import { GenerateAddressesComponent } from './advanced/components/generate-addresses/generate-addresses.component';
 import { ResyncComponent } from './advanced/components/resync/resync.component';
+import { CoinUnitComponent } from './advanced/components/coin-unit/coin-unit.component';
 
 const routes: Routes = [
   { path: 'wallet', component: WalletComponent, children: [
@@ -24,7 +25,8 @@ const routes: Routes = [
         { path: 'about', component: AboutComponent},
         { path: 'extpubkey', component: ExtPubkeyComponent},
         { path: 'generate-addresses', component: GenerateAddressesComponent},
-        { path: 'resync', component: ResyncComponent}
+        { path: 'resync', component: ResyncComponent},
+        { path: 'coin-unit', component: CoinUnitComponent}
       ]
     },
     { path: 'smart-contracts', component: SmartContractsComponent },
