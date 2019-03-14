@@ -8,12 +8,12 @@
             <div class="col-9 text-left">
               <h5>Balance</h5>
               <p class="lead">
-                <strong>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
-                <small class="text-uppercase"> {{ coinUnit }}</small>
+                <strong><coins [amount]="confirmedBalance" [showUnit]="false"></coins></strong>
+                <small> {{ coinUnit }}</small>
               </p>
               <ul class="list-unstyled">
                 <!-- <li><strong>{{ (awaitingMaturity | coinNotation) || (0 | coinNotation) }}</strong><em> (staking)</em></li> -->
-                <li><strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong><em> (unconfirmed)</em></li>
+                <li><strong><coins [amount]="unconfirmedBalance"></coins></strong><em> (unconfirmed)</em></li>
                 <!-- <li><strong>805.65900153</strong> <em>(staking)</em></li> -->
               </ul>
             </div>
@@ -66,9 +66,9 @@
                       <th class="text-center" *ngIf="!transaction.transactionConfirmedInBlock"><span class="bubble bg-warning"></span></th>
                       <th class="text-center" *ngIf="transaction.transactionConfirmedInBlock"><span class="bubble bg-success"></span></th>
                       <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
-                      <td class="text-left" *ngIf="transaction.transactionType == 'sent'"><strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
-                      <td class="text-left" *ngIf="transaction.transactionType == 'received'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
-                      <td class="text-left" *ngIf="transaction.transactionType == 'staked'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
+                      <td class="text-left" *ngIf="transaction.transactionType == 'sent'"><strong>- <coins [amount]="transaction.transactionAmount + transaction.transactionFee"></coins></strong></td>
+                      <td class="text-left" *ngIf="transaction.transactionType == 'received'"><strong>+ <coins [amount]="transaction.transactionAmount + transaction.transactionFee"></coins></strong></td>
+                      <td class="text-left" *ngIf="transaction.transactionType == 'staked'"><strong>+ <coins [amount]="transaction.transactionAmount + transaction.transactionFee"></coins></strong></td>
                       <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
                       <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
                     </tr>
@@ -145,9 +145,9 @@
                 <ul class="list-unstyled mb-3">
                   <li *ngIf="isStarting">Waiting for staking to start...</li>
                   <div *ngIf="!isStarting">
-                    <li>Staking weight: <strong>{{ stakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
-                    <li>Coins awaiting maturity: <strong>{{ awaitingMaturity | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
-                    <li>Network weight: <strong>{{ netStakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
+                    <li>Staking weight: <strong><coins [amount]="stakingWeight" [format]="'1.0-0'"></coins></strong></li>
+                    <li>Coins awaiting maturity: <strong><coins [amount]="awaitingMaturity" [format]="'1.0-0'"></coins></strong></li>
+                    <li>Network weight: <strong><coins [amount]="netStakingWeight" [format]="'1.0-0'"></coins></strong></li>
                     <li class="mt-2">Expected reward time is:</li>
                     <li><strong>{{ dateTime }}</strong></li>
                   </div>

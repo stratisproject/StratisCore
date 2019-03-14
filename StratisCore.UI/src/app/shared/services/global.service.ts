@@ -1,5 +1,8 @@
 import {Injectable} from "@angular/core";
 import { ElectronService } from 'ngx-electron';
+import { BehaviorSubject, Observable } from "rxjs";
+import { take, map } from "rxjs/operators";
+import { BaseUnit } from "../BaseUnit";
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +13,15 @@ export class GlobalService {
     this.setSidechainEnabled();
     this.setTestnetEnabled();
     this.setApiPort();
+
+    // Store by name so we can match the object and populate the settings list correctly.
+    let storedBaseUnitName = localStorage.getItem('baseUnit');
+
+    if (storedBaseUnitName) {
+      let baseUnit = this.baseUnits.find(b => b.name === storedBaseUnitName);
+      if (baseUnit)
+        this.baseUnit.next(baseUnit);
+    }
   }
 
   private applicationVersion: string = "1.1.0";
@@ -25,6 +37,23 @@ export class GlobalService {
   private coinUnit: string;
   private network: string;
 
+  // Base units relative to sats
+  private baseUnits = [
+    new BaseUnit('', 100000000, '1.8-8'), // BTC = 100,000,000 sats
+    new BaseUnit('m', 100000, '1.5-8'), // mBTC = 100,000 sats
+    new BaseUnit('μ', 100, '1.2-8'), // μBTC = 100 sats
+    new BaseUnit('sats', 1, '1.0-0') // Defaults are in sats, no decimal places
+  ];
+
+  public baseUnit: BehaviorSubject<BaseUnit> = new BehaviorSubject<BaseUnit>(this.baseUnits[0]);
+
+  public formattedBaseUnit: Observable<string> = this.baseUnit.pipe(map(baseUnit => {
+    if (baseUnit.name === 'sats') {
+      return baseUnit.name;      
+    }
+
+    return baseUnit.name + this.coinUnit;
+  }));
 
   getApplicationVersion() {
     return this.applicationVersion;
@@ -104,5 +133,14 @@ export class GlobalService {
 
   setCoinUnit(coinUnit: string) {
     this.coinUnit = coinUnit;
+  }
+
+  setBaseUnit(baseUnit: BaseUnit) {
+    localStorage.setItem('baseUnit', baseUnit.name);
+    this.baseUnit.next(baseUnit);
+  }
+
+  getBaseUnits() {
+    return this.baseUnits;
   }
 }

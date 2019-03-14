@@ -14,17 +14,17 @@
   </ul>
   <ul class="list-inline row">
     <li class="list-inline-item col blockLabel">Total Amount</li>
-    <li *ngIf="transaction.transactionType == 'staked'" class="list-inline-item col-8 blockText text-success">{{ transaction.transactionAmount | coinNotation }} <small>{{ coinUnit }}</small></li>
-    <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col-8 blockText text-success">{{ transaction.transactionAmount | coinNotation }} <small>{{ coinUnit }}</small></li>
-    <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger">{{ transaction.transactionAmount + transaction.transactionFee | coinNotation }}  <small>{{ coinUnit }}</small></li>
+    <li *ngIf="transaction.transactionType == 'staked'" class="list-inline-item col-8 blockText text-success"><coins [amount]="transaction.transactionAmount" [showUnit]="false"></coins> <small>{{ coinUnit }}</small></li>
+    <li *ngIf="transaction.transactionType == 'received'" class="list-inline-item col-8 blockText text-success"><coins [amount]="transaction.transactionAmount" [showUnit]="false"></coins> <small>{{ coinUnit }}</small></li>
+    <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger"><coins [amount]="transaction.transactionAmount + transaction.transactionFee" [showUnit]="false"></coins> <small>{{ coinUnit }}</small></li>
   </ul>
   <ul class="list-inline row" *ngIf="transaction.transactionType == 'sent'">
       <li class="list-inline-item col blockLabel">Amount Sent</li>
-      <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger">{{ transaction.transactionAmount | coinNotation }}  <small>{{ coinUnit }}</small></li>
+      <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger"><coins [amount]="transaction.transactionAmount" [showUnit]="false"></coins> <small>{{ coinUnit }}</small></li>
   </ul>
   <ul class="list-inline row" *ngIf="transaction.transactionType == 'sent'">
       <li class="list-inline-item col blockLabel">Fee</li>
-      <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger">{{ transaction.transactionFee | coinNotation }}  <small>{{ coinUnit }}</small></li>
+      <li *ngIf="transaction.transactionType == 'sent'" class="list-inline-item col-8 blockText text-danger"><coins [amount]="transaction.transactionAmount" [showUnit]="false"></coins> <small>{{ coinUnit }}</small></li>
   </ul>
   <ul class="list-inline row">
     <li class="list-inline-item col blockLabel">Date</li>

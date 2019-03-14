@@ -22,6 +22,7 @@ import { SendConfirmationComponent } from './send/send-confirmation/send-confirm
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
 import { BsDatepickerModule } from 'ngx-bootstrap';
+import { BaseUnitComponent } from './advanced/components/base-unit/base-unit.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap';
     ExtPubkeyComponent,
     AboutComponent,
     GenerateAddressesComponent,
-    ResyncComponent
+    ResyncComponent,
+    BaseUnitComponent
   ],
   entryComponents: [
     SendComponent,

@@ -8,10 +8,10 @@ export class CoinNotationPipe implements PipeTransform {
 
   private decimalLimit = 8;
 
-  transform(value: number): number {
-    let temp;
+  transform(value: number, multiple: number = 100000000): number {
+    let temp;    
     if (typeof value === 'number') {
-      temp = value / 100000000;
+      temp = value / multiple;
       return temp.toFixed(this.decimalLimit);
     }
   }

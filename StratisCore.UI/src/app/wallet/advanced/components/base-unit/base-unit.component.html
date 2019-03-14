@@ -1,0 +1,16 @@
+<div class="card p-4">
+  <div class="card-header">Change Base Unit</div>
+    <div class="card-body" style="min-height:200px;">
+      <div class="row">
+        <div class='col-4 blockLabel'>
+          Base Unit:
+        </div>
+        <div class='col blockText'>
+            <select class="custom-select col-12" [(ngModel)]="selectedBaseUnit" [ngModelOptions]="{standalone: true}" (change)="onBaseUnitChanged()">
+              <option *ngFor="let baseUnit of baseUnits" [ngValue]="baseUnit">{{ coinUnit | prefixCoinUnit:baseUnit.name }}</option>
+            </select>
+          <span style="padding-left: 15px;">1 Strat = <coins [amount]="100000000"></coins></span>
+        </div>      
+      </div>    
+    </div>
+</div>
