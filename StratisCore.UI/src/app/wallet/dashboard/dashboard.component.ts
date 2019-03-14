@@ -1,4 +1,3 @@
-import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
@@ -13,7 +12,7 @@ import { SendComponent } from '../send/send.component';
 import { ReceiveComponent } from '../receive/receive.component';
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
 
-import { Subscription, ReplaySubject } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -35,7 +34,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public spendableBalance: number;
   public transactionArray: TransactionInfo[];
   private stakingForm: FormGroup;
-  private destroyed$ = new ReplaySubject<boolean>();
+  private walletBalanceSubscription: Subscription;
+  private walletHistorySubscription: Subscription;
+  private stakingInfoSubscription: Subscription;
   public stakingEnabled: boolean;
   public stakingActive: boolean;
   public stakingWeight: number;
@@ -51,12 +52,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.walletName = this.globalService.getWalletName();
     this.coinUnit = this.globalService.getCoinUnit();
-    this.refreshData();
+    this.startSubscriptions();
   };
 
   ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
+    this.cancelSubscriptions();
   }
 
   private buildStakingForm(): void {
@@ -84,8 +84,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private getWalletBalance() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName());
-    this.apiService.getWalletBalance(walletInfo)
-      .pipe(takeUntil(this.destroyed$))
+    this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
       .subscribe(
         response =>  {
           let balanceResponse = response;
@@ -101,10 +100,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
         error => {
           if (error.status === 0) {
-            // this.cancelSubscriptions();
+            this.cancelSubscriptions();
           } else if (error.status >= 400) {
             if (!error.error.errors[0].message) {
-              this.refreshData();
+              this.cancelSubscriptions();
+              this.startSubscriptions();
             }
           }
         }
@@ -116,8 +116,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private getHistory() {
     const walletInfo = new WalletInfo(this.globalService.getWalletName());
     let historyResponse;
-    this.apiService.getWalletHistory(walletInfo)
-      .pipe(takeUntil(this.destroyed$))
+    this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
           // TO DO - add account feature instead of using first entry in array
@@ -128,10 +127,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
         error => {
           if (error.status === 0) {
-            // this.cancelSubscriptions();
+            this.cancelSubscriptions();
           } else if (error.status >= 400) {
             if (!error.error.errors[0].message) {
-              this.refreshData();
+              this.cancelSubscriptions();
+              this.startSubscriptions();
             }
           }
         }
@@ -202,12 +202,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private getStakingInfo() {
-    if (this.sidechainEnabled) {
-      return;
-    }
-
-    this.apiService.getStakingInfo()
-      .pipe(takeUntil(this.destroyed$))
+    this.stakingInfoSubscription = this.apiService.getStakingInfo()
       .subscribe(
         response =>  {
           const stakingResponse = response;
@@ -225,10 +220,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         }, error => {
           if (error.status === 0) {
-            // this.cancelSubscriptions();
+            this.cancelSubscriptions();
           } else if (error.status >= 400) {
             if (!error.error.errors[0].message) {
-              this.refreshData();
+              this.cancelSubscriptions();
+              this.startSubscriptions();
             }
           }
         }
@@ -274,9 +270,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return dateString;
   }
 
-  private refreshData() {
+  private cancelSubscriptions() {
+    if (this.walletBalanceSubscription) {
+      this.walletBalanceSubscription.unsubscribe();
+    }
+
+    if(this.walletHistorySubscription) {
+      this.walletHistorySubscription.unsubscribe();
+    }
+
+    if (this.stakingInfoSubscription) {
+      this.stakingInfoSubscription.unsubscribe();
+    }
+  }
+
+  private startSubscriptions() {
     this.getWalletBalance();
     this.getHistory();
-    this.getStakingInfo();
+    if (!this.sidechainEnabled) {
+      this.getStakingInfo();
+    }
   }
 }
