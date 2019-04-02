@@ -54,7 +54,7 @@ export class ReceiveComponent {
       .subscribe(
         response => {
             this.address = response;
-            this.qrString = "stratis:" + response;
+            this.qrString = this.address;
         }
       );
   }
