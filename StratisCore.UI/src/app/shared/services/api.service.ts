@@ -241,19 +241,22 @@ export class ApiService {
     );
   }
 
-  /**
+    /**
    * Estimate the fee of a transaction
    */
   estimateFee(data: FeeEstimation): Observable<any> {
-    // let params = data;
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', data.accountName)
-      .set('recipients[0].destinationAddress', data.recipients[0].destinationAddress)
-      .set('recipients[0].amount', data.recipients[0].amount)
-      .set('feeType', data.feeType)
-      .set('allowUnconfirmed', "true");
-    return this.http.get(this.stratisApiUrl + '/wallet/estimate-txfee', { params }).pipe(
+    return this.http.post(this.stratisApiUrl + '/wallet/estimate-txfee', {
+      'walletName': data.walletName,
+      'accountName': data.accountName,
+      'recipients': [
+        {
+          'destinationAddress': data.recipients[0].destinationAddress,
+          'amount': data.recipients[0].amount
+        }
+      ],
+      'feeType': data.feeType,
+      'allowUnconfirmed': true
+     }).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -262,15 +265,18 @@ export class ApiService {
    * Estimate the fee of a sidechain transaction
    */
   estimateSidechainFee(data: SidechainFeeEstimation): Observable<any> {
-    // let params = data;
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', data.accountName)
-      .set('recipients[0].destinationAddress', data.recipients[0].destinationAddress)
-      .set('recipients[0].amount', data.recipients[0].amount)
-      .set('feeType', data.feeType)
-      .set('allowUnconfirmed', "true");
-    return this.http.get(this.stratisApiUrl + '/wallet/estimate-txfee', { params }).pipe(
+    return this.http.post(this.stratisApiUrl + '/wallet/estimate-txfee', {
+      'walletName': data.walletName,
+      'accountName': data.accountName,
+      'recipients': [
+        {
+          'destinationAddress': data.recipients[0].destinationAddress,
+          'amount': data.recipients[0].amount
+        }
+      ],
+      'feeType': data.feeType,
+      'allowUnconfirmed': true
+     }).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
