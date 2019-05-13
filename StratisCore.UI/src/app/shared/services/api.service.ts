@@ -246,16 +246,16 @@ export class ApiService {
    */
   estimateFee(data: FeeEstimation): Observable<any> {
     return this.http.post(this.stratisApiUrl + '/wallet/estimate-txfee', {
-      "walletName": data.walletName,
-      "accountName": data.accountName,
-      "recipients": [
+      'walletName': data.walletName,
+      'accountName': data.accountName,
+      'recipients': [
         {
-          "destinationAddress": data.recipients[0].destinationAddress,
-          "amount": data.recipients[0].amount
+          'destinationAddress': data.recipients[0].destinationAddress,
+          'amount': data.recipients[0].amount
         }
       ],
-      "feeType": data.feeType,
-      "allowUnconfirmed": "true"
+      'feeType': data.feeType,
+      'allowUnconfirmed': true
      }).pipe(
       catchError(err => this.handleHttpError(err))
     );
@@ -266,16 +266,16 @@ export class ApiService {
    */
   estimateSidechainFee(data: SidechainFeeEstimation): Observable<any> {
     return this.http.post(this.stratisApiUrl + '/wallet/estimate-txfee', {
-      "walletName": data.walletName,
-      "accountName": data.accountName,
-      "recipients": [
+      'walletName': data.walletName,
+      'accountName': data.accountName,
+      'recipients': [
         {
-          "destinationAddress": data.recipients[0].destinationAddress,
-          "amount": data.recipients[0].amount
+          'destinationAddress': data.recipients[0].destinationAddress,
+          'amount': data.recipients[0].amount
         }
       ],
-      "feeType": data.feeType,
-      "allowUnconfirmed": "true"
+      'feeType': data.feeType,
+      'allowUnconfirmed': true
      }).pipe(
       catchError(err => this.handleHttpError(err))
     );
