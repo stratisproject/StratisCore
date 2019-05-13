@@ -49,12 +49,14 @@ export class ReceiveComponent {
   }
 
   private getUnusedReceiveAddresses() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName())
+    const walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.apiService.getUnusedReceiveAddress(walletInfo)
       .subscribe(
         response => {
             this.address = response;
-            this.qrString = this.address;
+            // TODO: fix this later to use the actual sidechain name instead of 'cirrus'
+            const networkName = this.globalService.getSidechainEnabled() ? 'cirrus' : 'stratis';
+            this.qrString = `${networkName}:${response}`;
         }
       );
   }
