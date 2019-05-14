@@ -93,13 +93,13 @@
               </div>
               <!--<div class="form-group has-success">-->
               <div class="form-group clearfix">
-                <label for="federationAddress">Sidechain federation address</label>
+                <label for="federationAddress">{{ firstTitle }} federation address</label>
                 <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.federationAddress" [class.is-valid]="!sendToSidechainFormErrors.federaionAddress && sendToSidechainForm.get('federationAddress').valid" formControlName="federationAddress" placeholder="Please enter the federation address here.">
                 <div *ngIf="sendToSidechainFormErrors.federationAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.federationAddress }}</div>
               </div>
               <!--<div class="form-group has-success">-->
               <div class="form-group clearfix">
-                <label for="destinationAddress">Sidechain destination address</label>
+                <label for="destinationAddress">{{ secondTitle }} destination address</label>
                 <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.destinationAddress" [class.is-valid]="!sendToSidechainFormErrors.destinationAddress && sendToSidechainForm.get('destinationAddress').valid" formControlName="destinationAddress" id="destinationAddress" placeholder="Please enter the sidechain destination address here.">
                 <div *ngIf="sendToSidechainFormErrors.destinationAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.destinationAddress }}</div>
               </div>
