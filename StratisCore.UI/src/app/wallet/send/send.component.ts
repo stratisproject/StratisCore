@@ -45,7 +45,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public apiError: string;
   public firstTitle: string;
   public secondTitle: string;
-  public opReturnAmount: number = 0;
+  public opReturnAmount: number = 100000000;
   private transactionHex: string;
   private responseMessage: any;
   private transaction: TransactionBuilding;
@@ -381,6 +381,7 @@ export class SendComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.transaction = this.transaction;
     modalRef.componentInstance.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
     modalRef.componentInstance.sidechainEnabled = this.sidechainEnabled;
+    modalRef.componentInstance.opReturnAmount = this.opReturnAmount;
     modalRef.componentInstance.hasOpReturn = this.hasOpReturn;
   }
 
