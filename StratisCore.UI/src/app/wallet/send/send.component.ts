@@ -45,7 +45,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public apiError: string;
   public firstTitle: string;
   public secondTitle: string;
-  public opReturnAmount: number = 100000000;
+  public opReturnAmount: number = 1;
   private transactionHex: string;
   private responseMessage: any;
   private transaction: TransactionBuilding;
