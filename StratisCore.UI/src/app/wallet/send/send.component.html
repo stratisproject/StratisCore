@@ -131,6 +131,11 @@
               </div> -->
               </div>
               <div class="form-group clearfix">
+                <div>
+                  <label class="blockText text-danger">An additional amount of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.</label>
+                </div>
+              </div>
+              <div class="form-group clearfix">
                 <label for="walletPassword">Wallet Password</label>
                 <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password" [class.is-valid]="!sendToSidechainFormErrors.password && sendToSidechainForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
                 <div *ngIf="sendToSidechainFormErrors.password" class="invalid-feedback">{{sendToSidechainFormErrors.password}}</div>
