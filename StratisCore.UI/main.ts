@@ -27,6 +27,20 @@ if (testnet && !sidechain) {
   apiPort = 38225;
 }
 
+// Sets default arguments
+let daemonIP;
+let coreargs = require('minimist')(args, {
+  default : {
+    daemonip: 'localhost'
+  },
+});
+daemonIP = coreargs.daemonip;
+
+// Prevents daemon from starting if connecting to remote daemon.
+if (daemonIP != 'localhost') {
+  nodaemon = true;
+}
+
 ipcMain.on('get-port', (event, arg) => {
   event.returnValue = apiPort;
 });
@@ -37,6 +51,10 @@ ipcMain.on('get-testnet', (event, arg) => {
 
 ipcMain.on('get-sidechain', (event, arg) => {
   event.returnValue = sidechain;
+});
+
+ipcMain.on('get-daemonip', (event, arg) => {
+  event.returnValue = daemonIP;
 });
 
 require('electron-context-menu')({
@@ -145,7 +163,7 @@ function shutdownDaemon(portNumber) {
 
   var request = new http.ClientRequest({
     method: 'POST',
-    hostname: 'localhost',
+    hostname: daemonIP,
     port: portNumber,
     path: '/api/node/shutdown',
     headers: {
