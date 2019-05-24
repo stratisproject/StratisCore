@@ -35,7 +35,7 @@ export class ApiService {
   setApiUrl() {
     this.apiPort = this.globalService.getApiPort();
     this.daemonIP = this.globalService.getDaemonIP();
-    this.stratisApiUrl = 'http://' + this.daemonIP + ":"+ this.apiPort + '/api';
+    this.stratisApiUrl = 'http://' + this.daemonIP + ':' + this.apiPort + '/api';
   }
 
   getNodeStatus(silent?: boolean): Observable<NodeStatus> {
