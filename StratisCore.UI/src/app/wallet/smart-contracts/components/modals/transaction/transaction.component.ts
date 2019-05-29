@@ -140,10 +140,10 @@ export class TransactionComponent implements OnInit {
 
         let gasLimitValidator = (this.mode === Mode.Call ? gasCallLimitMinimumValidator : gasCreateLimitMinimumValidator);
 
-        this.amount = new FormControl(0.1, [amountValidator]);
-        this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator]);
-        this.gasPrice = new FormControl(100, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator]);
-        this.gasLimit = new FormControl(this.mode === Mode.Call ? this.gasCallLimitMinimum : this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator]);
+        this.amount = new FormControl(0.1, [amountValidator, Validators.min(0)]);
+        this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator, Validators.min(0)]);
+        this.gasPrice = new FormControl(100, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator, Validators.min(0)]);
+        this.gasLimit = new FormControl(this.mode === Mode.Call ? this.gasCallLimitMinimum : this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
         this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
         this.contractCode = new FormControl('', [Validators.required, Validators.nullValidator, Validators.pattern('[0-9a-fA-F]*'), oddValidator]);
         this.parameters = new FormArray([]);
