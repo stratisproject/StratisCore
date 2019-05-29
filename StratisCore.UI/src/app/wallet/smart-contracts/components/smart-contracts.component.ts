@@ -115,8 +115,7 @@ export class SmartContractsComponent implements OnInit {
         this.showModal(Mode.Create);
     }
 
-    showModal(mode: Mode)
-    {
+    showModal(mode: Mode) {
         const modal = this.modalService.open(TransactionComponent, { backdrop: 'static', keyboard: false });
         (<TransactionComponent>modal.componentInstance).mode = mode;
         (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
