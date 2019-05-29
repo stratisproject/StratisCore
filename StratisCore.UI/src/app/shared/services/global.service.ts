@@ -18,8 +18,8 @@ export class GlobalService {
   private sidechain: boolean = false;
   private mainApiPort: number = 37221;
   private testApiPort: number = 38221;
-  private mainSideChainApiPort: number = 38225;
-  private testSideChainApiPort: number = 38225;
+  private mainSideChainApiPort: number = 37223;
+  private testSideChainApiPort: number = 38223;
   private apiPort: number;
   private walletPath: string;
   private currentWalletName: string;

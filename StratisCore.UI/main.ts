@@ -16,25 +16,31 @@ testnet = args.some(val => val === "--testnet" || val === "-testnet");
 sidechain = args.some(val => val === "--sidechain" || val === "-sidechain");
 nodaemon = args.some(val => val === "--nodaemon" || val === "-nodaemon");
 
-let apiPort;
+// Set default API port according to network
+let apiPortDefault;
 if (testnet && !sidechain) {
-  apiPort = 38221;
+  apiPortDefault = 38221;
 } else if (!testnet && !sidechain) {
-  apiPort = 37221;
+  apiPortDefault = 37221;
 } else if (sidechain && testnet) {
-  apiPort = 38225;
+  apiPortDefault = 38223;
 } else if (sidechain && !testnet) {
-  apiPort = 38225;
+  apiPortDefault = 37223;
 }
 
 // Sets default arguments
-let daemonIP;
 let coreargs = require('minimist')(args, {
   default : {
-    daemonip: 'localhost'
+    daemonip: 'localhost',
+    apiport: apiPortDefault
   },
 });
+
+// Apply arguments to override default daemon IP and port
+let daemonIP;
+let apiPort;
 daemonIP = coreargs.daemonip;
+apiPort = coreargs.apiport;
 
 // Prevents daemon from starting if connecting to remote daemon.
 if (daemonIP != 'localhost') {
@@ -95,7 +101,7 @@ function createWindow() {
   // Emitted when the window is going to close.
   mainWindow.on('close', () => {
     if (!serve && !nodaemon) {
-      shutdownDaemon(apiPort);
+      shutdownDaemon(daemonIP, apiPort);
     }
   })
 
@@ -134,13 +140,13 @@ app.on('ready', () => {
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', () => {
   if (!serve && !nodaemon) {
-    shutdownDaemon(apiPort);
+    shutdownDaemon(daemonIP, apiPort);
   }
 });
 
 app.on('quit', () => {
   if (!serve && !nodaemon) {
-    shutdownDaemon(apiPort);
+    shutdownDaemon(daemonIP, apiPort);
   }
 });
 
@@ -157,13 +163,13 @@ app.on('activate', () => {
   }
 });
 
-function shutdownDaemon(portNumber) {
+function shutdownDaemon(daemonAddr, portNumber) {
   var http = require('http');
   var body = JSON.stringify({});
 
   var request = new http.ClientRequest({
     method: 'POST',
-    hostname: daemonIP,
+    hostname: daemonAddr,
     port: portNumber,
     path: '/api/node/shutdown',
     headers: {
