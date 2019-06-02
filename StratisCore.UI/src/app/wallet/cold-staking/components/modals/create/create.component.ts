@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { GlobalService } from '../../../../../shared/services/global.service';
+import { GlobalService } from '@shared/services/global.service';
 
 import { ColdStakingServiceBase } from '../../../cold-staking.service';
 import { ColdStakingCreateSuccessComponent } from '../create-success/create-success.component';

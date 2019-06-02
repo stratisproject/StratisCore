@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 
-import { GlobalService } from '../../shared/services/global.service';
+import { GlobalService } from '@shared/services/global.service';
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 
 @Component({

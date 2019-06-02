@@ -5,9 +5,9 @@ import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { SmartContractsServiceBase, ContractTransactionItem } from '../smart-contracts.service';
-import { GlobalService } from '../../../shared/services/global.service';
+import { GlobalService } from '@shared/services/global.service';
 import { TransactionComponent, Mode } from './modals/transaction/transaction.component';
-import { ModalService } from '../../../shared/services/modal.service';
+import { ModalService } from '@shared/services/modal.service';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({

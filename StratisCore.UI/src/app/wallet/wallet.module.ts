@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { ColdStakingModule } from './cold-staking/cold-staking.module';
 import { SmartContractsModule } from './smart-contracts/smart-contracts.module';

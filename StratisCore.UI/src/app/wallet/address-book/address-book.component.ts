@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ApiService } from '../../shared/services/api.service';
-import { ModalService } from '../../shared/services/modal.service';
+import { ApiService } from '@shared/services/api.service';
+import { ModalService } from '@shared/services/modal.service';
 import { SendComponent } from '../send/send.component';
 import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
-import { AddressLabel } from '../../shared/models/address-label';
+import { AddressLabel } from '@shared/models/address-label';
 
 import { Subscription } from 'rxjs';
 

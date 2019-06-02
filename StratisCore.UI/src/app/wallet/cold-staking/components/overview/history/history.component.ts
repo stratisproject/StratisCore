@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { GlobalService } from '../../../../../shared/services/global.service';
+import { GlobalService } from '@shared/services/global.service';
 import { ColdStakingServiceBase } from '../../../cold-staking.service';
 
 export class HistoryItem {

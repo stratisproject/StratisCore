@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
-import { ApiService } from '../../../../shared/services/api.service';
-import { ModalService } from '../../../../shared/services/modal.service';
-import { AddressLabel } from '../../../../shared/models/address-label';
+import { ApiService } from '@shared/services/api.service';
+import { ModalService } from '@shared/services/modal.service';
+import { AddressLabel } from '@shared/models/address-label';
 
 @Component({
     selector: 'app-add-new-address',

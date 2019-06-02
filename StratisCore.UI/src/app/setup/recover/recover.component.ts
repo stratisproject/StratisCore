@@ -3,11 +3,11 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
-import { GlobalService } from '../../shared/services/global.service';
-import { ApiService } from '../../shared/services/api.service';
-import { ModalService } from '../../shared/services/modal.service';
+import { GlobalService } from '@shared/services/global.service';
+import { ApiService } from '@shared/services/api.service';
+import { ModalService } from '@shared/services/modal.service';
 
-import { WalletRecovery } from '../../shared/models/wallet-recovery';
+import { WalletRecovery } from '@shared/models/wallet-recovery';
 
 @Component({
   selector: 'app-recover',
