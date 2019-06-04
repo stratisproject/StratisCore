@@ -1,0 +1,64 @@
+//
+//
+//  Light theme for GUI Wallet
+//  #TeamStratis
+//
+//
+
+///// Variables
+$body-bg : #FAFBFC;
+
+///// BODY
+#GUI {
+  &.light {
+    background-color: $body-bg !important;
+    .btn-outline-light {&:hover {color: $white;}}
+
+    ///// MENU
+    .navbar {
+      /* Base: */
+      background: $white;
+      box-shadow: 0 2px 27px 0 #E6E8F7;
+
+      &.bg-light {
+        background-color: $white;
+      }
+    }
+
+    ///// JUMBOTRON
+    .jumbotron {
+      h5 {color: #A6AFB4;}
+    }
+
+    ///// CONTENT
+    // Cards
+    .card {
+      background: rgba(255,255,255,0.74);
+      box-shadow: 0 2px 30px 0 #E6E8F7;
+      &:hover {
+        border: $card-border-width solid #158BCF;
+        box-shadow: 0 5px 40px 0 #BDDDF2;
+      }
+
+      .card-header {
+        background-color: $white;
+        color: #A6AFB4;
+      }
+    }
+    // Tables
+    .table {
+      color: #A6AFB4;
+      strong {
+        color: $black;
+        font-weight: 600;
+      }
+    }
+    // Staking
+    #staking {
+      color: #A6AFB4;
+      strong {
+        color: $black;
+      }
+    }
+  }
+}

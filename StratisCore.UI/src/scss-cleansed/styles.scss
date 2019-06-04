@@ -1,0 +1,19 @@
+// Import all package variables first to override the defaults
+@import 'variables/module';
+
+
+// Import all scss/sass node module packages. Allows for
+// easy package updates and management with npm/yarn.
+@import '../../node_modules/bootstrap/scss/bootstrap';
+
+
+// @import the global base styles of the app
+@import 'base/module';
+
+
+// Themes module of light and dark theme
+@import 'themes/module';
+
+
+// Add or modify package styles at a component level
+@import 'components/module';

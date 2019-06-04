@@ -1,0 +1,7 @@
+.breadcrumb-item {
+  word-break: break-word !important;
+
+  &.active {
+    word-break: break-word !important;
+  }
+}
