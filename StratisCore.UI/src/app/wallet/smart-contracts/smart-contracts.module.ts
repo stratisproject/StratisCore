@@ -8,7 +8,7 @@ import { SmartContractsServiceBase, SmartContractsService } from './smart-contra
 import { SmartContractsComponent } from './components/smart-contracts.component';
 import { TransactionComponent } from './components/modals/transaction/transaction.component';
 import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { ScBalanceComponent } from './components/balance/balance.component';
 import { ContractTypePipe } from './components/contract-type.pipe';
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { GlobalService } from '../../../../shared/services/global.service';
+import { GlobalService } from '@shared/services/global.service';
 import { ColdStakingServiceBase, ColdStakingInfo } from '../../cold-staking.service';
 import { ColdStakingCreateAddressComponent } from '../modals/create-address/create-address.component';
 import { ColdStakingWithdrawComponent } from '../modals/withdraw/withdraw.component';

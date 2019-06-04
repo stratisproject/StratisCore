@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl, FormControl, FormArray } from '@angular/forms';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { GlobalService } from '../../../../../shared/services/global.service';
+import { GlobalService } from '@shared/services/global.service';
 import { SmartContractsServiceBase } from '../../../smart-contracts.service';
 import { Observable } from 'rxjs';
 
@@ -58,8 +58,8 @@ export class TransactionComponent implements OnInit {
     gasPriceMinimum = 1;
     gasPriceMaximum = 10000;
 
-    get title(): string { return `${this.prefixText} Transaction`; }
-    get buttonText(): string { return `${this.prefixText} transaction`; }
+    get title(): string { return `${this.prefixText} Contract`; }
+    get buttonText(): string { return `${this.prefixText} Contract`; }
 
     ngOnInit() {
         this.registerControls();
@@ -87,10 +87,9 @@ export class TransactionComponent implements OnInit {
         this.parameters.removeAt(index);
     }
 
-    onSubmit()
-    {
+    onSubmit() {
         // Hack the parameters into a format the API expects
-        let result =  {
+        const result =  {
             ...this.transactionForm.value,
             parameters: this.transactionForm.value.parameters.map(p => p.type + "#" + p.value),
             walletName: this.walletName,
@@ -125,7 +124,7 @@ export class TransactionComponent implements OnInit {
     }
 
     private get prefixText(): string {
-        return this.mode === Mode.Call ? "Call" : "Create";
+        return this.mode === Mode.Call ? (this.loading ? 'Calling' : 'Call') : (this.loading ? 'Creating' : 'Create');
     }
 
     private registerControls() {
@@ -141,10 +140,10 @@ export class TransactionComponent implements OnInit {
 
         let gasLimitValidator = (this.mode === Mode.Call ? gasCallLimitMinimumValidator : gasCreateLimitMinimumValidator);
 
-        this.amount = new FormControl(0, [amountValidator]);
-        this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator]);
-        this.gasPrice = new FormControl(1, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator]);
-        this.gasLimit = new FormControl(this.mode === Mode.Call ? this.gasCallLimitMinimum : this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator]);
+        this.amount = new FormControl(0.1, [amountValidator, Validators.min(0)]);
+        this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator, Validators.min(0)]);
+        this.gasPrice = new FormControl(100, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator, Validators.min(0)]);
+        this.gasLimit = new FormControl(this.mode === Mode.Call ? this.gasCallLimitMinimum : this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
         this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
         this.contractCode = new FormControl('', [Validators.required, Validators.nullValidator, Validators.pattern('[0-9a-fA-F]*'), oddValidator]);
         this.parameters = new FormArray([]);

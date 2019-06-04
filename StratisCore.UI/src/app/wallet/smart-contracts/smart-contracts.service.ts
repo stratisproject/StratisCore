@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiService } from '../../shared/services/api.service';
+import { ApiService } from '@shared/services/api.service';
 
 export class SmartContractsContractItem {
     constructor(public blockId: string, public type: string, public hash: string, public destinationAddress: string, public amount: number) { }

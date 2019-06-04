@@ -4,11 +4,11 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 import { Subscription } from 'rxjs';
 
-import { WalletInfo } from '../../../../shared/models/wallet-info';
-import { ApiService } from '../../../../shared/services/api.service';
-import { GlobalService } from '../../../../shared/services/global.service';
-import { ModalService } from '../../../../shared/services/modal.service';
-import { WalletRescan } from '../../../../shared/models/wallet-rescan';
+import { WalletInfo } from '@shared/models/wallet-info';
+import { ApiService } from '@shared/services/api.service';
+import { GlobalService } from '@shared/services/global.service';
+import { ModalService } from '@shared/services/modal.service';
+import { WalletRescan } from '@shared/models/wallet-rescan';
 
 @Component({
   selector: 'app-resync',

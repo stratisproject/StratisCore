@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ApiService } from '../../../../shared/services/api.service';
-import { ModalService } from '../../../../shared/services/modal.service';
-import { NodeStatus } from '../../../../shared/models/node-status';
-import { GlobalService } from '../../../../shared/services/global.service';
+import { ApiService } from '@shared/services/api.service';
+import { ModalService } from '@shared/services/modal.service';
+import { NodeStatus } from '@shared/models/node-status';
+import { GlobalService } from '@shared/services/global.service';
 
 @Component({
   selector: 'app-about',
