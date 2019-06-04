@@ -30,10 +30,12 @@ export class ApiService {
   private pollingInterval = interval(5000);
   private apiPort;
   private stratisApiUrl;
+  private daemonIP;
 
   setApiUrl() {
     this.apiPort = this.globalService.getApiPort();
-    this.stratisApiUrl = 'http://localhost:' + this.apiPort + '/api';
+    this.daemonIP = this.globalService.getDaemonIP();
+    this.stratisApiUrl = 'http://' + this.daemonIP + ':' + this.apiPort + '/api';
   }
 
   getNodeStatus(silent?: boolean): Observable<NodeStatus> {

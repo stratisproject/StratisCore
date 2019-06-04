@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "electron-context-menu": "0.11.0",
+    "minimist": "^1.2.0",
     "ngx-pagination": "3.2.1",
     "ngx-qrcode2": "0.0.9"
   },
@@ -91,6 +92,7 @@
     "karma-coverage-istanbul-reporter": "2.0.5",
     "karma-jasmine": "2.0.1",
     "karma-jasmine-html-reporter": "1.4.0",
+    "minimist": "1.2.0",
     "ngx-bootstrap": "3.2.0",
     "ngx-clipboard": "12.0.0",
     "ngx-electron": "2.1.1",
