@@ -1,18 +1,18 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
-import { ApiService } from '../../shared/services/api.service';
-import { GlobalService } from '../../shared/services/global.service';
-import { ModalService } from '../../shared/services/modal.service';
-import { CoinNotationPipe } from '../../shared/pipes/coin-notation.pipe';
+import { ApiService } from '@shared/services/api.service';
+import { GlobalService } from '@shared/services/global.service';
+import { ModalService } from '@shared/services/modal.service';
+import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { FeeEstimation } from '../../shared/models/fee-estimation';
-import { SidechainFeeEstimation } from '../../shared/models/sidechain-fee-estimation';
-import { TransactionBuilding } from '../../shared/models/transaction-building';
-import { TransactionSending } from '../../shared/models/transaction-sending';
-import { WalletInfo } from '../../shared/models/wallet-info';
+import { FeeEstimation } from '@shared/models/fee-estimation';
+import { SidechainFeeEstimation } from '@shared/models/sidechain-fee-estimation';
+import { TransactionBuilding } from '@shared/models/transaction-building';
+import { TransactionSending } from '@shared/models/transaction-sending';
+import { WalletInfo } from '@shared/models/wallet-info';
 
 import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
 

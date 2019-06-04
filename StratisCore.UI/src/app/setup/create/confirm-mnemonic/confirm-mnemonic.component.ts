@@ -3,10 +3,10 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { ApiService } from '../../../shared/services/api.service';
-import { ModalService } from '../../../shared/services/modal.service';
+import { ApiService } from '@shared/services/api.service';
+import { ModalService } from '@shared/services/modal.service';
 
-import { WalletCreation } from '../../../shared/models/wallet-creation';
+import { WalletCreation } from '@shared/models/wallet-creation';
 import { SecretWordIndexGenerator } from './secret-word-index-generator';
 
 @Component({

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ApiService } from '../../shared/services/api.service';
-import { GlobalService } from '../../shared/services/global.service';
-import { ModalService } from '../../shared/services/modal.service';
+import { ApiService } from '@shared/services/api.service';
+import { GlobalService } from '@shared/services/global.service';
+import { ModalService } from '@shared/services/modal.service';
 
-import { WalletInfo } from '../../shared/models/wallet-info';
+import { WalletInfo } from '@shared/models/wallet-info';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 

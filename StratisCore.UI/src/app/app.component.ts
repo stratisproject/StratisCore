@@ -5,11 +5,11 @@ import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { retryWhen, delay, tap } from 'rxjs/operators';
 
-import { ApiService } from './shared/services/api.service';
+import { ApiService } from '@shared/services/api.service';
 import { ElectronService } from 'ngx-electron';
-import { GlobalService } from './shared/services/global.service';
+import { GlobalService } from '@shared/services/global.service';
 
-import { NodeStatus } from './shared/models/node-status';
+import { NodeStatus } from '@shared/models/node-status';
 
 @Component({
   selector: 'app-root',
