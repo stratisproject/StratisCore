@@ -129,7 +129,7 @@ export class SmartContractsComponent implements OnInit {
             .GetReceipt(contract.hash)
             .toPromise()
             .then(result => {
-                this.genericModalService.openModal("Receipt", "<pre style='user-select: text;'>" + JSON.stringify(result, null,"    ") + "</pre>");
+                this.genericModalService.openModal("Receipt", "<pre style='-webkit-user-select: text;'>" + JSON.stringify(result, null,"    ") + "</pre>");
             },
                 error => {
                     this.showApiError("Error retrieving receipt. " + error);
