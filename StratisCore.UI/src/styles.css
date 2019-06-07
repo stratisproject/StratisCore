@@ -8463,6 +8463,11 @@ a.text-purple:focus, a.text-purple:hover {
   border: 0;
 }
 
+.selectable {
+  user-select: text;
+  cursor: text;
+}
+
 .visible {
   visibility: visible !important;
 }
