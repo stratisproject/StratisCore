@@ -50,3 +50,8 @@
 .text-hide {
   @include text-hide();
 }
+
+.selectable {
+  user-select: text;
+  cursor: text;
+}
