@@ -20,7 +20,7 @@
                     <td class="text-left" *ngIf="transaction.transactionType == 'received'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
                     <td class="text-left" *ngIf="transaction.transactionType == 'staked'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
                     <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-                    <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
+                    <td class="text-center"><a href="javascript:void(0)" (click)="openTransactionDetailDialog(transaction)">details</a></td>
                   </tr>
                 </tbody>
               </table>
