@@ -5,6 +5,7 @@ import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
+import { NumberToStringPipe } from '@shared/pipes/number-to-string.pipe';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -306,7 +307,7 @@ export class SendComponent implements OnInit, OnDestroy {
       true,
       false,
       this.sendToSidechainForm.get("destinationAddress").value.trim(),
-      this.numberToString(this.opReturnAmount / 100000000)
+      new NumberToStringPipe().transform((this.opReturnAmount / 100000000))
     );
 
     this.apiService.buildTransaction(this.transaction)
@@ -393,31 +394,5 @@ export class SendComponent implements OnInit, OnDestroy {
 
   private startSubscriptions() {
     this.getWalletBalance();
-  }
-
-  private numberToString(num) {
-    let numStr = String(num);
-    if (Math.abs(num) < 1.0) {
-      let e = parseInt(num.toString().split('e-')[1]);
-      if (e) {
-        const negative = num < 0;
-        if (negative) {
-          num *= -1;
-        }
-        num *= Math.pow(10, e - 1);
-        numStr = '0.' + (new Array(e)).join('0') + num.toString().substring(2);
-        if (negative) {
-          numStr = '-' + numStr;
-        }
-      }
-    } else {
-        let e = parseInt(num.toString().split('+')[1]);
-        if (e > 20) {
-            e -= 20;
-            num /= Math.pow(10, e);
-            numStr = num.toString() + (new Array(e + 1)).join('0');
-        }
-    }
-    return numStr;
   }
 }
