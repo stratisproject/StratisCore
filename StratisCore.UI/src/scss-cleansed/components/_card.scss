@@ -1,0 +1,25 @@
+.dark {
+  .card {
+    box-shadow: 0 5px 40px rgba($black,.80);
+
+    .card-header {
+      background-color: #2E3439;
+      color: #A6AFB4;
+    }
+
+    .card-body {
+      background-color: #2E3439;
+    }
+  }
+}
+
+.light {
+  .card {
+    box-shadow: 0 2px 30px 0 #E6E8F7;
+
+    .card-header {
+      background-color: $white;
+      color: #A6AFB4;
+    }
+  }
+}

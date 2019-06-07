@@ -1,8 +1,7 @@
-
-body.dark {
+body.light {
   // Import all package variables first to override the defaults
   @import './variables/module';
-  @import './dark';
+
 
   // Import all scss/sass node module packages. Allows for
   // easy package updates and management with npm/yarn.
@@ -13,19 +12,16 @@ body.dark {
   @import '../../base/module';
 
 
-  // Themes module of light and dark theme
-  // @import 'themes/module';
-
-
   // Add or modify package styles at a component level
   @import '../../components/module';
 
-  margin: 0;
-  font-family: $font-family-base;
-  font-size: $font-size-base;
-  font-weight: $font-weight-base;
-  line-height: $line-height-base;
-  color: $body-color;
-  text-align: left;
-  background-color: $body-bg;
+    margin: 0;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    font-weight: $font-weight-base;
+    line-height: $line-height-base;
+    color: $body-color;
+    text-align: left;
+    background-color: $body-bg;
 }
+

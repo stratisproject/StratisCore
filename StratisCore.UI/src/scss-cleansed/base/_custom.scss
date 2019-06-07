@@ -1,36 +1,6 @@
-//
-//
-//
 //    Here all the custom CSS for GUI wallet
 //    #TeamStratis
-//
-//
 
-// basics
-body {
-  background: #FAFBFC !important;
-  cursor: default !important;
-  -webkit-touch-callout: none; /* iOS Safari */
-   -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-      -moz-user-select: none; /* Firefox */
-       -ms-user-select: none; /* Internet Explorer/Edge */
-           user-select: none; /* Non-prefixed version, currently
-                                 supported by Chrome and Opera */
-}
-button {&:hover {cursor: pointer;}}
-img {pointer-events: none !important;}
-
-.invalid-feedback,
-.valid-feedback {font-size: .8rem;}
-.link {
-  color: $primary !important;
-  text-decoration: none !important;
-  &:hover {
-    cursor: pointer !important;
-    text-decoration: underline !important;
-  }
-}
 
 #GUI {
   #content {
@@ -50,41 +20,13 @@ img {pointer-events: none !important;}
     }
   }
 
-  ///// NAVBAR
-  .navbar {
-    // &.bg-light {background-color: $white !important;}
-    .navbar-text {font-weight: bold;}
-    .form-inline {
-      a {
-        &:hover {
-          cursor: pointer;
-          .lnr {color: $primary;}
-        }
-        .lnr {
-          font-size: 1.25rem;
-          color: $gray-500;
-        }
-      }
-      .dropdown-menu {
-        .lnr {
-          margin-right: .5rem;
-          font-size: 1rem;
-          color: $gray-500;
-        }
-        &.dropdown-menu-right {
-          right: 0 !important;
-          left: auto !important;
-        }
-      }
-    }
-  }
-
   ///// JUMBOTRON
   .jumbotron {
     h5 {
       text-transform: uppercase;
       font-size: $font-size-base;
       font-weight: 300;
+      color: #A6AFB4;
     }
     .lead {
       font-size: 3rem;
@@ -137,7 +79,8 @@ img {pointer-events: none !important;}
 
   ///// STAKING
   #staking {
-    strong {font-weight: bold !important;}
+    color: #A6AFB4;
+    strong {color: $black;}
   }
   //CARD
   .card-staking {
@@ -265,67 +208,67 @@ img {pointer-events: none !important;}
     -ms-user-select: none; /* IE10+ */
     cursor: pointer;
     color: $gray-500;
-}
-.toggle-on .toggle-text-off{color: rgba(0,0,0,0);}
-/* used for streak effect */
-.glow-comp{
-    position: absolute;
-    opacity: 0;
-    top: 10px;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    border-radius: 6px;
-    background-color: rgba(75, 122, 141, .1);
-    box-shadow: 0 0 12px rgba(75, 122, 141, .2);
-    -webkit-transition: opacity 4.5s 1s;
-    transition: opacity 4.5s 1s;
-}
-.toggle-on .glow-comp{
-    opacity: 1;
-    -webkit-transition: opacity 1s;
-    transition: opacity 1s;
-}
+  }
+  .toggle-on .toggle-text-off{color: rgba(0,0,0,0);}
+  /* used for streak effect */
+  .glow-comp{
+      position: absolute;
+      opacity: 0;
+      top: 10px;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      border-radius: 6px;
+      background-color: rgba(75, 122, 141, .1);
+      box-shadow: 0 0 12px rgba(75, 122, 141, .2);
+      -webkit-transition: opacity 4.5s 1s;
+      transition: opacity 4.5s 1s;
+  }
+  .toggle-on .glow-comp{
+      opacity: 1;
+      -webkit-transition: opacity 1s;
+      transition: opacity 1s;
+  }
 
   // Flip
   .flip {
-        -webkit-perspective: 800;
-        perspective: 800;
-        position: relative;
+    -webkit-perspective: 800;
+    perspective: 800;
+    position: relative;
+  }
+  .flip .card.flipped {
+    -webkit-transform: rotatey(-180deg);
+    transform: rotatey(-180deg);
+  }
+  .flip .card {
+    height: 179px;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transition: 0.5s;
+    transform-style: preserve-3d;
+    transition: 0.5s;
+  }
+  .flip .card .face {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    z-index: 2;
+  }
+  .flip .card .front {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+  }
+  .flip .card .back {
+    position: absolute;
+    width: 100%;
+    backface-visibility:hidden !important;
+    .card-body {
+      ul {li{line-height: 1.33rem;}}
     }
-        .flip .card.flipped {
-            -webkit-transform: rotatey(-180deg);
-            transform: rotatey(-180deg);
-        }
-        .flip .card {
-            height: 179px;
-            -webkit-transform-style: preserve-3d;
-            -webkit-transition: 0.5s;
-            transform-style: preserve-3d;
-            transition: 0.5s;
-        }
-            .flip .card .face {
-                -webkit-backface-visibility: hidden;
-                backface-visibility: hidden;
-                z-index: 2;
-            }
-            .flip .card .front {
-                position: absolute;
-                width: 100%;
-                z-index: 1;
-            }
-            .flip .card .back {
-                position: absolute;
-                width: 100%;
-                backface-visibility:hidden !important;
-                .card-body {
-                  ul {li{line-height: 1.33rem;}}
-                }
-            }
-            .flip .card .back {
-                -webkit-transform: rotatey(-180deg);
-                transform: rotatey(-180deg);
-            }
+  }
+  .flip .card .back {
+    -webkit-transform: rotatey(-180deg);
+    transform: rotatey(-180deg);
+  }
 
 
   ///// TABLES
@@ -344,54 +287,6 @@ img {pointer-events: none !important;}
       &.bg-success {
         border-color: $green;
         background-color: rgba($green,.5) !important;
-      }
-    }
-  }
-
-
-  // status box
-  .status {
-    background: $white;
-    width: auto;
-    height: 36px;
-    border: 1px solid #DEE0EC;
-    border-radius: 80px;
-    position: fixed;
-    bottom: 2%;
-    right: 2%;
-    text-align: center;
-    .lnr {
-      font-weight: bold;
-      font-size: 105%;
-    }
-    ul {
-      transform: translateY(50%) translateX(0);
-      display: inline-block;
-      position: relative;
-      padding: 0 2em;
-    }
-    li {
-      font-size: .9em;
-      position: relative;
-      float: left;
-      margin-right: 4px;
-      &.pending {
-        i {
-          font-size: .9em;
-          color: $yellow;
-        }
-      }
-      &.statusOK {
-        i {
-          color: $green;
-          font-size: .9em;
-          position: absolute;
-        }
-      }
-      small {
-        margin-left: 5px;
-        font-size: 80%;
-        font-weight: 600;
       }
     }
   }
@@ -481,10 +376,7 @@ img {pointer-events: none !important;}
     stroke-dasharray: 745.74853515625;
     animation: dash 4s ease-out forwards;
   }
-  @keyframes dash {
-    0% {stroke-dashoffset: 745.74853515625;}
-    100% {stroke-dashoffset: 0;}
-  }
+
   //tab-pane content
   .tab-pane-line {
     padding: .5em;
@@ -683,26 +575,7 @@ img {pointer-events: none !important;}
     }
   }
 }
-@-webkit-keyframes scaleout {
-  0% {
-    -webkit-transform: scale(1);
-  }
-  100% {
-    -webkit-transform: scale(2);
-    opacity: 0;
-  }
-}
-@keyframes scaleout {
-  0% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-  100% {
-    -webkit-transform: scale(2);
-    transform: scale(2);
-    opacity: 0;
-  }
-}
+
 
 /// MODAL DETAILS
 .details {
@@ -733,35 +606,6 @@ img {pointer-events: none !important;}
   fill-opacity:1;
   fill:#1794C8;
   stroke:#1794C8;
-}
-
-@keyframes log {
-  0% {
-    stroke-dashoffset: 4500;
-    opacity:1;
-    stroke:#1794C8;
-    fill-opacity:0;
-  }
-  15%{
-    opacity:1;
-    stroke:#1794C8;
-    fill-opacity:0;
-  }
-  70%{
-    opacity:1;
-    stroke:#1794C8;
-    fill-opacity:0;
-  }
-  95%{
-    opacity:1;
-    stroke:#1794C8;
-    fill-opacity:1;
-  }
-  100%{
-    opacity:1;
-    stroke:#1794C8;
-    fill-opacity:1;
-  }
 }
 
 // Wallet creation

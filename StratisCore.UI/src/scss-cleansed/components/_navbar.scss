@@ -1,0 +1,40 @@
+.navbar {
+  .navbar-text {font-weight: bold;}
+  .form-inline {
+    a {
+      &:hover {
+        cursor: pointer;
+        .lnr {color: $primary;}
+      }
+      .lnr {
+        font-size: 1.25rem;
+        color: $gray-500;
+      }
+    }
+    .dropdown-menu {
+      .lnr {
+        margin-right: .5rem;
+        font-size: 1rem;
+        color: $gray-500;
+      }
+      &.dropdown-menu-right {
+        right: 0 !important;
+        left: auto !important;
+      }
+    }
+  }
+}
+
+
+.light {
+  .navbar {
+    background-color: $white !important;
+    box-shadow: 0 2px 27px 0 #E6E8F7;
+  }
+}
+
+.dark {
+  .navbar {
+    background-color: $black !important;
+  }
+}

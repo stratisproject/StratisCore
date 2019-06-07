@@ -1,0 +1,46 @@
+.status {
+  background: $white;
+  width: auto;
+  height: 36px;
+  border: 1px solid #DEE0EC;
+  border-radius: 80px;
+  position: fixed;
+  bottom: 2%;
+  right: 2%;
+  text-align: center;
+  .lnr {
+    font-weight: bold;
+    font-size: 105%;
+  }
+  ul {
+    transform: translateY(50%) translateX(0);
+    display: inline-block;
+    position: relative;
+    padding: 0 2em;
+  }
+  li {
+    font-size: .9em;
+    position: relative;
+    float: left;
+    margin-right: 4px;
+    color: $black;
+    &.pending {
+      i {
+        font-size: .9em;
+        color: $yellow;
+      }
+    }
+    &.statusOK {
+      i {
+        color: $green;
+        font-size: .9em;
+        position: absolute;
+      }
+    }
+    small {
+      margin-left: 5px;
+      font-size: 80%;
+      font-weight: 600;
+    }
+  }
+}
