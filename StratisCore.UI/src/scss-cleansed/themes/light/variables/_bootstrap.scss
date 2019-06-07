@@ -1,5 +1,5 @@
-@import "../../../node_modules/bootstrap/scss/_functions";
-@import "../../../node_modules/bootstrap/scss/mixins";
+@import "../../../../../node_modules/bootstrap/scss/_functions";
+@import "../../../../../node_modules/bootstrap/scss/mixins";
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -75,7 +75,7 @@ $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
-$light:         $gray-500 !default;
+$light:         $gray-200 !default;
 $dark:          $gray-800 !default;
 $purple:        $purple !default;
 

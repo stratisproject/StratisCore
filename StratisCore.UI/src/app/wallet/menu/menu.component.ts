@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 
 import { GlobalService } from '../../shared/services/global.service';
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
+import { ThemeService } from '../../shared/services/theme.service';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
     selector: 'app-menu',
@@ -11,13 +14,20 @@ import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confi
     styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent implements OnInit {
-  constructor(private modalService: NgbModal, private globalService: GlobalService, private router: Router) {
-      this.walletName = this.globalService.getWalletName();
-  }
-
   public testnet: boolean;
   public sidechainEnabled: boolean;
   public walletName: string;
+  public theme$: Observable<string>;
+
+  constructor(
+    private modalService: NgbModal,
+    private globalService: GlobalService,
+    private router: Router,
+    private themeService: ThemeService
+  ) {
+    this.walletName = this.globalService.getWalletName();
+    this.theme$ = this.themeService.theme;
+  }
 
   ngOnInit() {
     this.testnet = this.globalService.getTestnetEnabled();
@@ -34,5 +44,9 @@ export class MenuComponent implements OnInit {
 
   logoutClicked() {
       this.modalService.open(LogoutConfirmationComponent, { backdrop: "static" });
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 }

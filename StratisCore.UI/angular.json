@@ -20,9 +20,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/scss-cleansed/styles.scss"
+              "src/scss-cleansed/themes/light/light-theme.scss",
+              "src/scss-cleansed/themes/dark/dark-theme.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "extractCss": true
           },
           "configurations": {
             "dev": {
@@ -90,7 +92,8 @@
             "karmaConfig": "src/karma.conf.js",
             "scripts": [],
             "styles": [
-              "src/scss-cleansed/styles.scss"
+              "src/scss-cleansed/light-theme.scss",
+              "src/scss-cleansed/dark-theme.scss"
             ],
             "assets": [
               "src/assets"

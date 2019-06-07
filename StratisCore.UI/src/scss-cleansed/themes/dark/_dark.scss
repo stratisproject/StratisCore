@@ -6,15 +6,13 @@
 //
 
 ///// Variables
-$body-bg: #23272B;
-$body-color: #8C959D;
-$white: rgba($white,.85);
+// $body-bg: #23272B;
+// $body-color: #8C959D;
+// $white: rgba($white,.85);
 
 ///// BODY
 #GUI {
-  &.dark {
-    color: $body-color;
-    background-color: $body-bg !important;
+
     .btn-outline-light {&:hover {color: $white;}}
 
     ///// MENU
@@ -32,19 +30,20 @@ $white: rgba($white,.85);
     ///// CONTENT
     // Cards
     .card {
-      border: $card-border-width solid rgba(255,255,255,.1);
-      border-radius: 0 !important;
-      &:hover {
-        border: $card-border-width solid #158BCF;
-        box-shadow: 0 5px 40px rgba(0,0,0,.25);
-        background-color: #3A4147;
-      }
+      // border: 0px;
+      // border-radius: 0 !important;
+      box-shadow: 0 5px 40px rgba($black,.80);
+      // &:hover {
+      //   border: $card-border-width solid #158BCF;
 
-      .card-header {
-        background-color: #2E3439;
-        color: #A6AFB4;
-      }
-      .card-body {background-color: #2E3439;}
+      //   background-color: #3A4147;
+      // }
+
+      // .card-header {
+      //   background-color: #2E3439;
+      //   color: #A6AFB4;
+      // }
+      // .card-body {background-color: #2E3439;}
     }
     ///// TABLES
     .table {
@@ -111,6 +110,4 @@ $white: rgba($white,.85);
         }
       }
     }
-
-  }
 }

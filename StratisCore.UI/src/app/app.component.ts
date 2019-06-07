@@ -18,18 +18,23 @@ import { NodeStatus } from './shared/models/node-status';
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
-
   private subscription: Subscription;
   private readonly MaxRetryCount = 50;
   private readonly TryDelayMilliseconds = 3000;
-
   loading = true;
   loadingFailed = false;
 
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    private globalService: GlobalService,
+    private titleService: Title,
+    private electronService: ElectronService
+  ) { }
+
   ngOnInit() {
-      this.setTitle();
-      this.tryStart();
+    this.setTitle();
+    this.tryStart();
   }
 
   ngOnDestroy() {

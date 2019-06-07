@@ -6,12 +6,9 @@
 //
 
 ///// Variables
-$body-bg : #FAFBFC;
 
 ///// BODY
 #GUI {
-  &.light {
-    background-color: $body-bg !important;
     .btn-outline-light {&:hover {color: $white;}}
 
     ///// MENU
@@ -60,5 +57,4 @@ $body-bg : #FAFBFC;
         color: $black;
       }
     }
-  }
 }
