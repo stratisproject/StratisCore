@@ -20,7 +20,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/scss-cleansed/styles.scss"
+              "src/scss/styles.scss"
             ],
             "scripts": [],
             "extractCss": true
@@ -91,7 +91,7 @@
             "karmaConfig": "src/karma.conf.js",
             "scripts": [],
             "styles": [
-              "src/scss-cleansed/styles.scss"
+              "src/scss/styles.scss"
             ],
             "assets": [
               "src/assets"
