@@ -1,0 +1,26 @@
+.Loading {
+  padding: 30px;
+  text-align: center;
+  position: relative;
+  &.LoadingSend {padding: 0 !important;}
+}
+.Loading:before {
+  content: '';
+  position: absolute;
+  left: calc(50% - 15px);
+  width: 30px;
+  height: 30px;
+  background-color: $primary;
+  opacity: .75;
+  border-radius: 100%;
+  -webkit-animation: scaleout 1.5s infinite ease-in-out;
+  animation: scaleout 1.5s infinite ease-in-out;
+
+}
+.Loading {
+  &.unset-left {
+    &:before{
+      left : unset;
+    }
+  }
+}

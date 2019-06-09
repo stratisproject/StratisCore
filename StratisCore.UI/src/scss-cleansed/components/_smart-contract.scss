@@ -1,0 +1,57 @@
+.smartcontracts {
+  .card {
+    min-height: 120px;
+    &:hover {border-color: $purple !important;}
+
+    .card-header {padding: 1rem 1.25rem;}
+    .card-body {padding: 0rem 1rem 1rem 1rem;}
+    .sub {
+      font-size: ($font-size-base * 2);
+      margin-bottom: 0 !important;
+      strong {font-weight: 600;}
+      small {
+        font-weight: light;
+        font-size: 50%;
+      }
+    }
+    // table
+    .table {
+      margin: 1rem 0 !important;
+      th {
+        color: #A6AFB4;
+        font-weight: normal;
+        text-transform: uppercase;
+      }
+      td {
+        padding: .75rem .25rem !important;
+        vertical-align: middle;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+        // amount
+        strong {color: $black;}
+        small {color: rgba($black, .7);}
+        // see details
+        .btn-primary {
+          border-radius: 50%;
+          background-color: rgba($primary, .1);
+          color: $primary;
+          border: $border-width solid transparent;
+          padding: 0;
+          width: 18px;
+          height: 18px;
+          &:hover {
+            background-color: $primary;
+            color: $white;
+          }
+        }
+      }
+      .badge-info {
+        color: #95B1C2;
+        background-color: rgba(#C0DCED,.3);
+        border: $border-width solid #C0DCED;
+      }
+    }
+  }
+}

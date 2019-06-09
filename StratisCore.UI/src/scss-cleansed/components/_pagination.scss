@@ -1,0 +1,17 @@
+////// PAGINATION
+.ngx-pagination {
+  padding-left: 0 !important;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+
+  li {
+    a {
+      color: $gray-700;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}

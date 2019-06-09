@@ -1,3 +1,134 @@
 .modal-content {
   padding: .75rem;
 }
+
+
+.modal {
+  label {
+    color: $black;
+    margin-bottom: .25rem !important;
+  }
+  .alert {text-align: center !important;}
+  .blockID {
+    word-wrap: break-word;
+    margin-right: 0 !important;
+  }
+  .badge-warning {
+    color: #A49803;
+    background-color: #FFF8A7;
+  }
+  .blockText {
+    font-weight: 500;
+    user-select: auto !important;
+  }
+  .btn-group {
+      label {color: $white;}
+    &.fee {
+      label {
+        margin-bottom: 0 !important;
+        &.btn-outline-danger {color: $red;}
+        &.btn-outline-warning {color: $yellow;}
+        &.btn-outline-success {color: $green;}
+        &.active {color: $white !important;}
+      }
+    }
+    label {
+      &:hover {color: $white;}
+      input {
+        position: absolute;
+        opacity: 0;
+      }
+    }
+  }
+  // fee
+  .btn-outline-danger:not([disabled]):not(.disabled).active {box-shadow: none !important;}
+  .btn-outline-warning:not([disabled]):not(.disabled).active {box-shadow: none !important;}
+  .btn-outline-success:not([disabled]):not(.disabled).active {box-shadow: none !important;}
+  // content
+  .modal-title {
+    font-size: 2rem;
+    font-weight: 300;
+  }
+  .modal-dialog {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
+    // special addresses
+    .tab-content {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+  }
+  .myAddress {
+    .btn {&:hover {cursor: pointer;}}
+    .lnr-file-add {
+      font-size: .8rem;
+      display: block;
+    }
+  }
+  button {
+    &.closemodal {
+      z-index: 5;
+      padding: 0;
+      &:hover {cursor: pointer;}
+      i {
+        font-size: 2rem;
+        color: $gray-500;
+      }
+    }
+  }
+  // Checkmark
+  #checkmark {
+    stroke: $green !important;
+    stroke-dashoffset: 745.74853515625;
+    stroke-dasharray: 745.74853515625;
+    animation: dash 4s ease-out forwards;
+  }
+
+  //tab-pane content
+  .tab-pane-line {
+    padding: .5em;
+    border-bottom: 1px dotted #ccc;
+  }
+}
+
+
+// Modal Send
+.ModalSend {
+  .tab-content {padding-bottom: 0 !important;}
+  .nav-link {&.active {color: $white !important;}}
+  #purple-bg {
+    &.nav-link {
+      background-color: $white !important;
+      color: $primary !important;
+    }
+  } // for none active sidechains pill
+  #purple-bg {
+    &.nav-link {
+      &.active {
+        background-color: $purple !important;
+        color: $white !important;
+      }
+    }
+  } // for none active sidechains pill
+}
+
+
+/// MODAL DETAILS
+.details {
+  .list-inline {margin-bottom: .5rem;}
+  .alert {
+    margin-bottom: 0;
+    padding: .75rem .4rem;
+  }
+  &.modal-footer {padding: 0 15px;}
+}
+
+
+.modal-body {
+  .nav-tabs {
+    border-bottom: 0 !important;
+  }
+}

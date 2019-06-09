@@ -1,0 +1,58 @@
+.jumbotron {
+  h5 {
+    text-transform: uppercase;
+    font-size: $font-size-base;
+    font-weight: 300;
+    color: #A6AFB4;
+  }
+  .lead {
+    font-size: 3rem;
+    margin-bottom: 0 !important;
+    strong {
+      font-weight: 500;
+      user-select: auto !important;
+    }
+    small {
+      font-weight: light;
+      font-size: 30%;
+    }
+  }
+  strong {font-weight: 500;}
+  em {font-weight: light;}
+
+  // buttons
+  .btn-lg {
+    border-radius: 0;
+    padding: 1.25rem 0 0 0;
+    height: 80px;
+    width: 80px;
+
+    &:hover {
+      cursor: pointer;
+      .icon {
+        font-size: 20px;
+        transition-duration: .5s;
+      }
+      .text-uppercase {
+        display: block;
+        opacity: 1;
+        transition-duration: .5s;
+      }
+    }
+    .icon {
+      font-size: 40px;
+      color: $white;
+      transition-duration: .5s;
+      font-weight: 300;
+    }
+    .text-uppercase {
+      display: block;
+      opacity: 0;
+      transition-duration: .5s;
+      font-size: .9rem;
+      font-weight: 400;
+      color: $white;
+    }
+  }
+  .Addresses {dl, dt, dd {margin-bottom: 0 !important;}}
+}

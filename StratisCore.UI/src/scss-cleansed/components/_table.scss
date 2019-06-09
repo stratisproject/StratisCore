@@ -24,3 +24,25 @@
     }
   }
 }
+
+
+///// TABLES
+.table {
+  .bubble {
+    height: 10px;
+    width: 10px;
+    border: 2px solid;
+    border-radius: 50%;
+    display: inline-block;
+
+    &.bg-warning {
+      border-color: $yellow;
+      background-color: rgba($yellow, .5) !important;
+    }
+
+    &.bg-success {
+      border-color: $green;
+      background-color: rgba($green, .5) !important;
+    }
+  }
+}

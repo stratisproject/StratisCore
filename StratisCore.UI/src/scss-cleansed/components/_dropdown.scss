@@ -4,3 +4,11 @@
     left: auto;
   }
 }
+
+
+// no caret
+.dropdown-menu-nocaret {
+  .dropdown-toggle::after {
+    display: none;
+  }
+}
