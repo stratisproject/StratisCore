@@ -5,6 +5,7 @@ import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
+import { NumberToStringPipe } from '@shared/pipes/number-to-string.pipe';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -306,7 +307,7 @@ export class SendComponent implements OnInit, OnDestroy {
       true,
       false,
       this.sendToSidechainForm.get("destinationAddress").value.trim(),
-      this.opReturnAmount / 100000000
+      new NumberToStringPipe().transform((this.opReturnAmount / 100000000))
     );
 
     this.apiService.buildTransaction(this.transaction)
