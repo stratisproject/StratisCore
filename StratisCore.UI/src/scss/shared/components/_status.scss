@@ -1,8 +1,6 @@
 .status {
-  background: $white;
   width: auto;
   height: 36px;
-  border: 1px solid #DEE0EC;
   border-radius: 80px;
   position: fixed;
   bottom: 2%;
@@ -23,7 +21,7 @@
     position: relative;
     float: left;
     margin-right: 4px;
-    color: $black;
+
     &.pending {
       i {
         font-size: .9em;
@@ -44,3 +42,27 @@
     }
   }
 }
+
+
+.dark {
+  .status {
+    background: $black;
+    border: 1px solid #333;
+
+    li {
+      color: #DEE0EC;
+    }
+  }
+}
+
+.light {
+  .status {
+    background: $white;
+    border: 1px solid #DEE0EC;
+
+    li {
+      color: $black;
+    }
+  }
+}
+

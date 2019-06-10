@@ -1,0 +1,9 @@
+.card {
+  // background-color: #2E3439;
+  box-shadow: 1px 4px 20px rgba(0,0,0, 0.2);
+
+  .card-header {
+    color: #A6AFB4;
+    border-bottom: 1px solid $body-bg;
+  }
+}
