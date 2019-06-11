@@ -50,6 +50,12 @@
     "package:windows86": "npm run build:prod && electron-builder build --windows --ia32",
     "package:windows64": "npm run build:prod && electron-builder build --windows --x64",
     "package:mac": "npm run build:prod && electron-builder build --mac",
+    "package:sidechain:linux": "npm run build:prod && electron-builder build --linux --config ./electron-sidechain-builder.json",
+    "package:sidechain:linuxarm": "npm run build:prod && electron-builder build --linux --armv7l --config ./electron-sidechain-builder.json",
+    "package:sidechain:windows": "npm run build:prod && electron-builder build --windows --config ./electron-sidechain-builder.json",
+    "package:sidechain:windows86": "npm run build:prod && electron-builder build --windows --ia32 --config ./electron-sidechain-builder.json",
+    "package:sidechain:windows64": "npm run build:prod --sidechain && electron-builder build --windows --x64 --config ./electron-sidechain-builder.json",
+    "package:sidechain:mac": "npm run build:prod && electron-builder build --mac --config ./electron-sidechain-builder.json",
     "test": "npm run postinstall:web && ng test",
     "e2e": "npm run postinstall:web && ng e2e"
   },

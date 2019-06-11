@@ -6,6 +6,9 @@ if (os.arch() == 'arm') {
   app.disableHardwareAcceleration();
 }
 
+// Set to true if you want to build Core for sidechains
+const buildForSidechain = true;
+
 let serve;
 let testnet;
 let sidechain;
@@ -15,6 +18,10 @@ serve = args.some(val => val === "--serve" || val === "-serve");
 testnet = args.some(val => val === "--testnet" || val === "-testnet");
 sidechain = args.some(val => val === "--sidechain" || val === "-sidechain");
 nodaemon = args.some(val => val === "--nodaemon" || val === "-nodaemon");
+
+if (buildForSidechain) {
+  sidechain = true;
+}
 
 // Set default API port according to network
 let apiPortDefault;
