@@ -23,6 +23,11 @@ if (buildForSidechain) {
   sidechain = true;
 }
 
+let applicationName = 'Stratis Core';
+if (sidechain) {
+  applicationName = 'Cirrus Core';
+}
+
 // Set default API port according to network
 let apiPortDefault;
 if (testnet && !sidechain) {
@@ -50,7 +55,7 @@ daemonIP = coreargs.daemonip;
 apiPort = coreargs.apiport;
 
 // Prevents daemon from starting if connecting to remote daemon.
-if (daemonIP != 'localhost') {
+if (daemonIP !== 'localhost') {
   nodaemon = true;
 }
 
@@ -86,7 +91,7 @@ function createWindow() {
     frame: true,
     minWidth: 1150,
     minHeight: 650,
-    title: 'Stratis Core'
+    title: applicationName
   });
 
   if (serve) {
