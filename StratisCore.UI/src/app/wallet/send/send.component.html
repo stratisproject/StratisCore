@@ -132,7 +132,8 @@
               </div>
               <div class="form-group clearfix">
                 <div>
-                  <label class="blockText text-danger">An additional amount of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.</label>
+                  <div class="alert alert-warning py-1">An additional amount of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.</div>
+                  <div class="alert alert-warning py-1">Please note that sending from the mainchain to a sidechain requires 500 confirmations. Sending from a sidechain to the mainchain requires 240 confirmations.</div>
                 </div>
               </div>
               <div class="form-group clearfix">

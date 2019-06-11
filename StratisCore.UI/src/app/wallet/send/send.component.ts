@@ -87,7 +87,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.sendToSidechainForm = this.fb.group({
       "federationAddress": ["", Validators.compose([Validators.required, Validators.minLength(26)])],
       "destinationAddress": ["", Validators.compose([Validators.required, Validators.minLength(26)])],
-      "amount": ["", Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((this.spendableBalance - this.estimatedFee)/100000000)(control)])],
+      "amount": ["", Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(1), (control: AbstractControl) => Validators.max((this.spendableBalance - this.estimatedFee)/100000000)(control)])],
       "fee": ["medium", Validators.required],
       "password": ["", Validators.required]
     });
@@ -153,7 +153,7 @@ export class SendComponent implements OnInit, OnDestroy {
     'amount': {
       'required': 'An amount is required.',
       'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-      'min': "The amount has to be more or equal to 0.00001 Stratis.",
+      'min': "The amount has to be more or equal to 0.00001.",
       'max': 'The total transaction amount exceeds your spendable balance.'
     },
     'fee': {
@@ -184,7 +184,7 @@ export class SendComponent implements OnInit, OnDestroy {
     'amount': {
       'required': 'An amount is required.',
       'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-      'min': "The amount has to be more or equal to 0.00001 Stratis.",
+      'min': "The amount has to be more or equal to 1.",
       'max': 'The total transaction amount exceeds your spendable balance.'
     },
     'fee': {

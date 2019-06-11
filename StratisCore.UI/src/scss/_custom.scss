@@ -499,13 +499,6 @@ img {pointer-events: none !important;}
   }
 }
 
-// for cross-chain modal look
-.stratis-green-shadow {
-  .modal-content {
-    border: 1px solid $stratis-green !important;
-    box-shadow: 0 5px 20px 0 rgba($stratis-green,.4) !important;
-  }
-}
 .modal-body {
   .nav-tabs {border-bottom: 0 !important;}
 }
