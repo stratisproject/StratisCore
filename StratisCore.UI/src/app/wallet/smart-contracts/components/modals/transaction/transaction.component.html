@@ -62,7 +62,7 @@
                                 </select>
                             </div>
                             <div class="mb-2 col-4" [formGroupName]="i">
-                                <input type="text" 
+                                <input type="text"
                                         class="form-control form-control-sm"
                                         formControlName="value"
                                         id="Value"
@@ -90,7 +90,7 @@
                             <input
                                 formControlName="methodName"
                                 id="methodName"
-                                type="text" 
+                                type="text"
                                 class="form-control"
                                 id=""
                                 placeholder="Method"
@@ -102,9 +102,9 @@
                             <input type="text"
                                    formControlName="contractAddress"
                                    id="contractAddress"
-                                   class="form-control"                                   
+                                   class="form-control"
                                    placeholder="Contract Address"
-                                   data-toggle="tooltip" data-placement="right" title="The address of the recipient contract"                                   
+                                   data-toggle="tooltip" data-placement="right" title="The address of the recipient contract"
                                    [class.is-invalid]="contractAddress.invalid && (contractAddress.dirty || contractAddress.touched)">
                         </div>
                     </div>
@@ -138,7 +138,7 @@
 
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
-            <button type="submit" data-toggle="modal" data-target="#" class="btn btn-purple btn-block" data-dismiss="modal"
+            <button type="submit" data-toggle="modal" data-target="#" class="btn btn-stratis-green btn-block" data-dismiss="modal"
                 [disabled]="!transactionForm.valid">{{buttonText}}</button>
         </div>
     </form>
