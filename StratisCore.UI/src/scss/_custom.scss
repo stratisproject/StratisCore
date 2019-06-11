@@ -492,18 +492,18 @@ img {pointer-events: none !important;}
   }
 }
 // for cross-chain modal look
-.purple-shadow {
+.stratis-green-shadow {
   .modal-content {
-    border: 1px solid $purple !important;
-    box-shadow: 0 5px 20px 0 rgba($purple,.4) !important;
+    border: 1px solid $stratis-green !important;
+    box-shadow: 0 5px 20px 0 rgba($stratis-green,.4) !important;
   }
 }
 
 // for cross-chain modal look
-.purple-shadow {
+.stratis-green-shadow {
   .modal-content {
-    border: 1px solid $purple !important;
-    box-shadow: 0 5px 20px 0 rgba($purple,.4) !important;
+    border: 1px solid $stratis-green !important;
+    box-shadow: 0 5px 20px 0 rgba($stratis-green,.4) !important;
   }
 }
 .modal-body {
@@ -514,7 +514,7 @@ img {pointer-events: none !important;}
 .smartcontracts {
   .card {
     min-height: 120px;
-    &:hover {border-color: $purple !important;}
+    &:hover {border-color: $stratis-green !important;}
 
     .card-header {padding: 1rem 1.25rem;}
     .card-body {padding: 0rem 1rem 1rem 1rem;}
@@ -573,8 +573,8 @@ img {pointer-events: none !important;}
 .code-block {
   padding: .5rem;
   border-radius: $border-radius-lg;
-  background-color: rgba($purple, .05);
-  color: rgba($purple, .8);
+  background-color: rgba($stratis-green, .05);
+  color: rgba($stratis-green, .8);
   overflow-wrap: break-word;
   display: inline-block;
   margin: .5rem 0 0;
@@ -640,16 +640,16 @@ img {pointer-events: none !important;}
 .ModalSend {
   .tab-content {padding-bottom: 0 !important;}
   .nav-link {&.active {color: $white !important;}}
-  #purple-bg {
+  #stratis-green-bg {
     &.nav-link {
       background-color: $white !important;
       color: $primary !important;
     }
   } // for none active sidechains pill
-  #purple-bg {
+  #stratis-green-bg {
     &.nav-link {
       &.active {
-        background-color: $purple !important;
+        background-color: $stratis-green !important;
         color: $white !important;
       }
     }
