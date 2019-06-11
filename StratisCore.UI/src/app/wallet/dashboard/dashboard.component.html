@@ -56,7 +56,7 @@
 
         <div class="row" *ngIf="transactionArray; else noTransactions">
           <!-- TRANSACTIONS -->
-          <div class="col-8">
+          <div class="col-8" [class.col-12]="sidechainEnabled">
             <div class="card">
               <div class="card-header">Latest Transactions</div>
               <div class="card-body">
