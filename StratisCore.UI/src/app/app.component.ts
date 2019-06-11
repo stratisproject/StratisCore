@@ -23,17 +23,19 @@ export class AppComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private readonly MaxRetryCount = 50;
   private readonly TryDelayMilliseconds = 3000;
+  public sidechainEnabled;
 
   loading = true;
   loadingFailed = false;
 
   ngOnInit() {
-      this.setTitle();
-      this.tryStart();
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    this.setTitle();
+    this.tryStart();
   }
 
   ngOnDestroy() {
-      this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
@@ -66,12 +68,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private setTitle() {
     let applicationName = "Stratis Core";
+    if (this.sidechainEnabled) {
+      applicationName = "Cirrus Core";
+    }
     let applicationVersion = this.globalService.getApplicationVersion();
     let newTitle = applicationName + " " + applicationVersion;
     this.titleService.setTitle(newTitle);
   }
 
   public openSupport() {
-    this.electronService.shell.openExternal("https://github.com/stratisproject/StratisCore/releases/tag/v1.0.0.0");
+    this.electronService.shell.openExternal("https://github.com/stratisproject/StratisCore/");
   }
 }

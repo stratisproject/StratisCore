@@ -9333,6 +9333,17 @@ img {
   text-align: center;
 }
 
+.left-login-green {
+  height: 100vh;
+  background: #3BB0BA;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: auto;
+  text-align: center;
+}
+
 .right-login {
   min-height: calc(100vh - 60px);
 }

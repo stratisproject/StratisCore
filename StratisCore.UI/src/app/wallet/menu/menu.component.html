@@ -17,7 +17,8 @@
 
       <span class="navbar-brand mx-auto">
         <a>
-          <img src="./assets/images/logo.svg" width="36" height="36" alt="Stratis">
+          <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/logo.svg" width="36" height="36" alt="Stratis">
+          <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/logo.svg" width="36" height="36" alt="Cirrus">
         </a>
       </span>
 
