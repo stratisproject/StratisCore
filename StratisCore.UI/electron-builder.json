@@ -21,14 +21,14 @@
     "!tslint.json"
   ],
   "win": {
-    "icon": "dist/assets/images/icon",
+    "icon": "dist/assets/images/stratis/icon",
     "target": [
       "nsis"
     ],
     "artifactName": "${productName}-v${version}-setup-${os}-${arch}.${ext}"
   },
   "linux": {
-    "icon": "dist/assets/images/",
+    "icon": "dist/assets/images/stratis/",
     "target": [
       "deb",
       "tar.gz"
@@ -38,7 +38,7 @@
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
   },
   "mac": {
-    "icon": "dist/assets/images/icon.icns",
+    "icon": "dist/assets/images/stratis/icon.icns",
     "target": [
       "dmg"
     ],
@@ -60,7 +60,7 @@
   },
   "extraResources": [
     "daemon/**/*",
-    "src/assets/images/icon-tray.png",
+    "src/assets/images/stratis/icon-16.png",
     "src/assets/images/license_en.txt"
   ]
 }

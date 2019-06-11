@@ -2,22 +2,22 @@ import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
-if (os.arch() == 'arm') {
+if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
 }
 
 // Set to true if you want to build Core for sidechains
-const buildForSidechain = true;
+const buildForSidechain = false;
 
 let serve;
 let testnet;
 let sidechain;
 let nodaemon;
 const args = process.argv.slice(1);
-serve = args.some(val => val === "--serve" || val === "-serve");
-testnet = args.some(val => val === "--testnet" || val === "-testnet");
-sidechain = args.some(val => val === "--sidechain" || val === "-sidechain");
-nodaemon = args.some(val => val === "--nodaemon" || val === "-nodaemon");
+serve = args.some(val => val === '--serve' || val === '-serve');
+testnet = args.some(val => val === '--testnet' || val === '-testnet');
+sidechain = args.some(val => val === '--sidechain' || val === '-sidechain');
+nodaemon = args.some(val => val === '--nodaemon' || val === '-nodaemon');
 
 if (buildForSidechain) {
   sidechain = true;
@@ -36,7 +36,7 @@ if (testnet && !sidechain) {
 }
 
 // Sets default arguments
-let coreargs = require('minimist')(args, {
+const coreargs = require('minimist')(args, {
   default : {
     daemonip: 'localhost',
     apiport: apiPortDefault
@@ -86,7 +86,7 @@ function createWindow() {
     frame: true,
     minWidth: 1150,
     minHeight: 650,
-    title: "Stratis Core"
+    title: 'Stratis Core'
   });
 
   if (serve) {
@@ -127,13 +127,12 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   if (serve) {
-    console.log("Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.")
-  }
-  else {
+    console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.')
+  } else {
     if (sidechain && !nodaemon) {
-      startDaemon("Stratis.SidechainD");
+      startDaemon('Stratis.SidechainD');
     } else if (!nodaemon) {
-      startDaemon("Stratis.StratisD")
+      startDaemon('Stratis.StratisD')
     }
   }
   createTray();
@@ -171,17 +170,17 @@ app.on('activate', () => {
 });
 
 function shutdownDaemon(daemonAddr, portNumber) {
-  var http = require('http');
-  var body = JSON.stringify({});
+  const http = require('http');
+  const body = JSON.stringify({});
 
-  var request = new http.ClientRequest({
+  const request = new http.ClientRequest({
     method: 'POST',
     hostname: daemonAddr,
     port: portNumber,
     path: '/api/node/shutdown',
     headers: {
-      "Content-Type": "application/json",
-      "Content-Length": Buffer.byteLength(body)
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(body)
     }
   })
 
@@ -194,16 +193,16 @@ function shutdownDaemon(daemonAddr, portNumber) {
 };
 
 function startDaemon(daemonName) {
-  var daemonProcess;
-  var spawnDaemon = require('child_process').spawn;
+  let daemonProcess;
+  const spawnDaemon = require('child_process').spawn;
 
-  var daemonPath;
+  let daemonPath;
   if (os.platform() === 'win32') {
     daemonPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\' + daemonName + '.exe');
-  } else if(os.platform() === 'linux') {
-	  daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
+  } else if (os.platform() === 'linux') {
+    daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
   } else {
-	  daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
+    daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
   }
 
   daemonProcess = spawnDaemon(daemonPath, [args.join(' ').replace('--','-')], {
@@ -216,15 +215,19 @@ function startDaemon(daemonName) {
 }
 
 function createTray() {
-  //Put the app in system tray
+  // Put the app in system tray
+  let iconPath = 'stratis/icon-16.png';
+  if (sidechain) {
+    iconPath = 'cirrus/icon-16.png';
+  }
   let trayIcon;
   if (serve) {
-    trayIcon = nativeImage.createFromPath('./src/assets/images/icon-tray.png');
+    trayIcon = nativeImage.createFromPath('./src/assets/images/' + iconPath);
   } else {
-    trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/images/icon-tray.png'));
+    trayIcon = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/src/assets/images/' + iconPath));
   }
 
-  let systemTray = new Tray(trayIcon);
+  const systemTray = new Tray(trayIcon);
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Hide/Show',
@@ -252,31 +255,33 @@ function createTray() {
   });
 
   app.on('window-all-closed', function () {
-    if (systemTray) systemTray.destroy();
+    if (systemTray) {
+      systemTray.destroy();
+    }
   });
-};
+}
 
 function writeLog(msg) {
   console.log(msg);
-};
+}
 
 function createMenu() {
-  var menuTemplate = [{
+  const menuTemplate = [{
     label: app.getName(),
     submenu: [
-      { label: "About " + app.getName(), selector: "orderFrontStandardAboutPanel:" },
-      { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
+      { label: 'About ' + app.getName(), selector: 'orderFrontStandardAboutPanel:' },
+      { label: 'Quit', accelerator: 'Command+Q', click: function() { app.quit(); }}
     ]}, {
-    label: "Edit",
+    label: 'Edit',
     submenu: [
-      { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-      { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-      { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-      { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-      { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-      { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+      { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
+      { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+      { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+      { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+      { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+      { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
     ]}
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
-};
+}
