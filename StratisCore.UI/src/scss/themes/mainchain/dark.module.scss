@@ -1,0 +1,30 @@
+@import '../../shared/base/module';
+
+body.mainchain.dark {
+  // Import variables necessary in order of importance.
+  @import './mainchain-colors';     // global brand colors
+  @import '../../modes/dark/_dark-variables';               // theme specific variables
+  @import '../../shared/variables/bootstrap';  // shared generic bootstrap variables
+
+
+  // Import all scss/sass node module packages that need specific theme changes.
+  @import '../../../../node_modules/bootstrap/scss/bootstrap';
+
+
+  // Add or modify theme component styles.
+  @import '../../modes/dark/components/module';
+  @import '../../shared/components/module';
+
+  // Set default body attributes per theme.
+  background-color: $body-bg;
+  color: $body-color;
+  margin: 0;
+  text-align: left;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  min-height: 100%;
+  opacity: 1 !important;
+  transition: opacity .2s ease-in;
+}

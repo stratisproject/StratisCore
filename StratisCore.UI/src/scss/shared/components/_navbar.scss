@@ -1,22 +1,31 @@
 .navbar {
-  .navbar-text {font-weight: bold;}
+  .navbar-text {
+    font-weight: bold;
+  }
+
   .form-inline {
     a {
       &:hover {
         cursor: pointer;
-        .lnr {color: $primary;}
+
+        .lnr {
+          color: $primary;
+        }
       }
+
       .lnr {
         font-size: 1.25rem;
         color: $gray-500;
       }
     }
+
     .dropdown-menu {
       .lnr {
         margin-right: .5rem;
         font-size: 1rem;
         color: $gray-500;
       }
+
       &.dropdown-menu-right {
         right: 0 !important;
         left: auto !important;

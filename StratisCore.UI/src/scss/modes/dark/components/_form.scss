@@ -1,0 +1,8 @@
+label {
+  color: $gray-300;
+}
+
+.form-control[readonly],
+.form-control[disabled] {
+  color: $gray-700;
+}

@@ -1,0 +1,13 @@
+.table {
+  .bubble {
+    &.bg-warning {
+      border-color: $yellow;
+      background-color: rgba($yellow, .3) !important;
+    }
+
+    &.bg-success {
+      border-color: $green;
+      background-color: rgba($green, .3) !important;
+    }
+  }
+}

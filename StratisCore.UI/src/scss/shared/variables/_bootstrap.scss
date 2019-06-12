@@ -333,8 +333,8 @@ $jumbotron-padding:                 2rem !default;
 // Cards
 $card-spacer-y:                     .75rem !default;
 $card-spacer-x:                     1.25rem !default;
-$card-border-width:                 $border-width !default;
-$card-border-radius:                $border-radius !default;
+$card-border-width:                 0px !default;
+$card-border-radius:                0px !default;
 $card-inner-border-radius:          calc(#{$card-border-radius} - #{$card-border-width}) !default;
 $card-img-overlay-padding:          1.25rem !default;
 $card-group-margin:                 ($grid-gutter-width / 2) !default;

@@ -1,2 +1,8 @@
 .invalid-feedback,
-.valid-feedback {font-size: .8rem;}
+.valid-feedback {
+  font-size: .8rem;
+}
+
+label {
+  margin-bottom: .25rem !important;
+}

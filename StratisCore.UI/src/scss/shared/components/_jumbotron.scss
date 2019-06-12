@@ -5,20 +5,29 @@
     font-weight: 300;
     color: #A6AFB4;
   }
+
   .lead {
     font-size: 3rem;
     margin-bottom: 0 !important;
+
     strong {
       font-weight: 500;
       user-select: auto !important;
     }
+
     small {
       font-weight: light;
       font-size: 30%;
     }
   }
-  strong {font-weight: 500;}
-  em {font-weight: light;}
+
+  strong {
+    font-weight: 500;
+  }
+
+  em {
+    font-weight: light;
+  }
 
   // buttons
   .btn-lg {
@@ -29,22 +38,26 @@
 
     &:hover {
       cursor: pointer;
+
       .icon {
         font-size: 20px;
         transition-duration: .5s;
       }
+
       .text-uppercase {
         display: block;
         opacity: 1;
         transition-duration: .5s;
       }
     }
+
     .icon {
       font-size: 40px;
       color: $white;
       transition-duration: .5s;
       font-weight: 300;
     }
+
     .text-uppercase {
       display: block;
       opacity: 0;
@@ -54,5 +67,13 @@
       color: $white;
     }
   }
-  .Addresses {dl, dt, dd {margin-bottom: 0 !important;}}
+
+  .Addresses {
+
+    dl,
+    dt,
+    dd {
+      margin-bottom: 0 !important;
+    }
+  }
 }

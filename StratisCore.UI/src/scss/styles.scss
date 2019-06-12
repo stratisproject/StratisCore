@@ -1,9 +1,0 @@
-// Main Stratis Core styles.scss import file
-
-// Import shared module first, both themes
-// will use these variables and styles
-@import 'shared/module';
-
-// Import theme modules individually
-@import 'light/module';
-@import 'dark/module';

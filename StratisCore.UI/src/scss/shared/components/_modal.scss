@@ -1,86 +1,134 @@
 .modal-content {
   padding: .75rem;
   border-radius: 0;
-  border: 1px solid $primary !important;
+  margin: 20px auto;
+  width: calc(100% - 40px);
 }
 
 
 .modal {
-  label {
-    color: $black;
-    margin-bottom: .25rem !important;
+  overflow-y: scroll;
+
+  .alert {
+    text-align: center !important;
   }
-  .alert {text-align: center !important;}
+
   .blockID {
     word-wrap: break-word;
     margin-right: 0 !important;
   }
+
   .badge-warning {
     color: #A49803;
     background-color: #FFF8A7;
   }
+
   .blockText {
     font-weight: 500;
     user-select: auto !important;
   }
+
   .btn-group {
-      label {color: $white;}
+    label {
+      color: $white;
+    }
+
     &.fee {
       label {
         margin-bottom: 0 !important;
-        &.btn-outline-danger {color: $red;}
-        &.btn-outline-warning {color: $yellow;}
-        &.btn-outline-success {color: $green;}
-        &.active {color: $white !important;}
+
+        &.btn-outline-danger {
+          color: $red;
+        }
+
+        &.btn-outline-warning {
+          color: $yellow;
+        }
+
+        &.btn-outline-success {
+          color: $green;
+        }
+
+        &.active {
+          color: $white !important;
+        }
       }
     }
+
     label {
-      &:hover {color: $white;}
+      &:hover {
+        color: $white;
+      }
+
       input {
         position: absolute;
         opacity: 0;
       }
     }
   }
+
   // fee
-  .btn-outline-danger:not([disabled]):not(.disabled).active {box-shadow: none !important;}
-  .btn-outline-warning:not([disabled]):not(.disabled).active {box-shadow: none !important;}
-  .btn-outline-success:not([disabled]):not(.disabled).active {box-shadow: none !important;}
+  .btn-outline-danger:not([disabled]):not(.disabled).active {
+    box-shadow: none !important;
+  }
+
+  .btn-outline-warning:not([disabled]):not(.disabled).active {
+    box-shadow: none !important;
+  }
+
+  .btn-outline-success:not([disabled]):not(.disabled).active {
+    box-shadow: none !important;
+  }
+
   // content
   .modal-title {
     font-size: 2rem;
     font-weight: 300;
   }
+
   .modal-dialog {
     min-height: calc(100vh - 60px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: auto;
+
     // special addresses
     .tab-content {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
+      flex: 0 0 100% !important;
+      max-width: 100% !important;
     }
   }
+
   .myAddress {
-    .btn {&:hover {cursor: pointer;}}
+    .btn {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
     .lnr-file-add {
       font-size: .8rem;
       display: block;
     }
   }
+
   button {
     &.closemodal {
       z-index: 5;
       padding: 0;
-      &:hover {cursor: pointer;}
+
+      &:hover {
+        cursor: pointer;
+      }
+
       i {
         font-size: 2rem;
         color: $gray-500;
       }
     }
   }
+
   // Checkmark
   #checkmark {
     stroke: $green !important;
@@ -99,14 +147,24 @@
 
 // Modal Send
 .ModalSend {
-  .tab-content {padding-bottom: 0 !important;}
-  .nav-link {&.active {color: $white !important;}}
+  .tab-content {
+    padding-bottom: 0 !important;
+  }
+
+  .nav-link {
+    &.active {
+      color: $white !important;
+    }
+  }
+
   #purple-bg {
     &.nav-link {
       background-color: $white !important;
       color: $primary !important;
     }
-  } // for none active sidechains pill
+  }
+
+  // for none active sidechains pill
   #purple-bg {
     &.nav-link {
       &.active {
@@ -114,18 +172,26 @@
         color: $white !important;
       }
     }
-  } // for none active sidechains pill
+  }
+
+  // for none active sidechains pill
 }
 
 
 /// MODAL DETAILS
 .details {
-  .list-inline {margin-bottom: .5rem;}
+  .list-inline {
+    margin-bottom: .5rem;
+  }
+
   .alert {
     margin-bottom: 0;
     padding: .75rem .4rem;
   }
-  &.modal-footer {padding: 0 15px;}
+
+  &.modal-footer {
+    padding: 0 15px;
+  }
 }
 
 

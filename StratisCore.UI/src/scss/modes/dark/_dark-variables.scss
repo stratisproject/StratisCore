@@ -39,7 +39,7 @@ $table-bg:                    transparent !default;
 $table-accent-bg:             rgba($black,.05) !default;
 $table-hover-bg:              rgba($black,.075) !default;
 $table-active-bg:             $table-hover-bg !default;
-$table-border-color:          $gray-200 !default;
+$table-border-color:          $gray-900 !default;
 $table-head-bg:               $gray-200 !default;
 $table-head-color:            $gray-700 !default;
 $table-dark-bg:               $gray-900 !default;
@@ -59,10 +59,10 @@ $btn-link-disabled-color:     $gray-600 !default;
 
 
 // Forms
-$input-bg:                              $black !default;
-$input-disabled-bg:                     $gray-200 !default;
-$input-color:                           $gray-700 !default;
-$input-border-color:                    $gray-400 !default;
+$input-bg:                              $gray-700 !default;
+$input-disabled-bg:                     $gray-600 !default;
+$input-color:                           $gray-500 !default;
+$input-border-color:                    $gray-800 !default;
 $input-box-shadow:                      inset 0 1px 1px rgba($black,.075) !default;
 $input-focus-bg:                        $input-bg !default;
 $input-focus-border-color:              lighten(theme-color("primary"), 25%) !default;
