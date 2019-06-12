@@ -20,7 +20,26 @@
               "src/assets"
             ],
             "styles": [
-              "src/scss/styles.scss"
+              {
+                "input": "src/scss/themes/mainchain/dark.module.scss",
+                "bundleName": "mainchain-dark",
+                "lazy": true
+              },
+              {
+                "input": "src/scss/themes/mainchain/light.module.scss",
+                "bundleName": "mainchain-light",
+                "lazy": true
+              },
+              {
+                "input": "src/scss/themes/sidechain/dark.module.scss",
+                "bundleName": "sidechain-dark",
+                "lazy": true
+              },
+              {
+                "input": "src/scss/themes/sidechain/light.module.scss",
+                "bundleName": "sidechain-light",
+                "lazy": true
+              }
             ],
             "scripts": [],
             "extractCss": true

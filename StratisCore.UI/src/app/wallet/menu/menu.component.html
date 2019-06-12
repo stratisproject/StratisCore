@@ -28,9 +28,9 @@
                   <div ngbDropdownMenu class="dropdown-menu-right">
                       <button class="dropdown-item d-flex align-items-center" type="button" (click)="openAddressBook()"><i class="lnr lnr-book"></i>Address Book</button>
                       <button class="dropdown-item d-flex align-items-center" type="button" (click)="openAdvanced()"><i class="lnr lnr-cog"></i>Advanced</button>
-                      <ng-container *ngIf="theme$ | async as theme">
-                        <button class="dropdown-item d-flex align-items-center" type="button" (click)="toggleTheme()" *ngIf="theme === 'dark'"><i class="lnr lnr-sun"></i>Light Mode</button>
-                        <button class="dropdown-item d-flex align-items-center" type="button" (click)="toggleTheme()" *ngIf="theme === 'light'"><i class="lnr lnr-moon"></i>Dark Mode</button>
+                      <ng-container *ngIf="themeMode$ | async as themeMode">
+                        <button class="dropdown-item d-flex align-items-center" type="button" (click)="toggleTheme()" *ngIf="themeMode === 'dark'"><i class="lnr lnr-sun"></i>Light Mode</button>
+                        <button class="dropdown-item d-flex align-items-center" type="button" (click)="toggleTheme()" *ngIf="themeMode === 'light'"><i class="lnr lnr-moon"></i>Dark Mode</button>
                       </ng-container>
                       <div class="dropdown-divider"></div>
                       <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal" (click)="logoutClicked()" data-target="#modalLogout"><i class="lnr lnr-exit"></i> Logout</button>

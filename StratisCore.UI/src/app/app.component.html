@@ -1,4 +1,4 @@
-<main *ngIf="theme$ | async as theme" [ngClass]="theme">
+<main [ngClass]="themeMode$ | async">
   <div *ngIf="loading">
       <div class="login">
           <div class="row align-items-center h-100">

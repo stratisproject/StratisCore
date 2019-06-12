@@ -17,7 +17,7 @@ export class MenuComponent implements OnInit {
   public testnet: boolean;
   public sidechainEnabled: boolean;
   public walletName: string;
-  public theme$: Observable<string>;
+  public themeMode$: Observable<string>;
 
   constructor(
     private modalService: NgbModal,
@@ -26,7 +26,7 @@ export class MenuComponent implements OnInit {
     private themeService: ThemeService
   ) {
     this.walletName = this.globalService.getWalletName();
-    this.theme$ = this.themeService.theme;
+    this.themeMode$ = this.themeService.mode;
   }
 
   ngOnInit() {

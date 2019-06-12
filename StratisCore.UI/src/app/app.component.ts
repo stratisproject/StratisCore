@@ -24,7 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly TryDelayMilliseconds = 3000;
   loading = true;
   loadingFailed = false;
-  theme$: Observable<string>;
+  themeMode$: Observable<string>;
 
   constructor(
     private router: Router,
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private electronService: ElectronService,
     private themeService: ThemeService
   ) {
-    this.theme$ = this.themeService.theme;
+    this.themeMode$ = this.themeService.mode;
   }
 
   ngOnInit() {
