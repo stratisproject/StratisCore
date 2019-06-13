@@ -8,6 +8,7 @@ import { ModalService } from '@shared/services/modal.service';
 
 import { WalletCreation } from '@shared/models/wallet-creation';
 import { SecretWordIndexGenerator } from './secret-word-index-generator';
+import { GlobalService } from '@shared/services/global.service';
 
 @Component({
   selector: 'app-confirm-mnemonic',
@@ -18,16 +19,18 @@ export class ConfirmMnemonicComponent implements OnInit {
 
   public secretWordIndexGenerator = new SecretWordIndexGenerator();
 
-  constructor(private apiService: ApiService, private genericModalService: ModalService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder) {
+  constructor(private apiService: ApiService, private genericModalService: ModalService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder, private globalService: GlobalService) {
     this.buildMnemonicForm();
   }
   private newWallet: WalletCreation;
   private subscription: Subscription;
+  public sidechainEnabled: Boolean;
   public mnemonicForm: FormGroup;
   public matchError: string = "";
   public isCreating: boolean;
 
   ngOnInit() {
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.subscription = this.route.queryParams.subscribe(params => {
       this.newWallet = new WalletCreation(
         params["name"],

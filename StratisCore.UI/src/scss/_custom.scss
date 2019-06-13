@@ -79,6 +79,19 @@ img {pointer-events: none !important;}
     }
   }
 
+  .nav-link-stratis-green {
+    &:hover {
+      color: $stratis-green;
+    }
+    .active {
+      color: $stratis-green;
+    }
+  }
+
+  .active-stratis-green {
+    color: $stratis-green;
+  }
+
   ///// JUMBOTRON
   .jumbotron {
     h5 {

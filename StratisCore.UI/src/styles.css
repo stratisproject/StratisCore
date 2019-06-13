@@ -8714,6 +8714,18 @@ img {
   left: auto !important;
 }
 
+#GUI .nav-link-stratis-green:hover {
+  color: #3BB0BA;
+}
+
+#GUI .nav-link-stratis-green .active {
+  color: #3BB0BA;
+}
+
+#GUI .active-stratis-green {
+  color: #3BB0BA;
+}
+
 #GUI .jumbotron h5 {
   text-transform: uppercase;
   font-size: 0.8125rem;
@@ -9203,11 +9215,6 @@ img {
 .modal .tab-pane-line {
   padding: .5em;
   border-bottom: 1px dotted #ccc;
-}
-
-.stratis-green-shadow .modal-content {
-  border: 1px solid #3BB0BA !important;
-  box-shadow: 0 5px 20px 0 rgba(59, 176, 186, 0.4) !important;
 }
 
 .stratis-green-shadow .modal-content {

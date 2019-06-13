@@ -1,7 +1,8 @@
 <section id="GUI" class="container-fluid light">
 <div class="row">
-  <div class="col-4 left-login d-flex align-items-center">
-    <img src="./assets/images/logo_white.svg" width="160px" height="auto">
+  <div class="col-4 left-login d-flex align-items-center" [class.left-login-green]="sidechainEnabled">
+    <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
+    <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
   </div>
   <!-- /col -->
   <div class="col-8 right-login d-flex align-content-center flex-wrap">
@@ -15,8 +16,8 @@
       </div>
       <div class="modal-footer col-10 mx-auto">
         <button type="button" class="btn btn-link mr-4" (click)="onBackClicked()">&#8592; back</button>
-        <button type="button" class="btn btn-outline-primary col" (click)="onRecoverClicked()">Restore</button>
-        <button type="button" class="btn btn-primary col" (click)="onCreateClicked()">Create</button>
+        <button type="button" class="btn btn-outline-primary col" (click)="onRecoverClicked()" [class.btn-outline-stratis-green]="sidechainEnabled">Restore</button>
+        <button type="button" class="btn btn-primary col" (click)="onCreateClicked()" [class.btn-stratis-green]="sidechainEnabled">Create</button>
       </div>
     </div>
     <!-- /form -->

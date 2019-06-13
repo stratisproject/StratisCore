@@ -1,7 +1,8 @@
 <section id="GUI" class="container-fluid light">
   <div class="row">
-    <div class="col-4 left-login d-flex align-items-center">
-        <img src="./assets/images/logo_white.svg" width="160px" height="auto">
+    <div class="col-4 left-login d-flex align-items-center" [class.left-login-green]="sidechainEnabled">
+      <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
+      <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
     </div>
     <!-- /col -->
     <div class="col-8 right-login d-flex align-content-center flex-wrap">
@@ -25,7 +26,7 @@
         </div>
         <div class="modal-footer col-12">
           <button type="button" class="btn btn-outline-light" (click)="onCancelClicked()">Cancel</button>
-          <button type="button" class="btn btn-primary btn-block" (click)="onContinueClicked()">Continue</button>
+          <button type="button" class="btn btn-primary btn-block" (click)="onContinueClicked()" [class.btn-stratis-green]="sidechainEnabled">Continue</button>
         </div>
       </div>
     </div>

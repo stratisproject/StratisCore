@@ -1,7 +1,8 @@
 <section id="GUI" class="container-fluid light">
   <div class="row">
-    <div class="col-4 left-login d-flex align-items-center">
-      <img src="./assets/images/logo_white.svg" width="160px" height="auto">
+    <div class="col-4 left-login d-flex align-items-center" [class.left-login-green]="sidechainEnabled">
+      <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
+      <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
     </div>
     <!-- /col -->
     <div class="col-8 right-login d-flex align-content-center flex-wrap">
@@ -30,7 +31,7 @@
         <div *ngIf="matchError" class="text-danger">{{ matchError }}</div>
         <div class="modal-footer col-12">
           <button type="button" class="btn btn-link" (click)="onBackClicked()">&#8592; back</button>
-          <button *ngIf="!isCreating" type="button" class="btn btn-primary btn-block" [disabled]="!mnemonicForm.valid || isCreating" (click)="onConfirmClicked()">Confirm</button>
+          <button *ngIf="!isCreating" type="button" class="btn btn-primary btn-block" [class.btn-stratis-green]="sidechainEnabled" [disabled]="!mnemonicForm.valid || isCreating" (click)="onConfirmClicked()">Confirm</button>
           <!-- SVG -->
           <div *ngIf="isCreating" class="Loading col-2 mx-auto unset-left">
             <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
