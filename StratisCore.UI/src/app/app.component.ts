@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription = stream$.subscribe(
       (data: NodeStatus) => {
         this.loading = false;
-        this.router.navigate(['login'])
+        this.router.navigate(['login']);
       }, (error: any) => {
         console.log('Failed to start wallet');
         this.loading = false;
@@ -67,16 +67,19 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setTitle() {
-    let applicationName = "Stratis Core";
+    let applicationName = 'Stratis Core';
     if (this.sidechainEnabled) {
-      applicationName = "Cirrus Core";
+      applicationName = 'Cirrus Core';
     }
-    let applicationVersion = this.globalService.getApplicationVersion();
-    let newTitle = applicationName + " " + applicationVersion;
+    const applicationVersion = this.globalService.getApplicationVersion();
+    let newTitle = applicationName + ' ' + applicationVersion;
+    if (this.globalService.getTestnetEnabled()) {
+      newTitle += ' (testnet)';
+    }
     this.titleService.setTitle(newTitle);
   }
 
   public openSupport() {
-    this.electronService.shell.openExternal("https://github.com/stratisproject/StratisCore/");
+    this.electronService.shell.openExternal('https://github.com/stratisproject/StratisCore/');
   }
 }
