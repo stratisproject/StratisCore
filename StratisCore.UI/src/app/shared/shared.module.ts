@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoinNotationPipe } from './pipes/coin-notation.pipe';
+import { NumberToStringPipe } from './pipes/number-to-string.pipe';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
 import { PasswordValidationDirective } from './directives/password-validation.directive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -13,8 +14,8 @@ import { GenericModalComponent } from './components/generic-modal/generic-modal.
 
 @NgModule({
   imports: [ CommonModule ],
-  declarations: [ CoinNotationPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent ],
-  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, AutoFocusDirective, PasswordValidationDirective ],
+  declarations: [ CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent ],
+  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective ],
   entryComponents: [ GenericModalComponent ]
 })
 

@@ -68,8 +68,14 @@
                                 <th scope="row"><strong>#{{item.blockHeight}}</strong></th>
                                 <td><span class="badge badge-info">{{item.type | contractType}}</span></td>
                                 <td>
-                                    <span *ngIf="item.type != 3 && item.type != 4">{{item.hash}}</span>
-                                    <a href="javascript:void(0);" *ngIf="item.type == 3 || item.type == 4" (click)="txHashClicked(item)">{{item.hash}}</a>
+                                    <ng-container *ngIf="item.blockHeight && (item.type == 3 || item.type == 4); then clickableTxHash; else txHash">
+                                    </ng-container>
+                                    <ng-template #clickableTxHash>
+                                        <a href="javascript:void(0);" (click)="txHashClicked(item)">{{item.hash}}</a>
+                                    </ng-template>
+                                    <ng-template #txHash>
+                                        {{ item.hash }}
+                                    </ng-template>
                                 </td>
                                 <td><code class="d-inline-block">{{item.to}}</code></td>
                                 <td><sc-balance [balance]="item.amount" [coinUnit]="coinUnit"></sc-balance></td>

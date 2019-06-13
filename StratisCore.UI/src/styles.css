@@ -8606,6 +8606,11 @@ a.text-stratis-green:focus, a.text-stratis-green:hover {
   border: 0;
 }
 
+.selectable {
+  user-select: text;
+  cursor: text;
+}
+
 .visible {
   visibility: visible !important;
 }
