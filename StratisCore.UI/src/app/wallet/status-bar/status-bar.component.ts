@@ -50,7 +50,7 @@ export class StatusBarComponent implements OnInit, OnDestroy {
           this.isChainSynced = generalWalletInfoResponse.isChainSynced;
           this.connectedNodes = generalWalletInfoResponse.connectedNodes;
 
-          const processedText = `Processed ${this.lastBlockSyncedHeight} out of ${this.chainTip} blocks.`;
+          const processedText = `Processed ${this.lastBlockSyncedHeight || '0'} out of ${this.chainTip} blocks.`;
           this.toolTip = `Synchronizing.  ${processedText}`;
 
           if (this.connectedNodes == 1) {
