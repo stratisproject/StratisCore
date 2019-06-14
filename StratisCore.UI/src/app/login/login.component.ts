@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
     this.buildDecryptForm();
   }
 
+  public sidechainEnabled: boolean;
   public hasWallet: boolean = false;
   public isDecrypting = false;
   private openWalletForm: FormGroup;
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.getWalletFiles();
     this.getCurrentNetwork();
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
   }
 
   private buildDecryptForm(): void {

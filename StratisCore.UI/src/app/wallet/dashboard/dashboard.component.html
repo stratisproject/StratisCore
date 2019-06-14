@@ -20,11 +20,11 @@
             <!-- /col-->
             <div class="col text-right">
               <p>
-                <a class="btn btn-lg btn-primary" (click)="openReceiveDialog()">
+                <a class="btn btn-lg btn-primary" (click)="openReceiveDialog()" [class.btn-secondary]="sidechainEnabled">
                   <i class="icon lnr lnr-arrow-down-circle"></i>
                   <span class="text-center text-uppercase">Receive</span>
                 </a>
-                <a class="btn btn-lg btn-secondary ml-2" (click)="openSendDialog()">
+                <a class="btn btn-lg btn-primary ml-2" (click)="openSendDialog()" [class.btn-secondary]="sidechainEnabled">
                   <i class="icon lnr lnr-arrow-up-circle"></i>
                   <span class="text-center text-uppercase">Send</span>
                 </a>
@@ -56,7 +56,7 @@
 
         <div class="row" *ngIf="transactionArray; else noTransactions">
           <!-- TRANSACTIONS -->
-          <div class="col-8">
+          <div class="col-8" [class.col-12]="sidechainEnabled">
             <div class="card">
               <div class="card-header">Latest Transactions</div>
               <div class="card-body">
@@ -75,7 +75,7 @@
                   </tbody>
                 </table>
                 <div class="text-center my-2">
-                  <button type="button" class="btn btn-outline-primary" (click)="goToHistory()">Go to History</button>
+                  <button type="button" class="btn btn-outline-primary" [class.btn-outline-stratis-green]="sidechainEnabled" (click)="goToHistory()">Go to History</button>
                 </div>
               </div>
             </div>

@@ -22,11 +22,13 @@ export class CreateComponent implements OnInit {
   }
 
   public createWalletForm: FormGroup;
+  public sidechainEnabled: boolean;
   private newWallet: WalletCreation;
   private mnemonic: string;
 
   ngOnInit() {
     this.getNewMnemonic();
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
   }
 
   private buildCreateForm(): void {

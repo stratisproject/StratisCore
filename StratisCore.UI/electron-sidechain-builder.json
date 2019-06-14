@@ -1,6 +1,6 @@
 {
-  "appId": "com.stratisplatform.core",
-  "productName": "Stratis Core",
+  "appId": "com.stratisplatform.cirrus",
+  "productName": "Cirrus Core",
   "publish": null,
   "directories": {
     "output": "app-builds"
@@ -21,24 +21,24 @@
     "!tslint.json"
   ],
   "win": {
-    "icon": "dist/assets/images/stratis/icon",
+    "icon": "dist/assets/images/cirrus/icon",
     "target": [
       "nsis"
     ],
     "artifactName": "${productName}-v${version}-setup-${os}-${arch}.${ext}"
   },
   "linux": {
-    "icon": "dist/assets/images/stratis/",
+    "icon": "dist/assets/images/cirrus/",
     "target": [
       "deb",
       "tar.gz"
     ],
-    "synopsis": "StratisCore.UI: Stratis' staking wallet.",
+    "synopsis": "Cirrus Core: Stratis' sidechain wallet.",
     "category": "Utility",
     "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}"
   },
   "mac": {
-    "icon": "dist/assets/images/stratis/icon.icns",
+    "icon": "dist/assets/images/cirrus/icon.icns",
     "target": [
       "dmg"
     ],
@@ -50,7 +50,7 @@
     "perMachine": true,
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": true,
-    "guid": "ef77eb40-01cf-4516-9da6-f3c6ba6854aa",
+    "guid": "622dc6e9-66ba-465e-a6b5-ad9af17a056f",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
     "license": "src/assets/images/license_en.txt"
@@ -60,7 +60,7 @@
   },
   "extraResources": [
     "daemon/**/*",
-    "src/assets/images/stratis/icon-16.png",
+    "src/assets/images/cirrus/icon-16.png",
     "src/assets/images/license_en.txt"
   ]
 }

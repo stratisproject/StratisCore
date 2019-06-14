@@ -21,8 +21,8 @@ export class ResyncComponent implements OnInit, OnDestroy {
   private walletName: string;
   private lastBlockSyncedHeight: number;
   private chainTip: number;
-  private isChainSynced: Boolean;
-  public isSyncing: Boolean = true;
+  private isChainSynced: boolean;
+  public isSyncing: boolean = true;
   private generalWalletInfoSubscription: Subscription;
   public minDate = new Date("2009-08-09");
   public maxDate = new Date();

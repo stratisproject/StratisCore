@@ -1,7 +1,8 @@
 <section id="GUI" class="container-fluid light">
   <div class="row">
-    <div class="col-4 left-login d-flex align-items-center">
-        <img src="./assets/images/logo_white.svg" width="160px" height="auto">
+    <div class="col-4 left-login d-flex align-items-center" [class.left-login-green]="sidechainEnabled">
+      <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
+      <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
     </div>
     <!-- /col -->
     <div class="col-8 right-login d-flex align-content-center flex-wrap">
@@ -16,7 +17,7 @@
         </div>
         <div class="form-group col-12">
           <label class="text-left" for="creationDate">Earliest Possible Creation Date</label>
-          <input type="text" class="form-control" bsDatepicker formControlName="walletDate" placeholder="mm/dd/yyy" [bsConfig]="bsConfig" [minDate]="minDate" [maxDate]="maxDate"/>
+          <input type="text" class="form-control" bsDatepicker formControlName="walletDate" placeholder="mm/dd/yyyy" [bsConfig]="bsConfig" [minDate]="minDate" [maxDate]="maxDate"/>
           <div *ngIf="formErrors.walletDate" class="text-danger mt-2">{{ formErrors.walletDate }}</div>
         </div>
         <div class="form-group col-12">
@@ -37,7 +38,7 @@
         </div>
         <div class="modal-footer col-12">
           <button *ngIf="!isRecovering" type="button" class="btn btn-outline-light" (click)="onBackClicked()">Cancel</button>
-          <button *ngIf="!isRecovering" type="button" class="btn btn-primary btn-block" [disabled]="!recoverWalletForm.valid || isRecovering" (click)="onRecoverClicked()">Restore</button>
+          <button *ngIf="!isRecovering" type="button" class="btn btn-primary btn-block" [class.btn-stratis-green]="sidechainEnabled" [disabled]="!recoverWalletForm.valid || isRecovering" (click)="onRecoverClicked()">Restore</button>
           <!-- SVG -->
           <div *ngIf="isRecovering" class="Loading">
               <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

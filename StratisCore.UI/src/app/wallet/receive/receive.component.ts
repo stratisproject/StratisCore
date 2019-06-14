@@ -28,9 +28,11 @@ export class ReceiveComponent {
   public pageNumberUsed: number = 1;
   public pageNumberUnused: number = 1;
   public pageNumberChange: number = 1;
+  public sidechainEnabled: boolean;
   private errorMessage: string;
 
   ngOnInit() {
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.getUnusedReceiveAddresses();
   }
 

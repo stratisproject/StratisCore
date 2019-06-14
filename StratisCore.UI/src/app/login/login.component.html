@@ -1,7 +1,8 @@
 <section id="GUI" class="container-fluid">
   <div class="row">
-    <div class="col-4 left-login d-flex align-items-center">
-      <img src="./assets/images/logo_white.svg" width="160px" height="auto">
+    <div class="col-4 left-login d-flex align-items-center" [class.left-login-green]="sidechainEnabled">
+      <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
+      <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
     </div>
     <!-- /col -->
     <div class="col-8 right-login d-flex align-content-center flex-wrap">
@@ -21,7 +22,7 @@
         </form>
         <div class="col-12">
           <div *ngIf="hasWallet">
-            <button type="submit" class="btn btn-block btn-lg btn-primary" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
+            <button type="submit" class="btn btn-block btn-lg btn-primary" [class.btn-stratis-green]="sidechainEnabled" [disabled]="!openWalletForm.valid || isDecrypting" (click)="onDecryptClicked()">Decrypt</button>
           </div>
           <div class="row d-flex justify-content-center mt-3">
               <button [disabled]="isDecrypting" type="button" class="btn btn-block btn-link text-dark" (click)="onCreateClicked()">Create or restore a wallet</button>

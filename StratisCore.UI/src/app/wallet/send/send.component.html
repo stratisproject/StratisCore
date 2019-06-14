@@ -80,7 +80,7 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab id="purple-bg" class="nav-link purple" title="{{ secondTitle }}">
+        <ngb-tab id="stratis-green-bg" class="nav-link stratis-green" title="{{ secondTitle }}">
           <ng-template ngbTabContent>
             <form [formGroup]="sendToSidechainForm">
               <!--<div class="form-group has-danger clearfix">-->
@@ -132,7 +132,8 @@
               </div>
               <div class="form-group clearfix">
                 <div>
-                  <label class="blockText text-danger">An additional amount of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.</label>
+                  <div class="alert alert-warning py-1">An additional amount of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.</div>
+                  <div class="alert alert-warning py-1">Please note that sending from the mainchain to a sidechain requires 500 confirmations. Sending from a sidechain to the mainchain requires 240 confirmations.</div>
                 </div>
               </div>
               <div class="form-group clearfix">
@@ -144,7 +145,7 @@
             </form>
             <div class="modal-footer p-0">
               <button *ngIf="!isSending" type="button" [disabled]="isSending" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
-              <button *ngIf="!isSending" type="button" class="btn btn-purple btn-block" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee" (click)="sendToSidechain()">Send</button>
+              <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-block" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee" (click)="sendToSidechain()">Send</button>
               <!-- SVG -->
               <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
                 <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

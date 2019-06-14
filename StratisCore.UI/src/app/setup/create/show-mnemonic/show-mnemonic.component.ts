@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { WalletCreation } from '@shared/models/wallet-creation';
+import { GlobalService } from '@shared/services/global.service';
 
 @Component({
   selector: 'app-show-mnemonic',
@@ -10,13 +11,15 @@ import { WalletCreation } from '@shared/models/wallet-creation';
   styleUrls: ['./show-mnemonic.component.css']
 })
 export class ShowMnemonicComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute, private router: Router) { }
+  constructor(private route: ActivatedRoute, private router: Router, private globalService: GlobalService) { }
   private mnemonic: string;
   private subscription: Subscription;
   private newWallet: WalletCreation;
   public mnemonicArray: string[];
+  public sidechainEnabled: boolean;
 
   ngOnInit() {
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.subscription = this.route.queryParams.subscribe(params => {
       this.newWallet = new WalletCreation(
         params["name"],

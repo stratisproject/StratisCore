@@ -23,17 +23,19 @@ export class AppComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private readonly MaxRetryCount = 50;
   private readonly TryDelayMilliseconds = 3000;
+  public sidechainEnabled;
 
   loading = true;
   loadingFailed = false;
 
   ngOnInit() {
-      this.setTitle();
-      this.tryStart();
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    this.setTitle();
+    this.tryStart();
   }
 
   ngOnDestroy() {
-      this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
@@ -55,23 +57,24 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription = stream$.subscribe(
       (data: NodeStatus) => {
         this.loading = false;
-        this.router.navigate(['login'])
+        this.router.navigate(['login']);
       }, (error: any) => {
         console.log('Failed to start wallet');
         this.loading = false;
         this.loadingFailed = true;
       }
-    )
+    );
   }
 
   private setTitle() {
-    let applicationName = "Stratis Core";
-    let applicationVersion = this.globalService.getApplicationVersion();
-    let newTitle = applicationName + " " + applicationVersion;
-    this.titleService.setTitle(newTitle);
+    const applicationName = this.sidechainEnabled ? 'Cirrus Core' : 'Stratis Core';
+    const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
+    const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
+
+    this.titleService.setTitle(title);
   }
 
   public openSupport() {
-    this.electronService.shell.openExternal("https://github.com/stratisproject/StratisCore/releases/tag/v1.0.0.0");
+    this.electronService.shell.openExternal('https://github.com/stratisproject/StratisCore/');
   }
 }

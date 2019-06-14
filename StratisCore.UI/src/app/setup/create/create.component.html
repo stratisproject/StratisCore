@@ -1,7 +1,8 @@
 <section id="GUI" class="container-fluid">
   <div class="row">
-    <div class="col-4 left-login d-flex align-items-center">
-        <img src="./assets/images/logo_white.svg" width="160px" height="auto">
+    <div class="col-4 left-login d-flex align-items-center" [class.left-login-green]="sidechainEnabled">
+      <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
+      <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
     </div>
     <!-- /col -->
     <div class="col-8 right-login d-flex align-content-center flex-wrap createWallet">
@@ -40,7 +41,7 @@
         </div>
         <div class="modal-footer col-12">
           <button type="button" class="btn btn-outline-light" (click)="onBackClicked()">Cancel</button>
-          <button type="button" class="btn btn-primary btn-block" [disabled]="!createWalletForm.valid" (click)="onContinueClicked()">Create a new wallet</button>
+          <button type="button" class="btn btn-primary btn-block" [class.btn-stratis-green]="sidechainEnabled" [disabled]="!createWalletForm.valid" (click)="onContinueClicked()">Create a new wallet</button>
         </div>
       </form>
       <!-- /form -->
