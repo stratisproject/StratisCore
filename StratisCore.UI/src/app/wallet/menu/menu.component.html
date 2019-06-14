@@ -2,16 +2,16 @@
   <nav class="navbar navbar-light bg-light justify-content-between">
       <ul class="nav list-inline col-5">
         <li class="nav-item list-inline-item">
-            <a class="nav-link" [class.nav-link-stratis-green]="sidechainEnabled" routerLink="dashboard" routerLinkActive="{sidechainEnabled ? active-stratis-green : active}">Dashboard</a>
+            <a class="nav-link" [class.nav-link-stratis-green]="sidechainEnabled" routerLink="dashboard" routerLinkActive="sidechainEnabled ? active-stratis-green : active">Dashboard</a>
         </li>
         <li class="nav-item list-inline-item">
-          <a class="nav-link" [class.nav-link-stratis-green]="sidechainEnabled" routerLink="history" routerLinkActive="{sidechainEnabled ? active-stratis-green : active}">History</a>
+          <a class="nav-link" [class.nav-link-stratis-green]="sidechainEnabled" routerLink="history" routerLinkActive="sidechainEnabled ? active-stratis-green : active">History</a>
         </li>
         <!-- <li *ngIf="testnet && !sidechainEnabled" class="nav-item list-inline-item">
           <a class="nav-link" routerLink="staking" routerLinkActive="active">Cold Staking</a>
         </li> -->
         <li *ngIf="sidechainEnabled" class="nav-item list-inline-item">
-          <a class="nav-link" [class.nav-link-stratis-green]="sidechainEnabled" routerLink="smart-contracts" routerLinkActive="{sidechainEnabled ? active-stratis-green : active}">Smart Contracts</a>
+          <a class="nav-link" [class.nav-link-stratis-green]="sidechainEnabled" routerLink="smart-contracts" routerLinkActive="sidechainEnabled ? active-stratis-green : active">Smart Contracts</a>
         </li>
       </ul>
 
