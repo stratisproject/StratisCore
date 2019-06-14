@@ -63,20 +63,15 @@ export class AppComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.loadingFailed = true;
       }
-    )
+    );
   }
 
   private setTitle() {
-    let applicationName = 'Stratis Core';
-    if (this.sidechainEnabled) {
-      applicationName = 'Cirrus Core';
-    }
-    const applicationVersion = this.globalService.getApplicationVersion();
-    let newTitle = applicationName + ' ' + applicationVersion;
-    if (this.globalService.getTestnetEnabled()) {
-      newTitle += ' (testnet)';
-    }
-    this.titleService.setTitle(newTitle);
+    const applicationName = this.sidechainEnabled ? 'Cirrus Core' : 'Stratis Core';
+    const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
+    const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
+
+    this.titleService.setTitle(title);
   }
 
   public openSupport() {

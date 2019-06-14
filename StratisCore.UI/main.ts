@@ -23,10 +23,7 @@ if (buildForSidechain) {
   sidechain = true;
 }
 
-let applicationName = 'Stratis Core';
-if (sidechain) {
-  applicationName = 'Cirrus Core';
-}
+const applicationName = sidechain ? 'Cirrus Core' : 'Stratis Core';
 
 // Set default API port according to network
 let apiPortDefault;
