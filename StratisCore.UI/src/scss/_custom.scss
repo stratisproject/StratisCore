@@ -80,16 +80,13 @@ img {pointer-events: none !important;}
   }
 
   .nav-link-stratis-green {
+    &.active-stratis-green {
+      color: $stratis-green !important;
+    }
+
     &:hover {
       color: $stratis-green;
     }
-    .active {
-      color: $stratis-green;
-    }
-  }
-
-  .active-stratis-green {
-    color: $stratis-green;
   }
 
   ///// JUMBOTRON

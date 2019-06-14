@@ -8714,15 +8714,11 @@ img {
   left: auto !important;
 }
 
+#GUI .nav-link-stratis-green.active-stratis-green {
+  color: #3BB0BA !important;
+}
+
 #GUI .nav-link-stratis-green:hover {
-  color: #3BB0BA;
-}
-
-#GUI .nav-link-stratis-green .active {
-  color: #3BB0BA;
-}
-
-#GUI .active-stratis-green {
   color: #3BB0BA;
 }
 
