@@ -22,7 +22,7 @@ export class CreateComponent implements OnInit {
   }
 
   public createWalletForm: FormGroup;
-  public sidechainEnabled: Boolean;
+  public sidechainEnabled: boolean;
   private newWallet: WalletCreation;
   private mnemonic: string;
 

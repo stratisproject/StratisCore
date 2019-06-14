@@ -24,7 +24,7 @@ export class ConfirmMnemonicComponent implements OnInit {
   }
   private newWallet: WalletCreation;
   private subscription: Subscription;
-  public sidechainEnabled: Boolean;
+  public sidechainEnabled: boolean;
   public mnemonicForm: FormGroup;
   public matchError: string = "";
   public isCreating: boolean;

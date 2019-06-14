@@ -26,7 +26,7 @@ export class RecoverComponent implements OnInit {
   public minDate = new Date("2009-08-09");
   public maxDate = new Date();
   public bsConfig: Partial<BsDatepickerConfig>;
-  public sidechainEnabled: Boolean;
+  public sidechainEnabled: boolean;
   private walletRecovery: WalletRecovery;
 
   ngOnInit() {
