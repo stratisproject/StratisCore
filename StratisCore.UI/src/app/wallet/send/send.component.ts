@@ -47,6 +47,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public firstTitle: string;
   public secondTitle: string;
   public opReturnAmount: number = 1;
+  public confirmationText: string;
   private transactionHex: string;
   private responseMessage: any;
   private transaction: TransactionBuilding;
@@ -66,6 +67,8 @@ export class SendComponent implements OnInit, OnDestroy {
     if (this.address) {
       this.sendForm.patchValue({'address': this.address})
     }
+
+    this.confirmationText = this.sidechainEnabled ? 'Please note that sending from a sidechain to the mainchain requires 240 confirmations.' : 'Please note that sending from the mainchain to a sidechain requires 500 confirmations.';
   }
 
   ngOnDestroy() {
