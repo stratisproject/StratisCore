@@ -333,7 +333,7 @@ export class ApiService {
   }
 
   /**
- * Verify the given signature with the private key of the given address
+ * Verify the given signature with the given address
  */
   verify(data: VerifyRequest): Observable<any> {
     return this.http.post(this.stratisApiUrl + '/wallet/verify',  JSON.stringify(data)).pipe(
