@@ -19,6 +19,7 @@ import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
 import { SignMessageRequest } from '../models/wallet-signmessagerequest';
+import { VerifyRequest } from '../models/wallet-verifyrequest';
 
 @Injectable({
   providedIn: 'root'
@@ -327,6 +328,15 @@ export class ApiService {
  */
   signMessage(data: SignMessageRequest): Observable<any> {
     return this.http.post(this.stratisApiUrl + '/wallet/signmessage',  JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+ * Verify the given signature with the private key of the given address
+ */
+  verify(data: VerifyRequest): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/wallet/verify',  JSON.stringify(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
