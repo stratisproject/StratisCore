@@ -18,6 +18,7 @@ import { TransactionBuilding } from '../models/transaction-building';
 import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
+import { SignMessageRequest } from '../models/wallet-signmessagerequest';
 
 @Injectable({
   providedIn: 'root'
@@ -317,6 +318,15 @@ export class ApiService {
       .set('fromDate', data.fromDate.toDateString())
       .set('reSync', 'true');
     return this.http.delete(this.stratisApiUrl + '/wallet/remove-transactions/', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+ * Sign the given message with the private key of the given address
+ */
+  signMessage(data: SignMessageRequest): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/wallet/signmessage',  JSON.stringify(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
