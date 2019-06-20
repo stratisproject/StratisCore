@@ -21,7 +21,6 @@ export class AboutComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('init')
     this.applicationVersion = this.globalService.getApplicationVersion();
     this.nodeStatusSubscription$ = this.apiService.getNodeStatusInterval();
   }
