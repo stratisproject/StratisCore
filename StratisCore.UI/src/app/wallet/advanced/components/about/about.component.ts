@@ -4,6 +4,7 @@ import { ApiService } from '@shared/services/api.service';
 import { ModalService } from '@shared/services/modal.service';
 import { NodeStatus } from '@shared/models/node-status';
 import { GlobalService } from '@shared/services/global.service';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
   selector: 'app-about',
@@ -12,7 +13,7 @@ import { GlobalService } from '@shared/services/global.service';
 })
 export class AboutComponent implements OnInit, OnDestroy {
 
-  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService) { }
+  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private electron: ElectronService) { }
 
   private nodeStatusSubscription: Subscription;
   public clientName: string;
@@ -30,6 +31,10 @@ export class AboutComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.cancelSubscriptions();
+  }
+
+  openWalletDirectory(): void {
+    this.electron.shell.showItemInFolder(this.dataDirectory);
   }
 
   private startSubscriptions() {

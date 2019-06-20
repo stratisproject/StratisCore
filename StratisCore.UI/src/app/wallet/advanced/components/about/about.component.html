@@ -55,7 +55,9 @@
           Wallet data directory:
         </div>
         <div class="col blockText">
-          <em>{{ dataDirectory }}</em>
+          <a (click)="openWalletDirectory()" href="javascript:void(0)">
+            <em>{{ dataDirectory }}</em>
+          </a>
         </div>
       </div>
     </div>
