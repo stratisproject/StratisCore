@@ -111,7 +111,7 @@
                     <div *ngIf="mode === modeEnum.Create">
                         <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="The bytecode of the contract to deploy">
                             <label class="float-left" for="contractCode">Byte Code</label>
-                            <textarea class="form-control form-control-sm" id="contractCode" rows="5" formControlName="contractCode" #byteCodeElement
+                            <textarea class="form-control form-control-sm" id="contractCode" rows="5" formControlName="contractCode"
                                 [class.is-invalid]="contractCode.invalid && (contractCode.dirty || contractCode.touched)">{{contractCode}}</textarea>
                             <div *ngIf="contractCode.errors" class="invalid-feedback">
                                 <p *ngIf="contractCode.errors.hasOddNumberOfCharacters">Must have an even number of characters</p>
