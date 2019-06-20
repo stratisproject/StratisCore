@@ -55,9 +55,14 @@
           Wallet data directory:
         </div>
         <div class="col blockText">
-          <a (click)="openWalletDirectory(node.dataDirectoryPath)" href="javascript:void(0)">
+          <span *ngIf="!isElectron; else directoryLink">
             <em>{{ node.dataDirectoryPath }}</em>
-          </a>
+          </span>
+          <ng-template #directoryLink>
+            <a (click)="openWalletDirectory(node.dataDirectoryPath)" href="javascript:void(0)">
+              <em>{{ node.dataDirectoryPath }}</em>
+            </a>
+          </ng-template>
         </div>
       </div>
     </div>

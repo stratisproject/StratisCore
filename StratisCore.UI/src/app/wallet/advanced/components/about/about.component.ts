@@ -13,6 +13,7 @@ import { ElectronService } from 'ngx-electron';
 export class AboutComponent implements OnInit {
   nodeStatusSubscription$: Observable<NodeStatus>;
   applicationVersion: string;
+  isElectron: boolean;
 
   constructor(
     private globalService: GlobalService,
@@ -21,11 +22,14 @@ export class AboutComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.isElectron = this.electron.isElectronApp;
     this.applicationVersion = this.globalService.getApplicationVersion();
     this.nodeStatusSubscription$ = this.apiService.getNodeStatusInterval();
   }
 
   openWalletDirectory(directory: string): void {
+    if (!this.isElectron) return;
+
     this.electron.shell.showItemInFolder(directory);
   }
 }
