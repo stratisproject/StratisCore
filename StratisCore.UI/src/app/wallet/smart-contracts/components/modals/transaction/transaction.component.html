@@ -13,7 +13,7 @@
                     <input class="form-control" [(ngModel)]="selectedSenderAddress" [ngModelOptions]="{standalone: true}" [readonly]="true" />
                 </div>
                 <div class="float-right">Balance : <sc-balance data-toggle="tooltip" data-placement="top" title=""
-                        data-original-title="Set maximum amount" class="btn-link" [balance]="balance" [coinUnit]="coinUnit"></sc-balance>
+                        data-original-title="Set maximum amount" class="btn-link no-underline" [balance]="balance" [coinUnit]="coinUnit"></sc-balance>
                 </div>
                 <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="The amount of {{ coinUnit }} to send with this transaction">
                     <label for="amount">Amount</label>
@@ -111,10 +111,6 @@
                     <div *ngIf="mode === modeEnum.Create">
                         <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="The bytecode of the contract to deploy">
                             <label class="float-left" for="contractCode">Byte Code</label>
-                            <span class="float-right">
-                                <button type="button" class="btn btn-link d-inline-block ml-2 btn-sm" data-toggle="tooltip"
-                                    data-placement="right" title="" data-original-title="Copy to Clipboard">Copy</button>
-                            </span>
                             <textarea class="form-control form-control-sm" id="contractCode" rows="5" formControlName="contractCode"
                                 [class.is-invalid]="contractCode.invalid && (contractCode.dirty || contractCode.touched)">{{contractCode}}</textarea>
                             <div *ngIf="contractCode.errors" class="invalid-feedback">
