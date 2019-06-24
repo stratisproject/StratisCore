@@ -13,7 +13,7 @@ export class GlobalService {
     this.setDaemonIP();
   }
 
-  private applicationVersion: string = "1.1.1";
+  private applicationVersion: string = "1.1.2";
   private testnet: boolean = false;
   private sidechain: boolean = false;
   private mainApiPort: number = 37221;
