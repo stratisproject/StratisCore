@@ -1,4 +1,4 @@
-<div class="card p-4">
+<div class="card p-4" *ngIf="nodeStatusSubscription$ | async as node">
   <div class="card-header">About</div>
     <div class="card-body" style="min-height:200px;">
 
@@ -7,7 +7,7 @@
           Client name:
         </div>
         <div class='col blockText'>
-          <strong class="text-primary">{{ clientName }}</strong>
+          <strong class="text-primary">{{ node.agent }}</strong>
         </div>
       </div>
       <div class="row">
@@ -23,7 +23,7 @@
           Fullnode version:
         </div>
         <div class="col blockText">
-          {{ fullNodeVersion }}
+          {{ node.version }}
         </div>
       </div>
       <div class="row">
@@ -31,7 +31,7 @@
           Current network:
         </div>
         <div class="col blockText">
-          {{ network }}
+          {{ node.network }}
         </div>
       </div>
       <div class="row">
@@ -39,7 +39,7 @@
           Protocol version:
         </div>
         <div class="col blockText">
-          {{ protocolVersion }}
+          {{ node.protocolVersion }}
         </div>
       </div>
       <div class="row">
@@ -47,7 +47,7 @@
           Current block height:
         </div>
         <div class="col blockText">
-          {{ blockHeight }}
+          {{ node.blockStoreHeight }}
         </div>
       </div>
       <div class="row">
@@ -55,7 +55,14 @@
           Wallet data directory:
         </div>
         <div class="col blockText">
-          <em>{{ dataDirectory }}</em>
+          <span *ngIf="!isElectron; else directoryLink">
+            <em>{{ node.dataDirectoryPath }}</em>
+          </span>
+          <ng-template #directoryLink>
+            <a (click)="openWalletDirectory(node.dataDirectoryPath)" href="javascript:void(0)">
+              <em>{{ node.dataDirectoryPath }}</em>
+            </a>
+          </ng-template>
         </div>
       </div>
     </div>
