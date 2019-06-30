@@ -59,6 +59,8 @@
                                 <th scope="col">Hash</th>
                                 <th scope="col">Address</th>
                                 <th scope="col">Amount</th>
+                                <th scope="col">Transaction Fee</th>
+                                <th scope="col">Gas Fee</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -79,6 +81,8 @@
                                 </td>
                                 <td><code class="d-inline-block">{{item.to}}</code></td>
                                 <td><sc-balance [balance]="item.amount" [coinUnit]="coinUnit"></sc-balance></td>
+                                <td><sc-balance [balance]="item.transactionFee" [coinUnit]="coinUnit"></sc-balance></td>
+                                <td><sc-balance [balance]="item.gasFee" [coinUnit]="coinUnit"></sc-balance></td>
                                 <td>&nbsp;</td>
                             </tr>
 
