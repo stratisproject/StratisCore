@@ -109,16 +109,14 @@ export class TransactionComponent implements OnInit {
             },
             error => {
                 this.loading = false;
-                if (!error.errors) {
-                    if (error.value.message) {
-                        this.apiError = error.value.message;
+                if (!error.error.errors) {
+                    if (error.error.value.message) {
+                      this.apiError = error.error.value.message;
+                    } else {
+                      console.log(error);
                     }
-                    else {
-                        console.log(error);
-                    }
-                  }
-                  else {
-                    this.apiError = error.errors[0] .message;
+                  } else {
+                    this.apiError = error.error.errors[0].message;
                   }
             });
     }

@@ -128,9 +128,8 @@
                         <p *ngIf="password.errors.required">Please enter the password for wallet {{ walletName }}</p>
                     </div>
                 </div>
+                <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
         </div>
-
-        <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
 
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
