@@ -132,9 +132,9 @@ app.on('ready', () => {
     console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.')
   } else {
     if (sidechain && !nodaemon) {
-      startDaemon('Stratis.SidechainD');
+      startDaemon('Stratis.CirrusD');
     } else if (!nodaemon) {
-      startDaemon('Stratis.StratisD')
+      startDaemon('Stratis.StratisD');
     }
   }
   createTray();
