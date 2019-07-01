@@ -8,6 +8,7 @@ if (os.arch() === 'arm') {
 
 // Set to true if you want to build Core for sidechains
 const buildForSidechain = false;
+const daemonName = buildForSidechain ? 'Stratis.CirrusD' : 'Stratis.StratisD';
 
 let serve;
 let testnet;
@@ -112,7 +113,7 @@ function createWindow() {
     if (!serve && !nodaemon) {
       shutdownDaemon(daemonIP, apiPort);
     }
-  })
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -122,7 +123,7 @@ function createWindow() {
     mainWindow = null;
   });
 
-};
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -131,15 +132,13 @@ app.on('ready', () => {
   if (serve) {
     console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.')
   } else {
-    if (sidechain && !nodaemon) {
-      startDaemon('Stratis.CirrusD');
-    } else if (!nodaemon) {
-      startDaemon('Stratis.StratisD');
+    if (!nodaemon) {
+      startDaemon();
     }
   }
   createTray();
   createWindow();
-  if (os.platform() === 'darwin'){
+  if (os.platform() === 'darwin') {
     createMenu();
   }
 });
@@ -184,7 +183,7 @@ function shutdownDaemon(daemonAddr, portNumber) {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(body)
     }
-  })
+  });
 
   request.write('true');
   request.on('error', function (e) { });
@@ -194,7 +193,7 @@ function shutdownDaemon(daemonAddr, portNumber) {
   request.end(body);
 };
 
-function startDaemon(daemonName) {
+function startDaemon() {
   let daemonProcess;
   const spawnDaemon = require('child_process').spawn;
 
@@ -207,7 +206,7 @@ function startDaemon(daemonName) {
     daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
   }
 
-  daemonProcess = spawnDaemon(daemonPath, [args.join(' ').replace('--','-')], {
+  daemonProcess = spawnDaemon(daemonPath, [args.join(' ').replace('--', '-')], {
     detached: true
   });
 
