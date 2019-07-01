@@ -38,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.statusIntervalSubscription.unsubscribe();
   }
 
   // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
@@ -63,7 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
           .subscribe(
             response =>  {
               const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-              if (statusResponse[0].state === 'Initialized') {
+              if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
                 this.loading = false;
                 this.statusIntervalSubscription.unsubscribe();
                 this.router.navigate(['login']);
