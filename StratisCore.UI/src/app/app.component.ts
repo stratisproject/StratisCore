@@ -21,9 +21,11 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
 
   private subscription: Subscription;
+  private statusIntervalSubscription: Subscription;
   private readonly MaxRetryCount = 50;
   private readonly TryDelayMilliseconds = 3000;
   public sidechainEnabled;
+  public apiConnected = false;
 
   loading = true;
   loadingFailed = false;
@@ -36,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.statusIntervalSubscription.unsubscribe();
   }
 
   // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
@@ -56,8 +59,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.subscription = stream$.subscribe(
       (data: NodeStatus) => {
-        this.loading = false;
-        this.router.navigate(['login']);
+        this.apiConnected = true;
+        this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
+          .subscribe(
+            response =>  {
+              const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
+              if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
+                this.loading = false;
+                this.statusIntervalSubscription.unsubscribe();
+                this.router.navigate(['login']);
+              }
+            }
+          );
       }, (error: any) => {
         console.log('Failed to start wallet');
         this.loading = false;

@@ -23,6 +23,7 @@
                     </g>
                 </svg>
                 <div class="loadingText mt-4 col-12 text-center">Loading, please wait...</div>
+                <div *ngIf="apiConnected" class="loadingText col-12 text-center">Connected to the API. Waiting for node to initialize.</div>
             </div>
         </div>
     </div>
