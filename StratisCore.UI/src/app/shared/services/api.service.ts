@@ -44,11 +44,11 @@ export class ApiService {
     );
   }
 
-  getNodeStatusInterval(): Observable<NodeStatus> {
+  getNodeStatusInterval(silent?: boolean): Observable<NodeStatus> {
     return this.pollingInterval.pipe(
       startWith(0),
       switchMap(() => this.http.get<NodeStatus>(this.stratisApiUrl + '/node/status')),
-      catchError(err => this.handleHttpError(err))
+      catchError(err => this.handleHttpError(err, silent))
     )
   }
 

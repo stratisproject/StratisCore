@@ -1,6 +1,6 @@
 export class NodeStatus {
   constructor(agent: string, version: string, network: string, coinTicker: string, processId: number, consensusHeight: number, blockStoreHeight: number, inboundPeers: [Peer],
-      outbountPeers: [Peer], enabledFeatures: [string], dataDirectoryPath: string, runningtime: string, difficulty: number, protocolVersion: number, testnet: boolean, relayFee: number, state: string) {
+      outbountPeers: [Peer], featuresData: [featureData], dataDirectoryPath: string, runningtime: string, difficulty: number, protocolVersion: number, testnet: boolean, relayFee: number, state: string) {
     this.agent = agent;
     this.version = version;
     this.network = network;
@@ -10,7 +10,7 @@ export class NodeStatus {
     this.blockStoreHeight = blockStoreHeight;
     this.inboundPeers = inboundPeers;
     this.outbountPeers = outbountPeers;
-    this.enabledFeatures = enabledFeatures;
+    this.featuresData = featuresData;
     this.dataDirectoryPath = dataDirectoryPath;
     this.runningTime = runningtime;
     this.difficulty = difficulty;
@@ -29,7 +29,7 @@ export class NodeStatus {
   public blockStoreHeight: number;
   public inboundPeers: [Peer];
   public outbountPeers: [Peer];
-  public enabledFeatures: [string];
+  public featuresData: [featureData];
   public dataDirectoryPath: string;
   public runningTime: string;
   public difficulty: number;
@@ -49,4 +49,14 @@ class Peer {
   public version: string;
   public remoteSocketEndpoint: string;
   public tipHeight: number;
+}
+
+class featureData {
+  constructor(namespace: string, state: string) {
+    this.namespace = namespace;
+    this.state = state;
+  }
+
+  public namespace: string;
+  public state: string;
 }
