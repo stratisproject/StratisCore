@@ -10,10 +10,11 @@ import { Mode, TransactionComponent } from '../../smart-contracts/components/mod
 import { SmartContractsService } from '../../smart-contracts/smart-contracts.service';
 import { Disposable } from '../models/disposable';
 import { Mixin } from '../models/mixin';
-import { SavedToken } from '../models/token';
+import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
 import { Log } from '../services/logger.service';
 import { TokensService } from '../services/tokens.service';
+import { AddTokenComponent } from './add-token/add-token.component';
 
 @Component({
   selector: 'app-tokens',
@@ -30,6 +31,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   history = [];
   walletName: string;
   tokens$: Observable<SavedToken[]>;
+  availableTokens: Token[] = [];
 
   constructor(private tokenService: TokensService,
     private smartContractsService: SmartContractsService,
@@ -41,6 +43,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     this.addressChanged$ = new Subject();
     this.walletName = this.globalService.getWalletName();
     this.tokens$ = this.getBalances();
+    this.availableTokens = this.tokenService.GetAvailableTokens();
 
     this.smartContractsService
       .GetAddresses(this.walletName)
@@ -101,7 +104,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   }
 
   addToken() {
-    // TODO: this.showModal();
+    const modal = this.modalService.open(AddTokenComponent, { backdrop: 'static', keyboard: false });
+    (<AddTokenComponent>modal.componentInstance).tokens = this.availableTokens;
   }
 
   issueToken() {
