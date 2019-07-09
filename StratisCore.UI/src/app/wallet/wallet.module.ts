@@ -30,7 +30,7 @@ import { WalletComponent } from './wallet.component';
     WalletRoutingModule,
     ColdStakingModule,
     SmartContractsModule,
-    TokensModule.forRoot(),
+    TokensModule,
     BsDatepickerModule.forRoot()
   ],
   declarations: [

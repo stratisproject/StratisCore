@@ -15,7 +15,7 @@ import { TokensService, TokensServiceBase } from './services/tokens.service';
     CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule, SharedModule
   ],
 
-  providers: [{ provide: TokensServiceBase, useClass: TokensService }, StorageService, Log],
+  providers: [TokensService, StorageService, Log],
 
   declarations: [
     TokensComponent
@@ -24,15 +24,4 @@ import { TokensService, TokensServiceBase } from './services/tokens.service';
   entryComponents: [
   ]
 })
-export class TokensModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: TokensModule,
-      providers: [
-        { provide: TokensServiceBase, useClass: TokensService },
-        { provide: Log, useClass: Log },
-        { provide: StorageService, useClass: StorageService }
-      ]
-    };
-  }
-}
+export class TokensModule { }
