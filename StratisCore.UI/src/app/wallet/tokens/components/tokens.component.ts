@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { ReplaySubject, Subject, of } from 'rxjs';
-import { takeUntil, take, catchError } from 'rxjs/operators';
+import { ReplaySubject, Subject, of, forkJoin, Observable, combineLatest } from 'rxjs';
+import { takeUntil, take, catchError, map, withLatestFrom, switchMap } from 'rxjs/operators';
 
 import { Disposable } from '../models/disposable';
 import { Mixin } from '../models/mixin';
@@ -10,6 +10,7 @@ import { Log } from '../services/logger.service';
 import { TokensService } from '../services/tokens.service';
 import { TokenBalanceRequest } from '../models/token-balance-request';
 import { GlobalService } from '@shared/services/global.service';
+import { SavedToken } from '../models/token';
 
 @Component({
   selector: 'app-tokens',
@@ -25,15 +26,16 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   selectedAddress: string;
   history = [];
   walletName: string;
-  addressChangedSubject: Subject<unknown>;
+  addressChangedSubject: Subject<string>;
+  tokens$: Observable<SavedToken[]>;
 
   constructor(private tokenService: TokensService,
     private clipboardService: ClipboardService,
     private genericModalService: ModalService,
     private globalService: GlobalService) {
       this.addressChangedSubject = new Subject();
-
       this.walletName = this.globalService.getWalletName();
+      this.tokens$ = this.getBalances();
   }
 
   ngOnInit() {
@@ -51,8 +53,6 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             this.addressChangedSubject.next(addresses[0]);
             this.addresses = addresses;
             this.selectedAddress = addresses[0];
-
-            this.getBalances();
         }
     });
 
@@ -84,27 +84,35 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     // this.showModal(Mode.Create);
   }
 
-  getBalances() {
+  getBalances(): Observable<SavedToken[]> {
+    // TODO make these observables
     var allTokens = [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
     
-    var token = allTokens[0];
-
-    var request = new TokenBalanceRequest(token.hash, this.selectedAddress);
-
-    this.tokenService.GetTokenBalance(request)
-      .pipe(take(1))
-      .subscribe(
-        balance => {
-          let result = {
-            tokenAddress: request.contractAddress,
-            balance
+    return this.addressChangedSubject
+        .pipe(
+          switchMap(address => {
+            return forkJoin(
+              allTokens.map(token => {
+                return this.tokenService.GetTokenBalance(new TokenBalanceRequest(token.hash, address))
+                .pipe(
+                  catchError(error => {
+                    // TODO handle errors
+                    console.log("error getting token balance for token hash " + token.hash);
+                    return of(0)
+                  }),
+                  map(balance => {
+                    return new SavedToken(
+                      token.ticker,
+                      token.hash,
+                      balance
+                    )
+                  })
+                );
+              })
+            )
           }
-
-          console.log(result);
-
-          return result;
-        }
-      );
+        )
+      )
   }
 
   send(item: any) {

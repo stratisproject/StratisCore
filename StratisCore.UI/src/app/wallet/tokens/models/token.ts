@@ -9,5 +9,10 @@ export class Token {
 }
 
 export class SavedToken extends Token {
+  constructor(ticker: string, hash: string, balance: number) {
+    super(ticker, hash);
+    this.balance = balance;
+  } 
+
   balance: number;
 }
