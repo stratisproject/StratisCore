@@ -5,9 +5,6 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '@shared/shared.module';
 import { ClipboardModule } from 'ngx-clipboard';
 
-import { ScBalanceComponent } from '../smart-contracts/components/balance/balance.component';
-import { ContractTypePipe } from '../smart-contracts/components/contract-type.pipe';
-import { SmartContractsModule } from '../smart-contracts/smart-contracts.module';
 import { TokensComponent } from './components/tokens.component';
 import { Log } from './services/logger.service';
 import { StorageService } from './services/storage.service';
@@ -15,15 +12,13 @@ import { TokensService, TokensServiceBase } from './services/tokens.service';
 
 @NgModule({
   imports: [
-    CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule, SharedModule, SmartContractsModule
+    CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule, SharedModule
   ],
 
   providers: [{ provide: TokensServiceBase, useClass: TokensService }, StorageService, Log],
 
   declarations: [
-    TokensComponent,
-    ScBalanceComponent,
-    ContractTypePipe
+    TokensComponent
   ],
 
   entryComponents: [
