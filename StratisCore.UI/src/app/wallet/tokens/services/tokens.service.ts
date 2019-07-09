@@ -3,6 +3,7 @@ import { ApiService } from '@shared/services/api.service';
 import { Observable, of } from 'rxjs';
 
 import { ContractTransactionItem, SmartContractsContractItem } from '../../smart-contracts/smart-contracts.service';
+import { Result, ResultStatus } from '../models/Result';
 import { SavedToken, Token } from '../models/token';
 import { StorageService } from './storage.service';
 
@@ -20,6 +21,9 @@ export abstract class TokensServiceBase {
   PostCall(createTransaction: any): Observable<any> { return of(); }
   GetSavedTokens(): SavedToken[] { return []; }
   GetAvailableTokens(): Token[] { return []; }
+  UpdateTokens(tokens: SavedToken[]): Result<SavedToken[]> { return Result.ok(tokens); }
+  AddToken(token: SavedToken): Result<SavedToken> { return Result.ok(token); }
+  RemoveToken(token: SavedToken): Result<SavedToken> { return Result.ok(token); }
 }
 
 @Injectable()
@@ -39,36 +43,63 @@ export class TokensService implements TokensServiceBase {
     ];
   }
 
+  UpdateTokens(tokens: SavedToken[]): Result<SavedToken[]> {
+    this.storage.setItem(this.savedTokens, tokens);
+    return Result.ok(tokens);
+  }
+
+  AddToken(token: SavedToken): Result<SavedToken> {
+    if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
+    const tokens = this.GetSavedTokens();
+
+    const index = tokens.map(t => t.hash).indexOf(token.hash);
+    if (index >= 0) { return new Result(ResultStatus.Error, 'Specified token is already saved'); }
+
+    tokens.push(token);
+    this.storage.setItem(this.savedTokens, tokens);
+    return Result.ok(token);
+  }
+
+  RemoveToken(token: SavedToken): Result<SavedToken> {
+    if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
+    const tokens = this.GetSavedTokens();
+    const index = tokens.map(t => t.hash).indexOf(token.hash);
+    if (index < 0) { return new Result(ResultStatus.Error, 'Specified token was not found'); }
+    tokens.splice(index, 1);
+    this.storage.setItem(this.savedTokens, tokens);
+    return Result.ok(token);
+  }
+
   GetReceipt(hash: string): Observable<string> {
-    return this.apiService.getReceipt(hash)
+    return this.apiService.getReceipt(hash);
   }
 
   PostCall(createTransaction: any): Observable<any> {
-    return this.apiService.postCallTransaction(createTransaction)
+    return this.apiService.postCallTransaction(createTransaction);
   }
 
   PostCreate(createTransaction: any): Observable<any> {
-    return this.apiService.postCreateTransaction(createTransaction)
+    return this.apiService.postCreateTransaction(createTransaction);
   }
 
   GetHistory(walletName: string, address: string): Observable<any> {
-    return this.apiService.getAccountHistory(walletName, address)
+    return this.apiService.getAccountHistory(walletName, address);
   }
 
   GetBalance(walletName: string): Observable<any> {
-    return this.apiService.getAccountBalance(walletName)
+    return this.apiService.getAccountBalance(walletName);
   }
 
   GetAddressBalance(address: string): Observable<any> {
-    return this.apiService.getAddressBalance(address)
+    return this.apiService.getAddressBalance(address);
   }
 
   GetAddress(walletName: string): Observable<any> {
-    return this.apiService.getAccountAddress(walletName)
+    return this.apiService.getAccountAddress(walletName);
   }
 
   GetAddresses(walletName: string): Observable<any> {
-    return this.apiService.getAccountAddresses(walletName)
+    return this.apiService.getAccountAddresses(walletName);
   }
 
   GetContracts(walletName: string): Observable<SmartContractsContractItem[]> {
