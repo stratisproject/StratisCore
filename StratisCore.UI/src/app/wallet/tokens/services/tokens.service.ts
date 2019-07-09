@@ -6,6 +6,8 @@ import { ContractTransactionItem, SmartContractsContractItem } from '../../smart
 import { Result, ResultStatus } from '../models/Result';
 import { SavedToken, Token } from '../models/token';
 import { StorageService } from './storage.service';
+import { TokenBalanceRequest } from '../models/token-balance-request';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class TokensService {
@@ -83,24 +85,13 @@ export class TokensService {
     return this.apiService.getAccountAddresses(walletName);
   }
 
-  GetContracts(walletName: string): Observable<SmartContractsContractItem[]> {
-    return of([
-      new SmartContractsContractItem('7809', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 10898025),
-      new SmartContractsContractItem('7810', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 11898025),
-      new SmartContractsContractItem('7811', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 12898025),
-      new SmartContractsContractItem('7812', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 13898025),
-      new SmartContractsContractItem('7813', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 14898025),
-      new SmartContractsContractItem('7814', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 15898025),
-    ]);
-  }
-
   GetSenderAddresses(walletName: string): Observable<string[]> {
     return of([
       'SarP7wvxZmaG7t1UAjaxyB6RNT9FV1Z2Sn',
       'SbrP8wvxZmaG7t2UAjbxyB7RNT9FV1Z2Sn',
       'ScrP9wvxZmaG7t3UAjcxyB8RNT9FV1Z2Sn'
     ]);
-  }
+  }  
 
   GetParameterTypes(walletName: string): Observable<string[]> {
     return of([
@@ -108,5 +99,11 @@ export class TokensService {
       'Type 2',
       'Type 3'
     ]);
+  }
+
+  GetTokenBalance(request: TokenBalanceRequest): Observable<number> {
+    return this.apiService.localCall(request).pipe(
+      map(localExecutionresult => localExecutionresult.return ? localExecutionresult.return : 0)
+    );
   }
 }

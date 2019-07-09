@@ -18,6 +18,7 @@ import { TransactionBuilding } from '../models/transaction-building';
 import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
+import { LocalExecutionResult } from '@shared/models/local-execution-result';
 
 @Injectable({
   providedIn: 'root'
@@ -438,6 +439,12 @@ export class ApiService {
   getReceipt(hash: string): any {
     let params = new HttpParams().set('txHash', hash);
     return this.http.get(this.stratisApiUrl + '/smartcontracts/receipt', { params }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  localCall(localCall: object): Observable<LocalExecutionResult> {    
+    return this.http.post<LocalExecutionResult>(this.stratisApiUrl + '/smartcontracts/local-call', localCall).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
