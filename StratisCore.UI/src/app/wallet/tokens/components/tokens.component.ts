@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { ReplaySubject, Subject, of, forkJoin, Observable, combineLatest } from 'rxjs';
-import { takeUntil, take, catchError, map, withLatestFrom, switchMap } from 'rxjs/operators';
+import { forkJoin, Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Disposable } from '../models/disposable';
 import { Mixin } from '../models/mixin';
+import { SavedToken } from '../models/token';
+import { TokenBalanceRequest } from '../models/token-balance-request';
 import { Log } from '../services/logger.service';
 import { TokensService } from '../services/tokens.service';
-import { TokenBalanceRequest } from '../models/token-balance-request';
-import { GlobalService } from '@shared/services/global.service';
-import { SavedToken } from '../models/token';
 
 @Component({
   selector: 'app-tokens',
@@ -32,28 +32,29 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     private clipboardService: ClipboardService,
     private genericModalService: ModalService,
     private globalService: GlobalService) {
-      this.addressChanged$ = new Subject();
-      this.walletName = this.globalService.getWalletName();
-      this.tokens$ = this.getBalances();
+    this.addressChanged$ = new Subject();
+    this.walletName = this.globalService.getWalletName();
+    this.tokens$ = this.getBalances();
   }
 
   ngOnInit() {
 
     this.tokenService
-    .GetAddresses(this.walletName)
-    .pipe(
-      catchError(error => {
-        this.showApiError("Error retrieving addressses. " + error);
-        return of([]);
-      }),
-      takeUntil(this.disposed$))
-    .subscribe(addresses => {
+      .GetAddresses(this.walletName)
+      .pipe(
+        catchError(error => {
+          Log.error(error);
+          this.showApiError(`Error retrieving addressses. ${error}`);
+          return of([]);
+        }),
+        takeUntil(this.disposed$))
+      .subscribe(addresses => {
         if (addresses && addresses.length > 0) {
-            this.addressChanged$.next(addresses[0]);
-            this.addresses = addresses;
-            this.selectedAddress = addresses[0];
+          this.addressChanged$.next(addresses[0]);
+          this.addresses = addresses;
+          this.selectedAddress = addresses[0];
         }
-    });
+      });
 
   }
 
@@ -85,33 +86,34 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
   getBalances(): Observable<SavedToken[]> {
     // TODO make these observables
-    var allTokens = [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
-    
+    const allTokens = [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
+
     return this.addressChanged$
-        .pipe(
-          switchMap(address => {
-            return forkJoin(
-              allTokens.map(token => {
-                return this.tokenService.GetTokenBalance(new TokenBalanceRequest(token.hash, address))
+      .pipe(
+        switchMap(address => {
+          return forkJoin(
+            allTokens.map(token => {
+              return this.tokenService.GetTokenBalance(new TokenBalanceRequest(token.hash, address))
                 .pipe(
                   catchError(error => {
                     // TODO handle errors
-                    console.log("error getting token balance for token hash " + token.hash);
-                    return of(0)
+                    Log.error(error);
+                    console.log(`error getting token balance for token hash ${token.hash}`);
+                    return of(0);
                   }),
                   map(balance => {
                     return new SavedToken(
                       token.ticker,
                       token.hash,
                       balance
-                    )
+                    );
                   })
                 );
-              })
-            )
-          }
+            })
+          );
+        }
         )
-      )
+      );
   }
 
   send(item: any) {
