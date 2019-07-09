@@ -1,3 +1,72 @@
-<p>
-  tokens works!
-</p>
+<section id="GUI" class="light">
+  <section id="content" class="light smartcontracts col-10 mx-auto">
+    <section class="mb-3">
+
+      <div class="col-12">
+        <section class="row d-flex align-items-center">
+
+          <div class="col-9">
+            <div class="card">
+              <div class="card-header">Active address</div>
+              <div class="card-body d-flex align-items-center">
+                <div style="display: flex; flex-direction: row">
+                  <select class="form-control" [(ngModel)]="selectedAddress" [ngModelOptions]="{standalone: true}"
+                    (change)="addressChanged($event.target.value)">
+                    <option *ngFor="let address of addresses">{{address}}</option>
+                  </select>
+                  <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
+                    data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
+                    (click)="clipboardAddressClicked()">
+                    <i class="lnr lnr-file-add"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-3">
+            <button type="button" class="btn btn-outline-stratis-green btn-block" data-toggle="modal"
+              data-target="#modalCalltx" (click)="addToken()">Add Token
+            </button>
+            <button type="button" class="btn btn-stratis-green btn-block" data-toggle="modal"
+              data-target="#modalCreatetx" (click)="issueToken()">Issue Token
+            </button>
+          </div>
+
+        </section>
+      </div>
+    </section>
+
+    <section class="col-12">
+      <div class="card my-4">
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Ticker</th>
+                <th scope="col">Hash</th>
+                <th scope="col">Balance</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let item of history">
+                <td><span class="badge badge-info">{{item.ticker}}</span></td>
+                <td>{{ item.hash }}</td>
+                <td>
+                  <sc-balance [balance]="item.balance" [coinUnit]="item.ticker"></sc-balance>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-stratis-green btn-block" (click)="send(item)">Issue Token
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </section>
