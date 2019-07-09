@@ -19,6 +19,7 @@ import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
+import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 
 @Injectable({
   providedIn: 'root'
@@ -443,7 +444,7 @@ export class ApiService {
     );
   }
 
-  localCall(localCall: object): Observable<LocalExecutionResult> {    
+  localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {    
     return this.http.post<LocalExecutionResult>(this.stratisApiUrl + '/smartcontracts/local-call', localCall).pipe(
       catchError(err => this.handleHttpError(err))
     );
