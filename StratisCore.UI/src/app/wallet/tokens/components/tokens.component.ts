@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { ReplaySubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject, Subject, of } from 'rxjs';
+import { takeUntil, take, catchError } from 'rxjs/operators';
 
 import { Disposable } from '../models/disposable';
 import { Mixin } from '../models/mixin';
 import { Log } from '../services/logger.service';
 import { TokensService } from '../services/tokens.service';
+import { TokenBalanceRequest } from '../models/token-balance-request';
+import { GlobalService } from '@shared/services/global.service';
 
 @Component({
   selector: 'app-tokens',
@@ -22,18 +24,38 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   dispose: () => void;
   selectedAddress: string;
   history = [];
+  walletName: string;
+  addressChangedSubject: Subject<unknown>;
 
   constructor(private tokenService: TokensService,
     private clipboardService: ClipboardService,
-    private genericModalService: ModalService) {
+    private genericModalService: ModalService,
+    private globalService: GlobalService) {
+      this.addressChangedSubject = new Subject();
 
+      this.walletName = this.globalService.getWalletName();
   }
 
   ngOnInit() {
+
     this.tokenService
-      .GetAddresses('')
-      .pipe(takeUntil(this.disposed$))
-      .subscribe(data => Log.info(data));
+    .GetAddresses(this.walletName)
+    .pipe(
+      catchError(error => {
+        this.showApiError("Error retrieving addressses. " + error);
+        return of([]);
+      }),
+      takeUntil(this.disposed$))
+    .subscribe(addresses => {
+        if (addresses && addresses.length > 0) {
+            this.addressChangedSubject.next(addresses[0]);
+            this.addresses = addresses;
+            this.selectedAddress = addresses[0];
+
+            this.getBalances();
+        }
+    });
+
   }
 
   ngOnDestroy() {
@@ -60,6 +82,29 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
   issueToken() {
     // this.showModal(Mode.Create);
+  }
+
+  getBalances() {
+    var allTokens = [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
+    
+    var token = allTokens[0];
+
+    var request = new TokenBalanceRequest(token.hash, this.selectedAddress);
+
+    this.tokenService.GetTokenBalance(request)
+      .pipe(take(1))
+      .subscribe(
+        balance => {
+          let result = {
+            tokenAddress: request.contractAddress,
+            balance
+          }
+
+          console.log(result);
+
+          return result;
+        }
+      );
   }
 
   send(item: any) {

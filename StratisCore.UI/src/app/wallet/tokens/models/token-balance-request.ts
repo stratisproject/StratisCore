@@ -1,14 +1,15 @@
 export class TokenBalanceRequest {
     contractAddress: string;
-    senderAddress: string;
+    sender: string;
     methodName = "GetBalance";
     amount = 0;
     gasPrice = 100;
     gasLimit = 100000;
-    parameters = [];
+    parameters: string[] = [];
 
     constructor(tokenAddress: string, senderAddress: string) {
         this.contractAddress = tokenAddress;
-        this.senderAddress = senderAddress;
+        this.sender = senderAddress;
+        this.parameters.push("9#" + senderAddress);
     }
 }

@@ -21,8 +21,7 @@ export class TokensService {
 
   GetAvailableTokens(): Token[] {
     return [
-      new Token('MYTK', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'),
-      new Token('CIRR', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+      new Token('MYTK', 'tCJgD1PEcUJBBBn9B6fbdkcQ9bzPBBW6A8')
     ];
   }
 
