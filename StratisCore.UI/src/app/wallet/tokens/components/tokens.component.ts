@@ -41,7 +41,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   }
 
   showApiError(error: string) {
-    this.genericModalService.openModal("Error", error);
+    this.genericModalService.openModal('Error', error);
   }
 
   addressChanged(address: string) {
@@ -55,11 +55,11 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   }
 
   addToken() {
-    //this.showModal(Mode.Call);
+    // this.showModal(Mode.Call);
   }
 
   issueToken() {
-    //this.showModal(Mode.Create);
+    // this.showModal(Mode.Create);
   }
 
   send(item: any) {
