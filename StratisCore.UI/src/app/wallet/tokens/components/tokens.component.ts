@@ -110,6 +110,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
   issueToken() {
     const modal = this.modalService.open(TransactionComponent, { backdrop: 'static', keyboard: false });
+    (<TransactionComponent>modal.componentInstance).title = 'Issue new token';
+    (<TransactionComponent>modal.componentInstance).actionButtonText = 'Issue Token';
     (<TransactionComponent>modal.componentInstance).mode = Mode.Create;
     (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
     // TODO: get current balance
