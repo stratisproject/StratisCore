@@ -5,6 +5,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { forkJoin, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
 
+import { SmartContractsService } from '../../smart-contracts/smart-contracts.service';
 import { Disposable } from '../models/disposable';
 import { Mixin } from '../models/mixin';
 import { SavedToken } from '../models/token';
@@ -29,6 +30,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   tokens$: Observable<SavedToken[]>;
 
   constructor(private tokenService: TokensService,
+    private smartContractsService: SmartContractsService,
     private clipboardService: ClipboardService,
     private genericModalService: ModalService,
     private globalService: GlobalService) {
@@ -39,7 +41,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
   ngOnInit() {
 
-    this.tokenService
+    this.smartContractsService
       .GetAddresses(this.walletName)
       .pipe(
         catchError(error => {
@@ -72,7 +74,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
   clipboardAddressClicked() {
     if (this.selectedAddress && this.clipboardService.copyFromContent(this.selectedAddress)) {
-      console.log(`Copied ${this.selectedAddress} to clipboard`);
+      Log.info(`Copied ${this.selectedAddress} to clipboard`);
     }
   }
 

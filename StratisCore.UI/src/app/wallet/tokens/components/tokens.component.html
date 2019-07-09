@@ -54,9 +54,7 @@
               <tr *ngFor="let item of tokens$ | async">
                 <td><span class="badge badge-info">{{item.ticker}}</span></td>
                 <td>{{ item.hash }}</td>
-                <td>
-                  {{ item.balance }}
-                </td>
+                <td>{{ item.balance }}</td>
                 <td>
                   <button type="button" class="btn btn-stratis-green btn-block" (click)="send(item)">Issue Token
                   </button>
