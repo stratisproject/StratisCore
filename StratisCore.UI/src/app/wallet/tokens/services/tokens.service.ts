@@ -3,6 +3,8 @@ import { ApiService } from '@shared/services/api.service';
 import { Observable, of } from 'rxjs';
 
 import { ContractTransactionItem, SmartContractsContractItem } from '../../smart-contracts/smart-contracts.service';
+import { SavedToken, Token } from '../models/token';
+import { StorageService } from './storage.service';
 
 export abstract class TokensServiceBase {
   GetReceipt(hash: string): Observable<string> { return of(); }
@@ -16,11 +18,26 @@ export abstract class TokensServiceBase {
   GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> { return of(); }
   PostCreate(createTransaction: any): Observable<any> { return of(); }
   PostCall(createTransaction: any): Observable<any> { return of(); }
+  GetSavedTokens(): SavedToken[] { return []; }
+  GetAvailableTokens(): Token[] { return []; }
 }
 
 @Injectable()
 export class TokensService implements TokensServiceBase {
-  constructor(private apiService: ApiService) { }
+  private savedTokens = 'savedTokens';
+
+  constructor(private apiService: ApiService, private storage: StorageService) { }
+
+  GetSavedTokens(): SavedToken[] {
+    return this.storage.getItem<SavedToken[]>(this.savedTokens) || [];
+  }
+
+  GetAvailableTokens(): Token[] {
+    return [
+      new Token('MYTK', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'),
+      new Token('CIRR', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    ];
+  }
 
   GetReceipt(hash: string): Observable<string> {
     return this.apiService.getReceipt(hash)
