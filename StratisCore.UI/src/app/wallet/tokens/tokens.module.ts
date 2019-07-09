@@ -8,7 +8,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { TokensComponent } from './components/tokens.component';
 import { Log } from './services/logger.service';
 import { StorageService } from './services/storage.service';
-import { TokensService, TokensServiceBase } from './services/tokens.service';
+import { TokensService } from './services/tokens.service';
 
 @NgModule({
   imports: [

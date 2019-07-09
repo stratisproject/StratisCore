@@ -7,27 +7,8 @@ import { Result, ResultStatus } from '../models/Result';
 import { SavedToken, Token } from '../models/token';
 import { StorageService } from './storage.service';
 
-export abstract class TokensServiceBase {
-  GetReceipt(hash: string): Observable<string> { return of(); }
-  GetAddresses(walletName: string): Observable<string[]> { return of(); }
-  GetBalance(walletName: string): Observable<number> { return of(); }
-  GetAddressBalance(address: string): Observable<number> { return of(); }
-  GetAddress(walletName: string): Observable<string> { return of(); }
-  GetContracts(walletName: string): Observable<SmartContractsContractItem[]> { return of(); }
-  GetSenderAddresses(walletName: string): Observable<string[]> { return of(); }
-  GetParameterTypes(walletName: string): Observable<string[]> { return of(); }
-  GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> { return of(); }
-  PostCreate(createTransaction: any): Observable<any> { return of(); }
-  PostCall(createTransaction: any): Observable<any> { return of(); }
-  GetSavedTokens(): SavedToken[] { return []; }
-  GetAvailableTokens(): Token[] { return []; }
-  UpdateTokens(tokens: SavedToken[]): Result<SavedToken[]> { return Result.ok(tokens); }
-  AddToken(token: SavedToken): Result<SavedToken> { return Result.ok(token); }
-  RemoveToken(token: SavedToken): Result<SavedToken> { return Result.ok(token); }
-}
-
 @Injectable()
-export class TokensService implements TokensServiceBase {
+export class TokensService {
   private savedTokens = 'savedTokens';
 
   constructor(private apiService: ApiService, private storage: StorageService) { }
