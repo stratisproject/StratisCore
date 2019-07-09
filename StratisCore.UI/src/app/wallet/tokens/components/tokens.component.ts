@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { forkJoin, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
 
+import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsService } from '../../smart-contracts/smart-contracts.service';
 import { Disposable } from '../models/disposable';
 import { Mixin } from '../models/mixin';
@@ -33,13 +35,12 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     private smartContractsService: SmartContractsService,
     private clipboardService: ClipboardService,
     private genericModalService: ModalService,
+    private modalService: NgbModal,
     private globalService: GlobalService) {
+
     this.addressChanged$ = new Subject();
     this.walletName = this.globalService.getWalletName();
     this.tokens$ = this.getBalances();
-  }
-
-  ngOnInit() {
 
     this.smartContractsService
       .GetAddresses(this.walletName)
@@ -49,7 +50,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
           this.showApiError(`Error retrieving addressses. ${error}`);
           return of([]);
         }),
-        takeUntil(this.disposed$))
+        takeUntil(this.disposed$)
+      )
       .subscribe(addresses => {
         if (addresses && addresses.length > 0) {
           this.addressChanged$.next(addresses[0]);
@@ -58,6 +60,26 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         }
       });
 
+    this.addressChanged$
+      .pipe(
+        switchMap(address => this.smartContractsService.GetHistory(this.walletName, address)
+          .pipe(catchError(error => {
+            this.showApiError(`Error retrieving transactions. ${error}`);
+            return of([]);
+          })
+          )
+        ),
+        takeUntil(this.disposed$)
+      )
+      .subscribe(history => this.history = history);
+
+
+    this.addressChanged$
+      .pipe(takeUntil(this.disposed$))
+      .subscribe(address => this.selectedAddress = address);
+  }
+
+  ngOnInit() {
   }
 
   ngOnDestroy() {
@@ -79,11 +101,16 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   }
 
   addToken() {
-    // this.showModal(Mode.Call);
+    // TODO: this.showModal();
   }
 
   issueToken() {
-    // this.showModal(Mode.Create);
+    const modal = this.modalService.open(TransactionComponent, { backdrop: 'static', keyboard: false });
+    (<TransactionComponent>modal.componentInstance).mode = Mode.Create;
+    (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
+    // TODO: get current balance
+    // (<TransactionComponent>modal.componentInstance).balance = this.balance;
+    // (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
   }
 
   getBalances(): Observable<SavedToken[]> {
@@ -92,15 +119,16 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
     return this.addressChanged$
       .pipe(
-        switchMap(address => {
-          return forkJoin(
-            allTokens.map(token => {
-              return this.tokenService.GetTokenBalance(new TokenBalanceRequest(token.hash, address))
+        switchMap(address =>
+          forkJoin(
+            allTokens.map(token =>
+              this.tokenService
+                .GetTokenBalance(new TokenBalanceRequest(token.hash, address))
                 .pipe(
                   catchError(error => {
                     // TODO handle errors
                     Log.error(error);
-                    console.log(`error getting token balance for token hash ${token.hash}`);
+                    Log.log(`error getting token balance for token hash ${token.hash}`);
                     return of(0);
                   }),
                   map(balance => {
@@ -110,16 +138,13 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
                       balance
                     );
                   })
-                );
-            })
-          );
-        }
-        )
-      );
+                )
+            )
+          )
+        ));
   }
 
   send(item: any) {
-
+    // TODO: show send dialog
   }
-
 }

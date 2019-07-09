@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '@shared/shared.module';
@@ -9,6 +9,7 @@ import { TokensComponent } from './components/tokens.component';
 import { Log } from './services/logger.service';
 import { StorageService } from './services/storage.service';
 import { TokensService } from './services/tokens.service';
+import { AddTokenComponent } from './components/add-token/add-token.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { TokensService } from './services/tokens.service';
   providers: [TokensService, StorageService, Log],
 
   declarations: [
-    TokensComponent
+    TokensComponent,
+    AddTokenComponent
   ],
 
   entryComponents: [
