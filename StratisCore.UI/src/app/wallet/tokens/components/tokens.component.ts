@@ -26,14 +26,13 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   selectedAddress: string;
   history = [];
   walletName: string;
-  addressChangedSubject: Subject<string>;
   tokens$: Observable<SavedToken[]>;
 
   constructor(private tokenService: TokensService,
     private clipboardService: ClipboardService,
     private genericModalService: ModalService,
     private globalService: GlobalService) {
-      this.addressChangedSubject = new Subject();
+      this.addressChanged$ = new Subject();
       this.walletName = this.globalService.getWalletName();
       this.tokens$ = this.getBalances();
   }
@@ -50,7 +49,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       takeUntil(this.disposed$))
     .subscribe(addresses => {
         if (addresses && addresses.length > 0) {
-            this.addressChangedSubject.next(addresses[0]);
+            this.addressChanged$.next(addresses[0]);
             this.addresses = addresses;
             this.selectedAddress = addresses[0];
         }
@@ -88,7 +87,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     // TODO make these observables
     var allTokens = [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
     
-    return this.addressChangedSubject
+    return this.addressChanged$
         .pipe(
           switchMap(address => {
             return forkJoin(
