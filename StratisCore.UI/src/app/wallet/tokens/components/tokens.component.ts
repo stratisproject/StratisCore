@@ -127,15 +127,15 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     // (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
   }
 
+  get allTokens() {
+    return [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
+  }
   getBalances(): Observable<SavedToken[]> {
-    // TODO make these observables
-    const allTokens = [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
-
     return combineLatest(this.addressChanged$, this.tokenAdded$)
       .pipe(
         switchMap(([address, _]) =>
           forkJoin(
-            allTokens.map(token =>
+            this.allTokens.map(token =>
               this.tokenService
                 .GetTokenBalance(new TokenBalanceRequest(token.hash, address))
                 .pipe(

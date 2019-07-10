@@ -43,19 +43,19 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">Ticker</th>
-                <th scope="col">Hash</th>
-                <th scope="col">Balance</th>
-                <th scope="col"></th>
+                <th class="text-center col-2" scope="col">Ticker</th>
+                <th class="text-left col-3" scope="col">Balance</th>
+                <th class="text-left col-5" scope="col">Hash</th>
+                <th class="text-right col-2" class="text-right" scope="col"></th>
               </tr>
             </thead>
             <tbody>
 
               <tr *ngFor="let item of tokens$ | async">
-                <td><span class="badge badge-info">{{item.ticker}}</span></td>
+                <td class="text-center"><span class="badge badge-info">{{item.ticker}}</span></td>
+                <td class="text-left">{{ item.balance }}</td>
                 <td>{{ item.hash }}</td>
-                <td>{{ item.balance }}</td>
-                <td>
+                <td class="text-right">
                   <button type="button" class="btn btn-sm btn-stratis-green btn-block" (click)="send(item)"><i class="icon lnr lnr-arrow-up-circle"></i> Send
                   </button>
                 </td>
