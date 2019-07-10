@@ -29,7 +29,7 @@ import { WalletComponent } from './wallet.component';
     SharedModule,
     WalletRoutingModule,
     ColdStakingModule,
-    SmartContractsModule,
+    SmartContractsModule.forRoot(),
     TokensModule,
     BsDatepickerModule.forRoot()
   ],

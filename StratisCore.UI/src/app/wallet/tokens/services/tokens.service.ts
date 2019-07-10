@@ -3,7 +3,7 @@ import { ApiService } from '@shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Result, ResultStatus } from '../models/Result';
+import { Result, ResultStatus } from '../models/result';
 import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
 import { StorageService } from './storage.service';

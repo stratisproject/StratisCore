@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -30,4 +30,13 @@ import { ContractTypePipe } from './components/contract-type.pipe';
         TransactionComponent, AddNewAddressComponent
     ]
 })
-export class SmartContractsModule { }
+export class SmartContractsModule {
+    static forRoot(): ModuleWithProviders {
+        return {
+          ngModule: SmartContractsModule,
+          providers: [
+            { provide: SmartContractsServiceBase, useClass: SmartContractsService }
+          ]
+        };
+    }
+}

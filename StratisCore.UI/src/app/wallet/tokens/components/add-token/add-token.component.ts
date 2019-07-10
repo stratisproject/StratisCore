@@ -24,14 +24,15 @@ export class AddTokenComponent implements OnInit {
   constructor(
     private tokenService: TokensService,
     private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder) {
+      this.registerControls();
+    }
 
   get customTokenSelected() {
-    return !!this.addTokenForm.get('token').value && this.addTokenForm.get('token').value.toLowerCase() === 'custom';
+    return !!this.addTokenForm && !!this.addTokenForm.get('token').value && this.addTokenForm.get('token').value.toLowerCase() === 'custom';
   }
 
   ngOnInit() {
-    this.registerControls();
   }
 
   closeClicked() {

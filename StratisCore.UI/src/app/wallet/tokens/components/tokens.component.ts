@@ -7,7 +7,7 @@ import { forkJoin, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
-import { SmartContractsService } from '../../smart-contracts/smart-contracts.service';
+import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
 import { Disposable } from '../models/disposable';
 import { Mixin } from '../models/mixin';
 import { SavedToken, Token } from '../models/token';
@@ -34,7 +34,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   availableTokens: Token[] = [];
 
   constructor(private tokenService: TokensService,
-    private smartContractsService: SmartContractsService,
+    private smartContractsService: SmartContractsServiceBase,
     private clipboardService: ClipboardService,
     private genericModalService: ModalService,
     private modalService: NgbModal,

@@ -10,10 +10,12 @@ import { Log } from './services/logger.service';
 import { StorageService } from './services/storage.service';
 import { TokensService } from './services/tokens.service';
 import { AddTokenComponent } from './components/add-token/add-token.component';
+import { SmartContractsModule } from '../smart-contracts/smart-contracts.module';
+import { TransactionComponent } from '../smart-contracts/components/modals/transaction/transaction.component';
 
 @NgModule({
   imports: [
-    CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule, SharedModule
+    CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule, SharedModule, SmartContractsModule.forRoot()
   ],
 
   providers: [TokensService, StorageService, Log],
@@ -24,6 +26,8 @@ import { AddTokenComponent } from './components/add-token/add-token.component';
   ],
 
   entryComponents: [
+    AddTokenComponent,
+    TransactionComponent
   ]
 })
 export class TokensModule { }
