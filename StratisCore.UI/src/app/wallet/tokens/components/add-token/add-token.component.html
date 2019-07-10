@@ -21,7 +21,7 @@
           <p>Token is required</p>
         </div>
       </div>
-      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token contract address/hash">
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token contract address/hash" *ngIf="customTokenSelected">
         <label for="hash">Token Contract Address</label>
         <input formControlName="hash" id="hash" type="text" class="form-control" placeholder=""
           [class.is-invalid]="hash.invalid && (hash.dirty || hash.touched)">
@@ -29,7 +29,7 @@
           <p *ngIf="hash.errors['required']">Contract address is required</p>
         </div>
       </div>
-      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token symbol/ticker">
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token symbol/ticker" *ngIf="customTokenSelected">
         <label for="ticker">Token Symbol</label>
         <input formControlName="ticker" id="ticker" type="text" class="form-control" placeholder=""
           [class.is-invalid]="ticker.invalid && (ticker.dirty || ticker.touched)">
@@ -42,7 +42,7 @@
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
       <button type="submit" data-toggle="modal" data-target="#" class="btn btn-stratis-green btn-block"
-        data-dismiss="modal" [disabled]="!addTokenForm.valid">Add Token</button>
+        data-dismiss="modal" [disabled]="!addTokenForm.valid || addTokenForm.pristine">Add Token</button>
     </div>
   </form>
   <div [hidden]="!loading" class="Loading col-2 mx-auto unset-left">

@@ -44,6 +44,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     this.walletName = this.globalService.getWalletName();
     this.tokens$ = this.getBalances();
     this.availableTokens = this.tokenService.GetAvailableTokens();
+    this.availableTokens.push(new Token('Custom', 'custom'));
 
     this.smartContractsService
       .GetAddresses(this.walletName)
@@ -106,6 +107,11 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   addToken() {
     const modal = this.modalService.open(AddTokenComponent, { backdrop: 'static', keyboard: false });
     (<AddTokenComponent>modal.componentInstance).tokens = this.availableTokens;
+    modal.result.then(value => {
+      if (value === 'ok') {
+        Log.info('Refresh token list');
+      }
+    });
   }
 
   issueToken() {

@@ -53,7 +53,7 @@ export class AddTokenComponent implements OnInit {
       return;
     }
 
-    this.activeModal.close();
+    this.activeModal.close('ok');
   }
 
   private registerControls() {
