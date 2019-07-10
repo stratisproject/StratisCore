@@ -35,7 +35,7 @@ export class StorageService {
   }
 
   setItem<T>(key: string, value: T) {
-    if (!!value) {
+    if (!value) {
       localStorage.setItem(key, null);
       return;
     }

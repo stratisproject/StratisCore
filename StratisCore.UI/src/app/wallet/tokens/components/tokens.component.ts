@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { forkJoin, Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { forkJoin, Observable, of, ReplaySubject, Subject, BehaviorSubject, combineLatest } from 'rxjs';
 import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
@@ -24,8 +24,9 @@ import { AddTokenComponent } from './add-token/add-token.component';
 @Mixin([Disposable])
 export class TokensComponent implements OnInit, OnDestroy, Disposable {
   addressChanged$: Subject<string>;
-  disposed$ = new ReplaySubject<boolean>();
+  tokenAdded$ = new BehaviorSubject<boolean>(true);
   addresses: string[];
+  disposed$ = new ReplaySubject<boolean>();
   dispose: () => void;
   selectedAddress: string;
   history = [];
@@ -110,6 +111,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     modal.result.then(value => {
       if (value === 'ok') {
         Log.info('Refresh token list');
+        this.tokenAdded$.next(true);
       }
     });
   }
@@ -129,9 +131,9 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     // TODO make these observables
     const allTokens = [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
 
-    return this.addressChanged$
+    return combineLatest(this.addressChanged$, this.tokenAdded$)
       .pipe(
-        switchMap(address =>
+        switchMap(([address, _]) =>
           forkJoin(
             allTokens.map(token =>
               this.tokenService
