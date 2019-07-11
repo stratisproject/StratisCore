@@ -22,7 +22,7 @@ export class TokensService {
 
   GetAvailableTokens(): Token[] {
     return [
-      new Token('MYTK', 'tCJgD1PEcUJBBBn9B6fbdkcQ9bzPBBW6A8')
+      new Token('SDT', 'tCJgD1PEcUJBBBn9B6fbdkcQ9bzPBBW6A8')
     ];
   }
 

@@ -4,7 +4,7 @@ import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { BehaviorSubject, combineLatest, forkJoin, interval, Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { catchError, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
@@ -28,7 +28,6 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   coinUnit: string;
   addressChanged$: Subject<string>;
   tokensRefreshRequested$ = new BehaviorSubject<boolean>(true);
-  polling$: Observable<number>;
   addresses: string[];
   disposed$ = new ReplaySubject<boolean>();
   dispose: () => void;
@@ -104,7 +103,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       .pipe(takeUntil(this.disposed$))
       .subscribe(address => this.selectedAddress = address);
 
-    this.polling$ = interval(this.pollingInterval).pipe(startWith(0));
+    // poll tokens list periodically
+    interval(this.pollingInterval).pipe(takeUntil(this.disposed$)).subscribe(() => this.tokensRefreshRequested$.next(true));
   }
 
   ngOnInit() {
