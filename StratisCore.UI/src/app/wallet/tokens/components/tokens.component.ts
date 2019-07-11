@@ -3,8 +3,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { BehaviorSubject, combineLatest, forkJoin, Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, forkJoin, interval, Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { catchError, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
@@ -24,7 +24,8 @@ import { AddTokenComponent } from './add-token/add-token.component';
 @Mixin([Disposable])
 export class TokensComponent implements OnInit, OnDestroy, Disposable {
   addressChanged$: Subject<string>;
-  tokenAdded$ = new BehaviorSubject<boolean>(true);
+  tokensRefreshRequested$ = new BehaviorSubject<boolean>(true);
+  polling$: Observable<number>;
   addresses: string[];
   disposed$ = new ReplaySubject<boolean>();
   dispose: () => void;
@@ -33,8 +34,10 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   walletName: string;
   tokens$: Observable<SavedToken[]>;
   availableTokens: Token[] = [];
+  private pollingInterval = 5 * 1000; // polling milliseconds
 
-  constructor(private tokenService: TokensService,
+  constructor(
+    private tokenService: TokensService,
     private smartContractsService: SmartContractsServiceBase,
     private clipboardService: ClipboardService,
     private genericModalService: ModalService,
@@ -82,6 +85,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     this.addressChanged$
       .pipe(takeUntil(this.disposed$))
       .subscribe(address => this.selectedAddress = address);
+
+    this.polling$ = interval(this.pollingInterval).pipe(startWith(0));
   }
 
   ngOnInit() {
@@ -111,7 +116,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     modal.result.then(value => {
       if (value === 'ok') {
         Log.info('Refresh token list');
-        this.tokenAdded$.next(true);
+        this.tokensRefreshRequested$.next(true);
       }
     });
   }
@@ -128,8 +133,9 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   get allTokens() {
     return [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
   }
+
   getBalances(): Observable<SavedToken[]> {
-    return combineLatest(this.addressChanged$, this.tokenAdded$)
+    return combineLatest(this.addressChanged$, this.tokensRefreshRequested$, this.polling$)
       .pipe(
         switchMap(([address, _]) =>
           forkJoin(
@@ -138,9 +144,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
                 .GetTokenBalance(new TokenBalanceRequest(token.hash, address))
                 .pipe(
                   catchError(error => {
-                    // TODO handle errors
                     Log.error(error);
-                    Log.log(`error getting token balance for token hash ${token.hash}`);
+                    Log.log(`Error getting token balance for token hash ${token.hash}`);
                     return of(0);
                   }),
                   map(balance => {
