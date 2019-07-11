@@ -141,10 +141,16 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
   issueToken() {
     const modal = this.modalService.open(TransactionComponent, { backdrop: 'static', keyboard: false });
-    (<TransactionComponent>modal.componentInstance).mode = Mode.Create;
+    (<TransactionComponent>modal.componentInstance).mode = Mode.IssueToken;
     (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
     (<TransactionComponent>modal.componentInstance).balance = this.balance;
     (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
+    modal.result.then(value => {
+      if (value === 'ok') {
+        Log.info('Refresh token list');
+        this.tokensRefreshRequested$.next(true);
+      }
+    });
   }
 
   get allTokens() {
@@ -185,6 +191,11 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     (<SendTokenComponent>modal.componentInstance).balance = this.balance;
     (<SendTokenComponent>modal.componentInstance).coinUnit = this.coinUnit;
     (<SendTokenComponent>modal.componentInstance).token = item;
-
+    modal.result.then(value => {
+      if (value === 'ok') {
+        Log.info('Refresh token list');
+        this.tokensRefreshRequested$.next(true);
+      }
+    });
   }
 }

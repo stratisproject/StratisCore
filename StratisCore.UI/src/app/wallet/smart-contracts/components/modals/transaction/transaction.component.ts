@@ -117,7 +117,7 @@ export class TransactionComponent implements OnInit {
       .toPromise()
       .then(result => {
         this.loading = false;
-        this.activeModal.close();
+        this.activeModal.close('ok');
       },
         error => {
           this.loading = false;

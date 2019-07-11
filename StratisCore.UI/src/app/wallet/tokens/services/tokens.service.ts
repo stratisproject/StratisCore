@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { Result, ResultStatus } from '../models/result';
 import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
-import { LocalCallRequest } from "../models/LocalCallRequest";
+import { LocalCallRequest } from '../models/LocalCallRequest';
 import { StorageService } from './storage.service';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
 
@@ -15,7 +15,7 @@ export class TokensService {
   private savedTokens = 'savedTokens';
 
   constructor(private apiService: ApiService, private storage: StorageService) { }
-  
+
   GetSavedTokens(): SavedToken[] {
     return this.storage.getItem<SavedToken[]>(this.savedTokens) || [];
   }
