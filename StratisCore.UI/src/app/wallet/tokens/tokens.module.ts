@@ -12,6 +12,7 @@ import { TokensService } from './services/tokens.service';
 import { AddTokenComponent } from './components/add-token/add-token.component';
 import { SmartContractsModule } from '../smart-contracts/smart-contracts.module';
 import { TransactionComponent } from '../smart-contracts/components/modals/transaction/transaction.component';
+import { SendTokenComponent } from './components/send-token/send-token.component';
 
 @NgModule({
   imports: [
@@ -22,11 +23,13 @@ import { TransactionComponent } from '../smart-contracts/components/modals/trans
 
   declarations: [
     TokensComponent,
-    AddTokenComponent
+    AddTokenComponent,
+    SendTokenComponent
   ],
 
   entryComponents: [
     AddTokenComponent,
+    SendTokenComponent,
     TransactionComponent
   ]
 })

@@ -15,6 +15,7 @@ import { TokenBalanceRequest } from '../models/token-balance-request';
 import { Log } from '../services/logger.service';
 import { TokensService } from '../services/tokens.service';
 import { AddTokenComponent } from './add-token/add-token.component';
+import { SendTokenComponent } from './send-token/send-token.component';
 
 @Component({
   selector: 'app-tokens',
@@ -151,7 +152,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   }
 
   getBalances(): Observable<SavedToken[]> {
-    return combineLatest(this.addressChanged$, this.tokensRefreshRequested$, this.polling$)
+    return combineLatest(this.addressChanged$, this.tokensRefreshRequested$)
       .pipe(
         switchMap(([address, _]) =>
           forkJoin(
@@ -177,7 +178,13 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         ));
   }
 
-  send(item: any) {
-    // TODO: show send dialog
+  send(item: SavedToken) {
+
+    const modal = this.modalService.open(SendTokenComponent, { backdrop: 'static', keyboard: false });
+    (<SendTokenComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
+    (<SendTokenComponent>modal.componentInstance).balance = this.balance;
+    (<SendTokenComponent>modal.componentInstance).coinUnit = this.coinUnit;
+    (<SendTokenComponent>modal.componentInstance).token = item;
+
   }
 }

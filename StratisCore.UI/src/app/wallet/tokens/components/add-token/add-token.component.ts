@@ -106,7 +106,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
       });
   }
 
-  showApiError(error: string) {
+  showApiError(error: string) {    
     this.genericModalService.openModal('Error', error);
   }
 
