@@ -155,7 +155,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       .pipe(
         switchMap(([address, _]) =>
           forkJoin(
-            this.allTokens.map(token =>
+            this.tokenService.GetSavedTokens().map(token =>
               this.tokenService
                 .GetTokenBalance(new TokenBalanceRequest(token.hash, address))
                 .pipe(
