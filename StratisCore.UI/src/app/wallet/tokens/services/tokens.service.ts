@@ -8,6 +8,7 @@ import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
 import { LocalCallRequest } from "../models/LocalCallRequest";
 import { StorageService } from './storage.service';
+import { LocalExecutionResult } from '@shared/models/local-execution-result';
 
 @Injectable()
 export class TokensService {
@@ -58,9 +59,7 @@ export class TokensService {
     );
   }
 
-  LocalCall<T>(request: LocalCallRequest): Observable<T> {
-    return this.apiService.localCall(request).pipe(
-      map(result => result.return ? <T> result.return : null)
-    );
+  LocalCall(request: LocalCallRequest): Observable<LocalExecutionResult> {
+    return this.apiService.localCall(request);
   }
 }

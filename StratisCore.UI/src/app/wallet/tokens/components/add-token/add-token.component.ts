@@ -2,10 +2,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '@shared/services/modal.service';
-import { of, ReplaySubject } from 'rxjs';
-import { catchError, take, takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
+import { take, takeUntil, finalize } from 'rxjs/operators';
 import { SmartContractsServiceBase } from 'src/app/wallet/smart-contracts/smart-contracts.service';
-
 import { Disposable } from '../../models/disposable';
 import { Mixin } from '../../models/mixin';
 import { SavedToken, Token } from '../../models/token';
@@ -66,24 +65,21 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
     
     // Add the token if valid token contract exists
     this.tokenService
-      .LocalCall<string>(tickerCall)
+      .LocalCall(tickerCall)
       .pipe(
         take(1),
-        catchError(error => {
-          Log.error(error);
-          this.showApiError(`Please check if contract hash is valid.`);
-          return of(undefined);
-        }),
-        takeUntil(this.disposed$))
-      .subscribe(methodCallResult => {
-        this.loading = false;
+        takeUntil(this.disposed$),
+        finalize(() => this.loading = false)
+      )
+      .subscribe(localExecutionResult => {
+        let methodCallResult = localExecutionResult.return;
 
-        if (methodCallResult === null) { 
+        if (!methodCallResult) {
           this.showApiError(`Address is not a valid token contract.`);
           return;
         }
-
-        if (methodCallResult !== ticker) { 
+        
+        if (typeof(methodCallResult) === 'string' && methodCallResult !== ticker) { 
           this.showApiError(`Token contract symbol ${methodCallResult} does not match given symbol ${ticker}.`);
           return;
         }
