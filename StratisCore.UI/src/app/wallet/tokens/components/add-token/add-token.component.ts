@@ -3,14 +3,14 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '@shared/services/modal.service';
 import { ReplaySubject } from 'rxjs';
-import { take, takeUntil, finalize } from 'rxjs/operators';
+import { finalize, take, takeUntil } from 'rxjs/operators';
 import { SmartContractsServiceBase } from 'src/app/wallet/smart-contracts/smart-contracts.service';
+
 import { Disposable } from '../../models/disposable';
+import { LocalCallRequest } from '../../models/LocalCallRequest';
 import { Mixin } from '../../models/mixin';
 import { SavedToken, Token } from '../../models/token';
-import { Log } from '../../services/logger.service';
 import { TokensService } from '../../services/tokens.service';
-import { LocalCallRequest } from '../../models/LocalCallRequest';
 
 @Component({
   selector: 'app-add-token',
@@ -59,19 +59,18 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
     const ticker = this.customTokenSelected ? this.ticker.value + '' : this.tokens.find(t => t.hash === this.token.value).ticker;
     const hash = this.customTokenSelected ? this.hash.value + '' : this.tokens.find(t => t.hash === this.token.value).hash;
 
-        // Check that this token isn't already in the list
-    let addedTokens = this.tokenService.GetSavedTokens()
-        .find(token => token.hash === hash);
+    // Check that this token isn't already in the list
+    const addedTokens = this.tokenService.GetSavedTokens().find(token => token.hash === hash);
 
     if (addedTokens) {
       this.showApiError(`Token ${addedTokens.ticker} is already added`);
 
       return;
     }
-  
+
     // Sender doesn't matter here, just reuse an easily available address
-    const tickerCall = new LocalCallRequest(hash, hash, "Symbol");
-  
+    const tickerCall = new LocalCallRequest(hash, hash, 'Symbol');
+
     this.loading = true;
 
     // Add the token if valid token contract exists
@@ -83,14 +82,14 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
         finalize(() => this.loading = false)
       )
       .subscribe(localExecutionResult => {
-        let methodCallResult = localExecutionResult.return;
+        const methodCallResult = localExecutionResult.return;
 
         if (!methodCallResult) {
           this.showApiError(`Address is not a valid token contract.`);
           return;
         }
-        
-        if (typeof(methodCallResult) === 'string' && methodCallResult !== ticker) { 
+
+        if (typeof (methodCallResult) === 'string' && methodCallResult !== ticker) {
           this.showApiError(`Token contract symbol ${methodCallResult} does not match given symbol ${ticker}.`);
           return;
         }
