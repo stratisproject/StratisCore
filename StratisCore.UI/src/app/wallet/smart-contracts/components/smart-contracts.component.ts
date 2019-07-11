@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Subscription, Observable, Subject, of, fromEventPattern } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject, of } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,7 +15,7 @@ import { takeUntil } from 'rxjs/operators';
     templateUrl: './smart-contracts.component.html',
     styleUrls: ['./smart-contracts.component.css']
 })
-export class SmartContractsComponent implements OnInit {
+export class SmartContractsComponent implements OnInit, OnDestroy {
 
     private walletName = '';
     addresses: string[];
@@ -40,7 +40,7 @@ export class SmartContractsComponent implements OnInit {
             .GetAddresses(this.walletName)
             .pipe(
               catchError(error => {
-                this.showApiError("Error retrieving addressses. " + error);
+                this.showApiError('Error retrieving addressses. ' + error);
                 return of([]);
               }),
               takeUntil(this.unsubscribe))
@@ -56,7 +56,7 @@ export class SmartContractsComponent implements OnInit {
                   switchMap(x => this.smartContractsService.GetAddressBalance(x)
                     .pipe(
                       catchError(error => {
-                          this.showApiError("Error retrieving balance. " + error);
+                          this.showApiError('Error retrieving balance. ' + error);
                           return of(0);
                       })
                     )
@@ -69,7 +69,7 @@ export class SmartContractsComponent implements OnInit {
             .pipe(
               switchMap(address => this.smartContractsService.GetHistory(this.walletName, address)
                 .pipe(catchError(error => {
-                    this.showApiError("Error retrieving transactions. " + error);
+                    this.showApiError('Error retrieving transactions. ' + error);
                     return of([]);
                   })
                 )
@@ -90,11 +90,10 @@ export class SmartContractsComponent implements OnInit {
     ngOnDestroy() {
         this.unsubscribe.next();
         this.unsubscribe.complete();
-      }
+    }
 
-    showApiError(error: string)
-    {
-        this.genericModalService.openModal("Error", error);
+    showApiError(error: string) {
+        this.genericModalService.openModal('Error', error);
     }
 
     addressChanged(address: string) {
@@ -124,15 +123,16 @@ export class SmartContractsComponent implements OnInit {
     }
 
     txHashClicked(contract: ContractTransactionItem) {
-        console.log("txhash clicked");
+        console.log('txhash clicked');
         this.smartContractsService
             .GetReceipt(contract.hash)
             .toPromise()
             .then(result => {
-                this.genericModalService.openModal("Receipt", "<pre class='selectable'>" + JSON.stringify(result, null,"    ") + "</pre>");
+                // tslint:disable-next-line:max-line-length
+                this.genericModalService.openModal('Receipt', '<pre class=\'selectable\'>' + JSON.stringify(result, null, '    ') + '</pre>');
             },
                 error => {
-                    this.showApiError("Error retrieving receipt. " + error);
+                    this.showApiError('Error retrieving receipt. ' + error);
             });
     }
 }

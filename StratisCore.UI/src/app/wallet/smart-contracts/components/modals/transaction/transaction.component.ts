@@ -115,7 +115,7 @@ export class TransactionComponent implements OnInit {
       ? this.smartContractsService.PostCreate(result)
       : this.smartContractsService.PostCall(result))
       .toPromise()
-      .then(result => {
+      .then(() => {
         this.loading = false;
         this.activeModal.close('ok');
       },
@@ -147,13 +147,15 @@ export class TransactionComponent implements OnInit {
           `4#${this.tokenSymbol.value}`
         ],
         contractCode: this.newTokenByteCode,
-        password: this.password.value
+        password: this.password.value,
+        walletName: this.walletName,
+        sender: this.selectedSenderAddress
       };
     }
 
     return {
       ...this.transactionForm.value,
-      parameters: this.transactionForm.value.parameters.map(p => p.type + "#" + p.value),
+      parameters: this.transactionForm.value.parameters.map(p => `${p.type}#${p.value}`),
       walletName: this.walletName,
       sender: this.selectedSenderAddress
     };
@@ -164,20 +166,26 @@ export class TransactionComponent implements OnInit {
     const gasPriceTooLowValidator = control => Number(control.value) < this.gasPriceMinimum ? { gasPriceTooLowError: true } : null;
     const gasPriceTooHighValidator = control => Number(control.value) > this.gasPriceMaximum ? { gasPriceTooHighError: true } : null;
     const gasLimitMaximumValidator = control => Number(control.value) > this.gasLimitMaximum ? { gasLimitTooHighError: true } : null;
+    // tslint:disable-next-line:max-line-length
     const gasCallLimitMinimumValidator = control => Number(control.value) < this.gasCallLimitMinimum ? { gasCallLimitTooLowError: true } : null;
+    // tslint:disable-next-line:max-line-length
     const gasCreateLimitMinimumValidator = control => Number(control.value) < this.gasCreateLimitMinimum ? { gasCreateLimitTooLowError: true } : null;
     const oddValidator = control => String(control.value).length % 2 !== 0 ? { hasOddNumberOfCharacters: true } : null;
 
     const integerValidator = Validators.pattern('^[0-9][0-9]*$');
 
-    let gasLimitValidator = (this.mode === Mode.Call ? gasCallLimitMinimumValidator : gasCreateLimitMinimumValidator);
+    const gasLimitValidator = (this.mode === Mode.Call ? gasCallLimitMinimumValidator : gasCreateLimitMinimumValidator);
 
     this.amount = new FormControl(0, [amountValidator, Validators.min(0)]);
     this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator, Validators.min(0)]);
+    // tslint:disable-next-line:max-line-length
     this.gasPrice = new FormControl(100, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator, Validators.min(0)]);
+    // tslint:disable-next-line:max-line-length
     this.gasLimit = new FormControl(this.mode === Mode.Call ? this.gasCallLimitMinimum : this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
     this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
-    this.contractCode = new FormControl('', [Validators.required, Validators.nullValidator, Validators.pattern('[0-9a-fA-F]*'), oddValidator]);
+    const contractCode = this.mode === Mode.IssueToken ? this.newTokenByteCode : '';
+    // tslint:disable-next-line:max-line-length
+    this.contractCode = new FormControl(contractCode, [Validators.required, Validators.nullValidator, Validators.pattern('[0-9a-fA-F]*'), oddValidator]);
     this.parameters = new FormArray([]);
     this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
     this.totalSupply = new FormControl(21 * 1000 * 1000, [Validators.min(1), Validators.required]);

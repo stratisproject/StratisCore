@@ -96,7 +96,7 @@
             <input formControlName="tokenName" id="tokenName" type="text" class="form-control" placeholder="Token Name"
               [class.is-invalid]="tokenName.invalid && (tokenName.dirty || tokenName.touched)" maxlength="50">
             <div *ngIf="tokenName.errors" class="invalid-feedback">
-              <p *ngIf="tokenName.errors.requied">Token name is required</p>
+              <p *ngIf="tokenName.errors.required">Token name is required</p>
             </div>
           </div>
           <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right"
@@ -106,7 +106,7 @@
               placeholder="Token Symbol"
               [class.is-invalid]="tokenSymbol.invalid && (tokenSymbol.dirty || tokenSymbol.touched)" maxlength="5">
             <div *ngIf="tokenSymbol.errors" class="invalid-feedback">
-              <p *ngIf="tokenSymbol.errors.requied">Token symbol is required</p>
+              <p *ngIf="tokenSymbol.errors.required">Token symbol is required</p>
             </div>
           </div>
           <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right" title="Total coin supply">
@@ -115,10 +115,7 @@
               placeholder="Total Supply"
               [class.is-invalid]="totalSupply.invalid && (totalSupply.dirty || totalSupply.touched)" min="0">
             <div *ngIf="totalSupply.errors" class="invalid-feedback">
-              <p *ngIf="totalSupply.errors.requied">Total supply is required</p>
-              <p *ngIf="totalSupply.errors.gasCreateLimitTooLowError">Gas create limit must be greater than
-                {{ gasCreateLimitMinimum }}</p>
-              <p *ngIf="totalSupply.errors.gasLimitTooHighError">Gas limit must be less than {{ gasLimitMaximum }}</p>
+              <p *ngIf="totalSupply.errors.required">Total supply is required</p>
               <p *ngIf="totalSupply.errors.min">Total supply cannot be negative or zero</p>
             </div>
           </div>
