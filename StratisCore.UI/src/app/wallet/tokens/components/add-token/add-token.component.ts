@@ -55,14 +55,25 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
   }
 
   onSubmit() {
-    this.loading = true;
 
     const ticker = this.customTokenSelected ? this.ticker.value + '' : this.tokens.find(t => t.hash === this.token.value).ticker;
     const hash = this.customTokenSelected ? this.hash.value + '' : this.tokens.find(t => t.hash === this.token.value).hash;
 
+        // Check that this token isn't already in the list
+    let addedTokens = this.tokenService.GetSavedTokens()
+        .find(token => token.hash === hash);
+
+    if (addedTokens) {
+      this.showApiError(`Token ${addedTokens.ticker} is already added`);
+
+      return;
+    }
+  
     // Sender doesn't matter here, just reuse an easily available address
     const tickerCall = new LocalCallRequest(hash, hash, "Symbol");
-    
+  
+    this.loading = true;
+
     // Add the token if valid token contract exists
     this.tokenService
       .LocalCall(tickerCall)
