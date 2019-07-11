@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Result, ResultStatus } from '../models/result';
 import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
+import { LocalCallRequest } from "../models/LocalCallRequest";
 import { StorageService } from './storage.service';
 
 @Injectable()
@@ -54,6 +55,12 @@ export class TokensService {
   GetTokenBalance(request: TokenBalanceRequest): Observable<number> {
     return this.apiService.localCall(request).pipe(
       map(localExecutionresult => localExecutionresult.return ? localExecutionresult.return : 0)
+    );
+  }
+
+  LocalCall<T>(request: LocalCallRequest): Observable<T> {
+    return this.apiService.localCall(request).pipe(
+      map(result => result.return ? <T> result.return : null)
     );
   }
 }

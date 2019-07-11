@@ -11,6 +11,7 @@ import { Mixin } from '../../models/mixin';
 import { SavedToken, Token } from '../../models/token';
 import { Log } from '../../services/logger.service';
 import { TokensService } from '../../services/tokens.service';
+import { LocalCallRequest } from '../../models/LocalCallRequest';
 
 @Component({
   selector: 'app-add-token',
@@ -60,9 +61,12 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
     const ticker = this.customTokenSelected ? this.ticker.value + '' : this.tokens.find(t => t.hash === this.token.value).ticker;
     const hash = this.customTokenSelected ? this.hash.value + '' : this.tokens.find(t => t.hash === this.token.value).hash;
 
-    // Validate hash and add it if reciept exists
-    this.smartContractsService
-      .GetReceipt(hash)
+    // Sender doesn't matter here, just reuse an easily available address
+    const tickerCall = new LocalCallRequest(hash, hash, "Symbol");
+    
+    // Add the token if valid token contract exists
+    this.tokenService
+      .LocalCall<string>(tickerCall)
       .pipe(
         take(1),
         catchError(error => {
@@ -71,11 +75,21 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
           return of(undefined);
         }),
         takeUntil(this.disposed$))
-      .subscribe(data => {
-        if (!data) { return; }
+      .subscribe(methodCallResult => {
+        this.loading = false;
+
+        if (methodCallResult === null) { 
+          this.showApiError(`Address is not a valid token contract.`);
+          return;
+        }
+
+        if (methodCallResult !== ticker) { 
+          this.showApiError(`Token contract symbol ${methodCallResult} does not match given symbol ${ticker}.`);
+          return;
+        }
+
         const savedToken = new SavedToken(ticker, hash, 0);
         const result = this.tokenService.AddToken(savedToken);
-        this.loading = false;
 
         if (result.failure) {
           this.apiError = result.message;
