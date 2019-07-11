@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { forkJoin, Observable, of, ReplaySubject, Subject, BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, forkJoin, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
@@ -118,8 +118,6 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
   issueToken() {
     const modal = this.modalService.open(TransactionComponent, { backdrop: 'static', keyboard: false });
-    (<TransactionComponent>modal.componentInstance).title = 'Issue new token';
-    (<TransactionComponent>modal.componentInstance).actionButtonText = 'Issue Token';
     (<TransactionComponent>modal.componentInstance).mode = Mode.Create;
     (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
     // TODO: get current balance

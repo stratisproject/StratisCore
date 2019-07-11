@@ -1,7 +1,7 @@
 <div>
 
   <div class="modal-header">
-    <h5 class="modal-title">{{titleText}}</h5>
+    <h5 class="modal-title">{{title}}</h5>
     <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close"
       (click)="closeClicked()">
       <i class="lnr lnr-cross-circle"></i>
@@ -66,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row" *ngIf="mode !== modeEnum.IssueToken; else issueTokenParams">
         <label class="col-12" for="">Parameters</label>
         <div style="display:block; margin-left:auto; margin-right:auto">
           <div class="row" formArrayName="parameters" *ngFor="let parameter of parameters.controls; let i = index;">
@@ -88,7 +88,43 @@
           </div>
         </div>
       </div>
-      <div class="mt-2 mb-4 d-flex justify-content-end">
+      <ng-template #issueTokenParams>
+        <div class="row">
+          <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right"
+            title="Unique name for your token">
+            <label for="tokenName">Token Name</label>
+            <input formControlName="tokenName" id="tokenName" type="text" class="form-control" placeholder="Token Name"
+              [class.is-invalid]="tokenName.invalid && (tokenName.dirty || tokenName.touched)" maxlength="50">
+            <div *ngIf="tokenName.errors" class="invalid-feedback">
+              <p *ngIf="tokenName.errors.requied">Token name is required</p>
+            </div>
+          </div>
+          <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right"
+            title="Unique ticker/symbol for your token">
+            <label for="tokenName">Token Symbol</label>
+            <input formControlName="tokenSymbol" id="tokenName" type="text" class="form-control"
+              placeholder="Token Symbol"
+              [class.is-invalid]="tokenSymbol.invalid && (tokenSymbol.dirty || tokenSymbol.touched)" maxlength="5">
+            <div *ngIf="tokenSymbol.errors" class="invalid-feedback">
+              <p *ngIf="tokenSymbol.errors.requied">Token symbol is required</p>
+            </div>
+          </div>
+          <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right" title="Total coin supply">
+            <label for="totalSupply">Gas limit</label>
+            <input formControlName="totalSupply" id="totalSupply" type="number" class="form-control"
+              placeholder="Total Supply"
+              [class.is-invalid]="totalSupply.invalid && (totalSupply.dirty || totalSupply.touched)" min="0">
+            <div *ngIf="totalSupply.errors" class="invalid-feedback">
+              <p *ngIf="totalSupply.errors.requied">Total supply is required</p>
+              <p *ngIf="totalSupply.errors.gasCreateLimitTooLowError">Gas create limit must be greater than
+                {{ gasCreateLimitMinimum }}</p>
+              <p *ngIf="totalSupply.errors.gasLimitTooHighError">Gas limit must be less than {{ gasLimitMaximum }}</p>
+              <p *ngIf="totalSupply.errors.min">Total supply cannot be negative or zero</p>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <div class="mt-2 mb-4 d-flex justify-content-end" *ngIf="mode !== modeEnum.IssueToken">
         <button type="button" class="btn btn-outline-secondary" (click)="addParameterClicked()"><i
             class="lnr lnr-plus-circle"></i>
           Add a parameter</button>
