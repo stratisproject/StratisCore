@@ -23,6 +23,8 @@ import { AddTokenComponent } from './add-token/add-token.component';
 })
 @Mixin([Disposable])
 export class TokensComponent implements OnInit, OnDestroy, Disposable {
+  balance: number;
+  coinUnit: string;
   addressChanged$: Subject<string>;
   tokensRefreshRequested$ = new BehaviorSubject<boolean>(true);
   polling$: Observable<number>;
@@ -49,6 +51,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     this.tokens$ = this.getBalances();
     this.availableTokens = this.tokenService.GetAvailableTokens();
     this.availableTokens.push(new Token('Custom', 'custom'));
+    this.coinUnit = this.globalService.getCoinUnit();
 
     this.smartContractsService
       .GetAddresses(this.walletName)
@@ -80,6 +83,20 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         takeUntil(this.disposed$)
       )
       .subscribe(history => this.history = history);
+
+    this.addressChanged$
+      .pipe(
+        switchMap(x => this.smartContractsService.GetAddressBalance(x)
+          .pipe(
+            catchError(error => {
+              this.showApiError(`Error retrieving balance. ${error}`);
+              return of(0);
+            })
+          )
+        ),
+        takeUntil(this.disposed$)
+      )
+      .subscribe(balance => this.balance = balance);
 
 
     this.addressChanged$
@@ -125,9 +142,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     const modal = this.modalService.open(TransactionComponent, { backdrop: 'static', keyboard: false });
     (<TransactionComponent>modal.componentInstance).mode = Mode.Create;
     (<TransactionComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
-    // TODO: get current balance
-    // (<TransactionComponent>modal.componentInstance).balance = this.balance;
-    // (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
+    (<TransactionComponent>modal.componentInstance).balance = this.balance;
+    (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
   }
 
   get allTokens() {
