@@ -144,7 +144,7 @@ export class TransactionComponent implements OnInit {
         parameters: [
           `7#${this.totalSupply.value}`,
           `4#${this.tokenName.value}`,
-          `4#${this.tokenSymbol.value}`
+          `4#${this.tokenSymbol.value.toUpperCase()}`
         ],
         contractCode: this.newTokenByteCode,
         password: this.password.value,
