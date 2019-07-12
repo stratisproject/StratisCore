@@ -147,7 +147,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     (<TransactionComponent>modal.componentInstance).balance = this.balance;
     (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
     modal.result.then(value => {
-      if (!!value && !!value.request && !!value.response) {
+      if (!!value && !!value.request && !!value.transactionHash) {
         // start monitoring token progress
         const progressModal = this.modalService.open(IssueTokenProgressComponent, { backdrop: 'static', keyboard: false });
         if (!!value.response['error']) {
