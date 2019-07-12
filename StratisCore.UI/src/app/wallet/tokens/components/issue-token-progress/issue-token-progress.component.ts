@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '@shared/services/modal.service';
-import { interval, of, race, ReplaySubject, throwError, timer } from 'rxjs';
-import { catchError, first, mergeMap, switchMapTo } from 'rxjs/operators';
+import { interval, of, ReplaySubject, timer, race, throwError } from 'rxjs';
+import { catchError, takeUntil, switchMapTo, mergeMap, first, map, timeout, tap } from 'rxjs/operators';
 import { SmartContractsServiceBase } from 'src/app/wallet/smart-contracts/smart-contracts.service';
 
 import { Disposable } from '../../models/disposable';
@@ -38,11 +38,7 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
   ngOnInit() {
     this.loading = true;
 
-    const timeOut = timer(this.maxTimeout)
-      .pipe(
-        switchMapTo(throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
-        to monitor transactions and check the progress of the token issuance. Once successful, add token manually.`))
-      );
+    let timeOut = timer(this.maxTimeout).pipe(map(_ => null));
 
     // Polls for a receipt on an interval and only emits when a receipt is found
     const pollReceipt = interval(this.pollingInterval)
@@ -63,15 +59,18 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
       );
 
     race(timeOut, pollReceipt)
-      .subscribe(
-        receipt => {
-          this.loading = false;
-
-          if (!!receipt['error']) {
-            this.showError(receipt['error']);
-            this.activeModal.close('ok');
-            return;
+      .pipe(
+        takeUntil(this.disposed$),
+        tap(receipt => {
+          // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
+          if (receipt == null) {
+            throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
+            to monitor transactions and check the progress of the token issuance. Once successful, add token manually.`);
           }
+        })
+      )
+      .subscribe(receipt => {
+        this.loading = false;
 
           const newTokenAddress = receipt['newContractAddress'];
           const token = new SavedToken(this.symbol, newTokenAddress, 0);
