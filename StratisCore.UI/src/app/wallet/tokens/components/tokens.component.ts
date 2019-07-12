@@ -151,8 +151,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         // start monitoring token progress
         const progressModal = this.modalService.open(IssueTokenProgressComponent, { backdrop: 'static', keyboard: false });
 
-        (<IssueTokenProgressComponent>modal.componentInstance).transactionHash = value.transactionHash;
-        (<IssueTokenProgressComponent>modal.componentInstance).symbol = value.request.parameters[2].split('#')[1];
+        (<IssueTokenProgressComponent>progressModal.componentInstance).transactionHash = value.transactionHash;
+        (<IssueTokenProgressComponent>progressModal.componentInstance).symbol = value.request.parameters[2].split('#')[1];
         progressModal.result.then(_ => {
           Log.info('Refresh token list');
           this.tokensRefreshRequested$.next(true);
