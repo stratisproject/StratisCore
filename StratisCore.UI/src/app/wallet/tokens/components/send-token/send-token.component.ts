@@ -6,6 +6,7 @@ import { Disposable } from '../../models/disposable';
 import { TokensService } from '../../services/tokens.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '@shared/services/modal.service';
+import { SmartContractsService } from 'src/app/wallet/smart-contracts/smart-contracts.service';
 
 @Component({
   selector: 'app-send-token',
@@ -21,16 +22,17 @@ export class SendTokenComponent implements OnInit {
   @Input()
   token: SavedToken;
 
+  @Input()
+  walletName: string;
+
   balance = 0;
 
   title = 'Send Token';
 
   parameters: FormArray;
-  amount: FormControl;
   feeAmount: FormControl;
   gasPrice: FormControl;
   gasLimit: FormControl;
-  methodName: FormControl;
   contractAddress: FormControl;
   recipientAddress: FormControl;
   password: FormControl;
@@ -43,25 +45,65 @@ export class SendTokenComponent implements OnInit {
   gasLimitMaximum = 100000;
   gasPriceMinimum = 1;
   gasPriceMaximum = 10000;
-  transactionForm: any;
+  transactionForm: FormGroup;
   tokenAmount: FormControl;
 
-  constructor(private tokenService: TokensService,
-    private activeModal: NgbActiveModal,
-    private genericModalService: ModalService) {
-    }
+  constructor(private activeModal: NgbActiveModal, private smartContractsService: SmartContractsService) {}
 
   ngOnInit() {
     this.registerControls();
     this.contractAddress.setValue(this.token.hash);
     this.contractAddress.disable();
-
-    this.methodName.setValue('TransferTo');
-    this.methodName.disable();
   }
 
   closeClicked() {
     this.activeModal.close();
+  }
+
+  private createModel() {
+
+    return {
+      amount: 0,
+      contractAddress: this.token.hash,
+      feeAmount: this.feeAmount.value,
+      gasPrice: this.gasPrice.value,
+      gasLimit: this.gasLimit.value,
+      parameters: [
+        `9#${this.recipientAddress.value}`,
+        `7#${this.tokenAmount.value}`
+      ],
+      methodName: "TransferTo",
+      password: this.password.value,
+      walletName: this.walletName,
+      sender: this.selectedSenderAddress
+    };
+  }
+
+  onSubmit() {
+    // Hack the parameters into a format the API expects
+    const result = this.createModel();
+
+    this.loading = true;
+
+    // We don't need an observable here so let's treat it as a promise.
+    this.smartContractsService.PostCall(result)
+      .toPromise()
+      .then(transactionHash => {
+        this.loading = false;
+        this.activeModal.close({ request: result, transactionHash });
+      },
+        error => {
+          this.loading = false;
+          if (!error.error.errors) {
+            if (error.error.value.message) {
+              this.apiError = error.error.value.message;
+            } else {
+              console.log(error);
+            }
+          } else {
+            this.apiError = error.error.errors[0].message;
+          }
+        });
   }
 
   private registerControls() {
@@ -71,34 +113,27 @@ export class SendTokenComponent implements OnInit {
     const gasLimitMaximumValidator = control => Number(control.value) > this.gasLimitMaximum ? { gasLimitTooHighError: true } : null;
     // tslint:disable-next-line:max-line-length
     const gasCallLimitMinimumValidator = control => Number(control.value) < this.gasCallLimitMinimum ? { gasCallLimitTooLowError: true } : null;
-    // tslint:disable-next-line:max-line-length
-    const gasCreateLimitMinimumValidator = control => Number(control.value) < this.gasCreateLimitMinimum ? { gasCreateLimitTooLowError: true } : null;
-    const oddValidator = control => String(control.value).length % 2 !== 0 ? { hasOddNumberOfCharacters: true } : null;
 
     const integerValidator = Validators.pattern('^[0-9][0-9]*$');
 
     const gasLimitValidator = (gasCallLimitMinimumValidator);
 
-    this.amount = new FormControl(0, [amountValidator, Validators.min(0)]);
     this.tokenAmount = new FormControl(0, [Validators.min(0)]);
     this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator, Validators.min(0)]);
     // tslint:disable-next-line:max-line-length
     this.gasPrice = new FormControl(100, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator, Validators.min(0)]);
     // tslint:disable-next-line:max-line-length
     this.gasLimit = new FormControl(this.gasCallLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
-    this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
     this.parameters = new FormArray([]);
     this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
     this.contractAddress = new FormControl('', [Validators.required, Validators.nullValidator]);
     this.recipientAddress = new FormControl('', [Validators.required, Validators.nullValidator]);
     this.transactionForm = new FormGroup({
-      amount: this.amount,
       feeAmount: this.feeAmount,
       gasPrice: this.gasPrice,
       gasLimit: this.gasLimit,
       parameters: this.parameters,
       tokenAmount: this.tokenAmount,
-      methodName: this.methodName,
       contractAddress: this.contractAddress,
       recipientAddress: this.recipientAddress,
       password: this.password

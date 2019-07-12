@@ -195,6 +195,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   send(item: SavedToken) {
 
     const modal = this.modalService.open(SendTokenComponent, { backdrop: 'static', keyboard: false });
+    (<SendTokenComponent>modal.componentInstance).walletName = this.walletName;
     (<SendTokenComponent>modal.componentInstance).selectedSenderAddress = this.selectedAddress;
     (<SendTokenComponent>modal.componentInstance).balance = this.balance;
     (<SendTokenComponent>modal.componentInstance).coinUnit = this.coinUnit;

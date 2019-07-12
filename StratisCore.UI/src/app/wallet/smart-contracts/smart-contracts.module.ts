@@ -18,7 +18,9 @@ import { ContractTypePipe } from './components/contract-type.pipe';
     ],
 
     providers: [{ provide: SmartContractsServiceBase, useClass: SmartContractsService }],
-
+    exports: [
+        ScBalanceComponent
+    ],
     declarations: [
         SmartContractsComponent,
         TransactionComponent,

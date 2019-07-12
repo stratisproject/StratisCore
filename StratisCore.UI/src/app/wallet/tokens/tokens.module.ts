@@ -14,13 +14,14 @@ import { TokensComponent } from './components/tokens.component';
 import { Log } from './services/logger.service';
 import { StorageService } from './services/storage.service';
 import { TokensService } from './services/tokens.service';
+import { SmartContractsService } from '../smart-contracts/smart-contracts.service';
 
 @NgModule({
   imports: [
     CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule, SharedModule, SmartContractsModule.forRoot()
   ],
 
-  providers: [TokensService, StorageService, Log],
+  providers: [TokensService, StorageService, Log, SmartContractsService],
 
   declarations: [
     TokensComponent,
