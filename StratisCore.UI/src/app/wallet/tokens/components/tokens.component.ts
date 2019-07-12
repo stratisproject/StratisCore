@@ -246,10 +246,60 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     (<SendTokenComponent>modal.componentInstance).coinUnit = this.coinUnit;
     (<SendTokenComponent>modal.componentInstance).token = item;
     modal.result.then(value => {
-      if (value === 'ok') {
-        Log.info('Refresh token list');
-        this.tokensRefreshRequested$.next(true);
+
+      if (!value && !value.callResponse) {
+        return;
       }
+
+      let loading = false;
+      // start monitoring token progress
+      const progressModal = this.modalService.open(IssueTokenProgressComponent, { backdrop: 'static', keyboard: false });
+      (<IssueTokenProgressComponent>progressModal.componentInstance).loading = loading;
+      (<IssueTokenProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
+
+      let receiptQuery = this.smartContractsService.GetReceiptSilent(value.callResponse.transactionId)
+        .pipe(
+          catchError(error => {
+            // Receipt API returns a 400 if the receipt is not found.
+            Log.log(`Receipt not found yet`);
+            return of(undefined);
+          })
+        );
+  
+      tokenService.pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
+        .pipe(
+          first(r => {
+            // Ignore the response until it has a value
+            return !!r;
+          }),          
+          switchMap(result => {
+            // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
+            if (result == null) {
+              return throwError(`It seems to be taking longer to transfer tokens. Please go to "Smart Contracts" tab
+              to monitor transactions and check the progress of the token transfer.`);
+            }
+
+            return of(result);
+          })          
+        )
+        .subscribe(receipt => {
+            loading = false;
+            progressModal.close('ok');
+            
+            if (receipt.error) {
+              this.showError(receipt.error);
+            }
+            else {
+              this.tokensRefreshRequested$.next(true);
+            }            
+          },
+          error => {
+            loading = false;
+            this.showError(error);
+            Log.error(error);
+            progressModal.close('ok');
+          }
+        );
     });
   }
 }

@@ -88,9 +88,9 @@ export class SendTokenComponent implements OnInit {
     // We don't need an observable here so let's treat it as a promise.
     this.smartContractsService.PostCall(result)
       .toPromise()
-      .then(transactionHash => {
+      .then(callResponse => {
         this.loading = false;
-        this.activeModal.close({ request: result, transactionHash });
+        this.activeModal.close({ request: result, callResponse });
       },
         error => {
           this.loading = false;
