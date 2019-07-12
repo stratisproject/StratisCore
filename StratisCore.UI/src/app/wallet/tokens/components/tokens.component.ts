@@ -183,7 +183,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
             return of(result);
           }),
-          map(receipt => {
+          switchMap(receipt => {
             if (receipt.error) {
               return throwError(receipt.error)
             }
@@ -287,12 +287,12 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
             return of(result);
           }),
-          map(receipt => {
+          switchMap(receipt => {
             if (receipt.error) {
               return throwError(receipt.error)
             }
             return of(receipt);
-          })
+          })  
         )
         .subscribe(receipt => {
             loading = false;
