@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '@shared/services/modal.service';
-import { BehaviorSubject, interval, of, ReplaySubject } from 'rxjs';
-import { catchError, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
+import { BehaviorSubject, interval, of, ReplaySubject, timer, race, throwError } from 'rxjs';
+import { catchError, switchMap, takeUntil, takeWhile, skipUntil, skipWhile, switchMapTo, mergeMap, first, map } from 'rxjs/operators';
 import { SmartContractsServiceBase } from 'src/app/wallet/smart-contracts/smart-contracts.service';
 
 import { Disposable } from '../../models/disposable';
@@ -27,8 +27,6 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
   dispose: () => void;
   maxTimeout = 1.5 * 60 * 1000; // wait for about 1.5 minutes
   pollingInterval = 5 * 1000;
-  cancellationRequested = false;
-  completed$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -37,53 +35,53 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
     private genericModalService: ModalService) { }
 
   ngOnInit() {
-    interval(this.pollingInterval)
+
+    let timeOut = timer(this.maxTimeout)
       .pipe(
-        takeWhile((elapsedIntervals) => {
-          const elapsed = elapsedIntervals * this.pollingInterval;
-          const timedOut = elapsed > this.maxTimeout;
-          const completed = this.cancellationRequested || timedOut;
-          if (timedOut) { this.completed$.next(true); }
-          return !completed;
-        }),
-        switchMap(_ => this.smartContractsService.GetReceipt(this.transactionHash, true)),
-        catchError(error => {
-          Log.log(`Error getting receipt for ${this.transactionHash}`);
-          return of(undefined);
-        }),
+        switchMapTo(throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
+        to monitor transactions and check the progress of the token issuance. Once successful, add token manually.`))
+      );
+
+    // Polls for a receipt on an interval and only emits when a receipt is found
+    let pollReceipt = interval(this.pollingInterval)
+      .pipe(
+        mergeMap(_ => this.smartContractsService.GetReceiptSilent(this.transactionHash)
+          .pipe(
+            catchError(error => {
+              // Receipt API returns a 400 if the receipt is not found. 
+              Log.log(`Receipt not found yet`);
+              return of(undefined);
+            })
+          )        
+        ), // Don't care about errors here, they will be handled in the subscribe
+        first(r => {
+          // Ignore the response until it has a value
+          return !!r;
+        })
+      );
+
+    race(timeOut, pollReceipt)
+      .pipe(
         takeUntil(this.disposed$)
       )
       .subscribe(receipt => {
-        if (!receipt) { return; }
 
-        try {
-          const receiptModel = JSON.parse(receipt);
-          if (!!receiptModel['error']) {
-            this.showError(receipt['error']);
-            this.activeModal.close('ok');
-            return;
-          }
-
-          const newTokenAddress = receiptModel['newContractAddress'];
-          const token = new SavedToken(this.symbol, newTokenAddress, 0);
-          this.tokenService.AddToken(token);
-          this.cancellationRequested = true;
+        if (!!receipt['error']) {
+          this.showError(receipt['error']);
           this.activeModal.close('ok');
-
-        } catch (e) {
-          Log.error(e);
           return;
         }
+
+        const newTokenAddress = receipt['newContractAddress'];
+        const token = new SavedToken(this.symbol, newTokenAddress, 0);
+        this.tokenService.AddToken(token);
+        this.activeModal.close('ok');
+      },
+      error => {
+        this.showError(error);
+        Log.error(error);
+        this.activeModal.close('ok');
       });
-
-    this.completed$.pipe(takeUntil(this.disposed$)).subscribe(completed => {
-      if (!completed) { return; }
-
-      this.showError(
-        `It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
-         to monitor transactions and check the progress of the token issuance. Once successful, add token manually.`);
-      this.activeModal.close('ok');
-    });
   }
 
   ngOnDestroy() {
