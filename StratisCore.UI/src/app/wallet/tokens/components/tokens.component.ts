@@ -153,7 +153,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         if (!!value.response['error']) {
           this.showApiError(value.response['error']);
         }
-        (<IssueTokenProgressComponent>modal.componentInstance).hash = value.response['newContractAddress'];
+        console.log(value);
+        (<IssueTokenProgressComponent>modal.componentInstance).transactionHash = value.transactionHash;
         (<IssueTokenProgressComponent>modal.componentInstance).symbol = value.request.parameters[2].split('#')[1];
         progressModal.result.then(_ => {
           Log.info('Refresh token list');

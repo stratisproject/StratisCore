@@ -115,9 +115,9 @@ export class TransactionComponent implements OnInit {
       ? this.smartContractsService.PostCreate(result)
       : this.smartContractsService.PostCall(result))
       .toPromise()
-      .then(apiResult => {
+      .then(transactionHash => {
         this.loading = false;
-        this.activeModal.close({ request: result, response: apiResult });
+        this.activeModal.close({ request: result, transactionHash });
       },
         error => {
           this.loading = false;

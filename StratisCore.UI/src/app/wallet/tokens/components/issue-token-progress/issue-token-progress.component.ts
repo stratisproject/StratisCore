@@ -19,7 +19,7 @@ import { TokensService } from '../../services/tokens.service';
 @Mixin([Disposable])
 export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposable {
 
-  @Input() hash = '';
+  @Input() transactionHash = '';
   @Input() symbol = '';
 
   apiError: string;
@@ -46,9 +46,9 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
           if (timedOut) { this.completed$.next(true); }
           return !completed;
         }),
-        switchMap(_ => this.smartContractsService.GetReceipt(this.hash, true)),
+        switchMap(_ => this.smartContractsService.GetReceipt(this.transactionHash, true)),
         catchError(error => {
-          Log.log(`Error getting receipt for ${this.hash}`);
+          Log.log(`Error getting receipt for ${this.transactionHash}`);
           return of(undefined);
         }),
         takeUntil(this.disposed$)
@@ -63,14 +63,17 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
             this.activeModal.close('ok');
             return;
           }
+
+          const newTokenAddress = receiptModel['newContractAddress'];
+          const token = new SavedToken(this.symbol, newTokenAddress, 0);
+          this.tokenService.AddToken(token);
+          this.cancellationRequested = true;
+          this.activeModal.close('ok');
+
         } catch (e) {
           Log.error(e);
           return;
         }
-        const token = new SavedToken(this.symbol, this.hash, 0);
-        this.tokenService.AddToken(token);
-        this.cancellationRequested = true;
-        this.activeModal.close('ok');
       });
 
     this.completed$.pipe(takeUntil(this.disposed$)).subscribe(completed => {
