@@ -157,7 +157,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       // start monitoring token progress
       const progressModal = this.modalService.open(IssueTokenProgressComponent, { backdrop: 'static', keyboard: false });
       (<IssueTokenProgressComponent>progressModal.componentInstance).loading = loading;
-      (<IssueTokenProgressComponent>progressModal.componentInstance).close.next(() => progressModal.close());
+      (<IssueTokenProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
 
       let receiptQuery = this.smartContractsService.GetReceiptSilent(value.transactionHash)
         .pipe(
