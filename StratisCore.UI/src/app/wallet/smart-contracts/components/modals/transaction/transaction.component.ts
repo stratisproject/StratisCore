@@ -232,7 +232,6 @@ export class TransactionComponent implements OnInit {
       });
     } else if (this.mode === Mode.IssueToken) {
       this.transactionForm = new FormGroup({
-        amount: this.amount,
         feeAmount: this.feeAmount,
         gasPrice: this.gasPrice,
         gasLimit: this.gasLimit,
