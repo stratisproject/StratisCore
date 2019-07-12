@@ -15,6 +15,7 @@ import { TokenBalanceRequest } from '../models/token-balance-request';
 import { Log } from '../services/logger.service';
 import { TokensService } from '../services/tokens.service';
 import { AddTokenComponent } from './add-token/add-token.component';
+import { IssueTokenProgressComponent } from './issue-token-progress/issue-token-progress.component';
 import { SendTokenComponent } from './send-token/send-token.component';
 
 @Component({
@@ -146,9 +147,18 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     (<TransactionComponent>modal.componentInstance).balance = this.balance;
     (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
     modal.result.then(value => {
-      if (value === 'ok') {
-        Log.info('Refresh token list');
-        this.tokensRefreshRequested$.next(true);
+      if (!!value && !!value.request && !!value.response) {
+        // start monitoring token progress
+        const progressModal = this.modalService.open(IssueTokenProgressComponent, { backdrop: 'static', keyboard: false });
+        if (!!value.response['error']) {
+          this.showApiError(value.response['error']);
+        }
+        (<IssueTokenProgressComponent>modal.componentInstance).hash = value.response['newContractAddress'];
+        (<IssueTokenProgressComponent>modal.componentInstance).symbol = value.request.parameters[2].split('#')[1];
+        progressModal.result.then(_ => {
+          Log.info('Refresh token list');
+          this.tokensRefreshRequested$.next(true);
+        });
       }
     });
   }

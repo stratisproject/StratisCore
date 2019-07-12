@@ -5,14 +5,15 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '@shared/shared.module';
 import { ClipboardModule } from 'ngx-clipboard';
 
+import { TransactionComponent } from '../smart-contracts/components/modals/transaction/transaction.component';
+import { SmartContractsModule } from '../smart-contracts/smart-contracts.module';
+import { AddTokenComponent } from './components/add-token/add-token.component';
+import { IssueTokenProgressComponent } from './components/issue-token-progress/issue-token-progress.component';
+import { SendTokenComponent } from './components/send-token/send-token.component';
 import { TokensComponent } from './components/tokens.component';
 import { Log } from './services/logger.service';
 import { StorageService } from './services/storage.service';
 import { TokensService } from './services/tokens.service';
-import { AddTokenComponent } from './components/add-token/add-token.component';
-import { SmartContractsModule } from '../smart-contracts/smart-contracts.module';
-import { TransactionComponent } from '../smart-contracts/components/modals/transaction/transaction.component';
-import { SendTokenComponent } from './components/send-token/send-token.component';
 
 @NgModule({
   imports: [
@@ -24,13 +25,15 @@ import { SendTokenComponent } from './components/send-token/send-token.component
   declarations: [
     TokensComponent,
     AddTokenComponent,
-    SendTokenComponent
+    SendTokenComponent,
+    IssueTokenProgressComponent
   ],
 
   entryComponents: [
     AddTokenComponent,
     SendTokenComponent,
-    TransactionComponent
+    TransactionComponent,
+    IssueTokenProgressComponent
   ]
 })
 export class TokensModule { }
