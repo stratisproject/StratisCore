@@ -46,7 +46,7 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
           if (timedOut) { this.completed$.next(true); }
           return !completed;
         }),
-        switchMap(_ => this.smartContractsService.GetReceipt(this.hash)),
+        switchMap(_ => this.smartContractsService.GetReceipt(this.hash, true)),
         catchError(error => {
           Log.log(`Error getting receipt for ${this.hash}`);
           return of(undefined);

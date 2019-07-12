@@ -17,7 +17,7 @@ export class ContractTransactionItem {
 }
 
 export abstract class SmartContractsServiceBase {
-  GetReceipt(hash: string): Observable<string> { return of(); }
+  GetReceipt(hash: string, silent: boolean = false): Observable<string> { return of(); }
   GetAddresses(walletName: string): Observable<string[]> { return of(); }
   GetBalance(walletName: string): Observable<number> { return of(); }
   GetAddressBalance(address: string): Observable<number> { return of(); }

@@ -437,10 +437,10 @@ export class ApiService {
   /*
     * Returns the receipt for a particular txhash, or empty JSON.
     */
-  getReceipt(hash: string): any {
+  getReceipt(hash: string, silent: boolean = false): any {
     let params = new HttpParams().set('txHash', hash);
     return this.http.get(this.stratisApiUrl + '/smartcontracts/receipt', { params }).pipe(
-      catchError(err => this.handleHttpError(err))
+      catchError(err => this.handleHttpError(err, silent))
     );
   }
 
