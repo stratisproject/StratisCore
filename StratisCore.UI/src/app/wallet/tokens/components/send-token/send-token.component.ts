@@ -3,9 +3,7 @@ import { SavedToken } from '../../models/token';
 import { FormControl, FormArray, Validators, FormGroup } from '@angular/forms';
 import { Mixin } from '../../models/mixin';
 import { Disposable } from '../../models/disposable';
-import { TokensService } from '../../services/tokens.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalService } from '@shared/services/modal.service';
 import { SmartContractsService } from 'src/app/wallet/smart-contracts/smart-contracts.service';
 
 @Component({
@@ -72,7 +70,7 @@ export class SendTokenComponent implements OnInit {
         `9#${this.recipientAddress.value}`,
         `7#${this.tokenAmount.value}`
       ],
-      methodName: "TransferTo",
+      methodName: 'TransferTo',
       password: this.password.value,
       walletName: this.walletName,
       sender: this.selectedSenderAddress

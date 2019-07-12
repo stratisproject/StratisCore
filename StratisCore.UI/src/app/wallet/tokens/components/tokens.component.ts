@@ -4,7 +4,7 @@ import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { BehaviorSubject, combineLatest, forkJoin, interval, Observable, of, ReplaySubject, Subject, throwError } from 'rxjs';
-import { catchError, map, switchMap, takeUntil, tap, mapTo, first, take } from 'rxjs/operators';
+import { catchError, map, switchMap, takeUntil, first } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
@@ -17,7 +17,7 @@ import { TokensService } from '../services/tokens.service';
 import { AddTokenComponent } from './add-token/add-token.component';
 import { IssueTokenProgressComponent } from './issue-token-progress/issue-token-progress.component';
 import { SendTokenComponent } from './send-token/send-token.component';
-import * as tokenService from '../services/index';
+import { pollWithTimeOut } from '../services/polling';
 
 @Component({
   selector: 'app-tokens',
@@ -159,7 +159,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       (<IssueTokenProgressComponent>progressModal.componentInstance).loading = loading;
       (<IssueTokenProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
 
-      let receiptQuery = this.smartContractsService.GetReceiptSilent(value.transactionHash)
+      const receiptQuery = this.smartContractsService.GetReceiptSilent(value.transactionHash)
         .pipe(
           catchError(error => {
             // Receipt API returns a 400 if the receipt is not found.
@@ -167,44 +167,38 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             return of(undefined);
           })
         );
-  
-      tokenService.pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
-        .pipe(
-          first(r => {
-            // Ignore the response until it has a value
-            return !!r;
-          }),          
-          switchMap(result => {
-            // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
-            if (result == null) {
-              return throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
-              to monitor transactions and check the progress of the token issuance. Once successful, add token manually.`);
-            }
 
-            return of(result);
-          }),
-          switchMap(receipt => {
-            if (receipt.error) {
-              return throwError(receipt.error)
+        pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
+          .pipe(
+            first(r => !!r),
+            switchMap(result => {
+              // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
+              if (result == null) {
+                return throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
+                to monitor transactions and check the progress of the token issuance. Once successful, add token manually.`);
+              }
+
+              return of(result);
+            }),
+            switchMap(receipt => !!receipt.error ? throwError(receipt.error) : of(receipt)),
+            takeUntil(this.disposed$)
+          )
+          .subscribe(
+            receipt => {
+              loading = false;
+              const newTokenAddress = receipt['newContractAddress'];
+              const token = new SavedToken(value.symbol, newTokenAddress, 0);
+              this.tokenService.AddToken(token);
+              progressModal.close('ok');
+              this.tokensRefreshRequested$.next(true);
+            },
+            error => {
+              loading = false;
+              this.showError(error);
+              Log.error(error);
+              progressModal.close('ok');
             }
-            return of(receipt);
-          })          
-        )
-        .subscribe(receipt => {
-            loading = false;
-            const newTokenAddress = receipt['newContractAddress'];
-            const token = new SavedToken(value.symbol, newTokenAddress, 0);
-            this.tokenService.AddToken(token);
-            progressModal.close('ok');
-            this.tokensRefreshRequested$.next(true);
-          },
-          error => {
-            loading = false;
-            this.showError(error);
-            Log.error(error);
-            progressModal.close('ok');
-          }
-        );
+          );
     });
   }
 
@@ -263,7 +257,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       (<IssueTokenProgressComponent>progressModal.componentInstance).loading = loading;
       (<IssueTokenProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
 
-      let receiptQuery = this.smartContractsService.GetReceiptSilent(value.callResponse.transactionId)
+      const receiptQuery = this.smartContractsService.GetReceiptSilent(value.callResponse.transactionId)
         .pipe(
           catchError(error => {
             // Receipt API returns a 400 if the receipt is not found.
@@ -271,41 +265,35 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             return of(undefined);
           })
         );
-  
-      tokenService.pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
-        .pipe(
-          first(r => {
-            // Ignore the response until it has a value
-            return !!r;
-          }),          
-          switchMap(result => {
-            // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
-            if (result == null) {
-              return throwError(`It seems to be taking longer to transfer tokens. Please go to "Smart Contracts" tab
-              to monitor transactions and check the progress of the token transfer.`);
-            }
 
-            return of(result);
-          }),
-          switchMap(receipt => {
-            if (receipt.error) {
-              return throwError(receipt.error)
+        pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
+          .pipe(
+            first(r => !!r),
+            switchMap(result => {
+              // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
+              if (result === null) {
+                return throwError(`It seems to be taking longer to transfer tokens. Please go to "Smart Contracts" tab
+                to monitor transactions and check the progress of the token transfer.`);
+              }
+
+              return of(result);
+            }),
+            switchMap(receipt => (!!receipt.error) ? throwError(receipt.error) : of(receipt)),
+            takeUntil(this.disposed$)
+          )
+          .subscribe(
+            receipt => {
+              loading = false;
+              progressModal.close('ok');
+              this.tokensRefreshRequested$.next(true);
+            },
+            error => {
+              loading = false;
+              this.showError(error);
+              Log.error(error);
+              progressModal.close('ok');
             }
-            return of(receipt);
-          })  
-        )
-        .subscribe(receipt => {
-            loading = false;
-            progressModal.close('ok');
-            this.tokensRefreshRequested$.next(true);
-          },
-          error => {
-            loading = false;
-            this.showError(error);
-            Log.error(error);
-            progressModal.close('ok');
-          }
-        );
+          );
     });
   }
 }
