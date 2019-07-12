@@ -34,8 +34,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
   constructor(
     private tokenService: TokensService,
     private activeModal: NgbActiveModal,
-    private genericModalService: ModalService,
-    private smartContractsService: SmartContractsServiceBase) {
+    private genericModalService: ModalService) {
     this.registerControls();
   }
 

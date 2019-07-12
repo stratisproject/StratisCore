@@ -15,7 +15,7 @@ import { TokenBalanceRequest } from '../models/token-balance-request';
 import { Log } from '../services/logger.service';
 import { TokensService } from '../services/tokens.service';
 import { AddTokenComponent } from './add-token/add-token.component';
-import { IssueTokenProgressComponent } from './issue-token-progress/issue-token-progress.component';
+import { ProgressComponent } from './progress/progress.component';
 import { SendTokenComponent } from './send-token/send-token.component';
 import { pollWithTimeOut } from '../services/polling';
 
@@ -155,9 +155,9 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
       let loading = false;
       // start monitoring token progress
-      const progressModal = this.modalService.open(IssueTokenProgressComponent, { backdrop: 'static', keyboard: false });
-      (<IssueTokenProgressComponent>progressModal.componentInstance).loading = loading;
-      (<IssueTokenProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
+      const progressModal = this.modalService.open(ProgressComponent, { backdrop: 'static', keyboard: false });
+      (<ProgressComponent>progressModal.componentInstance).loading = loading;
+      (<ProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
 
       const receiptQuery = this.smartContractsService.GetReceiptSilent(value.transactionHash)
         .pipe(
@@ -253,9 +253,12 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
       let loading = false;
       // start monitoring token progress
-      const progressModal = this.modalService.open(IssueTokenProgressComponent, { backdrop: 'static', keyboard: false });
-      (<IssueTokenProgressComponent>progressModal.componentInstance).loading = loading;
-      (<IssueTokenProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
+      const progressModal = this.modalService.open(ProgressComponent, { backdrop: 'static', keyboard: false });
+      (<ProgressComponent>progressModal.componentInstance).loading = loading;
+      (<ProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
+      (<ProgressComponent>progressModal.componentInstance).title = 'Token Sending Progress';
+      // tslint:disable-next-line:max-line-length
+      (<ProgressComponent>progressModal.componentInstance).message = 'Checking the progress of token send operation. This can take up to a minute, please wait...';
 
       const receiptQuery = this.smartContractsService.GetReceiptSilent(value.callResponse.transactionId)
         .pipe(

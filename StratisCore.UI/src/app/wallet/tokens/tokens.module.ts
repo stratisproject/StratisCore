@@ -8,7 +8,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { TransactionComponent } from '../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsModule } from '../smart-contracts/smart-contracts.module';
 import { AddTokenComponent } from './components/add-token/add-token.component';
-import { IssueTokenProgressComponent } from './components/issue-token-progress/issue-token-progress.component';
+import { ProgressComponent } from './components/progress/progress.component';
 import { SendTokenComponent } from './components/send-token/send-token.component';
 import { TokensComponent } from './components/tokens.component';
 import { Log } from './services/logger.service';
@@ -27,14 +27,14 @@ import { SmartContractsService } from '../smart-contracts/smart-contracts.servic
     TokensComponent,
     AddTokenComponent,
     SendTokenComponent,
-    IssueTokenProgressComponent
+    ProgressComponent
   ],
 
   entryComponents: [
     AddTokenComponent,
     SendTokenComponent,
     TransactionComponent,
-    IssueTokenProgressComponent
+    ProgressComponent
   ]
 })
 export class TokensModule { }
