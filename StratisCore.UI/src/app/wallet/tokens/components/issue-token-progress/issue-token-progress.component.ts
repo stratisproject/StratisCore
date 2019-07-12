@@ -10,6 +10,7 @@ import { Mixin } from '../../models/mixin';
 import { SavedToken } from '../../models/token';
 import { Log } from '../../services/logger.service';
 import { TokensService } from '../../services/tokens.service';
+import * as tokenService from '../../services/index';
 
 @Component({
   selector: 'app-issue-token-progress',
@@ -38,40 +39,33 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
   ngOnInit() {
     this.loading = true;
 
-    let timeOut = timer(this.maxTimeout).pipe(map(_ => null));
-
-    // Polls for a receipt on an interval and only emits when a receipt is found
-    const pollReceipt = interval(this.pollingInterval)
+    let receiptQuery = this.smartContractsService.GetReceiptSilent(this.transactionHash)
       .pipe(
-        mergeMap(_ => this.smartContractsService.GetReceiptSilent(this.transactionHash)
-          .pipe(
-            catchError(error => {
-              // Receipt API returns a 400 if the receipt is not found.
-              Log.log(`Receipt not found yet`);
-              return of(undefined);
-            })
-          )
-        ), // Don't care about errors here, they will be handled in the subscribe
-        first(r => {
-          // Ignore the response until it has a value
-          return !!r;
+        catchError(error => {
+          // Receipt API returns a 400 if the receipt is not found.
+          Log.log(`Receipt not found yet`);
+          return of(undefined);
         })
       );
 
-    race(timeOut, pollReceipt)
+    tokenService.pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
       .pipe(
-        takeUntil(this.disposed$),
-        tap(receipt => {
+        first(r => {
+          // Ignore the response until it has a value
+          return !!r;
+        }),        
+        map(result => {
           // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
-          if (receipt == null) {
-            throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
+          if (result == null) {
+            return throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
             to monitor transactions and check the progress of the token issuance. Once successful, add token manually.`);
           }
+
+          return of(result);
         })
       )
       .subscribe(receipt => {
-        this.loading = false;
-
+          this.loading = false;
           const newTokenAddress = receipt['newContractAddress'];
           const token = new SavedToken(this.symbol, newTokenAddress, 0);
           this.tokenService.AddToken(token);
