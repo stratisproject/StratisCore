@@ -149,7 +149,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     (<TransactionComponent>modal.componentInstance).balance = this.balance;
     (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
     modal.result.then(value => {
-      if (!value && !value.request && !value.transactionHash) {
+      if (!value && !value.symbol && !value.transactionHash) {
         return;
       }
 
@@ -187,7 +187,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         .subscribe(receipt => {
             loading = false;
             const newTokenAddress = receipt['newContractAddress'];
-            const token = new SavedToken(value.request.parameters[2].split('#')[1], newTokenAddress, 0);
+            const token = new SavedToken(value.symbol, newTokenAddress, 0);
             this.tokenService.AddToken(token);
             progressModal.close('ok');
           },
