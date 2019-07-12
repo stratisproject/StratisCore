@@ -27,6 +27,7 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
   dispose: () => void;
   maxTimeout = 1.5 * 60 * 1000; // wait for about 1.5 minutes
   pollingInterval = 5 * 1000;
+  loading = false;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -35,6 +36,7 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
     private genericModalService: ModalService) { }
 
   ngOnInit() {
+    this.loading = true;
 
     let timeOut = timer(this.maxTimeout)
       .pipe(
@@ -65,6 +67,7 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
         takeUntil(this.disposed$)
       )
       .subscribe(receipt => {
+        this.loading = false;
 
         if (!!receipt['error']) {
           this.showError(receipt['error']);
@@ -78,6 +81,7 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
         this.activeModal.close('ok');
       },
       error => {
+        this.loading = false;
         this.showError(error);
         Log.error(error);
         this.activeModal.close('ok');
