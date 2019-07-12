@@ -190,6 +190,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             const token = new SavedToken(value.symbol, newTokenAddress, 0);
             this.tokenService.AddToken(token);
             progressModal.close('ok');
+            this.tokensRefreshRequested$.next(true);
           },
           error => {
             loading = false;
@@ -197,12 +198,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             Log.error(error);
             progressModal.close('ok');
           }
-        );        
-
-      progressModal.result.then(_ => {
-        Log.info('Refresh token list');
-        this.tokensRefreshRequested$.next(true);
-      });      
+        );
     });
   }
 
