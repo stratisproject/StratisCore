@@ -27,7 +27,7 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
   dispose: () => void;
   maxTimeout = 1.5 * 60 * 1000; // wait for about 1.5 minutes
   pollingInterval = 5 * 1000;
-  cancel = false;
+  cancellationRequested = false;
   completed$ = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -39,16 +39,16 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
   ngOnInit() {
     interval(this.pollingInterval)
       .pipe(
-        takeWhile((elapsed) => {
-          const completed = this.cancel || elapsed > this.maxTimeout;
-          if (elapsed > this.maxTimeout) {
-            this.completed$.next(true);
-          }
+        takeWhile((elapsedIntervals) => {
+          const elapsed = elapsedIntervals * this.pollingInterval;
+          const timedOut = elapsed > this.maxTimeout;
+          const completed = this.cancellationRequested || timedOut;
+          if (timedOut) { this.completed$.next(true); }
           return !completed;
         }),
         switchMap(_ => this.smartContractsService.GetReceipt(this.hash)),
         catchError(error => {
-          Log.log(`Error getting receipt  for ${this.hash}`);
+          Log.log(`Error getting receipt for ${this.hash}`);
           return of(undefined);
         }),
         takeUntil(this.disposed$)
@@ -69,7 +69,7 @@ export class IssueTokenProgressComponent implements OnInit, OnDestroy, Disposabl
         }
         const token = new SavedToken(this.symbol, this.hash, 0);
         this.tokenService.AddToken(token);
-        this.cancel = true;
+        this.cancellationRequested = true;
         this.activeModal.close('ok');
       });
 
