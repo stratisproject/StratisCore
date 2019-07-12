@@ -3,8 +3,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { BehaviorSubject, combineLatest, forkJoin, interval, Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { catchError, map, switchMap, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, forkJoin, interval, Observable, of, ReplaySubject, Subject, throwError } from 'rxjs';
+import { catchError, map, switchMap, takeUntil, tap, mapTo, first, take } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
@@ -17,6 +17,7 @@ import { TokensService } from '../services/tokens.service';
 import { AddTokenComponent } from './add-token/add-token.component';
 import { IssueTokenProgressComponent } from './issue-token-progress/issue-token-progress.component';
 import { SendTokenComponent } from './send-token/send-token.component';
+import * as tokenService from '../services/index';
 
 @Component({
   selector: 'app-tokens',
@@ -38,6 +39,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   tokens$: Observable<SavedToken[]>;
   availableTokens: Token[] = [];
   private pollingInterval = 5 * 1000; // polling milliseconds
+  maxTimeout = 1.5 * 60 * 1000; // wait for about 1.5 minutes
 
   constructor(
     private tokenService: TokensService,
@@ -147,18 +149,65 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     (<TransactionComponent>modal.componentInstance).balance = this.balance;
     (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
     modal.result.then(value => {
-      if (!!value && !!value.request && !!value.transactionHash) {
-        // start monitoring token progress
-        const progressModal = this.modalService.open(IssueTokenProgressComponent, { backdrop: 'static', keyboard: false });
-
-        (<IssueTokenProgressComponent>progressModal.componentInstance).transactionHash = value.transactionHash;
-        (<IssueTokenProgressComponent>progressModal.componentInstance).symbol = value.request.parameters[2].split('#')[1];
-        progressModal.result.then(_ => {
-          Log.info('Refresh token list');
-          this.tokensRefreshRequested$.next(true);
-        });
+      if (!value && !value.request && !value.transactionHash) {
+        return;
       }
+
+      let loading = false;
+      // start monitoring token progress
+      const progressModal = this.modalService.open(IssueTokenProgressComponent, { backdrop: 'static', keyboard: false });
+      (<IssueTokenProgressComponent>progressModal.componentInstance).loading = loading;
+      (<IssueTokenProgressComponent>progressModal.componentInstance).close.next(() => progressModal.close());
+
+      let receiptQuery = this.smartContractsService.GetReceiptSilent(value.transactionHash)
+        .pipe(
+          catchError(error => {
+            // Receipt API returns a 400 if the receipt is not found.
+            Log.log(`Receipt not found yet`);
+            return of(undefined);
+          })
+        );
+  
+      tokenService.pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
+        .pipe(
+          first(r => {
+            // Ignore the response until it has a value
+            return !!r;
+          }),          
+          switchMap(result => {
+            // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
+            if (result == null) {
+              return throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
+              to monitor transactions and check the progress of the token issuance. Once successful, add token manually.`);
+            }
+
+            return of(result);
+          })          
+        )
+        .subscribe(receipt => {
+            loading = false;
+            const newTokenAddress = receipt['newContractAddress'];
+            const token = new SavedToken(value.request.parameters[2].split('#')[1], newTokenAddress, 0);
+            this.tokenService.AddToken(token);
+            progressModal.close('ok');
+          },
+          error => {
+            loading = false;
+            this.showError(error);
+            Log.error(error);
+            progressModal.close('ok');
+          }
+        );        
+
+      progressModal.result.then(_ => {
+        Log.info('Refresh token list');
+        this.tokensRefreshRequested$.next(true);
+      });      
     });
+  }
+
+  showError(error: string) {
+    this.genericModalService.openModal('Error', error);
   }
 
   get allTokens() {
