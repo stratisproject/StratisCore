@@ -11,11 +11,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GenericModalComponent } from './components/generic-modal/generic-modal.component';
+import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 
 @NgModule({
   imports: [ CommonModule ],
-  declarations: [ CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent ],
-  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective ],
+  declarations: [ CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent, LoadingModalComponent ],
+  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective, LoadingModalComponent ],
   entryComponents: [ GenericModalComponent ]
 })
 
