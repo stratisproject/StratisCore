@@ -58,6 +58,7 @@ export class TransactionComponent implements OnInit {
 
   gasCallLimitMinimum = 10000;
   gasCreateLimitMinimum = 12000;
+  gasCreateTokenLimitMinimum = 15000;
   gasLimitMaximum = 100000;
   gasPriceMinimum = 1;
   gasPriceMaximum = 10000;
@@ -180,8 +181,22 @@ export class TransactionComponent implements OnInit {
     this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator, Validators.min(0)]);
     // tslint:disable-next-line:max-line-length
     this.gasPrice = new FormControl(100, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator, Validators.min(0)]);
-    // tslint:disable-next-line:max-line-length
-    this.gasLimit = new FormControl(this.mode === Mode.Call ? this.gasCallLimitMinimum : this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
+    
+    if (this.mode == Mode.Call) {
+      // tslint:disable-next-line:max-line-length
+      this.gasLimit = new FormControl(this.gasCallLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
+    }
+
+    if (this.mode == Mode.Create) {
+      // tslint:disable-next-line:max-line-length
+      this.gasLimit = new FormControl(this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
+    }
+
+    if (this.mode == Mode.IssueToken) {
+      // tslint:disable-next-line:max-line-length
+      this.gasLimit = new FormControl(this.gasCreateTokenLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
+    }
+    
     this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
     const contractCode = this.mode === Mode.IssueToken ? this.newTokenByteCode : '';
     // tslint:disable-next-line:max-line-length
@@ -217,7 +232,6 @@ export class TransactionComponent implements OnInit {
       });
     } else if (this.mode === Mode.IssueToken) {
       this.transactionForm = new FormGroup({
-        amount: this.amount,
         feeAmount: this.feeAmount,
         gasPrice: this.gasPrice,
         gasLimit: this.gasLimit,
