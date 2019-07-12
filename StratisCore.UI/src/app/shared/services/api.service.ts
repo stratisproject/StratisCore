@@ -444,6 +444,14 @@ export class ApiService {
     );
   }
 
+  /*
+    Setting the silent flag is not enough because the error format returned by /receipt still causes a modal to be displayed.
+  */
+  getReceiptSilent(hash: string): any {
+    let params = new HttpParams().set('txHash', hash);
+    return this.http.get(this.stratisApiUrl + '/smartcontracts/receipt', { params });
+  }
+
   localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {    
     return this.http.post<LocalExecutionResult>(this.stratisApiUrl + '/smartcontracts/local-call', localCall).pipe(
       catchError(err => this.handleHttpError(err))
