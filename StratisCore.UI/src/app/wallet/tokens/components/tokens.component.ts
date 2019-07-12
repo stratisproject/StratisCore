@@ -182,6 +182,12 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             }
 
             return of(result);
+          }),
+          map(receipt => {
+            if (receipt.error) {
+              return throwError(receipt.error)
+            }
+            return of(receipt);
           })          
         )
         .subscribe(receipt => {
@@ -280,18 +286,18 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             }
 
             return of(result);
-          })          
+          }),
+          map(receipt => {
+            if (receipt.error) {
+              return throwError(receipt.error)
+            }
+            return of(receipt);
+          })
         )
         .subscribe(receipt => {
             loading = false;
             progressModal.close('ok');
-            
-            if (receipt.error) {
-              this.showError(receipt.error);
-            }
-            else {
-              this.tokensRefreshRequested$.next(true);
-            }            
+            this.tokensRefreshRequested$.next(true);
           },
           error => {
             loading = false;
