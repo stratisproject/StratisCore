@@ -51,13 +51,13 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of tokens$ | async" class="d-flex">
-                <td class="text-center col-2" scope="col"><span class="badge badge-info">{{item.ticker}}</span></td>
-                <td class="text-left col-3" scope="col">{{ item.balance }}</td>
+                <td class="text-center col-1" scope="col"><span class="badge badge-info">{{item.ticker}}</span></td>
+                <td class="text-left col-2" scope="col">{{ item.balance }}</td>
                 <td class="text-left col-5" scope="col">{{ item.address }}</td>
-                <td class="text-right col-2" scope="col">
-                  <button type="button" class="btn btn-sm btn-stratis-green btn-block" (click)="send(item)"><i class="icon lnr lnr-arrow-up-circle"></i> Send
+                <td class="text-right col-4" scope="col">
+                  <button type="button" class="btn btn-sm btn-stratis-green" (click)="send(item)"><i class="icon lnr lnr-arrow-up-circle"></i> Send
                   </button>&nbsp;
-                  <button type="button" class="btn btn-sm btn-danger btn-block" (click)="delete(item)"><i class="icon lnr lnr-cross-circle"></i> Delete
+                  <button type="button" class="btn btn-sm btn-danger" (click)="delete(item)"><i class="icon lnr lnr-cross-circle"></i> Delete
                   </button>
                 </td>
               </tr>
