@@ -292,11 +292,22 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
               return of(result);
             }),
-            switchMap(receipt => (!!receipt.error) ? throwError(receipt.error) : of(receipt)),
             takeUntil(this.disposed$)
           )
           .subscribe(
             receipt => {
+
+              if(!!receipt.error) {
+                this.showError(receipt.error);
+                Log.error(new Error(receipt.error));
+              }
+              
+              if (receipt.returnValue === "False") {
+                const sendFailedError = "Sending tokens failed! Check the amount you are trying to send is correct.";
+                this.showError(sendFailedError);
+                Log.error(new Error(sendFailedError));
+              }
+
               progressModal.close('ok');
               this.tokensRefreshRequested$.next(true);
             },
