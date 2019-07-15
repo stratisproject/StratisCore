@@ -14,7 +14,7 @@
         <label for="token">Token</label>
         <select class="form-control" formControlName="token" id="token"
           [class.is-invalid]="token.invalid && (token.dirty || token.touched)">
-          <option *ngFor="let t of tokens" [ngValue]="t.hash">{{t.ticker}}
+          <option *ngFor="let t of tokens" [ngValue]="t.hash">{{t.ticker}} - ({{ t.hash }})
           </option>
         </select>
         <div *ngIf="token.errors" class="invalid-feedback">
