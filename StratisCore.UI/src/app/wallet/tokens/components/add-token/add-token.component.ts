@@ -62,7 +62,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
     const addedTokens = this.tokenService.GetSavedTokens().find(token => token.hash === hash);
 
     if (addedTokens) {
-      this.showApiError(`Token ${addedTokens.ticker} is already added`);
+      this.showApiError(`Token ${ticker} is already added`);
 
       return;
     }
