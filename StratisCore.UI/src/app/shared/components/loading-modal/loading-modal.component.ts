@@ -8,7 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angu
 export class LoadingModalComponent implements OnInit, OnDestroy {
 
   @Input()
-  loading = false;
+  loading = true;
 
   @Output()
   close = new EventEmitter();
