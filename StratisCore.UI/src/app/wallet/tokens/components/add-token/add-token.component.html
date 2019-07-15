@@ -14,19 +14,19 @@
         <label for="token">Token</label>
         <select class="form-control" formControlName="token" id="token"
           [class.is-invalid]="token.invalid && (token.dirty || token.touched)">
-          <option *ngFor="let t of tokens" [ngValue]="t.hash">{{t.ticker}} - ({{ t.hash }})
+          <option *ngFor="let t of tokens" [ngValue]="t.address">{{t.ticker}} - ({{ t.address }})
           </option>
         </select>
         <div *ngIf="token.errors" class="invalid-feedback">
           <p>Token is required</p>
         </div>
       </div>
-      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token contract address/hash" *ngIf="customTokenSelected">
-        <label for="hash">Token Contract Address</label>
-        <input formControlName="hash" id="hash" type="text" class="form-control" placeholder=""
-          [class.is-invalid]="hash.invalid && (hash.dirty || hash.touched)">
-        <div *ngIf="hash.errors" class="invalid-feedback">
-          <p *ngIf="hash.errors['required']">Contract address is required</p>
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token contract address" *ngIf="customTokenSelected">
+        <label for="address">Token Contract Address</label>
+        <input formControlName="address" id="address" type="text" class="form-control" placeholder=""
+          [class.is-invalid]="address.invalid && (address.dirty || address.touched)">
+        <div *ngIf="address.errors" class="invalid-feedback">
+          <p *ngIf="address.errors['required']">Contract address is required</p>
         </div>
       </div>
       <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token symbol/ticker" *ngIf="customTokenSelected">

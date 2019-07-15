@@ -154,10 +154,9 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         return;
       }
 
-      let loading = false;
       // start monitoring token progress
       const progressModal = this.modalService.open(ProgressComponent, { backdrop: 'static', keyboard: false });
-      (<ProgressComponent>progressModal.componentInstance).loading = loading;
+      (<ProgressComponent>progressModal.componentInstance).loading = true;
       (<ProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
 
       const receiptQuery = this.smartContractsService.GetReceiptSilent(value.transactionHash)
@@ -186,7 +185,6 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
           )
           .subscribe(
             receipt => {
-              loading = false;
               const newTokenAddress = receipt['newContractAddress'];
               const token = new SavedToken(value.symbol, newTokenAddress, 0);
               this.tokenService.AddToken(token);
@@ -194,7 +192,6 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
               this.tokensRefreshRequested$.next(true);
             },
             error => {
-              loading = false;
               this.showError(error);
               Log.error(error);
               progressModal.close('ok');
@@ -218,17 +215,17 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
           forkJoin(
             this.tokenService.GetSavedTokens().map(token =>
               this.tokenService
-                .GetTokenBalance(new TokenBalanceRequest(token.hash, address))
+                .GetTokenBalance(new TokenBalanceRequest(token.address, address))
                 .pipe(
                   catchError(error => {
                     Log.error(error);
-                    Log.log(`Error getting token balance for token hash ${token.hash}`);
+                    Log.log(`Error getting token balance for token address ${token.address}`);
                     return of(0);
                   }),
                   map(balance => {
                     return new SavedToken(
                       token.ticker,
-                      token.hash,
+                      token.address,
                       balance
                     );
                   })
@@ -266,10 +263,9 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         return;
       }
 
-      let loading = false;
       // start monitoring token progress
       const progressModal = this.modalService.open(ProgressComponent, { backdrop: 'static', keyboard: false });
-      (<ProgressComponent>progressModal.componentInstance).loading = loading;
+      (<ProgressComponent>progressModal.componentInstance).loading = true;
       (<ProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
       (<ProgressComponent>progressModal.componentInstance).title = 'Token Sending Progress';
       // tslint:disable-next-line:max-line-length
@@ -301,12 +297,10 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
           )
           .subscribe(
             receipt => {
-              loading = false;
               progressModal.close('ok');
               this.tokensRefreshRequested$.next(true);
             },
             error => {
-              loading = false;
               this.showError(error);
               Log.error(error);
               progressModal.close('ok');

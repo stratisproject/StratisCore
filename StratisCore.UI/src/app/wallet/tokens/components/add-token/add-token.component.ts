@@ -24,7 +24,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
   addTokenForm: FormGroup;
   balance = 0;
   token: FormControl;
-  hash: FormControl;
+  address: FormControl;
   ticker: FormControl;
   loading: boolean;
   apiError: string;
@@ -55,11 +55,11 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
 
   onSubmit() {
 
-    const ticker = this.customTokenSelected ? this.ticker.value + '' : this.tokens.find(t => t.hash === this.token.value).ticker;
-    const hash = this.customTokenSelected ? this.hash.value + '' : this.tokens.find(t => t.hash === this.token.value).hash;
+    const ticker = this.customTokenSelected ? this.ticker.value + '' : this.tokens.find(t => t.address === this.token.value).ticker;
+    const address = this.customTokenSelected ? this.address.value + '' : this.tokens.find(t => t.address === this.token.value).address;
 
     // Check that this token isn't already in the list
-    const addedTokens = this.tokenService.GetSavedTokens().find(token => token.hash === hash);
+    const addedTokens = this.tokenService.GetSavedTokens().find(token => token.address === address);
 
     if (addedTokens) {
       this.showApiError(`Token ${ticker} is already added`);
@@ -68,7 +68,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
     }
 
     // Sender doesn't matter here, just reuse an easily available address
-    const tickerCall = new LocalCallRequest(hash, hash, 'Symbol');
+    const tickerCall = new LocalCallRequest(address, address, 'Symbol');
 
     this.loading = true;
 
@@ -81,7 +81,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
         finalize(() => this.loading = false)
       )
       .subscribe(localExecutionResult => {
-        const methodCallResult = (<any>localExecutionResult).Return; // fix once PR for casing is in
+        const methodCallResult = localExecutionResult.return;
 
         if (!methodCallResult) {
           this.showApiError(`Address is not a valid token contract.`);
@@ -93,7 +93,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
           return;
         }
 
-        const savedToken = new SavedToken(ticker, hash, 0);
+        const savedToken = new SavedToken(ticker, address, 0);
         const result = this.tokenService.AddToken(savedToken);
 
         if (result.failure) {
@@ -113,12 +113,12 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
     const customTokenDetailsValidator = control => !control.value && this.customTokenSelected ? { required: true } : null;
 
     this.token = new FormControl(0, [Validators.required]);
-    this.hash = new FormControl('', [customTokenDetailsValidator]);
+    this.address = new FormControl('', [customTokenDetailsValidator]);
     this.ticker = new FormControl('', [customTokenDetailsValidator]);
 
     this.addTokenForm = new FormGroup({
       token: this.token,
-      hash: this.hash,
+      address: this.address,
       ticker: this.ticker
     });
   }
