@@ -172,7 +172,7 @@
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
       <button type="submit" data-toggle="modal" data-target="#" class="btn btn-stratis-green btn-block"
-        data-dismiss="modal" [disabled]="!transactionForm.valid">{{buttonText}}</button>
+        data-dismiss="modal" [disabled]="!transactionForm.valid" ngbAutofocus>{{buttonText}}</button>
     </div>
   </form>
   <div [hidden]="!loading" class="Loading col-2 mx-auto unset-left">

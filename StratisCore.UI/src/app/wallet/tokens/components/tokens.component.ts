@@ -150,7 +150,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     (<TransactionComponent>modal.componentInstance).balance = this.balance;
     (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
     modal.result.then(value => {
-      if (!value && !value.symbol && !value.transactionHash) {
+      if (!value || !value.symbol || !value.transactionHash) {
         return;
       }
 
@@ -259,7 +259,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     (<SendTokenComponent>modal.componentInstance).token = item;
     modal.result.then(value => {
 
-      if (!value && !value.callResponse) {
+      if (!value || !value.callResponse) {
         return;
       }
 
