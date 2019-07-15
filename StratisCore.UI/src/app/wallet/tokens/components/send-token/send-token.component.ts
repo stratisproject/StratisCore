@@ -25,8 +25,6 @@ export class SendTokenComponent implements OnInit {
 
   balance = 0;
 
-  title = 'Send Token';
-
   parameters: FormArray;
   feeAmount: FormControl;
   gasPrice: FormControl;
