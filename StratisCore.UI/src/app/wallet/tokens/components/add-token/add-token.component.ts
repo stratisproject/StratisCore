@@ -81,7 +81,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
         finalize(() => this.loading = false)
       )
       .subscribe(localExecutionResult => {
-        const methodCallResult = (<any>localExecutionResult).Return; // fix once PR for casing is in
+        const methodCallResult = localExecutionResult.return;
 
         if (!methodCallResult) {
           this.showApiError(`Address is not a valid token contract.`);
