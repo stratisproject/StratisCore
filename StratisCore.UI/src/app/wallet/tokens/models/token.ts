@@ -1,16 +1,16 @@
 export class Token {
-  constructor(ticker: string, hash: string) {
+  constructor(ticker: string, address: string) {
     this.ticker = ticker;
-    this.hash = hash;
+    this.address = address;
   }
 
   ticker: string;
-  hash: string;
+  address: string;
 }
 
 export class SavedToken extends Token {
-  constructor(ticker: string, hash: string, balance: number) {
-    super(ticker, hash);
+  constructor(ticker: string, address: string, balance: number) {
+    super(ticker, address);
     this.balance = balance;
   } 
 

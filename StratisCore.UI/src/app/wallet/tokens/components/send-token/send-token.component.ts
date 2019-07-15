@@ -48,7 +48,7 @@ export class SendTokenComponent implements OnInit {
 
   ngOnInit() {
     this.registerControls();
-    this.contractAddress.setValue(this.token.hash);
+    this.contractAddress.setValue(this.token.address);
     this.contractAddress.disable();
   }
 
@@ -60,7 +60,7 @@ export class SendTokenComponent implements OnInit {
 
     return {
       amount: 0,
-      contractAddress: this.token.hash,
+      contractAddress: this.token.address,
       feeAmount: this.feeAmount.value,
       gasPrice: this.gasPrice.value,
       gasLimit: this.gasLimit.value,

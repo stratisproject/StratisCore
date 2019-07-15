@@ -35,7 +35,7 @@ export class TokensService {
     if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
     const tokens = this.GetSavedTokens();
 
-    const index = tokens.map(t => t.hash).indexOf(token.hash);
+    const index = tokens.map(t => t.address).indexOf(token.address);
     if (index >= 0) { return new Result(ResultStatus.Error, 'Specified token is already saved'); }
 
     tokens.push(token);
@@ -46,7 +46,7 @@ export class TokensService {
   RemoveToken(token: SavedToken): Result<SavedToken> {
     if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
     const tokens = this.GetSavedTokens();
-    const index = tokens.map(t => t.hash).indexOf(token.hash);
+    const index = tokens.map(t => t.address).indexOf(token.address);
     if (index < 0) { return new Result(ResultStatus.Error, 'Specified token was not found'); }
     tokens.splice(index, 1);
     this.storage.setItem(this.savedTokens, tokens);

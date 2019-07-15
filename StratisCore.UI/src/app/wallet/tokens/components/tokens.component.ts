@@ -217,17 +217,17 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
           forkJoin(
             this.tokenService.GetSavedTokens().map(token =>
               this.tokenService
-                .GetTokenBalance(new TokenBalanceRequest(token.hash, address))
+                .GetTokenBalance(new TokenBalanceRequest(token.address, address))
                 .pipe(
                   catchError(error => {
                     Log.error(error);
-                    Log.log(`Error getting token balance for token hash ${token.hash}`);
+                    Log.log(`Error getting token balance for token address ${token.address}`);
                     return of(0);
                   }),
                   map(balance => {
                     return new SavedToken(
                       token.ticker,
-                      token.hash,
+                      token.address,
                       balance
                     );
                   })

@@ -45,7 +45,7 @@
               <tr class="d-flex">
                 <th class="text-center col-2" scope="col">Ticker</th>
                 <th class="text-left col-3" scope="col">Balance</th>
-                <th class="text-left col-5" scope="col">Hash</th>
+                <th class="text-left col-5" scope="col">Address</th>
                 <th class="text-right col-2" scope="col">&nbsp;</th>
               </tr>
             </thead>
@@ -53,7 +53,7 @@
               <tr *ngFor="let item of tokens$ | async" class="d-flex">
                 <td class="text-center col-2" scope="col"><span class="badge badge-info">{{item.ticker}}</span></td>
                 <td class="text-left col-3" scope="col">{{ item.balance }}</td>
-                <td class="text-left col-5" scope="col">{{ item.hash }}</td>
+                <td class="text-left col-5" scope="col">{{ item.address }}</td>
                 <td class="text-right col-2" scope="col">
                   <button type="button" class="btn btn-sm btn-stratis-green btn-block" (click)="send(item)"><i class="icon lnr lnr-arrow-up-circle"></i> Send
                   </button>
