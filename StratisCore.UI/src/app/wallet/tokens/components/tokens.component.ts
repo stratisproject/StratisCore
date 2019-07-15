@@ -18,6 +18,7 @@ import { AddTokenComponent } from './add-token/add-token.component';
 import { ProgressComponent } from './progress/progress.component';
 import { SendTokenComponent } from './send-token/send-token.component';
 import { pollWithTimeOut } from '../services/polling';
+import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-tokens',
@@ -235,6 +236,20 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             )
           )
         ));
+  }
+
+  delete (item: SavedToken) {
+    const modal = this.modalService.open(ConfirmationModalComponent, { backdrop: 'static', keyboard: false });
+    (<ConfirmationModalComponent>modal.componentInstance).body = `Are you sure you want to remove "${item.ticker}" token`;
+    modal.result.then(value => {
+      if (!value) { return; }
+      const removeResult = this.tokenService.RemoveToken(item);
+      if (removeResult.failure) {
+        this.showApiError(removeResult.message);
+        return;
+      }
+      this.tokensRefreshRequested$.next(true);
+    });
   }
 
   send(item: SavedToken) {

@@ -56,6 +56,8 @@
                 <td class="text-left col-5" scope="col">{{ item.hash }}</td>
                 <td class="text-right col-2" scope="col">
                   <button type="button" class="btn btn-sm btn-stratis-green btn-block" (click)="send(item)"><i class="icon lnr lnr-arrow-up-circle"></i> Send
+                  </button>&nbsp;
+                  <button type="button" class="btn btn-sm btn-danger btn-block" (click)="delete(item)"><i class="icon lnr lnr-cross-circle"></i> Delete
                   </button>
                 </td>
               </tr>
