@@ -21,7 +21,8 @@
           <p>Token is required</p>
         </div>
       </div>
-      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token contract address" *ngIf="customTokenSelected">
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token contract address"
+        *ngIf="customTokenSelected">
         <label for="address">Token Contract Address</label>
         <input formControlName="address" id="address" type="text" class="form-control" placeholder=""
           [class.is-invalid]="address.invalid && (address.dirty || address.touched)">
@@ -29,12 +30,22 @@
           <p *ngIf="address.errors['required']">Contract address is required</p>
         </div>
       </div>
-      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token symbol/ticker" *ngIf="customTokenSelected">
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token symbol/ticker"
+        *ngIf="customTokenSelected">
         <label for="ticker">Token Symbol</label>
         <input formControlName="ticker" id="ticker" type="text" class="form-control" placeholder=""
-          [class.is-invalid]="ticker.invalid && (ticker.dirty || ticker.touched)">
+          [class.is-invalid]="ticker.invalid && (ticker.dirty || ticker.touched)" maxlength="5">
         <div *ngIf="ticker.errors" class="invalid-feedback">
           <p *ngIf="ticker.errors['required']">Token symbol is required</p>
+        </div>
+      </div>
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token name"
+        *ngIf="customTokenSelected">
+        <label for="name">Token Name</label>
+        <input formControlName="name" id="name" type="text" class="form-control" placeholder=""
+          [class.is-invalid]="name.invalid && (name.dirty || name.touched)" maxlength="50">
+        <div *ngIf="name.errors" class="invalid-feedback">
+          <p *ngIf="name.errors['required']">Token name is required</p>
         </div>
       </div>
       <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>

@@ -1,10 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { BehaviorSubject, combineLatest, forkJoin, interval, Observable, of, ReplaySubject, Subject, throwError } from 'rxjs';
-import { catchError, map, switchMap, takeUntil, first } from 'rxjs/operators';
+import {
+  BehaviorSubject,
+  combineLatest,
+  forkJoin,
+  interval,
+  Observable,
+  of,
+  ReplaySubject,
+  Subject,
+  throwError,
+} from 'rxjs';
+import { catchError, first, map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
@@ -13,12 +24,11 @@ import { Mixin } from '../models/mixin';
 import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
 import { Log } from '../services/logger.service';
+import { pollWithTimeOut } from '../services/polling';
 import { TokensService } from '../services/tokens.service';
 import { AddTokenComponent } from './add-token/add-token.component';
 import { ProgressComponent } from './progress/progress.component';
 import { SendTokenComponent } from './send-token/send-token.component';
-import { pollWithTimeOut } from '../services/polling';
-import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-tokens',
@@ -54,7 +64,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     this.walletName = this.globalService.getWalletName();
     this.tokens$ = this.getBalances();
     this.availableTokens = this.tokenService.GetAvailableTokens();
-    this.availableTokens.push(new Token('Custom', 'custom'));
+    this.availableTokens.push(new Token('Custom', 'custom', 'custom'));
     this.coinUnit = this.globalService.getCoinUnit();
 
     this.smartContractsService
@@ -132,6 +142,12 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     }
   }
 
+  copyTokenAddress(address: string) {
+    if (this.clipboardService.copyFromContent(address)) {
+      Log.info(`Copied ${this.selectedAddress} to clipboard`);
+    }
+  }
+
   addToken() {
     const modal = this.modalService.open(AddTokenComponent, { backdrop: 'static', keyboard: false });
     (<AddTokenComponent>modal.componentInstance).tokens = this.availableTokens;
@@ -150,7 +166,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     (<TransactionComponent>modal.componentInstance).balance = this.balance;
     (<TransactionComponent>modal.componentInstance).coinUnit = this.coinUnit;
     modal.result.then(value => {
-      if (!value || !value.symbol || !value.transactionHash) {
+      if (!value || !value.symbol || !value.transactionHash || !value.name) {
         return;
       }
 
@@ -168,35 +184,35 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
           })
         );
 
-        pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
-          .pipe(
-            first(r => !!r),
-            switchMap(result => {
-              // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
-              if (result == null) {
-                return throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
+      pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
+        .pipe(
+          first(r => !!r),
+          switchMap(result => {
+            // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
+            if (result == null) {
+              return throwError(`It seems to be taking longer to issue a token. Please go to "Smart Contracts" tab
                 to monitor transactions and check the progress of the token issuance. Once successful, add token manually.`);
-              }
-
-              return of(result);
-            }),
-            switchMap(receipt => !!receipt.error ? throwError(receipt.error) : of(receipt)),
-            takeUntil(this.disposed$)
-          )
-          .subscribe(
-            receipt => {
-              const newTokenAddress = receipt['newContractAddress'];
-              const token = new SavedToken(value.symbol, newTokenAddress, 0);
-              this.tokenService.AddToken(token);
-              progressModal.close('ok');
-              this.tokensRefreshRequested$.next(true);
-            },
-            error => {
-              this.showError(error);
-              Log.error(error);
-              progressModal.close('ok');
             }
-          );
+
+            return of(result);
+          }),
+          switchMap(receipt => !!receipt.error ? throwError(receipt.error) : of(receipt)),
+          takeUntil(this.disposed$)
+        )
+        .subscribe(
+          receipt => {
+            const newTokenAddress = receipt['newContractAddress'];
+            const token = new SavedToken(value.symbol, newTokenAddress, 0, value.name);
+            this.tokenService.AddToken(token);
+            progressModal.close('ok');
+            this.tokensRefreshRequested$.next(true);
+          },
+          error => {
+            this.showError(error);
+            Log.error(error);
+            progressModal.close('ok');
+          }
+        );
     });
   }
 
@@ -226,7 +242,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
                     return new SavedToken(
                       token.ticker,
                       token.address,
-                      balance
+                      balance,
+                      token.name
                     );
                   })
                 )
@@ -235,7 +252,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         ));
   }
 
-  delete (item: SavedToken) {
+  delete(item: SavedToken) {
     const modal = this.modalService.open(ConfirmationModalComponent, { backdrop: 'static', keyboard: false });
     (<ConfirmationModalComponent>modal.componentInstance).body = `Are you sure you want to remove "${item.ticker}" token`;
     modal.result.then(value => {
@@ -280,43 +297,43 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
           })
         );
 
-        pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
-          .pipe(
-            first(r => !!r),
-            switchMap(result => {
-              // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
-              if (result === null) {
-                return throwError(`It seems to be taking longer to transfer tokens. Please go to "Smart Contracts" tab
+      pollWithTimeOut(this.pollingInterval, this.maxTimeout, receiptQuery)
+        .pipe(
+          first(r => !!r),
+          switchMap(result => {
+            // Timeout returns null after completion, use this to throw an error to be handled by the subscriber.
+            if (result === null) {
+              return throwError(`It seems to be taking longer to transfer tokens. Please go to "Smart Contracts" tab
                 to monitor transactions and check the progress of the token transfer.`);
-              }
-
-              return of(result);
-            }),
-            takeUntil(this.disposed$)
-          )
-          .subscribe(
-            receipt => {
-
-              if (!!receipt.error) {
-                this.showError(receipt.error);
-                Log.error(new Error(receipt.error));
-              }
-
-              if (receipt.returnValue === 'False') {
-                const sendFailedError = 'Sending tokens failed! Check the amount you are trying to send is correct.';
-                this.showError(sendFailedError);
-                Log.error(new Error(sendFailedError));
-              }
-
-              progressModal.close('ok');
-              this.tokensRefreshRequested$.next(true);
-            },
-            error => {
-              this.showError(error);
-              Log.error(error);
-              progressModal.close('ok');
             }
-          );
+
+            return of(result);
+          }),
+          takeUntil(this.disposed$)
+        )
+        .subscribe(
+          receipt => {
+
+            if (!!receipt.error) {
+              this.showError(receipt.error);
+              Log.error(new Error(receipt.error));
+            }
+
+            if (receipt.returnValue === 'False') {
+              const sendFailedError = 'Sending tokens failed! Check the amount you are trying to send is correct.';
+              this.showError(sendFailedError);
+              Log.error(new Error(sendFailedError));
+            }
+
+            progressModal.close('ok');
+            this.tokensRefreshRequested$.next(true);
+          },
+          error => {
+            this.showError(error);
+            Log.error(error);
+            progressModal.close('ok');
+          }
+        );
     });
   }
 }

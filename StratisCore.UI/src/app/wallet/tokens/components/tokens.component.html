@@ -44,20 +44,31 @@
             <thead>
               <tr class="d-flex">
                 <th class="text-center col-1" scope="col">Ticker</th>
+                <th class="text-left col-2" scope="col">Name</th>
                 <th class="text-left col-2" scope="col">Balance</th>
-                <th class="text-left col-5" scope="col">Address</th>
-                <th class="text-right col-4" scope="col">&nbsp;</th>
+                <th class="text-left col-4" scope="col">Address</th>
+                <th class="text-right col-3" scope="col">&nbsp;</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of tokens$ | async" class="d-flex">
                 <td class="text-center col-1" scope="col"><span class="badge badge-info">{{item.ticker}}</span></td>
+                <td class="text-left col-2" scope="col">{{ item.name }}</td>
                 <td class="text-left col-2" scope="col">{{ item.balance }}</td>
-                <td class="text-left col-5" scope="col">{{ item.address }}</td>
-                <td class="text-right col-4" scope="col">
-                  <button type="button" class="btn btn-sm btn-stratis-green" (click)="send(item)"><i class="icon lnr lnr-arrow-up-circle"></i> Send
+                <td class="text-left col-4" scope="col">
+                  {{ item.address }}
+                  <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
+                    data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
+                    (click)="copyTokenAddress(item.address)">
+                    <i class="lnr lnr-file-add"></i>
+                  </button>
+                </td>
+                <td class="text-right col-3" scope="col">
+                  <button type="button" class="btn btn-sm btn-stratis-green" (click)="send(item)"><i
+                      class="icon lnr lnr-arrow-up-circle"></i> Send
                   </button>&nbsp;
-                  <button type="button" class="btn btn-sm btn-danger" (click)="delete(item)"><i class="icon lnr lnr-cross-circle"></i> Delete
+                  <button type="button" class="btn btn-sm btn-danger" (click)="delete(item)"><i
+                      class="icon lnr lnr-cross-circle"></i>
                   </button>
                 </td>
               </tr>

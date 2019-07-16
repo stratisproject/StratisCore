@@ -4,7 +4,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '@shared/services/modal.service';
 import { ReplaySubject } from 'rxjs';
 import { finalize, take, takeUntil } from 'rxjs/operators';
-import { SmartContractsServiceBase } from 'src/app/wallet/smart-contracts/smart-contracts.service';
 
 import { Disposable } from '../../models/disposable';
 import { LocalCallRequest } from '../../models/LocalCallRequest';
@@ -26,6 +25,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
   token: FormControl;
   address: FormControl;
   ticker: FormControl;
+  name: FormControl;
   loading: boolean;
   apiError: string;
   disposed$ = new ReplaySubject<boolean>();
@@ -57,6 +57,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
 
     const ticker = this.customTokenSelected ? this.ticker.value + '' : this.tokens.find(t => t.address === this.token.value).ticker;
     const address = this.customTokenSelected ? this.address.value + '' : this.tokens.find(t => t.address === this.token.value).address;
+    const name = this.customTokenSelected ? this.name.value + '' : this.tokens.find(t => t.address === this.token.value).name;
 
     // Check that this token isn't already in the list
     const addedTokens = this.tokenService.GetSavedTokens().find(token => token.address === address);
@@ -93,7 +94,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
           return;
         }
 
-        const savedToken = new SavedToken(ticker, address, 0);
+        const savedToken = new SavedToken(ticker, address, 0, name);
         const result = this.tokenService.AddToken(savedToken);
 
         if (result.failure) {
@@ -115,11 +116,13 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
     this.token = new FormControl(0, [Validators.required]);
     this.address = new FormControl('', [customTokenDetailsValidator]);
     this.ticker = new FormControl('', [customTokenDetailsValidator]);
+    this.name = new FormControl('', [customTokenDetailsValidator]);
 
     this.addTokenForm = new FormGroup({
       token: this.token,
       address: this.address,
-      ticker: this.ticker
+      ticker: this.ticker,
+      name: this.name
     });
   }
 }

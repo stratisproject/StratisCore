@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
+import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { ApiService } from '@shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { LocalCallRequest } from '../models/LocalCallRequest';
 import { Result, ResultStatus } from '../models/result';
 import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
-import { LocalCallRequest } from '../models/LocalCallRequest';
 import { StorageService } from './storage.service';
-import { LocalExecutionResult } from '@shared/models/local-execution-result';
 
 @Injectable()
 export class TokensService {
@@ -22,7 +22,7 @@ export class TokensService {
 
   GetAvailableTokens(): Token[] {
     return [
-      new Token('SDT', 'tCJgD1PEcUJBBBn9B6fbdkcQ9bzPBBW6A8')
+      new Token('SDT', 'tCJgD1PEcUJBBBn9B6fbdkcQ9bzPBBW6A8', 'SRC-20 Standard Token')
     ];
   }
 

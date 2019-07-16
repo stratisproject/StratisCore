@@ -118,7 +118,7 @@ export class TransactionComponent implements OnInit {
       .toPromise()
       .then(transactionHash => {
         this.loading = false;
-        this.activeModal.close({ symbol: this.tokenSymbol.value.toUpperCase(), transactionHash });
+        this.activeModal.close({ symbol: this.tokenSymbol.value.toUpperCase(), name: this.tokenName.value, transactionHash });
       },
         error => {
           this.loading = false;
