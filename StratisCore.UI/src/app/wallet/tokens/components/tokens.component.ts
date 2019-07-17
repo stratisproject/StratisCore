@@ -173,6 +173,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       // start monitoring token progress
       const progressModal = this.modalService.open(ProgressComponent, { backdrop: 'static', keyboard: false });
       (<ProgressComponent>progressModal.componentInstance).loading = true;
+      (<ProgressComponent>progressModal.componentInstance).title = 'Waiting for Confirmation';
+      (<ProgressComponent>progressModal.componentInstance).message = 'Your token creation transaction has been broadcast and is waiting to be mined. This window will close once the transaction receives one confirmation.';
       (<ProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
 
       const receiptQuery = this.smartContractsService.GetReceiptSilent(value.transactionHash)
