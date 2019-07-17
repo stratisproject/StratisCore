@@ -1,0 +1,72 @@
+<div>
+
+  <div class="modal-header">
+    <h5 class="modal-title">Add Token</h5>
+    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close"
+      (click)="closeClicked()">
+      <i class="lnr lnr-cross-circle"></i>
+    </button>
+  </div>
+  <form [formGroup]="addTokenForm" (ngSubmit)="onSubmit()" [hidden]="loading">
+    <div class="modal-body">
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right"
+        title="Select token to add or add a custom token">
+        <label for="token">Token</label>
+        <select class="form-control" formControlName="token" id="token"
+          [class.is-invalid]="token.invalid && (token.dirty || token.touched)">
+          <option *ngFor="let t of tokens" [ngValue]="t.address">{{t.ticker}} - ({{ t.address }})
+          </option>
+        </select>
+        <div *ngIf="token.errors" class="invalid-feedback">
+          <p>Token is required</p>
+        </div>
+      </div>
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token contract address"
+        *ngIf="customTokenSelected">
+        <label for="address">Token Contract Address</label>
+        <input formControlName="address" id="address" type="text" class="form-control" placeholder=""
+          [class.is-invalid]="address.invalid && (address.dirty || address.touched)">
+        <div *ngIf="address.errors" class="invalid-feedback">
+          <p *ngIf="address.errors['required']">Contract address is required</p>
+        </div>
+      </div>
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token symbol/ticker"
+        *ngIf="customTokenSelected">
+        <label for="ticker">Token Symbol</label>
+        <input formControlName="ticker" id="ticker" type="text" class="form-control" placeholder=""
+          [class.is-invalid]="ticker.invalid && (ticker.dirty || ticker.touched)" maxlength="5">
+        <div *ngIf="ticker.errors" class="invalid-feedback">
+          <p *ngIf="ticker.errors['required']">Token symbol is required</p>
+        </div>
+      </div>
+      <div class="form-group clearfix" data-toggle="tooltip" data-placement="right" title="Token name"
+        *ngIf="customTokenSelected">
+        <label for="name">Token Name</label>
+        <input formControlName="name" id="name" type="text" class="form-control" placeholder=""
+          [class.is-invalid]="name.invalid && (name.dirty || name.touched)" maxlength="50">
+        <div *ngIf="name.errors" class="invalid-feedback">
+          <p *ngIf="name.errors['required']">Token name is required</p>
+        </div>
+      </div>
+      <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
+      <button type="submit" data-toggle="modal" data-target="#" class="btn btn-stratis-green btn-block"
+        data-dismiss="modal" [disabled]="!addTokenForm.valid || addTokenForm.pristine" ngbAutofocus>Add Token</button>
+    </div>
+  </form>
+  <div [hidden]="!loading" class="Loading col-2 mx-auto unset-left">
+    <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink">
+      <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="anim" fill-rule="nonzero">
+          <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
+          <path
+            d="M77.935738,148.48817 L179.236786,205.174938 C179.304043,205.216974 179.389314,205.216974 179.45657,205.174938 L280.736,148.488771 C280.863907,148.408304 280.863907,148.222148 280.7366,148.141081 L179.437954,91.4453047 C179.370098,91.4020686 179.283025,91.4026691 179.215769,91.4465058 L77.933336,148.141681 C77.8072307,148.223349 77.8090322,148.408304 77.935738,148.48817 M175.474042,275.838986 L68.1457574,215.733562 C68.0502777,215.67171 68.0226546,215.544403 68.0839057,215.448923 L72.7257846,208.248307 C72.7870357,208.152827 72.9143421,208.125204 73.0098218,208.187055 L179.215769,267.655348 C179.283025,267.698584 179.370098,267.698584 179.437954,267.655348 L278.974728,211.93839 C281.418771,210.567445 282.646196,207.782918 282.646196,204.989383 L282.646196,189.862143 C282.646196,189.699407 282.467246,189.600925 282.329732,189.688598 L183.158664,245.214596 C180.42578,246.744674 178.264574,246.765092 175.500464,245.2188 L75.2064574,189.096503 C70.042142,185.817764 67.0252211,180.207275 67.0252211,174.089964 L67,147.658277 C67,143.83248 68.9804549,142.616464 71.877876,140.992707 L175.345535,83.0604983 C177.884456,81.6433141 180.792086,81.6433141 183.344219,83.0797143 L288.392998,141.892259 C290.557207,143.104071 291.693356,145.664011 291.693356,148.239563 C291.693356,150.671595 290.317006,153.39427 288.392998,154.47157 L183.122033,213.411421 C180.429383,214.916279 178.22434,214.916279 175.527487,213.409019 L76.2561346,157.829576 C76.1192201,157.743104 75.9408711,157.841586 75.9408711,158.003722 L75.9666927,174.089964 C75.9666927,177.107485 77.4871632,179.875197 80.0344918,181.492349 L179.21637,237.038764 C179.283625,237.082001 179.370098,237.082001 179.437354,237.038764 L280.530028,180.422855 C283.149417,178.754061 286.889943,178.675395 289.31537,180.830596 C290.864064,182.207547 291.693356,184.224632 291.693356,186.296363 L291.691555,204.920325 C291.67474,210.679137 288.392998,216.930962 283.770336,219.519725 L183.133442,275.861805 C180.394554,277.394887 178.268778,277.394887 175.474042,275.838986"
+            id="Fill-1" fill="#FFFFFF"></path>
+        </g>
+      </g>
+    </svg>
+  </div>
+</div>

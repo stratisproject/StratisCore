@@ -11,12 +11,14 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GenericModalComponent } from './components/generic-modal/generic-modal.component';
+import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 
 @NgModule({
   imports: [ CommonModule ],
-  declarations: [ CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent ],
-  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective ],
-  entryComponents: [ GenericModalComponent ]
+  declarations: [ CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent, LoadingModalComponent, ConfirmationModalComponent ],
+  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective, LoadingModalComponent, ConfirmationModalComponent ],
+  entryComponents: [ GenericModalComponent, ConfirmationModalComponent ]
 })
 
 export class SharedModule { }

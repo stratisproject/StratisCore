@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    {{title}}
+  </h5>
+  <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close"
+    (click)="activeModal.close(false)">
+    <i class="lnr lnr-cross-circle"></i>
+  </button>
+</div>
+<div class="modal-body">
+    <div [innerHTML]="body">
+</div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="activeModal.close(false)">Cancel</button>
+  <button type="button" data-toggle="modal" class="btn btn-stratis-green btn-block"
+    data-dismiss="modal" ngbAutofocus (click)="activeModal.close(true)">Yes</button>
+</div>
+

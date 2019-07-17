@@ -18,6 +18,8 @@ import { TransactionBuilding } from '../models/transaction-building';
 import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
+import { LocalExecutionResult } from '@shared/models/local-execution-result';
+import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 
 @Injectable({
   providedIn: 'root'
@@ -435,9 +437,23 @@ export class ApiService {
   /*
     * Returns the receipt for a particular txhash, or empty JSON.
     */
-  getReceipt(hash: string): any {
+  getReceipt(hash: string, silent: boolean = false): any {
     let params = new HttpParams().set('txHash', hash);
     return this.http.get(this.stratisApiUrl + '/smartcontracts/receipt', { params }).pipe(
+      catchError(err => this.handleHttpError(err, silent))
+    );
+  }
+
+  /*
+    Setting the silent flag is not enough because the error format returned by /receipt still causes a modal to be displayed.
+  */
+  getReceiptSilent(hash: string): any {
+    let params = new HttpParams().set('txHash', hash);
+    return this.http.get(this.stratisApiUrl + '/smartcontracts/receipt', { params });
+  }
+
+  localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {    
+    return this.http.post<LocalExecutionResult>(this.stratisApiUrl + '/smartcontracts/local-call', localCall).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }

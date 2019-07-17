@@ -1,0 +1,81 @@
+<section id="GUI" class="light">
+  <section id="content" class="light tokens col-10 mx-auto">
+    <section class="mb-3">
+
+      <div class="col-12">
+        <section class="row d-flex align-items-center">
+
+          <div class="col-9">
+            <div class="card">
+              <div class="card-header">Active address</div>
+              <div class="card-body d-flex align-items-center">
+                <div style="display: flex; flex-direction: row">
+                  <select class="form-control" [(ngModel)]="selectedAddress" [ngModelOptions]="{standalone: true}"
+                    (change)="addressChanged($event.target.value)">
+                    <option *ngFor="let address of addresses">{{address}}</option>
+                  </select>
+                  <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
+                    data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
+                    (click)="clipboardAddressClicked()">
+                    <i class="lnr lnr-file-add"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-3">
+            <button type="button" class="btn btn-outline-stratis-green btn-block" data-toggle="modal"
+              data-target="#modalCalltx" (click)="addToken()">Add Token
+            </button>
+            <button type="button" class="btn btn-stratis-green btn-block" data-toggle="modal"
+              data-target="#modalCreatetx" (click)="issueToken()">Create Token
+            </button>
+          </div>
+
+        </section>
+      </div>
+    </section>
+
+    <section class="col-12">
+      <div class="card my-4">
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr class="d-flex">
+                <th class="text-center col-1" scope="col">Ticker</th>
+                <th class="text-left col-2" scope="col">Name</th>
+                <th class="text-left col-2" scope="col">Balance</th>
+                <th class="text-left col-4" scope="col">Address</th>
+                <th class="text-right col-3" scope="col">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of tokens$ | async" class="d-flex">
+                <td class="text-center col-1" scope="col"><span class="badge badge-info">{{item.ticker}}</span></td>
+                <td class="text-left col-2" scope="col">{{ item.name }}</td>
+                <td class="text-left col-2" scope="col">{{ item.balance }}</td>
+                <td class="text-left col-4" scope="col">
+                  {{ item.address }}
+                  <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
+                    data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
+                    (click)="copyTokenAddress(item.address)">
+                    <i class="lnr lnr-file-add"></i>
+                  </button>
+                </td>
+                <td class="text-right col-3" scope="col">
+                  <button type="button" class="btn btn-sm btn-stratis-green" (click)="send(item)"><i
+                      class="icon lnr lnr-arrow-up-circle"></i> Send
+                  </button>&nbsp;
+                  <button type="button" class="btn btn-sm btn-danger" (click)="delete(item)"><i
+                      class="icon lnr lnr-cross-circle"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </section>

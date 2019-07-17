@@ -1,0 +1,7 @@
+<app-loading-modal
+  [loading]="loading"
+  (close)="closeClicked()">
+  <span class="title">{{ title }}</span>
+  <p class="description">{{ message }}</p>
+  <p class="summary" *ngIf="summary">Summary:<br/>{{ summary }}</p>
+</app-loading-modal>
