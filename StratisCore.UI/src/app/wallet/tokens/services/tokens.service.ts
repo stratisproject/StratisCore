@@ -54,12 +54,25 @@ export class TokensService {
   }
 
   GetTokenBalance(request: TokenBalanceRequest): Observable<number> {
-    return this.apiService.localCall(request).pipe(
+    return this.LocalCall(request).pipe(
       map(localExecutionresult => localExecutionresult.return ? localExecutionresult.return : 0)
     );
   }
 
   LocalCall(request: LocalCallRequest): Observable<LocalExecutionResult> {
-    return this.apiService.localCall(request);
+    return this.apiService.localCall(request)
+      .pipe(
+        map(response => {
+          // Temporary workaround for non-camel-cased API response          
+          let anyResponse = (<any>response);
+          let result = new LocalExecutionResult();
+          result.gasConsumed = anyResponse.hasOwnProperty('GasConsumed') ? anyResponse.GasConsumed : anyResponse.gasConsumed;          
+          result.return = anyResponse.hasOwnProperty('Return') ? anyResponse.Return : anyResponse.return;
+          result.revert = anyResponse.hasOwnProperty('Revert') ? anyResponse.Revert : anyResponse.revert;
+          result.logs = anyResponse.hasOwnProperty('Logs') ? anyResponse.Revert : anyResponse.logs;
+          result.internalTransfers = anyResponse.hasOwnProperty('InternalTransfers') ? anyResponse.Revert : anyResponse.internalTransfers;
+          return result;
+        })
+      );
   }
 }
