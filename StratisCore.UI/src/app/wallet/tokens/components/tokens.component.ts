@@ -284,9 +284,9 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       const progressModal = this.modalService.open(ProgressComponent, { backdrop: 'static', keyboard: false });
       (<ProgressComponent>progressModal.componentInstance).loading = true;
       (<ProgressComponent>progressModal.componentInstance).close.subscribe(() => progressModal.close());
-      (<ProgressComponent>progressModal.componentInstance).title = 'Waiting For Transaction To Be Mined';
+      (<ProgressComponent>progressModal.componentInstance).title = 'Waiting For Confirmation';
       // tslint:disable-next-line:max-line-length
-      (<ProgressComponent>progressModal.componentInstance).message = 'Your token transfer transaction has been broadcast. When it is mined this window will close.';
+      (<ProgressComponent>progressModal.componentInstance).message = 'Your token transfer transaction has been broadcast and is waiting to be mined. This window will close once the transaction receives one confirmation.';
       (<ProgressComponent>progressModal.componentInstance).summary = `Send ${value.amount} ${item.name} to ${value.recipientAddress}`;
       
       const receiptQuery = this.smartContractsService.GetReceiptSilent(value.callResponse.transactionId)
