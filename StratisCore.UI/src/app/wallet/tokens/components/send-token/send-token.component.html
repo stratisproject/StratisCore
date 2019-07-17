@@ -75,6 +75,7 @@
           min="0">
         <div *ngIf="tokenAmount.errors" class="invalid-feedback">
           <p *ngIf="tokenAmount.errors['min']">The number of tokens cannot be negative</p>
+          <p *ngIf="tokenAmount.errors['max']">The number of tokens exceeds your balance of {{ token.balance }} {{ token.ticker }}</p>
         </div>
       </div>
 

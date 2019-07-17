@@ -119,7 +119,7 @@ export class SendTokenComponent implements OnInit {
 
     const gasLimitValidator = (gasCallLimitMinimumValidator);
 
-    this.tokenAmount = new FormControl(0, [Validators.min(0)]);
+    this.tokenAmount = new FormControl(0, [Validators.required, Validators.min(0), Validators.max(this.token.balance)]);
     this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator, Validators.min(0)]);
     // tslint:disable-next-line:max-line-length
     this.gasPrice = new FormControl(100, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator, Validators.min(0)]);
