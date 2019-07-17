@@ -10,6 +10,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
   @Input() loading = false;
   @Input() title = 'Token Issue Progress';
   @Input() message = 'Checking the progress of the token issuance. This can take up to a minute, please wait...';
+  @Input() summary;
   @Output() close = new EventEmitter();
 
   constructor() { }

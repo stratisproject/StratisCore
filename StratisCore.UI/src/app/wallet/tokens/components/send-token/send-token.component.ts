@@ -25,6 +25,8 @@ export class SendTokenComponent implements OnInit {
 
   balance = 0;
 
+  title: string;
+
   parameters: FormArray;
   feeAmount: FormControl;
   gasPrice: FormControl;
@@ -47,6 +49,7 @@ export class SendTokenComponent implements OnInit {
   constructor(private activeModal: NgbActiveModal, private smartContractsService: SmartContractsService) {}
 
   ngOnInit() {
+    this.title = 'Send token ' + this.token.ticker;
     this.registerControls();
     this.contractAddress.setValue(this.token.address);
     this.contractAddress.disable();
@@ -81,12 +84,14 @@ export class SendTokenComponent implements OnInit {
 
     this.loading = true;
 
+    this.title = 'Sending token ' + this.token.ticker + '...';
+
     // We don't need an observable here so let's treat it as a promise.
     this.smartContractsService.PostCall(result)
       .toPromise()
       .then(callResponse => {
         this.loading = false;
-        this.activeModal.close({ request: result, callResponse });
+        this.activeModal.close({ request: result, callResponse, amount: this.tokenAmount.value, recipientAddress: this.recipientAddress.value });
       },
         error => {
           this.loading = false;
