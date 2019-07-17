@@ -62,6 +62,11 @@
           title="The address to send the tokens to"
           [class.is-invalid]="recipientAddress.invalid && (recipientAddress.dirty || recipientAddress.touched)">
       </div>
+      <div class="float-right">Token Balance: 
+        <span class="btn-link no-underline">
+          <strong data-toggle="tooltip" data-placement="right" [title]="token.balance + ' ' + token.ticker">{{ token.balance }}</strong><small> {{ token.ticker }}</small>
+        </span>
+      </div>
       <div class="form-group clearfix" data-toggle="tooltip" data-placement="right"
         title="The amount of tokens to send">
         <label for="amount">Number of Tokens To Send</label>
