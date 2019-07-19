@@ -107,6 +107,10 @@ export class SendTokenComponent implements OnInit {
         });
   }
 
+  setTokenAmount(tokenBalance: number) {
+    this.tokenAmount.setValue(tokenBalance);
+  }
+
   private registerControls() {
     const amountValidator = control => Number(control.value) > this.balance ? { amountError: true } : null;
     const gasPriceTooLowValidator = control => Number(control.value) < this.gasPriceMinimum ? { gasPriceTooLowError: true } : null;
