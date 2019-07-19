@@ -9,12 +9,22 @@ import { Result, ResultStatus } from '../models/result';
 import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
 import { StorageService } from './storage.service';
+import { GlobalService } from '@shared/services/global.service';
 
 @Injectable()
 export class TokensService {
   private savedTokens = 'savedTokens';
 
-  constructor(private apiService: ApiService, private storage: StorageService) { }
+  constructor(private apiService: ApiService, private storage: StorageService, private globalService: GlobalService) {
+    this.savedTokens = `${globalService.getNetwork()}:savedTokens`
+
+    // Upgrade wallets using the old format
+    let oldTokens = this.storage.getItem<SavedToken[]>('savedTokens');
+    if(oldTokens) {
+      this.UpdateTokens(oldTokens);
+      this.storage.removeItem('savedTokens');
+    }
+   }
 
   GetSavedTokens(): SavedToken[] {
     return this.storage.getItem<SavedToken[]>(this.savedTokens) || [];
