@@ -51,10 +51,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of tokens$ | async" class="d-flex">
+              <tr *ngFor="let item of tokens" class="d-flex">
                 <td class="text-center col-1" scope="col"><span class="badge badge-info">{{item.ticker}}</span></td>
                 <td class="text-left col-2" scope="col">{{ item.name }}</td>
-                <td class="text-left col-2" scope="col">{{ item.balance }}</td>
+                <td class="text-left col-2" scope="col">
+                  {{ item.balance === null && tokenLoading[item.address] === 'loading' ? 'Loading...' : item.balance }}
+                </td>
                 <td class="text-left col-4" scope="col">
                   {{ item.address }}
                   <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"

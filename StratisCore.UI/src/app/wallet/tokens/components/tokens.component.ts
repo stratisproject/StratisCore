@@ -15,7 +15,7 @@ import {
   Subject,
   throwError,
 } from 'rxjs';
-import { catchError, first, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, first, map, switchMap, takeUntil, distinctUntilChanged, tap } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
@@ -40,7 +40,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   balance: number;
   coinUnit: string;
   addressChanged$: Subject<string>;
-  tokensRefreshRequested$ = new BehaviorSubject<boolean>(true);
+  tokenBalanceRefreshRequested$ = new Subject<SavedToken[]>();
   addresses: string[];
   disposed$ = new ReplaySubject<boolean>();
   dispose: () => void;
@@ -51,6 +51,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   availableTokens: Token[] = [];
   private pollingInterval = 5 * 1000; // polling milliseconds
   maxTimeout = 1.5 * 60 * 1000; // wait for about 1.5 minutes
+  tokens: SavedToken[] = [];
+  tokenLoading: { [address: string]: string; } = {};
 
   constructor(
     private tokenService: TokensService,
@@ -62,7 +64,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
     this.addressChanged$ = new Subject();
     this.walletName = this.globalService.getWalletName();
-    this.tokens$ = this.getBalances();
+    
     this.availableTokens = this.tokenService.GetAvailableTokens();
     this.availableTokens.push(new Token('Custom', 'custom', 'custom'));
     this.coinUnit = this.globalService.getCoinUnit();
@@ -117,11 +119,62 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       .pipe(takeUntil(this.disposed$))
       .subscribe(address => this.selectedAddress = address);
 
-    // poll tokens list periodically
-    interval(this.pollingInterval).pipe(takeUntil(this.disposed$)).subscribe(() => this.tokensRefreshRequested$.next(true));
+    
+    // If the address changes we need to update all tokens.
+    this.addressChanged$
+      .pipe(        
+        tap(() => this.tokens.forEach(t => t.balance = null)),
+        switchMap(() => this.updateTokenBalances(this.tokens)),
+        takeUntil(this.disposed$)
+      )
+      .subscribe();
+
+    // Update requested token balances
+    this.tokenBalanceRefreshRequested$
+      .pipe(
+        tap(tokensToReload => tokensToReload.forEach(t => t.balance = null)),
+        switchMap(tokensToReload => this.updateTokenBalances(tokensToReload)),
+        takeUntil(this.disposed$)
+      )
+      .subscribe();    
+    
+    interval(this.pollingInterval)
+      .pipe(
+        switchMap(() => this.updateTokenBalances(this.tokens)),
+        takeUntil(this.disposed$)
+      )
+      .subscribe();
+  }
+
+  private updateTokenBalances(tokens: SavedToken[]) {
+    tokens.forEach(token => this.tokenLoading[token.address] = "loading");
+    return forkJoin(tokens.map(token => {
+      return this.tokenService
+        .GetTokenBalance(new TokenBalanceRequest(token.address, this.selectedAddress))
+        .pipe(catchError(error => {
+          Log.error(error);
+          Log.log(`Error getting token balance for token address ${token.address}`);
+          return of(null);
+        }), 
+        tap(balance => {
+          if (balance === null) {
+            token.balance === null;
+            this.tokenLoading[token.address] = "error";
+            return;
+          }
+
+          this.tokenLoading[token.address] = "loaded";
+          if (balance !== token.balance)
+            token.balance = balance;
+        }));
+    }));
   }
 
   ngOnInit() {
+    // Clear all the balances to start with
+    let tokens = this.tokenService.GetSavedTokens();
+    tokens.forEach(t => t.balance = null);
+    this.tokens = tokens;
   }
 
   ngOnDestroy() {
@@ -152,9 +205,12 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     const modal = this.modalService.open(AddTokenComponent, { backdrop: 'static', keyboard: false });
     (<AddTokenComponent>modal.componentInstance).tokens = this.availableTokens;
     modal.result.then(value => {
-      if (value === 'ok') {
+      if (value) {
+
         Log.info('Refresh token list');
-        this.tokensRefreshRequested$.next(true);
+
+        this.tokens.push(value);
+        this.tokenBalanceRefreshRequested$.next([value]);
       }
     });
   }
@@ -207,7 +263,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             const token = new SavedToken(value.symbol, newTokenAddress, 0, value.name);
             this.tokenService.AddToken(token);
             progressModal.close('ok');
-            this.tokensRefreshRequested$.next(true);
+            this.tokens.push(token);
+            this.tokenBalanceRefreshRequested$.next([token]);
           },
           error => {
             this.showError(error);
@@ -222,38 +279,6 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     this.genericModalService.openModal('Error', error);
   }
 
-  get allTokens() {
-    return [...this.tokenService.GetAvailableTokens(), ...this.tokenService.GetSavedTokens()];
-  }
-
-  getBalances(): Observable<SavedToken[]> {
-    return combineLatest(this.addressChanged$, this.tokensRefreshRequested$)
-      .pipe(
-        switchMap(([address, _]) =>
-          forkJoin(
-            this.tokenService.GetSavedTokens().map(token =>
-              this.tokenService
-                .GetTokenBalance(new TokenBalanceRequest(token.address, address))
-                .pipe(
-                  catchError(error => {
-                    Log.error(error);
-                    Log.log(`Error getting token balance for token address ${token.address}`);
-                    return of(0);
-                  }),
-                  map(balance => {
-                    return new SavedToken(
-                      token.ticker,
-                      token.address,
-                      balance,
-                      token.name
-                    );
-                  })
-                )
-            )
-          )
-        ));
-  }
-
   delete(item: SavedToken) {
     const modal = this.modalService.open(ConfirmationModalComponent, { backdrop: 'static', keyboard: false });
     (<ConfirmationModalComponent>modal.componentInstance).body = `Are you sure you want to remove "${item.ticker}" token`;
@@ -264,7 +289,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         this.showApiError(removeResult.message);
         return;
       }
-      this.tokensRefreshRequested$.next(true);
+
+      this.tokens.splice(this.tokens.indexOf(item), 1);
     });
   }
 
@@ -329,7 +355,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             }
 
             progressModal.close('ok');
-            this.tokensRefreshRequested$.next(true);
+            this.tokenBalanceRefreshRequested$.next([item]);
           },
           error => {
             this.showError(error);
