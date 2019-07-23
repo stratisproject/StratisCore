@@ -32,7 +32,7 @@ export class TokensService {
 
   GetAvailableTokens(): Token[] {
     return [
-      new Token('SDT', 'tCJgD1PEcUJBBBn9B6fbdkcQ9bzPBBW6A8', 'SRC-20 Standard Token')
+      new Token('CG1', 'CXa9fNVXPfYL9rdqiR22NoAc9kZUfBAUCu', 'Cirrus Giveaway')
     ];
   }
 
