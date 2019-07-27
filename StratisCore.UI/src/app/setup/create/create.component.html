@@ -30,9 +30,13 @@
         <!-- /form-group -->
         <div class="form-group col-12">
           <label for="walletPassphrase mr-auto">Passphrase</label><em class="text-muted ml-auto float-right">(optional)</em>
-          <!--[class.is-invalid]="formErrors.walletPassphrase" [class.is-valid]="!formErrors.walletPassphrase && createWalletForm.get('walletPassphrase').valid"-->
-          <input type="password" class="form-control form-control-success" formControlName="walletPassphrase" id="walletPassphrase" placeholder="Enter an optional passphrase." placement="right" ngbTooltip="The passphrase will be combined with your secret words to generate the private seed and will be required to restore your wallet in the future if necessary." triggers="click:blur">
+          <input type="password" class="form-control" [class.is-invalid]="formErrors.walletPassphrase" [class.is-valid]="!formErrors.walletPassphrase && createWalletForm.get('walletPassphrase').valid && createWalletForm.get('walletPassphrase').dirty" formControlName="walletPassphrase" id="walletPassphrase" placeholder="Enter an optional passphrase." placement="right" ngbTooltip="The passphrase will be combined with your secret words to generate the private seed and will be required to restore your wallet in the future if necessary." triggers="click:blur">
           <div *ngIf="formErrors.walletPassphrase" class="invalid-feedback">{{ formErrors.walletPassphrase }}</div>
+        </div>
+        <div class="form-group col-12" *ngIf="createWalletForm.get('walletPassphrase').dirty">
+          <label for="walletPassphrase mr-auto">Confirm Passphrase</label>
+          <input type="password" class="form-control" [class.is-invalid]="formErrors.walletPassphraseConfirmation" [class.is-valid]="!formErrors.walletPassphraseConfirmation && createWalletForm.get('walletPassphrase').valid && createWalletForm.get('walletPassphraseConfirmation').dirty && createWalletForm.get('walletPassphraseConfirmation').valid" formControlName="walletPassphraseConfirmation" id="walletPassphraseConfirmation" placeholder="Confirm passphrase." triggers="click:blur">
+          <div *ngIf="formErrors.walletPassphraseConfirmation" class="invalid-feedback">{{ formErrors.walletPassphraseConfirmation }}</div>
         </div>
         <div class="col-12">
           <div class="alert alert-danger text-center" role="alert">

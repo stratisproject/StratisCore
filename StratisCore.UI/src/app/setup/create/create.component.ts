@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { GlobalService } from '@shared/services/global.service';
@@ -9,6 +9,8 @@ import { ModalService } from '@shared/services/modal.service';
 import { PasswordValidationDirective } from '@shared/directives/password-validation.directive';
 
 import { WalletCreation } from '@shared/models/wallet-creation';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'create-component',
@@ -16,7 +18,7 @@ import { WalletCreation } from '@shared/models/wallet-creation';
   styleUrls: ['./create.component.css'],
 })
 
-export class CreateComponent implements OnInit {
+export class CreateComponent implements OnInit, OnDestroy {
   constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
     this.buildCreateForm();
   }
@@ -25,6 +27,8 @@ export class CreateComponent implements OnInit {
   public sidechainEnabled: boolean;
   private newWallet: WalletCreation;
   private mnemonic: string;
+  private formValueChanges$: Subscription;
+  private passphrase$: Subscription;
 
   ngOnInit() {
     this.getNewMnemonic();
@@ -42,6 +46,7 @@ export class CreateComponent implements OnInit {
         ])
       ],
       walletPassphrase : [''],
+      walletPassphraseConfirmation: [''],
       walletPassword: ['',
         Validators.required,
         // Validators.compose([
@@ -54,8 +59,15 @@ export class CreateComponent implements OnInit {
       validator: PasswordValidationDirective.MatchPassword
     });
 
-    this.createWalletForm.valueChanges
+    this.formValueChanges$ = this.createWalletForm.valueChanges
       .subscribe(data => this.onValueChanged(data));
+
+    const passphrase = this.createWalletForm.get('walletPassphrase');
+    const passphraseConfirmation = this.createWalletForm.get('walletPassphraseConfirmation');
+
+    this.passphrase$ = passphrase.valueChanges.subscribe(rsp => {
+      this.setDynamicPassphraseValidators(rsp, { passphrase, passphraseConfirmation });
+    });
 
     this.onValueChanged();
   }
@@ -78,6 +90,7 @@ export class CreateComponent implements OnInit {
   formErrors = {
     walletName: '',
     walletPassphrase: '',
+    walletPassphraseConfirmation: '',
     walletPassword: '',
     walletPasswordConfirmation: ''
   };
@@ -96,6 +109,10 @@ export class CreateComponent implements OnInit {
     walletPasswordConfirmation: {
       required: 'Confirm your password.',
       walletPasswordConfirmation: 'Passwords do not match.'
+    },
+    walletPassphraseConfirmation: {
+      required: 'Confirm your passphrase.',
+      walletPassphraseConfirmation: 'Passphrases do not match.'
     }
   };
 
@@ -115,12 +132,48 @@ export class CreateComponent implements OnInit {
     }
   }
 
-  private getNewMnemonic() {
+  private getNewMnemonic(): void {
+    // using take(1) no need to unsubscribe
     this.apiService.getNewMnemonic()
-      .subscribe(
-        response => {
-          this.mnemonic = response;
-        }
-      );
+      .pipe(take(1))
+      .subscribe(mnemonic => this.mnemonic = mnemonic);
+  }
+
+  private setDynamicPassphraseValidators(passphraseValue: string, controls: { passphrase: AbstractControl, passphraseConfirmation: AbstractControl }): void {
+    const { passphrase, passphraseConfirmation } = controls;
+
+    if (passphraseValue.length) {
+      // passphrase and confirmation should be required if passphrase is not null
+      passphrase.setValidators(Validators.required);
+      passphraseConfirmation.setValidators(Validators.required);
+
+      // Update form group validators to include MatachPassword and MatchPassphrase
+      this.createWalletForm.setValidators([
+        PasswordValidationDirective.MatchPassword,
+        PasswordValidationDirective.MatchPassphrase
+      ]);
+    } else { // Else, passphrase field is null, clear validators
+      // clear passphrase validators, errors, mark pristine
+      passphrase.clearValidators();
+      passphrase.setErrors(null);
+      passphrase.markAsPristine();
+
+      // clear confirmation validators, errors, mark pristine
+      passphraseConfirmation.setValue(null);
+      passphraseConfirmation.clearValidators();
+      passphraseConfirmation.setErrors(null);
+      passphraseConfirmation.markAsPristine();
+
+      // clear then set MatchPassowrd validator on form
+      this.createWalletForm.clearValidators();
+      this.createWalletForm.setValidators(PasswordValidationDirective.MatchPassword);
+    }
+
+    this.createWalletForm.updateValueAndValidity();
+  }
+
+  ngOnDestroy(): void {
+    this.formValueChanges$.unsubscribe();
+    this.passphrase$.unsubscribe();
   }
 }
