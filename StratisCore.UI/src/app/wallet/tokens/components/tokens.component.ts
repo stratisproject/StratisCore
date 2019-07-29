@@ -15,7 +15,7 @@ import {
   Subject,
   throwError,
 } from 'rxjs';
-import { catchError, first, map, switchMap, takeUntil, distinctUntilChanged, tap } from 'rxjs/operators';
+import { catchError, first, map, switchMap, takeUntil, distinctUntilChanged, tap, take, startWith } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
@@ -29,6 +29,7 @@ import { TokensService } from '../services/tokens.service';
 import { AddTokenComponent } from './add-token/add-token.component';
 import { ProgressComponent } from './progress/progress.component';
 import { SendTokenComponent } from './send-token/send-token.component';
+import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Component({
   selector: 'app-tokens',
@@ -39,7 +40,6 @@ import { SendTokenComponent } from './send-token/send-token.component';
 export class TokensComponent implements OnInit, OnDestroy, Disposable {
   balance: number;
   coinUnit: string;
-  addressChanged$: Subject<string>;
   tokenBalanceRefreshRequested$ = new Subject<SavedToken[]>();
   addresses: string[];
   disposed$ = new ReplaySubject<boolean>();
@@ -60,75 +60,35 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     private clipboardService: ClipboardService,
     private genericModalService: ModalService,
     private modalService: NgbModal,
-    private globalService: GlobalService) {
+    private globalService: GlobalService,
+    private currentAccountService: CurrentAccountService) {
 
-    this.addressChanged$ = new Subject();
     this.walletName = this.globalService.getWalletName();
     
     this.availableTokens = this.tokenService.GetAvailableTokens();
     this.availableTokens.push(new Token('Custom', 'custom', 'custom'));
     this.coinUnit = this.globalService.getCoinUnit();
+    this.selectedAddress = this.currentAccountService.getAddress();
 
-    this.smartContractsService
-      .GetAddresses(this.walletName)
-      .pipe(
-        catchError(error => {
-          Log.error(error);
-          this.showApiError(`Error retrieving addressses. ${error}`);
+    this.smartContractsService.GetHistory(this.walletName, this.selectedAddress)
+      .pipe(catchError(error => {
+          this.showApiError(`Error retrieving transactions. ${error}`);
           return of([]);
         }),
-        takeUntil(this.disposed$)
+        take(1)
       )
-      .subscribe(addresses => {
-        if (addresses && addresses.length > 0) {
-          this.addressChanged$.next(addresses[0]);
-          this.addresses = addresses;
-          this.selectedAddress = addresses[0];
-        }
-      });
+    .subscribe(history => this.history = history);
 
-    this.addressChanged$
+    this.smartContractsService.GetAddressBalance(this.selectedAddress)
       .pipe(
-        switchMap(address => this.smartContractsService.GetHistory(this.walletName, address)
-          .pipe(catchError(error => {
-            this.showApiError(`Error retrieving transactions. ${error}`);
-            return of([]);
-          })
-          )
-        ),
-        takeUntil(this.disposed$)
+        catchError(error => {
+          this.showApiError(`Error retrieving balance. ${error}`);
+          return of(0);
+        }),
+        take(1)
       )
-      .subscribe(history => this.history = history);
-
-    this.addressChanged$
-      .pipe(
-        switchMap(x => this.smartContractsService.GetAddressBalance(x)
-          .pipe(
-            catchError(error => {
-              this.showApiError(`Error retrieving balance. ${error}`);
-              return of(0);
-            })
-          )
-        ),
-        takeUntil(this.disposed$)
-      )
-      .subscribe(balance => this.balance = balance);
-
-
-    this.addressChanged$
-      .pipe(takeUntil(this.disposed$))
-      .subscribe(address => this.selectedAddress = address);
-
-    
-    // If the address changes we need to update all tokens.
-    this.addressChanged$
-      .pipe(        
-        tap(() => this.tokens.forEach(t => t.balance = null)),
-        switchMap(() => this.updateTokenBalances(this.tokens)),
-        takeUntil(this.disposed$)
-      )
-      .subscribe();
-
+      .subscribe(balance => this.balance = balance);  
+  
     // Update requested token balances
     this.tokenBalanceRefreshRequested$
       .pipe(
@@ -175,6 +135,9 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     let tokens = this.tokenService.GetSavedTokens();
     tokens.forEach(t => t.balance = null);
     this.tokens = tokens;
+
+    // Refresh them all
+    this.tokenBalanceRefreshRequested$.next(this.tokens);
   }
 
   ngOnDestroy() {
@@ -183,10 +146,6 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
   showApiError(error: string) {
     this.genericModalService.openModal('Error', error);
-  }
-
-  addressChanged(address: string) {
-    this.addressChanged$.next(address);
   }
 
   clipboardAddressClicked() {
