@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '@shared/services/modal.service';
 import { catchError, takeUntil, switchMap } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
+import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Component({
   selector: 'app-address-selection',
@@ -23,7 +24,8 @@ export class AddressSelectionComponent implements OnInit {
   unsubscribe: Subject<void> = new Subject();
 
   constructor(private globalService: GlobalService,
-    private smartContractsService: SmartContractsServiceBase) { 
+    private smartContractsService: SmartContractsServiceBase,
+    private currentAccountService: CurrentAccountService) { 
       
       this.coinUnit = this.globalService.getCoinUnit();
       this.walletName = this.globalService.getWalletName();
