@@ -7,6 +7,7 @@ import { ModalService } from '@shared/services/modal.service';
 import { catchError, takeUntil, switchMap } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
 import { CurrentAccountService } from '@shared/services/current-account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-address-selection',
@@ -25,7 +26,8 @@ export class AddressSelectionComponent implements OnInit {
 
   constructor(private globalService: GlobalService,
     private smartContractsService: SmartContractsServiceBase,
-    private currentAccountService: CurrentAccountService) { 
+    private currentAccountService: CurrentAccountService,
+    private router: Router) { 
       
       this.coinUnit = this.globalService.getCoinUnit();
       this.walletName = this.globalService.getWalletName();
@@ -43,6 +45,7 @@ export class AddressSelectionComponent implements OnInit {
           if (addresses && addresses.length > 0) {
               this.addressChangedSubject.next(addresses[0]);
               this.addresses = addresses;
+              this.selectedAddress = addresses[0];
           }
       });
 
@@ -58,14 +61,25 @@ export class AddressSelectionComponent implements OnInit {
         ),
         takeUntil(this.unsubscribe)
       )
-      .subscribe(balance => this.balance = balance);      
+      .subscribe(balance => this.balance = balance);
   }
 
   ngOnInit() {
   }
 
+  getAddress() {
+    return this.currentAccountService.getAddress();
+  }
+
   addressChanged(address: string) {
     this.addressChangedSubject.next(address);
+  }
+
+  next() {
+    if (this.selectedAddress) {
+      this.currentAccountService.setAddress(this.selectedAddress);
+      this.router.navigate(['wallet/dashboard']);
+    }
   }
 
 }

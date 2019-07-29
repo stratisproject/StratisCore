@@ -17,7 +17,7 @@
         </section>
       </div>
       <div class="col-12">
-        <button class="btn btn-block btn-lg btn-primary btn-stratis-green">Use Address</button>
+        <button class="btn btn-block btn-lg btn-primary btn-stratis-green" (click)="next()" [disabled]="!selectedAddress">Use Address</button>
       </div>
     </section>
   </section>
