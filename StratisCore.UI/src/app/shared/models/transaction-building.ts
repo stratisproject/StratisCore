@@ -9,7 +9,7 @@ export class Recipient {
 }
 
 export class TransactionBuilding {
-  constructor(walletName: string, accountName: string, password: string, destinationAddress: string, amount: string, feeAmount: number, allowUnconfirmed: boolean, shuffleOutputs: boolean, opReturnData?: string, opReturnAmount?: string) {
+  constructor(walletName: string, accountName: string, password: string, destinationAddress: string, amount: string, feeAmount: number, allowUnconfirmed: boolean, shuffleOutputs: boolean, opReturnData?: string, opReturnAmount?: string, changeAddress?: string) {
     this.walletName = walletName;
     this.accountName = accountName;
     this.password = password;
@@ -19,6 +19,7 @@ export class TransactionBuilding {
     this.shuffleOutputs = shuffleOutputs;
     this.opReturnData = opReturnData;
     this.opReturnAmount = opReturnAmount;
+    this.changeAddress = changeAddress;
   }
 
   walletName: string;
@@ -30,4 +31,5 @@ export class TransactionBuilding {
   shuffleOutputs: boolean;
   opReturnData: string;
   opReturnAmount: string;
+  changeAddress: string;
 }
