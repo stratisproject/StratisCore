@@ -1,8 +1,0 @@
-/* Allows for vertical scrolling if form gets too long. */
-.createWallet {
-  overflow-y: scroll;
-  max-height: 100vh;
-  display: block !important;
-  padding-top: 25px;
-  padding-bottom: 25px;
-}
