@@ -306,6 +306,9 @@ export class SendComponent implements OnInit, OnDestroy {
   };
 
   public buildSidechainTransaction() {
+    // Only set a change address if we're on a sidechain and there's a current account selected
+    let setChangeAddress = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
       "account 0",
@@ -320,6 +323,10 @@ export class SendComponent implements OnInit, OnDestroy {
       this.sendToSidechainForm.get("destinationAddress").value.trim(),
       new NumberToStringPipe().transform((this.opReturnAmount / 100000000))
     );
+
+    if (setChangeAddress) {
+      this.transaction.changeAddress = this.currentAccountService.getAddress();
+    }
 
     this.apiService.buildTransaction(this.transaction)
       .subscribe(
