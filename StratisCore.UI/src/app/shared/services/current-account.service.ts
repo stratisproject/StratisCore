@@ -24,4 +24,7 @@ export class CurrentAccountService {
     return !!this.address;
   }
 
+  clearAddress() {
+    this.address = undefined;
+  }
 }

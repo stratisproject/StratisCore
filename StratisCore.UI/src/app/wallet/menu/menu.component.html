@@ -34,6 +34,8 @@
         <div ngbDropdown class="d-inline-block">
           <button class="btn btn-outline-light" ngbDropdownToggle>{{walletName}}</button>
           <div ngbDropdownMenu class="dropdown-menu-right">
+              <button *ngIf="accountsEnabled" class="dropdown-item d-flex align-items-center" type="button"
+              (click)="switchAddress()"><i class="lnr lnr-users"></i>Switch Address</button>
             <button *ngIf="!sidechainEnabled" class="dropdown-item d-flex align-items-center" type="button"
               (click)="openAddressBook()"><i class="lnr lnr-book"></i>Address Book</button>
             <button class="dropdown-item d-flex align-items-center" type="button" (click)="openAdvanced()"><i
