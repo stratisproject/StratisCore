@@ -67,6 +67,11 @@ export class AddressSelectionComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
   getAddress() {
     return this.currentAccountService.getAddress();
   }
