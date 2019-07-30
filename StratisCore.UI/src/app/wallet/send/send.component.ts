@@ -19,6 +19,7 @@ import { SendConfirmationComponent } from './send-confirmation/send-confirmation
 
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Component({
   selector: 'send-component',
@@ -28,7 +29,7 @@ import { debounceTime } from 'rxjs/operators';
 
 export class SendComponent implements OnInit, OnDestroy {
   @Input() address: string;
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, public activeModal: NgbActiveModal, private fb: FormBuilder) {
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, public activeModal: NgbActiveModal, private fb: FormBuilder, private currentAccountService: CurrentAccountService) {
     this.buildSendForm();
     this.buildSendToSidechainForm();
   }
@@ -266,6 +267,9 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   public buildTransaction() {
+    // Only set a change address if we're on a sidechain and there's a current account selected
+    let setChangeAddress = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
       "account 0",
@@ -278,6 +282,10 @@ export class SendComponent implements OnInit, OnDestroy {
       true,
       false
     );
+
+    if (setChangeAddress) {
+      this.transaction.changeAddress = this.currentAccountService.getAddress();
+    }
 
     this.apiService
       .buildTransaction(this.transaction)
