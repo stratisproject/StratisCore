@@ -14,6 +14,7 @@ import { TransactionDetailsComponent } from '../transaction-details/transaction-
 
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Component({
   selector: 'dashboard-component',
@@ -22,7 +23,7 @@ import { Router } from '@angular/router';
 })
 
 export class DashboardComponent implements OnInit, OnDestroy {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router, private fb: FormBuilder, private currentAccountService: CurrentAccountService) {
     this.buildStakingForm();
   }
 
@@ -47,9 +48,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public isStarting: boolean;
   public isStopping: boolean;
   public hasBalance: boolean = false;
+  private accountsEnabled: boolean;
 
   ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
     this.walletName = this.globalService.getWalletName();
     this.coinUnit = this.globalService.getCoinUnit();
     this.startSubscriptions();
@@ -83,20 +86,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private getWalletBalance() {
+
     let walletInfo = new WalletInfo(this.globalService.getWalletName());
-    this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
+    
+    let observable = this.accountsEnabled
+      ? this.apiService.getReceivedByAddress(this.currentAccountService.getAddress())
+      : this.apiService.getWalletBalance(walletInfo);
+
+    this.walletBalanceSubscription = observable
       .subscribe(
         response =>  {
           let balanceResponse = response;
-          // TO DO - add account feature instead of using first entry in array
-          this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
-          this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
-          this.spendableBalance = balanceResponse.balances[0].spendableAmount;
-          if ((this.confirmedBalance + this.unconfirmedBalance) > 0) {
-            this.hasBalance = true;
-          } else {
-            this.hasBalance = false;
-          }
+          this.setWalletBalance(balanceResponse);
         },
         error => {
           if (error.status === 0) {
@@ -110,6 +111,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       )
     ;
+  }
+
+  private setWalletBalance(balanceResponse: any) {
+    if (!this.accountsEnabled) {
+      // TO DO - add account feature instead of using first entry in array
+      this.confirmedBalance = balanceResponse.balances[0].amountConfirmed;
+      this.unconfirmedBalance = balanceResponse.balances[0].amountUnconfirmed;
+      this.spendableBalance = balanceResponse.balances[0].spendableAmount;
+    } else {
+      this.confirmedBalance = balanceResponse.amountConfirmed;
+      this.unconfirmedBalance = balanceResponse.amountUnconfirmed;
+      this.spendableBalance = balanceResponse.spendableAmount;
+    }
+
+    this.hasBalance = this.confirmedBalance + this.unconfirmedBalance > 0;
   }
 
   // todo: add history in seperate service to make it reusable

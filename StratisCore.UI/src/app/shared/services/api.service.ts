@@ -181,6 +181,19 @@ export class ApiService {
   }
 
   /**
+   * Get wallet balance info from the API.
+   */
+  getReceivedByAddress(address: string): Observable<any> {
+    let params = new HttpParams()
+      .set('address', address);
+    return this.pollingInterval.pipe(
+      startWith(0),
+      switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/received-by-address', { params })),
+      catchError(err => this.handleHttpError(err))
+    )
+  }  
+
+  /**
    * Get the maximum sendable amount for a given fee from the API
    */
   getMaximumBalance(data): Observable<any> {
