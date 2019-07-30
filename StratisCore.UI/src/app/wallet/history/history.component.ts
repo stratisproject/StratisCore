@@ -12,6 +12,7 @@ import { TransactionInfo } from '@shared/models/transaction-info';
 import { Subscription } from 'rxjs';
 
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
+import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Component({
   selector: 'history-component',
@@ -20,13 +21,18 @@ import { TransactionDetailsComponent } from '../transaction-details/transaction-
 })
 
 export class HistoryComponent {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router) {}
+
+
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router, private currentAccountService: CurrentAccountService) {
+    this.accountsEnabled = this.globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress();
+  }
 
   public transactions: TransactionInfo[];
   public coinUnit: string;
   public pageNumber: number = 1;
   private errorMessage: string;
   private walletHistorySubscription: Subscription;
+  private accountsEnabled: boolean;
 
   ngOnInit() {
     this.startSubscriptions();
@@ -50,7 +56,12 @@ export class HistoryComponent {
   private getHistory() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName())
     let historyResponse;
-    this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
+    
+    let observable = this.accountsEnabled
+      ? this.apiService.getWalletHistory(walletInfo, this.currentAccountService.getAddress())
+      : this.apiService.getWalletHistory(walletInfo);
+
+    this.walletHistorySubscription = observable
       .subscribe(
         response => {
           //TO DO - add account feature instead of using first entry in array

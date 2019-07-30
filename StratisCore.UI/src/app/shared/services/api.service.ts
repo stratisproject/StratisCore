@@ -210,10 +210,15 @@ export class ApiService {
   /**
    * Get a wallets transaction history info from the API.
    */
-  getWalletHistory(data: WalletInfo): Observable<any> {
+  getWalletHistory(data: WalletInfo, address?: string): Observable<any> {
     let params = new HttpParams()
       .set('walletName', data.walletName)
       .set('accountName', "account 0");
+    
+    if (address) {
+      params = params.set('address', address);
+    }
+
     return this.pollingInterval.pipe(
       startWith(0),
       switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', { params: params })),

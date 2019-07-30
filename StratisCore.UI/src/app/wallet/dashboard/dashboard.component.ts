@@ -130,9 +130,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // todo: add history in seperate service to make it reusable
   private getHistory() {
+    
     const walletInfo = new WalletInfo(this.globalService.getWalletName());
+
+    let observable = this.accountsEnabled
+      ? this.apiService.getWalletHistory(walletInfo, this.currentAccountService.getAddress())
+      : this.apiService.getWalletHistory(walletInfo);
+
     let historyResponse;
-    this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
+    this.walletHistorySubscription = observable
       .subscribe(
         response => {
           // TO DO - add account feature instead of using first entry in array
