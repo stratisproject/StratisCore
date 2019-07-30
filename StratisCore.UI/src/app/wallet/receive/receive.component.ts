@@ -7,6 +7,7 @@ import { ModalService } from '@shared/services/modal.service';
 import { WalletInfo } from '@shared/models/wallet-info';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Component({
   selector: 'receive-component',
@@ -15,7 +16,8 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 
 export class ReceiveComponent {
-  constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal, private genericModalService: ModalService) {}
+  accountsEnabled: boolean;
+  constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal, private genericModalService: ModalService, private currentAccountService: CurrentAccountService) {}
 
   public address: any = "";
   public qrString: any;
@@ -33,7 +35,15 @@ export class ReceiveComponent {
 
   ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
-    this.getUnusedReceiveAddresses();
+    this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
+    if (!this.accountsEnabled) {
+      this.getUnusedReceiveAddresses();
+    }
+    else {
+      // If accounts are enabled, we just use the account address
+      this.getAccountAddress();
+    }
   }
 
   public onCopiedClick() {
@@ -56,11 +66,20 @@ export class ReceiveComponent {
       .subscribe(
         response => {
             this.address = response;
-            // TODO: fix this later to use the actual sidechain name instead of 'cirrus'
-            const networkName = this.globalService.getSidechainEnabled() ? 'cirrus' : 'stratis';
-            this.qrString = `${networkName}:${response}`;
+            this.setQrString(response);
         }
       );
+  }
+
+  private getAccountAddress() {
+    this.address = this.currentAccountService.getAddress();
+    this.setQrString(this.address);
+  }
+
+  private setQrString(address: string) {
+    // TODO: fix this later to use the actual sidechain name instead of 'cirrus'
+    const networkName = this.globalService.getSidechainEnabled() ? 'cirrus' : 'stratis';
+    this.qrString = `${networkName}:${address}`;
   }
 
   private getAddresses() {
