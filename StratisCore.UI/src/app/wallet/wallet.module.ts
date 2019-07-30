@@ -23,6 +23,7 @@ import { TokensModule } from './tokens/tokens.module';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletComponent } from './wallet.component';
+import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 
 @NgModule({
   imports: [
@@ -51,6 +52,9 @@ import { WalletComponent } from './wallet.component';
     AboutComponent,
     GenerateAddressesComponent,
     ResyncComponent
+  ],
+  providers: [
+    AccountSelectedGuard
   ],
   entryComponents: [
     SendComponent,
