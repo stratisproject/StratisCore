@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '@shared/services/global.service';
 import { SmartContractsServiceBase } from '../../smart-contracts.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalService } from '@shared/services/modal.service';
 import { catchError, takeUntil, switchMap } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
 import { CurrentAccountService } from '@shared/services/current-account.service';
@@ -53,20 +51,6 @@ export class AddressSelectionComponent implements OnInit {
             }
           }
       });
-
-      this.addressChangedSubject
-      .pipe(
-        switchMap(x => this.smartContractsService.GetAddressBalance(x)
-          .pipe(
-            catchError(error => {
-                console.log('Error retrieving balance. ' + error);
-                return of(0);
-            })
-          )
-        ),
-        takeUntil(this.unsubscribe)
-      )
-      .subscribe(balance => this.balance = balance);
   }
 
   ngOnInit() {
