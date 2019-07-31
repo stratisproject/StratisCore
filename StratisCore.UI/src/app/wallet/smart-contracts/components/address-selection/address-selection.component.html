@@ -9,7 +9,8 @@
             <div style="display: flex; flex-direction: row">
               <select class="form-control" [(ngModel)]="selectedAddress" [ngModelOptions]="{standalone: true}"
                 (change)="addressChanged($event.target.value)">
-                <option *ngFor="let address of addresses; let i = index;" [value]="address.address">[{{i}}] - {{address.address}}</option>
+                <option *ngFor="let address of addresses; let i = index;" [value]="address.address"
+                  [style.font-weight]="address.amountConfirmed > 0 ? 'bold' : ''">[{{i}}] - {{address.address}} - ({{ address.amountConfirmed | coinNotation | number : '1.2-2' }} {{ coinUnit }})</option>
               </select> Balance: 
               <sc-balance [balance]="balance" [coinUnit]="coinUnit"></sc-balance>
             </div>
