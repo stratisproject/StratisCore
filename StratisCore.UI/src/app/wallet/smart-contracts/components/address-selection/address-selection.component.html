@@ -11,8 +11,12 @@
                 (change)="addressChanged($event.target.value)">
                 <option *ngFor="let address of addresses; let i = index;" [value]="address.address"
                   [style.font-weight]="address.amountConfirmed > 0 ? 'bold' : ''">[{{i}}] - {{address.address}} - ({{ address.amountConfirmed | coinNotation | number : '1.2-2' }} {{ coinUnit }})</option>
-              </select> Balance: 
-              <sc-balance [balance]="balance" [coinUnit]="coinUnit"></sc-balance>
+              </select>
+              <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
+                data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
+                (click)="clipboardAddressClicked()">
+                <i class="lnr lnr-file-add"></i>
+              </button>              
             </div>
           </div>
         </section>

@@ -19,16 +19,15 @@ export class AddressSelectionComponent implements OnInit {
   private walletName = '';
   addresses: [];
   addressChangedSubject: Subject<string>;
-  balance: number;
   selectedAddress: any;
   coinUnit: string;
   unsubscribe: Subject<void> = new Subject();
 
   constructor(private globalService: GlobalService,
-    private smartContractsService: SmartContractsServiceBase,
     private apiService: ApiService,
     private currentAccountService: CurrentAccountService,
-    private router: Router) { 
+    private router: Router,
+    private clipboardService: ClipboardService) { 
       
       this.coinUnit = this.globalService.getCoinUnit();
       this.walletName = this.globalService.getWalletName();
@@ -76,4 +75,9 @@ export class AddressSelectionComponent implements OnInit {
     }
   }
 
+  clipboardAddressClicked() {
+    if (this.selectedAddress && this.clipboardService.copyFromContent(this.selectedAddress)) {
+        console.log(`Copied ${this.selectedAddress} to clipboard`);
+    }
+}
 }
