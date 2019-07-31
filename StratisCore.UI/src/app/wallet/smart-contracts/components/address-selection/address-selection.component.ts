@@ -8,6 +8,8 @@ import { catchError, takeUntil, switchMap } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { Router } from '@angular/router';
+import { ApiService } from '@shared/services/api.service';
+import { WalletInfo } from '@shared/models/wallet-info';
 
 @Component({
   selector: 'app-address-selection',
@@ -17,15 +19,16 @@ import { Router } from '@angular/router';
 export class AddressSelectionComponent implements OnInit {
 
   private walletName = '';
-  addresses: string[];
+  addresses: [];
   addressChangedSubject: Subject<string>;
   balance: number;
-  selectedAddress: string;
+  selectedAddress: any;
   coinUnit: string;
   unsubscribe: Subject<void> = new Subject();
 
   constructor(private globalService: GlobalService,
     private smartContractsService: SmartContractsServiceBase,
+    private apiService: ApiService,
     private currentAccountService: CurrentAccountService,
     private router: Router) { 
       
@@ -33,8 +36,8 @@ export class AddressSelectionComponent implements OnInit {
       this.walletName = this.globalService.getWalletName();
       this.addressChangedSubject = new Subject();
 
-    this.smartContractsService
-      .GetAddresses(this.walletName)
+    this.apiService
+      .getAllAddresses(new WalletInfo(this.walletName))
       .pipe(
         catchError(error => {
           console.log('Error retrieving addressses. ' + error);
@@ -42,10 +45,12 @@ export class AddressSelectionComponent implements OnInit {
         }),
         takeUntil(this.unsubscribe))
       .subscribe(addresses => {
-          if (addresses && addresses.length > 0) {
-              this.addressChangedSubject.next(addresses[0]);
-              this.addresses = addresses;
-              this.selectedAddress = addresses[0];
+          if (addresses && addresses.hasOwnProperty("addresses")) {
+            if (addresses.addresses.length > 0) {
+              this.addressChangedSubject.next(addresses.addresses[0].address);
+              this.addresses = addresses.addresses;
+              this.selectedAddress = addresses.addresses[0].address;
+            }
           }
       });
 
