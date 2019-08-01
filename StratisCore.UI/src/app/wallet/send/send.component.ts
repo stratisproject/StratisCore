@@ -53,9 +53,12 @@ export class SendComponent implements OnInit, OnDestroy {
   private responseMessage: any;
   private transaction: TransactionBuilding;
   private walletBalanceSubscription: Subscription;
+  private accountsEnabled: boolean;
 
   ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
     if (this.sidechainEnabled) {
       this.firstTitle = "Sidechain";
       this.secondTitle = "Mainchain";
@@ -374,13 +377,16 @@ export class SendComponent implements OnInit, OnDestroy {
 
   private getWalletBalance() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName());
-    this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
+    
+    let observable = this.accountsEnabled
+      ? this.apiService.getReceivedByAddress(this.currentAccountService.getAddress())
+      : this.apiService.getWalletBalance(walletInfo);
+
+    this.walletBalanceSubscription = observable
       .subscribe(
         response =>  {
             let balanceResponse = response;
-            //TO DO - add account feature instead of using first entry in array
-            this.totalBalance = balanceResponse.balances[0].amountConfirmed + balanceResponse.balances[0].amountUnconfirmed;
-            this.spendableBalance = balanceResponse.balances[0].spendableAmount;
+            this.setWalletBalance(balanceResponse); 
         },
         error => {
           if (error.status === 0) {
@@ -394,6 +400,17 @@ export class SendComponent implements OnInit, OnDestroy {
         }
       );
   };
+
+  private setWalletBalance(balanceResponse: any) {
+    if (!this.accountsEnabled) {
+      // TO DO - add account feature instead of using first entry in array
+      this.totalBalance = balanceResponse.balances[0].amountConfirmed; + balanceResponse.balances[0].amountUnconfirmed;
+      this.spendableBalance = balanceResponse.balances[0].spendableAmount;
+    } else {
+      this.totalBalance = balanceResponse.amountConfirmed + balanceResponse.amountUnconfirmed;
+      this.spendableBalance = balanceResponse.amountConfirmed;
+    }
+  }
 
   private openConfirmationModal() {
     const modalRef = this.modalService.open(SendConfirmationComponent, { backdrop: "static" });
