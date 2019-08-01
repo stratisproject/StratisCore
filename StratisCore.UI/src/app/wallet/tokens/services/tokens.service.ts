@@ -32,7 +32,9 @@ export class TokensService {
 
   GetAvailableTokens(): Token[] {
     return [
-      new Token('CG1', 'CXa9fNVXPfYL9rdqiR22NoAc9kZUfBAUCu', 'Cirrus Giveaway')
+      new Token('CG1', 'CXa9fNVXPfYL9rdqiR22NoAc9kZUfBAUCu', 'Cirrus Giveaway'),
+      new Token('MEDI', undefined, 'MediConnect - coming soon'),
+      new Token('GLU', undefined, 'Gluon - coming soon')
     ];
   }
 
