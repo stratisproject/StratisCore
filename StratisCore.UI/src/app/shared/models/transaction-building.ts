@@ -19,7 +19,7 @@ export class TransactionBuilding {
     this.shuffleOutputs = shuffleOutputs;
     this.opReturnData = opReturnData;
     this.opReturnAmount = opReturnAmount;
-    this.changeAddress = changeAddress;
+    this.sender = changeAddress;
   }
 
   walletName: string;
@@ -31,5 +31,5 @@ export class TransactionBuilding {
   shuffleOutputs: boolean;
   opReturnData: string;
   opReturnAmount: string;
-  changeAddress: string;
+  sender: string;
 }

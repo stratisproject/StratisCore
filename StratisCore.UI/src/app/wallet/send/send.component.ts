@@ -271,7 +271,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
   public buildTransaction() {
     // Only set a change address if we're on a sidechain and there's a current account selected
-    let setChangeAddress = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+    let setSender = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
 
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
@@ -286,12 +286,15 @@ export class SendComponent implements OnInit, OnDestroy {
       false
     );
 
-    if (setChangeAddress) {
-      this.transaction.changeAddress = this.currentAccountService.getAddress();
+    if (setSender) {
+      this.transaction.sender = this.currentAccountService.getAddress();
     }
 
-    this.apiService
-      .buildTransaction(this.transaction)
+    let observable = setSender
+      ? this.apiService.buildContractTransaction(this.transaction)
+      : this.apiService.buildTransaction(this.transaction);
+
+    observable
       .subscribe(
         response => {
           this.estimatedFee = response.fee;
@@ -310,7 +313,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
   public buildSidechainTransaction() {
     // Only set a change address if we're on a sidechain and there's a current account selected
-    let setChangeAddress = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+    let setSender = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
 
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),
@@ -327,11 +330,15 @@ export class SendComponent implements OnInit, OnDestroy {
       new NumberToStringPipe().transform((this.opReturnAmount / 100000000))
     );
 
-    if (setChangeAddress) {
-      this.transaction.changeAddress = this.currentAccountService.getAddress();
+    if (setSender) {
+      this.transaction.sender = this.currentAccountService.getAddress();
     }
 
-    this.apiService.buildTransaction(this.transaction)
+    let observable = setSender
+      ? this.apiService.buildContractTransaction(this.transaction)
+      : this.apiService.buildTransaction(this.transaction);
+    
+    observable
       .subscribe(
         response => {
           this.estimatedSidechainFee = response.fee;

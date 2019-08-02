@@ -476,6 +476,15 @@ export class ApiService {
     );
   }
 
+    /**
+   * Build a transaction for use on an account-based sidechain.
+   */
+  buildContractTransaction(data: TransactionBuilding): Observable<any> {
+    return this.http.post(this.stratisApiUrl + '/smartcontracts/build-transaction', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
   private handleHttpError(error: HttpErrorResponse, silent?: boolean) {
     console.log(error);
     if (error.status === 0) {
