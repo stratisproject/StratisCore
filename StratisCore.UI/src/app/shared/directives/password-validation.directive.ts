@@ -18,4 +18,16 @@ export class PasswordValidationDirective {
       return null;
     }
   }
+
+  static MatchPassphrase(AC: AbstractControl) {
+    let passphrase = AC.get('walletPassphrase').value;
+    let confirmPassphrase = AC.get('walletPassphraseConfirmation').value;
+
+    if(passphrase !== confirmPassphrase) {
+      AC.get('walletPassphraseConfirmation').setErrors({ walletPassphraseConfirmation: true });
+    } else {
+      AC.get('walletPassphraseConfirmation').setErrors(null);
+      return null;
+    }
+  }
 }

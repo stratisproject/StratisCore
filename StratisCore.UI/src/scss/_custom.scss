@@ -779,6 +779,13 @@ img {pointer-events: none !important;}
 
 // Wallet creation
 .createWallet {
+  /* Allows for vertical scrolling if form gets too long. */
+  overflow-y: scroll;
+  max-height: 100vh;
+  display: block !important;
+  padding-top: 25px;
+  padding-bottom: 25px;
+
   .bs-tooltip-right {
     width: 260px;
   }
