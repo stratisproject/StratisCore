@@ -17,7 +17,7 @@ import { WalletInfo } from '@shared/models/wallet-info';
 export class AddressSelectionComponent implements OnInit {
 
   private walletName = '';
-  addresses: [];
+  addresses: any[];
   addressChangedSubject: Subject<string>;
   selectedAddress: any;
   coinUnit: string;
@@ -45,8 +45,8 @@ export class AddressSelectionComponent implements OnInit {
           if (addresses && addresses.hasOwnProperty("addresses")) {
             if (addresses.addresses.length > 0) {
               this.addressChangedSubject.next(addresses.addresses[0].address);
-              this.addresses = addresses.addresses;
-              this.selectedAddress = addresses.addresses[0].address;
+              this.addresses = addresses.addresses.filter(a => a.isChange === false || (a.amountConfirmed > 0 || a.amountUnconfirmed > 0));
+              this.selectedAddress = this.addresses[0].address;
             }
           }
       });
