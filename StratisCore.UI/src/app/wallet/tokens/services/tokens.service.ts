@@ -14,6 +14,7 @@ import { GlobalService } from '@shared/services/global.service';
 @Injectable()
 export class TokensService {
   private savedTokens = 'savedTokens';
+  private defaultTokens = [new SavedToken('MEDI', undefined, 0, 'MediConnect - coming soon'), new SavedToken('GLU', undefined, 0, 'Gluon - coming soon')];
 
   constructor(private apiService: ApiService, private storage: StorageService, private globalService: GlobalService) {
     this.savedTokens = `${globalService.getNetwork()}:savedTokens`
@@ -27,14 +28,14 @@ export class TokensService {
    }
 
   GetSavedTokens(): SavedToken[] {
-    return this.storage.getItem<SavedToken[]>(this.savedTokens) || [];
+    let savedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
+    return savedTokens ? [...this.defaultTokens, ...savedTokens] : this.defaultTokens;
   }
 
   GetAvailableTokens(): Token[] {
     return [
       new Token('CG1', 'CXa9fNVXPfYL9rdqiR22NoAc9kZUfBAUCu', 'Cirrus Giveaway'),
-      new Token('MEDI', undefined, 'MediConnect - coming soon'),
-      new Token('GLU', undefined, 'Gluon - coming soon')
+      ...this.defaultTokens
     ];
   }
 
