@@ -5,7 +5,18 @@
       <div class="col-12">
         <section class="row d-flex align-items-center">
 
-          <div class="col-9">
+          <div class="col-4">
+            <div class="card">
+              <div class="card-header">Address Balance</div>
+              <div class="card-body d-flex align-items-center">
+                <p class="sub">
+                  <sc-balance [balance]="balance" [coinUnit]="coinUnit"></sc-balance>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-5">
             <div class="card">
               <div class="card-header">Active address</div>
               <div class="card-body d-flex align-items-center">
