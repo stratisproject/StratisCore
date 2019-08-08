@@ -69,17 +69,20 @@
                   {{ item.address }}
                   <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
                     data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
-                    (click)="copyTokenAddress(item.address)">
+                    (click)="copyTokenAddress(item.address)"
+                    *ngIf="item.address">
                     <i class="lnr lnr-file-add"></i>
                   </button>
                 </td>
                 <td class="text-right col-2" scope="col">
-                  <button type="button" class="btn btn-sm btn-stratis-green" (click)="send(item)"><i
-                      class="icon lnr lnr-arrow-up-circle"></i> Send
-                  </button>&nbsp;
-                  <button type="button" class="btn btn-sm btn-danger" (click)="delete(item)"><i
-                      class="icon lnr lnr-cross-circle"></i>
-                  </button>
+                  <ng-container *ngIf="item.address">
+                    <button type="button" class="btn btn-sm btn-stratis-green" (click)="send(item)"><i
+                        class="icon lnr lnr-arrow-up-circle"></i> Send
+                    </button>&nbsp;
+                    <button type="button" class="btn btn-sm btn-danger" (click)="delete(item)"><i
+                        class="icon lnr lnr-cross-circle"></i>
+                    </button>
+                  </ng-container>
                 </td>
               </tr>
             </tbody>
