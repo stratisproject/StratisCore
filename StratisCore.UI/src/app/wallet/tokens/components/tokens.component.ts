@@ -107,8 +107,9 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   }
 
   private updateTokenBalances(tokens: SavedToken[]) {
-    tokens.forEach(token => this.tokenLoading[token.address] = "loading");
-    return forkJoin(tokens.map(token => {
+    let tokensWithAddresses = tokens.filter(token => !!token.address);
+    tokensWithAddresses.forEach(token => this.tokenLoading[token.address] = "loading");
+    return forkJoin(tokensWithAddresses.map(token => {
       return this.tokenService
         .GetTokenBalance(new TokenBalanceRequest(token.address, this.selectedAddress))
         .pipe(catchError(error => {
