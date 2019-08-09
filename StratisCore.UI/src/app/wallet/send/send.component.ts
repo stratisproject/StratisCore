@@ -11,7 +11,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { SidechainFeeEstimation } from '@shared/models/sidechain-fee-estimation';
-import { TransactionBuilding } from '@shared/models/transaction-building';
+import { TransactionBuilding, FeeTransactionBuilding } from '@shared/models/transaction-building';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { WalletInfo } from '@shared/models/wallet-info';
 
@@ -121,7 +121,11 @@ export class SendComponent implements OnInit, OnDestroy {
     this.apiError = "";
 
     if(this.sendForm.get("address").valid && this.sendForm.get("amount").valid) {
-      this.estimateFee();
+      if(this.accountsEnabled) {
+        this.estimateAccountsFee();
+      } else {
+        this.estimateFee();
+      }
     }
   }
 
@@ -247,6 +251,34 @@ export class SendComponent implements OnInit, OnDestroy {
       );
   }
 
+  public estimateAccountsFee() {
+
+    let estimationTx = new FeeTransactionBuilding(
+      this.globalService.getWalletName(),
+      "account 0",
+      this.sendForm.get("password").value,
+      this.sendForm.get("address").value.trim(),
+      this.sendForm.get("amount").value,
+      null, // This must be set to null to get the tx builder to estimate a fee.
+      true,
+      false
+    );
+
+    estimationTx.sender = this.currentAccountService.getAddress();
+    estimationTx.feeType = this.sendForm.get("fee").value; // Must be set to get the tx builder to estimate a fee.
+
+    this.apiService.estimateContractTransactionFee(estimationTx)
+      .subscribe(
+        response => {
+          console.log("Estimated fee: " + response);
+          this.estimatedFee = response;
+        },
+        error => {
+          this.apiError = error.error.errors[0].message;
+        }
+      );    
+  }
+
   public estimateSidechainFee() {
     let sidechainTransaction = new SidechainFeeEstimation(
       this.globalService.getWalletName(),
@@ -270,8 +302,8 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   public buildTransaction() {
-    // Only set a change address if we're on a sidechain and there's a current account selected
-    let setSender = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+    // Only set a change address if we're on an accounts-based network.
+    let setSender = this.accountsEnabled;
 
     this.transaction = new TransactionBuilding(
       this.globalService.getWalletName(),

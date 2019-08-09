@@ -33,3 +33,7 @@ export class TransactionBuilding {
   opReturnAmount: string;
   sender: string;
 }
+
+export class FeeTransactionBuilding extends TransactionBuilding {
+  feeType: string;
+}

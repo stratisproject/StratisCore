@@ -14,7 +14,7 @@ import { WalletLoad } from '../models/wallet-load';
 import { WalletInfo } from '../models/wallet-info';
 import { SidechainFeeEstimation } from '../models/sidechain-fee-estimation';
 import { FeeEstimation } from '../models/fee-estimation';
-import { TransactionBuilding } from '../models/transaction-building';
+import { TransactionBuilding, FeeTransactionBuilding } from '../models/transaction-building';
 import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
@@ -481,6 +481,12 @@ export class ApiService {
    */
   buildContractTransaction(data: TransactionBuilding): Observable<any> {
     return this.http.post(this.stratisApiUrl + '/smartcontracts/build-transaction', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  estimateContractTransactionFee(data: FeeTransactionBuilding): Observable<any> {    
+    return this.http.post(this.stratisApiUrl + '/smartcontracts/estimate-fee', JSON.stringify(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
