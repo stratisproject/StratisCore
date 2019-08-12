@@ -21,12 +21,10 @@ import { WalletRescan } from '../models/wallet-rescan';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 import { StratisApiService } from "@shared/services/stratis-api-service.i";
+import { Balances, GeneralInfo, StakingInfo, WalletFileData, WalletHistory } from "@shared/services/api-dtos";
 
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable()
 export class ApiService implements StratisApiService {
   constructor(private http: HttpClient, private globalService: GlobalService, private modalService: ModalService, private router: Router) {
     this.setApiUrl();
@@ -37,7 +35,7 @@ export class ApiService implements StratisApiService {
   private stratisApiUrl;
   private daemonIP;
 
-  public setApiUrl() : void{
+  public setApiUrl(): void {
     this.apiPort = this.globalService.getApiPort();
     this.daemonIP = this.globalService.getDaemonIP();
     this.stratisApiUrl = 'http://' + this.daemonIP + ':' + this.apiPort + '/api';
@@ -81,8 +79,8 @@ export class ApiService implements StratisApiService {
   /**
    * Gets available wallets at the default path
    */
-  public getWalletFiles(): Observable<any> {
-    return this.http.get(this.stratisApiUrl + '/wallet/files').pipe(
+  public getWalletFiles(): Observable<WalletFileData> {
+    return this.http.get<WalletFileData>(this.stratisApiUrl + '/wallet/files').pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -160,11 +158,11 @@ export class ApiService implements StratisApiService {
   /**
    * Get general wallet info from the API.
    */
-  public getGeneralInfo(data: WalletInfo): Observable<any> {
+  public getGeneralInfo(data: WalletInfo): Observable<GeneralInfo> {
     let params = new HttpParams().set('Name', data.walletName);
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/general-info', {params})),
+      switchMap(() => this.http.get<GeneralInfo>(this.stratisApiUrl + '/wallet/general-info', {params})),
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -172,13 +170,23 @@ export class ApiService implements StratisApiService {
   /**
    * Get wallet balance info from the API.
    */
-  public getWalletBalance(data: WalletInfo): Observable<any> {
+  public getWalletBalancePolling(data: WalletInfo): Observable<Balances> {
     let params = new HttpParams()
       .set('walletName', data.walletName)
       .set('accountName', "account 0");
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/balance', {params})),
+      switchMap(() => this.http.get<Balances>(this.stratisApiUrl + '/wallet/balance', {params})),
+      catchError(err => this.handleHttpError(err))
+    )
+  }
+
+  public getWalletBalance(data: WalletInfo): Observable<Balances> {
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', "account 0");
+
+    return this.http.get<Balances>(this.stratisApiUrl + '/wallet/balance', {params}).pipe(
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -340,10 +348,10 @@ export class ApiService implements StratisApiService {
   /**
    * Get staking info
    */
-  public getStakingInfo(): Observable<any> {
+  public getStakingInfo(): Observable<StakingInfo> {
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get(this.stratisApiUrl + '/staking/getstakinginfo')),
+      switchMap(() => this.http.get<StakingInfo>(this.stratisApiUrl + '/staking/getstakinginfo')),
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -408,13 +416,13 @@ export class ApiService implements StratisApiService {
   /*
     * Gets the transaction history of the smart contract account.
     */
-  public getAccountHistory(walletName: string, address: string): Observable<any> {
+  public getAccountHistory(walletName: string, address: string): Observable<WalletHistory> {
     let params = new HttpParams()
       .set('walletName', walletName)
       .set('address', address);
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/history', {params})),
+      switchMap(() => this.http.get<WalletHistory>(this.stratisApiUrl + '/smartcontractwallet/history', {params})),
       catchError(err => this.handleHttpError(err))
     )
   }

@@ -2,167 +2,103 @@
   <!-- CONTAINER -->
   <section id="content" class="col-11 mx-auto">
     <!-- JUMBOTRON-->
-      <div class="jumbotron jumbotron-fluid">
-        <div class="col-12">
-          <div class="row d-flex align-items-center">
-            <div class="col-9 text-left">
-              <h5>Balance</h5>
-              <p class="lead">
-                <strong>{{ (confirmedBalance | coinNotation) || (0 | coinNotation) }}</strong>
-                <small class="text-uppercase"> {{ coinUnit }}</small>
-              </p>
-              <ul class="list-unstyled">
-                <!-- <li><strong>{{ (awaitingMaturity | coinNotation) || (0 | coinNotation) }}</strong><em> (staking)</em></li> -->
-                <li><strong>{{ (unconfirmedBalance | coinNotation) || (0 | coinNotation) }}</strong><em> (unconfirmed)</em></li>
-                <!-- <li><strong>805.65900153</strong> <em>(staking)</em></li> -->
-              </ul>
-            </div>
-            <!-- /col-->
-            <div class="col text-right">
-              <p>
-                <a class="btn btn-lg btn-primary" (click)="openReceiveDialog()" [class.btn-secondary]="sidechainEnabled">
-                  <i class="icon lnr lnr-arrow-down-circle"></i>
-                  <span class="text-center text-uppercase">Receive</span>
-                </a>
-                <a class="btn btn-lg btn-primary ml-2" (click)="openSendDialog()" [class.btn-secondary]="sidechainEnabled">
-                  <i class="icon lnr lnr-arrow-up-circle"></i>
-                  <span class="text-center text-uppercase">Send</span>
-                </a>
-              </p>
-            </div>
-            <!-- /col-->
+    <div class="jumbotron jumbotron-fluid">
+      <div class="col-12">
+        <div class="row d-flex align-items-center">
+          <div class="col-9 text-left" *ngIf="(nodeService.wallet(walletInfo) | async) as _wallet">
+            <h5>Balance</h5>
+            <p class="lead">
+              <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
+              <small class="text-uppercase"> {{ coinUnit }}</small>
+            </p>
+            <ul class="list-unstyled">
+              <!-- <li><strong>{{ (awaitingMaturity | coinNotation) || (0 | coinNotation) }}</strong><em> (staking)</em></li> -->
+              <li><strong>{{ (_wallet.amountUnconfirmed | coinNotation) || (0 | coinNotation) }}</strong><em>
+                (unconfirmed)</em></li>
+              <!-- <li><strong>805.65900153</strong> <em>(staking)</em></li> -->
+            </ul>
           </div>
-          <!-- /row-->
+          <!-- /col-->
+          <div class="col text-right">
+            <p>
+              <a class="btn btn-lg btn-primary" (click)="openReceiveDialog()" [class.btn-secondary]="sidechainEnabled">
+                <i class="icon lnr lnr-arrow-down-circle"></i>
+                <span class="text-center text-uppercase">Receive</span>
+              </a>
+              <a class="btn btn-lg btn-primary ml-2" (click)="openSendDialog()"
+                 [class.btn-secondary]="sidechainEnabled">
+                <i class="icon lnr lnr-arrow-up-circle"></i>
+                <span class="text-center text-uppercase">Send</span>
+              </a>
+            </p>
+          </div>
+          <!-- /col-->
         </div>
-        <!-- /col-->
+        <!-- /row-->
       </div>
-      <!-- /JUMBOTRON-->
+      <!-- /col-->
+    </div>
+    <!-- /JUMBOTRON-->
 
+    <app-transactions [transactions]="transactionArray"></app-transactions>
 
-      <!-- CONTENT -->
-      <section class="col-12">
-        <!-- NO TRANSACTIONS -->
-        <div class="row">
-          <ng-template #noTransactions>
-              <section class="col-12 text-center my-4">
-                <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">
-              </section>
-              <div class="col-12 text-center">
-                <p>Click the down arrow for a receive address.</p>
+    <ng-container *ngIf="(nodeService.wallet(walletInfo) | async) as _wallet">
+      <section class="col-4" *ngIf="_wallet.hasBalance && !sidechainEnabled">
+        <div class="card" *ngIf="!stakingEnabled">
+          <div class="card-header">Staking</div>
+          <div class="card-body">
+            <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
+            <form class="form-inline mb-3" [formGroup]="stakingForm">
+              <div class="form-group">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword"
+                       placeholder="Password">
+                <button type="button" id="flipcard" class="btn btn-outline-primary ml-2"
+                        [disabled]="isStarting || !stakingForm.valid" (click)="startStaking()">Unlock
+                </button>
               </div>
-          </ng-template>
-        </div>
-        <!-- /NO TRANSACTIONS -->
-
-        <div class="row" *ngIf="transactionArray; else noTransactions">
-          <!-- TRANSACTIONS -->
-          <div class="col-8" [class.col-12]="sidechainEnabled">
-            <div class="card">
-              <div class="card-header">Latest Transactions</div>
-              <div class="card-body">
-                <table class="table table-sm">
-                  <tbody *ngFor="let transaction of transactionArray; let i=index">
-                    <tr *ngIf="i<5">
-                      <th class="text-center" *ngIf="!transaction.transactionConfirmedInBlock"><span class="bubble bg-warning"></span></th>
-                      <th class="text-center" *ngIf="transaction.transactionConfirmedInBlock"><span class="bubble bg-success"></span></th>
-                      <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
-                      <td class="text-left" *ngIf="transaction.transactionType == 'sent'"><strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
-                      <td class="text-left" *ngIf="transaction.transactionType == 'received'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
-                      <td class="text-left" *ngIf="transaction.transactionType == 'staked'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
-                      <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-                      <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div class="text-center my-2">
-                  <button type="button" class="btn btn-outline-primary" [class.btn-outline-stratis-green]="sidechainEnabled" (click)="goToHistory()">Go to History</button>
-                </div>
-              </div>
-            </div>
+            </form>
           </div>
-          <!-- /TRANSACTIONS -->
-          <!-- STAKING -->
-          <!-- <div id="staking" class="flip col-4">
-            <div class="card">
-              <div class="face front">
-                <div class="card-header">Staking</div>
-                  <div class="card-body">
-                    <div class="alert alert-info text-center" role="alert">Please first, unlock your wallet.</div>
-                    <form class="form-inline">
-                      <div class="form-group">
-                        <label for="inputPassword" class="sr-only">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-                        <button type="button" id="flipcard" class="btn btn-outline-primary ml-2">Unlock</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-                <div class="face back">
-                  <div class="card-header">
-                    <span class="d-inline-block col-10 row">Staking</span>
-                    <div class="toggle d-inline-block" id="switch">
-                      <div class='toggle-text-off'>OFF</div>
-                      <div class='glow-comp'></div>
-                      <div class='toggle-button'></div>
-                      <div class='toggle-text-on'>ON</div>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <ul class="list-unstyled my-3">
-                    <li>Your weight is <strong>25,603</strong></li>
-                    <li>Network weight is <strong>24,239,023</strong></li>
-                    <li>Reward expected time is <strong>8 hours</strong></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div> -->
-          <section class="col-4" *ngIf="hasBalance && !sidechainEnabled">
-            <div class="card" *ngIf="!stakingEnabled">
-              <div class="card-header">Staking</div>
-              <div class="card-body">
-                <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
-                <form class="form-inline mb-3" [formGroup]="stakingForm">
-                  <div class="form-group">
-                    <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword" placeholder="Password">
-                    <button type="button" id="flipcard" class="btn btn-outline-primary ml-2" [disabled]="isStarting || !stakingForm.valid" (click)="startStaking()">Unlock</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div id="staking" class="card" *ngIf="stakingEnabled">
-              <div class="card-header">
-                <span class="d-inline-block col-10 row">Staking</span>
-                <!-- <div class="toggle d-inline-block" id="switch">
-                  <div class='toggle-text-off'>OFF</div>
-                  <div class='glow-comp'></div>
-                  <div class='toggle-button'></div>
-                  <div class='toggle-text-on'>ON</div>
-                </div> -->
-              </div>
-              <div class="card-body">
-                <ul class="list-unstyled mb-3">
-                  <li *ngIf="isStarting">Waiting for staking to start...</li>
-                  <div *ngIf="!isStarting">
-                    <li>Staking weight: <strong>{{ stakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
-                    <li>Coins awaiting maturity: <strong>{{ awaitingMaturity | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
-                    <li>Network weight: <strong>{{ netStakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
-                    <li class="mt-2">Expected reward time is:</li>
-                    <li><strong>{{ dateTime }}</strong></li>
-                  </div>
-                </ul>
-                <button type="button" class="btn btn-outline-light mb-3" [disabled]="isStopping" (click)="stopStaking()">Stop Staking</button>
-              </div>
-            </div>
-          </section>
-          <!-- STAKING -->
-
         </div>
-      <status-bar></status-bar>
-    </section>
-    <!-- /CONTENT -->
+        <div id="staking" class="card" *ngIf="stakingEnabled">
+          <div class="card-header">
+            <span class="d-inline-block col-10 row">Staking</span>
+            <!-- <div class="toggle d-inline-block" id="switch">
+              <div class='toggle-text-off'>OFF</div>
+              <div class='glow-comp'></div>
+              <div class='toggle-button'></div>
+              <div class='toggle-text-on'>ON</div>
+            </div> -->
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled mb-3">
+              <li *ngIf="isStarting">Waiting for staking to start...</li>
+              <div *ngIf="!isStarting">
+                <li>Staking weight:
+                  <strong>{{ stakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
+                <li>Coins awaiting maturity:
+                  <strong>{{ awaitingMaturity | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
+                <li>Network weight:
+                  <strong>{{ netStakingWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong></li>
+                <li class="mt-2">Expected reward time is:</li>
+                <li><strong>{{ dateTime }}</strong></li>
+              </div>
+            </ul>
+            <button type="button" class="btn btn-outline-light mb-3" [disabled]="isStopping"
+                    (click)="stopStaking()">
+              Stop Staking
+            </button>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+    <!-- STAKING -->
+
+    </div>
+    <status-bar></status-bar>
   </section>
-  <!-- /CONTAINER-->
+  <!-- /CONTENT -->
+</section>
+<!-- /CONTAINER-->
 </section>
 <!-- /GUI-->

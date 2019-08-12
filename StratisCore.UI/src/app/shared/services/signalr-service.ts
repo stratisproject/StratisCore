@@ -10,17 +10,14 @@ export interface SignalRConnectionInfo {
   signalRPort: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SignalRService implements ISignalRService {
   private connection: signalR.HubConnection;
 
-  constructor(private http: HttpClient,) {
+  constructor(private http: HttpClient) {
   }
 
-  public onConnectionFailed: EventEmitter<Error>;
-
+  public onConnectionFailed: EventEmitter<Error> = new EventEmitter<Error>();
 
   public connect(hubName: string, onEventMessageDelegate: (message: any) => void): void {
     this.getConnectionInfo().subscribe((con: SignalRConnectionInfo) => {
@@ -36,7 +33,6 @@ export class SignalRService implements ISignalRService {
         .build();
 
       this.connection.on('receiveEvent', onEventMessageDelegate);
-
 
       this.connection.onclose((error: Error) => {
         this.onConnectionFailed.emit(error);

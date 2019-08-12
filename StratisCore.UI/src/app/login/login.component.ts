@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -7,6 +7,7 @@ import { ApiService } from '@shared/services/api.service';
 import { ModalService } from '@shared/services/modal.service';
 
 import { WalletLoad } from '@shared/models/wallet-load';
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import { WalletLoad } from '@shared/models/wallet-load';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
     this.buildDecryptForm();
   }
@@ -24,6 +25,7 @@ export class LoginComponent implements OnInit {
   public isDecrypting = false;
   private openWalletForm: FormGroup;
   private wallets: [string];
+  private subscriptions: Subscription[] = [];
 
   ngOnInit() {
     this.getWalletFiles();
@@ -37,14 +39,16 @@ export class LoginComponent implements OnInit {
       "password": [{value: "", disabled: this.isDecrypting}, Validators.required]
     });
 
-    this.openWalletForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+    this.subscriptions.push(this.openWalletForm.valueChanges
+      .subscribe(data => this.onValueChanged(data)));
 
     this.onValueChanged();
   }
 
   onValueChanged(data?: any) {
-    if (!this.openWalletForm) { return; }
+    if (!this.openWalletForm) {
+      return;
+    }
     const form = this.openWalletForm;
     for (const field in this.formErrors) {
       this.formErrors[field] = '';
@@ -69,7 +73,7 @@ export class LoginComponent implements OnInit {
   };
 
   private getWalletFiles() {
-    this.apiService.getWalletFiles()
+    const subscription = this.apiService.getWalletFiles()
       .subscribe(
         response => {
           this.wallets = response.walletsFiles;
@@ -83,8 +87,9 @@ export class LoginComponent implements OnInit {
             this.hasWallet = false;
           }
         }
-      )
-    ;
+      );
+
+    this.subscriptions.push(subscription);
   }
 
   public onCreateClicked() {
@@ -130,5 +135,9 @@ export class LoginComponent implements OnInit {
         }
       )
     ;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }
