@@ -25,7 +25,9 @@ import { Balances, GeneralInfo, StakingInfo, WalletFileData, WalletHistory } fro
 import { RestApi } from "@shared/services/rest-api";
 
 
-@Injectable()
+@Injectable({
+  providedIn : "root"
+})
 export class ApiService extends RestApi implements StratisApiService {
   private pollingInterval = interval(5000);
 

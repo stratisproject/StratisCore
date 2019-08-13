@@ -10,7 +10,9 @@ export interface SignalRConnectionInfo {
   signalRPort: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn : "root"
+})
 export class SignalRService implements ISignalRService {
   private connection: signalR.HubConnection;
 

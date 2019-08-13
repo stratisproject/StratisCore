@@ -5,7 +5,9 @@ import { GlobalService } from "@shared/services/global.service";
 import { ApiService } from "@shared/services/api.service";
 import { SecondsToStringPipe } from "@shared/pipes/seconds-to-string.pipe";
 
-@Injectable()
+@Injectable({
+  providedIn : "root"
+})
 export class StakingService {
   private stakingInfoUpdatedSubject = new Subject<StakingInfo>();
   private isStopping: boolean;

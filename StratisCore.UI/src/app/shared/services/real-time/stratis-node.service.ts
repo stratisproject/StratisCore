@@ -1,4 +1,4 @@
-import { interval, Observable, Subject, Subscription } from "rxjs";
+import { BehaviorSubject, interval, Observable, Subject, Subscription } from "rxjs";
 import { Injectable } from "@angular/core";
 import { SignalRService } from "@shared/services/signalr-service";
 import { NodeStatus } from "@shared/models/node-status";
@@ -6,7 +6,9 @@ import { ApiService } from "@shared/services/api.service";
 import { WalletInfo } from "@shared/models/wallet-info";
 import { Balance, TransactionsHistoryItem } from "@shared/services/api-dtos";
 
-@Injectable()
+@Injectable({
+  providedIn : "root"
+})
 export class StratisNodeService {
 
   // Fallback to polling when SignalR is not available on older nodes.
@@ -17,10 +19,10 @@ export class StratisNodeService {
   private pollingSubscriptions: Subscription[] = [];
 
 
-  private walletUpdatedSubjects: { [walletName: string]: Subject<Balance> } = {};
-  private walletHistorySubjects: { [walletName: string]: Subject<TransactionsHistoryItem[]> } = {};
+  private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<Balance> } = {};
+  private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
 
-  private nodeStatusUpdatedSubject = new Subject<NodeStatus>();
+  private nodeStatusUpdatedSubject = new BehaviorSubject<NodeStatus>(null);
 
 
   constructor(
@@ -60,9 +62,9 @@ export class StratisNodeService {
     return this.getWalletHistorySubject(walletInfo).asObservable();
   }
 
-  private getWalletSubject(walletInfo: WalletInfo): Subject<Balance> {
+  private getWalletSubject(walletInfo: WalletInfo): BehaviorSubject<Balance> {
     if (!this.walletUpdatedSubjects[walletInfo.walletName]) {
-      this.walletUpdatedSubjects[walletInfo.walletName] = new Subject<Balance>();
+      this.walletUpdatedSubjects[walletInfo.walletName] = new BehaviorSubject<Balance>(null);
 
       // Initialise the wallet
       this.apiService.getWalletBalance(walletInfo).toPromise().then(data => {
@@ -75,10 +77,10 @@ export class StratisNodeService {
     return this.walletUpdatedSubjects[walletInfo.walletName];
   }
 
-  private getWalletHistorySubject(walletInfo : WalletInfo) : Subject<TransactionsHistoryItem[]>
+  private getWalletHistorySubject(walletInfo : WalletInfo) : BehaviorSubject<TransactionsHistoryItem[]>
   {
     if (!this.walletHistorySubjects[walletInfo.walletName]) {
-      this.walletHistorySubjects[walletInfo.walletName] = new Subject<TransactionsHistoryItem[]>();
+      this.walletHistorySubjects[walletInfo.walletName] = new BehaviorSubject<TransactionsHistoryItem[]>(null);
 
       // Get intitial Wallet History
       this.apiService.getWalletHistory(walletInfo).toPromise().then(history => {

@@ -5,7 +5,7 @@
     <div class="jumbotron jumbotron-fluid">
       <div class="col-12">
         <div class="row d-flex align-items-center">
-          <div class="col-9 text-left" *ngIf="(nodeService.wallet(globalService.currentWallet) | async) as _wallet">
+          <div class="col-9 text-left" *ngIf="(wallet| async) as _wallet">
             <h5>Balance</h5>
             <p class="lead">
               <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>

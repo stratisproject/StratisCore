@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TransactionInfo } from "@shared/models/transaction-info";
 import { TransactionDetailsComponent } from "../transaction-details/transaction-details.component";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -19,27 +19,29 @@ export class TransactionsComponent implements OnInit {
 
   public constructor(
     private globalService: GlobalService,
-    private stratisNodeService: StratisNodeService,
+    private nodeService: StratisNodeService,
     private router: Router,
     private modalService: NgbModal) {
   }
 
-  public ngOnInit() {
-    this.transactions = this.stratisNodeService.walletHistory(this.globalService.currentWallet).pipe(map((history => {
-      return this.mapToTransactionInfo(history)
-    })));
+  public ngOnInit(): void {
+    this.transactions = this.nodeService.walletHistory(this.globalService.currentWallet)
+      .pipe(map((history => {
+        return (null != history && history.length > 0) ? this.mapToTransactionInfo(history) : null;
+      })));
   }
 
-  public openTransactionDetailDialog(transaction: TransactionInfo) {
+  public openTransactionDetailDialog(transaction: TransactionInfo): void {
     const modalRef = this.modalService.open(TransactionDetailsComponent, {backdrop: "static", keyboard: false});
     modalRef.componentInstance.transaction = transaction;
   }
 
-  public goToHistory() {
-    this.router.navigate(['/wallet/history']);
+  public goToHistory(): Promise<boolean> {
+    return this.router.navigate(['/wallet/history']);
   }
 
   private mapToTransactionInfo(transactions: TransactionsHistoryItem[]): TransactionInfo[] {
+
     return transactions.map(transaction => {
       return new TransactionInfo(
         transaction.type == "send" ? "sent" : transaction.type,

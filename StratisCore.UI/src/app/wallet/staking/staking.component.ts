@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SecondsToStringPipe } from "@shared/pipes/seconds-to-string.pipe";
 import { GlobalService } from "@shared/services/global.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { StratisNodeService } from "@shared/services/real-time/stratis-node.service";
@@ -53,6 +52,4 @@ export class StakingComponent implements OnInit {
   public stopStaking(): void {
     this.stakingService.stopStaking();
   }
-
-
 }

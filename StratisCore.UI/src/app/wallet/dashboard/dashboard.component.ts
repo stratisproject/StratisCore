@@ -5,6 +5,8 @@ import { GlobalService } from '@shared/services/global.service';
 import { SendComponent } from '../send/send.component';
 import { ReceiveComponent } from '../receive/receive.component';
 import { StratisNodeService } from "@shared/services/real-time/stratis-node.service";
+import { Observable } from "rxjs";
+import { Balance } from "@shared/services/api-dtos";
 
 @Component({
   selector: 'dashboard-component',
@@ -13,6 +15,9 @@ import { StratisNodeService } from "@shared/services/real-time/stratis-node.serv
 })
 
 export class DashboardComponent implements OnInit {
+
+  public wallet : Observable<Balance>;
+
   constructor(
     private nodeService: StratisNodeService,
     private apiService: ApiService,
@@ -21,6 +26,7 @@ export class DashboardComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.wallet = this.nodeService.wallet(this.globalService.currentWallet);
   };
 
   public openSendDialog() {

@@ -3,7 +3,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GlobalService } from "@shared/services/global.service";
 
-@Injectable()
+@Injectable({
+  providedIn : "root"
+})
 export class RestApi {
   protected API_URL;
 
