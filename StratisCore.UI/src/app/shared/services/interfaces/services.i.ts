@@ -10,10 +10,14 @@ import { SidechainFeeEstimation } from "@shared/models/sidechain-fee-estimation"
 import { TransactionBuilding } from "@shared/models/transaction-building";
 import { TransactionSending } from "@shared/models/transaction-sending";
 import { WalletRescan } from "@shared/models/wallet-rescan";
-import { TokenBalanceRequest } from "../../wallet/tokens/models/token-balance-request";
 import { LocalExecutionResult } from "@shared/models/local-execution-result";
+import { TokenBalanceRequest } from "../../../wallet/tokens/models/token-balance-request";
 
-export interface StratisApiService {
+export interface ISignalRService {
+  connect(hubName: string, newMessageHandler: (message: any) => void): void;
+}
+
+export interface IApiService {
 
   getNodeStatus(silent?: boolean): Observable<NodeStatus>;
 
@@ -166,3 +170,4 @@ export interface StratisApiService {
 
   //handleHttpError(error: HttpErrorResponse, silent?: boolean): Observable<never>;
 }
+

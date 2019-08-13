@@ -3,15 +3,13 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { interval, Observable, throwError } from 'rxjs';
 import { catchError, startWith, switchMap } from 'rxjs/operators';
-
 import { GlobalService } from './global.service';
 import { ModalService } from './modal.service';
-
 import { AddressLabel } from '../models/address-label';
 import { WalletCreation } from '../models/wallet-creation';
 import { WalletRecovery } from '../models/wallet-recovery';
 import { WalletLoad } from '../models/wallet-load';
-import { WalletInfo } from '../models/wallet-info';
+import { WalletInfo, WalletInfoRequest } from '../models/wallet-info';
 import { SidechainFeeEstimation } from '../models/sidechain-fee-estimation';
 import { FeeEstimation } from '../models/fee-estimation';
 import { TransactionBuilding } from '../models/transaction-building';
@@ -20,15 +18,14 @@ import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
-import { StratisApiService } from "@shared/services/stratis-api-service.i";
-import { Balances, GeneralInfo, StakingInfo, WalletFileData, WalletHistory } from "@shared/services/api-dtos";
 import { RestApi } from "@shared/services/rest-api";
-
+import { IApiService } from "@shared/services/interfaces/services.i";
+import { Balances, GeneralInfo, StakingInfo, WalletFileData, WalletHistory } from "@shared/services/interfaces/api.i";
 
 @Injectable({
   providedIn: "root"
 })
-export class ApiService extends RestApi implements StratisApiService {
+export class ApiService extends RestApi implements IApiService {
   private pollingInterval = interval(5000);
 
   constructor(http: HttpClient, private globalService: GlobalService, private modalService: ModalService, private router: Router) {
@@ -177,7 +174,7 @@ export class ApiService extends RestApi implements StratisApiService {
   /**
    * Get the maximum sendable amount for a given fee from the API
    */
-  public getMaximumBalance(data: WalletInfo): Observable<any> {
+  public getMaximumBalance(data: WalletInfoRequest): Observable<any> {
     return this.get('wallet/maxbalance',
       this.getWalletParams(data, {
         feeType: data.feeType,

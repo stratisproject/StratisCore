@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import "@aspnet/signalr";
 import * as signalR from '@aspnet/signalr';
 import { HttpClient } from "@angular/common/http";
-import { ISignalRService } from "@shared/services/signalr-service.i";
+import { ISignalRService } from "@shared/services/interfaces/services.i";
 
 export interface SignalRConnectionInfo {
   signalRUri: string;

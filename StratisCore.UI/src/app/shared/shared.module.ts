@@ -15,8 +15,8 @@ import { LoadingModalComponent } from './components/loading-modal/loading-modal.
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { SecondsToStringPipe } from "@shared/pipes/seconds-to-string.pipe";
 import { ApiService } from "@shared/services/api.service";
-import { StratisNodeService } from "@shared/services/real-time/stratis-node.service";
 import { SignalRService } from "@shared/services/signalr-service";
+import { NodeService } from "@shared/services/node.service";
 
 @NgModule({
   imports: [CommonModule],
@@ -31,7 +31,7 @@ import { SignalRService } from "@shared/services/signalr-service";
     ConfirmationModalComponent],
   providers : [
     ApiService,
-    StratisNodeService,
+    NodeService,
     SignalRService
   ],
   exports: [

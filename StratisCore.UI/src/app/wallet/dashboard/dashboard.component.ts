@@ -4,9 +4,9 @@ import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { SendComponent } from '../send/send.component';
 import { ReceiveComponent } from '../receive/receive.component';
-import { StratisNodeService } from "@shared/services/real-time/stratis-node.service";
 import { Observable } from "rxjs";
-import { WalletBalance } from "@shared/services/api-dtos";
+import { NodeService } from "@shared/services/node.service";
+import { WalletBalance } from "@shared/services/interfaces/api.i";
 
 @Component({
   selector: 'dashboard-component',
@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   public wallet : Observable<WalletBalance>;
 
   constructor(
-    private nodeService: StratisNodeService,
+    private nodeService: NodeService,
     private apiService: ApiService,
     private globalService: GlobalService,
     private modalService: NgbModal) {

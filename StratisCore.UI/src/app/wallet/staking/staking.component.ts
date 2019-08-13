@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from "@shared/services/global.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { StratisNodeService } from "@shared/services/real-time/stratis-node.service";
 import { StakingService } from "@shared/services/staking-service";
+import { Observable } from "rxjs";
+import { WalletBalance } from "@shared/services/interfaces/api.i";
+import { NodeService } from "@shared/services/node.service";
 
 @Component({
   selector: 'app-staking',
@@ -11,11 +13,11 @@ import { StakingService } from "@shared/services/staking-service";
 })
 export class StakingComponent implements OnInit {
   private stakingForm: FormGroup;
-
+  public wallet : Observable<WalletBalance>;
   constructor(
     private fb: FormBuilder,
     private stakingService: StakingService,
-    private nodeService: StratisNodeService,
+    private nodeService: NodeService,
     private globalService: GlobalService) {
   }
 
@@ -31,6 +33,7 @@ export class StakingComponent implements OnInit {
   public isStopping: boolean;
 
   public ngOnInit() {
+    this.wallet = this.nodeService.wallet(this.globalService.currentWallet);
     this.buildStakingForm();
   }
 

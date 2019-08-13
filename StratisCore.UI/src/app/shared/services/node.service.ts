@@ -4,13 +4,12 @@ import { SignalRService } from "@shared/services/signalr-service";
 import { NodeStatus } from "@shared/models/node-status";
 import { ApiService } from "@shared/services/api.service";
 import { WalletInfo } from "@shared/models/wallet-info";
-import { WalletBalance, TransactionsHistoryItem } from "@shared/services/api-dtos";
+import { TransactionsHistoryItem, WalletBalance } from "@shared/services/interfaces/api.i";
 
 @Injectable({
   providedIn : "root"
 })
-export class StratisNodeService {
-
+export class NodeService {
   // Fallback to polling when SignalR is not available on older nodes.
   private pollingInterval: Observable<any>;
   private subscriptions: Subscription[] = [];
@@ -18,12 +17,10 @@ export class StratisNodeService {
   private transactionReceivedSubject = new Subject<any>();
   private pollingSubscriptions: Subscription[] = [];
 
-
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
 
   private nodeStatusUpdatedSubject = new BehaviorSubject<NodeStatus>(null);
-
 
   constructor(
     private apiService: ApiService,
@@ -53,7 +50,6 @@ export class StratisNodeService {
     return this.transactionReceivedSubject.asObservable();
   }
 
-
   public wallet(walletInfo: WalletInfo): Observable<WalletBalance> {
     return this.getWalletSubject(walletInfo).asObservable();
   }
@@ -82,7 +78,7 @@ export class StratisNodeService {
     if (!this.walletHistorySubjects[walletInfo.walletName]) {
       this.walletHistorySubjects[walletInfo.walletName] = new BehaviorSubject<TransactionsHistoryItem[]>(null);
 
-      // Get intitial Wallet History
+      // Get initial Wallet History
       this.apiService.getWalletHistory(walletInfo).toPromise().then(history => {
           this.walletHistorySubjects[walletInfo.walletName].next(history[walletInfo.account]);
       });

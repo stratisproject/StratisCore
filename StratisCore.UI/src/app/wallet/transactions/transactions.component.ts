@@ -4,10 +4,10 @@ import { TransactionDetailsComponent } from "../transaction-details/transaction-
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { GlobalService } from "@shared/services/global.service";
 import { Router } from "@angular/router";
-import { StratisNodeService } from "@shared/services/real-time/stratis-node.service";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { TransactionsHistoryItem } from "@shared/services/api-dtos";
+import { NodeService } from "@shared/services/node.service";
+import { TransactionsHistoryItem } from "@shared/services/interfaces/api.i";
 
 @Component({
   selector: 'app-transactions',
@@ -19,7 +19,7 @@ export class TransactionsComponent implements OnInit {
 
   public constructor(
     private globalService: GlobalService,
-    private nodeService: StratisNodeService,
+    private nodeService: NodeService,
     private router: Router,
     private modalService: NgbModal) {
   }

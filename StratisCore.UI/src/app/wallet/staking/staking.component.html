@@ -1,4 +1,4 @@
-<ng-container *ngIf="(nodeService.wallet(globalService.currentWallet) | async) as _wallet">
+<ng-container *ngIf="(wallet | async) as _wallet">
   <section class="col-4" *ngIf="_wallet.hasBalance && !globalService.getSidechainEnabled()">
     <div class="card" *ngIf="!stakingEnabled">
       <div class="card-header">Staking</div>
