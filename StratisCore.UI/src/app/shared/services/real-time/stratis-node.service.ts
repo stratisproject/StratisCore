@@ -4,7 +4,7 @@ import { SignalRService } from "@shared/services/signalr-service";
 import { NodeStatus } from "@shared/models/node-status";
 import { ApiService } from "@shared/services/api.service";
 import { WalletInfo } from "@shared/models/wallet-info";
-import { Balance, StakingInfo } from "@shared/services/api-dtos";
+import { Balance, TransactionsHistoryItem } from "@shared/services/api-dtos";
 
 @Injectable()
 export class StratisNodeService {
@@ -16,9 +16,12 @@ export class StratisNodeService {
   private transactionReceivedSubject = new Subject<any>();
   private pollingSubscriptions: Subscription[] = [];
 
+
   private walletUpdatedSubjects: { [walletName: string]: Subject<Balance> } = {};
+  private walletHistorySubjects: { [walletName: string]: Subject<TransactionsHistoryItem[]> } = {};
+
   private nodeStatusUpdatedSubject = new Subject<NodeStatus>();
-  private stakingInfoUpdatedSubject = new Subject<StakingInfo>();
+
 
   constructor(
     private apiService: ApiService,
@@ -48,12 +51,13 @@ export class StratisNodeService {
     return this.transactionReceivedSubject.asObservable();
   }
 
-  public stakingInfo(): Observable<StakingInfo> {
-    return this.stakingInfoUpdatedSubject.asObservable();
-  }
 
   public wallet(walletInfo: WalletInfo): Observable<Balance> {
     return this.getWalletSubject(walletInfo).asObservable();
+  }
+
+  public walletHistory(walletInfo: WalletInfo): Observable<TransactionsHistoryItem[]> {
+    return this.getWalletHistorySubject(walletInfo).asObservable();
   }
 
   private getWalletSubject(walletInfo: WalletInfo): Subject<Balance> {
@@ -69,6 +73,20 @@ export class StratisNodeService {
     }
 
     return this.walletUpdatedSubjects[walletInfo.walletName];
+  }
+
+  private getWalletHistorySubject(walletInfo : WalletInfo) : Subject<TransactionsHistoryItem[]>
+  {
+    if (!this.walletHistorySubjects[walletInfo.walletName]) {
+      this.walletHistorySubjects[walletInfo.walletName] = new Subject<TransactionsHistoryItem[]>();
+
+      // Get intitial Wallet History
+      this.apiService.getWalletHistory(walletInfo).toPromise().then(history => {
+          this.walletHistorySubjects[walletInfo.walletName].next(history[walletInfo.account]);
+      });
+    }
+
+    return this.walletHistorySubjects[walletInfo.walletName];
   }
 
   private revertToPolling(): void {

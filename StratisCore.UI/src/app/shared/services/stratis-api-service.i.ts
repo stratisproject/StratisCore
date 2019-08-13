@@ -14,7 +14,6 @@ import { TokenBalanceRequest } from "../../wallet/tokens/models/token-balance-re
 import { LocalExecutionResult } from "@shared/models/local-execution-result";
 
 export interface StratisApiService {
-  setApiUrl(): void;
 
   getNodeStatus(silent?: boolean): Observable<NodeStatus>;
 

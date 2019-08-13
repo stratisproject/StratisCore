@@ -26,26 +26,27 @@ export interface Balances {
   balances: Balance[];
 }
 
-export interface TransactionsHistory {
+export interface TransactionsHistoryItem {
   type: string;
   toAddress: string;
   id: string;
   amount: number;
   payments: any[];
   confirmedInBlock: number;
-  timestamp: string;
+  timestamp: number;
   blockIndex: number;
+  fee: number;
 }
 
-export interface WalletHistoryItem {
+export interface WalletHistoryAccount {
   accountName: string;
   accountHdPath: string;
   coinType: number;
-  transactionsHistory: TransactionsHistory[];
+  transactionsHistory: TransactionsHistoryItem[];
 }
 
 export interface WalletHistory {
-  history: WalletHistoryItem[];
+  history: WalletHistoryAccount[];
 }
 
 export interface StakingInfo {

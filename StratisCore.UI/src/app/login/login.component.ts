@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { GlobalService } from '@shared/services/global.service';
 import { ApiService } from '@shared/services/api.service';
 import { ModalService } from '@shared/services/modal.service';
-
 import { WalletLoad } from '@shared/models/wallet-load';
 import { Subscription } from "rxjs";
 
@@ -16,18 +14,36 @@ import { Subscription } from "rxjs";
 })
 
 export class LoginComponent implements OnInit, OnDestroy {
-  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
+  private openWalletForm: FormGroup;
+  private wallets: [string];
+  private subscriptions: Subscription[] = [];
+
+  private formErrors = {
+    'password': ''
+  };
+
+  private validationMessages = {
+    'password': {
+      'required': 'Please enter your password.'
+    }
+  };
+
+  constructor(
+    private globalService: GlobalService,
+    private apiService: ApiService,
+    private genericModalService: ModalService,
+    private router: Router,
+    private fb: FormBuilder) {
+
     this.buildDecryptForm();
   }
 
   public sidechainEnabled: boolean;
   public hasWallet: boolean = false;
   public isDecrypting = false;
-  private openWalletForm: FormGroup;
-  private wallets: [string];
-  private subscriptions: Subscription[] = [];
 
-  ngOnInit() {
+
+  public ngOnInit(): void {
     this.getWalletFiles();
     this.getCurrentNetwork();
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
@@ -45,7 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.onValueChanged();
   }
 
-  onValueChanged(data?: any) {
+  private onValueChanged(data?: any): void {
     if (!this.openWalletForm) {
       return;
     }
@@ -62,17 +78,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  formErrors = {
-    'password': ''
-  };
-
-  validationMessages = {
-    'password': {
-      'required': 'Please enter your password.'
-    }
-  };
-
-  private getWalletFiles() {
+  private getWalletFiles(): void {
     const subscription = this.apiService.getWalletFiles()
       .subscribe(
         response => {
@@ -96,13 +102,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.router.navigate(['setup']);
   }
 
-  public onEnter() {
+  public onEnter(): void {
     if (this.openWalletForm.valid) {
       this.onDecryptClicked();
     }
   }
 
-  public onDecryptClicked() {
+  public onDecryptClicked(): void {
     this.isDecrypting = true;
     this.globalService.setWalletName(this.openWalletForm.get("selectWallet").value);
     let walletLoad = new WalletLoad(
@@ -112,7 +118,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loadWallet(walletLoad);
   }
 
-  private loadWallet(walletLoad: WalletLoad) {
+  private loadWallet(walletLoad: WalletLoad): void {
     this.apiService.loadStratisWallet(walletLoad)
       .subscribe(
         response => {
@@ -125,7 +131,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     ;
   }
 
-  private getCurrentNetwork() {
+  private getCurrentNetwork(): void {
     this.apiService.getNodeStatus()
       .subscribe(
         response => {
@@ -137,7 +143,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     ;
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

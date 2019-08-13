@@ -4,8 +4,10 @@ import { TransactionDetailsComponent } from "../transaction-details/transaction-
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { GlobalService } from "@shared/services/global.service";
 import { Router } from "@angular/router";
-import { WalletInfo } from "@shared/models/wallet-info";
 import { StratisNodeService } from "@shared/services/real-time/stratis-node.service";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { TransactionsHistoryItem } from "@shared/services/api-dtos";
 
 @Component({
   selector: 'app-transactions',
@@ -13,16 +15,19 @@ import { StratisNodeService } from "@shared/services/real-time/stratis-node.serv
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
-  @Input() transactions: TransactionInfo[];
+  @Input() transactions: Observable<TransactionInfo[]>;
 
   public constructor(
     private globalService: GlobalService,
-    private stratisNodeService : StratisNodeService,
+    private stratisNodeService: StratisNodeService,
     private router: Router,
     private modalService: NgbModal) {
   }
 
   public ngOnInit() {
+    this.transactions = this.stratisNodeService.walletHistory(this.globalService.currentWallet).pipe(map((history => {
+      return this.mapToTransactionInfo(history)
+    })));
   }
 
   public openTransactionDetailDialog(transaction: TransactionInfo) {
@@ -34,58 +39,15 @@ export class TransactionsComponent implements OnInit {
     this.router.navigate(['/wallet/history']);
   }
 
-  // todo: add history in separate service to make it reusable
-  private getHistory() {
-    const walletInfo = new WalletInfo(this.globalService.getWalletName());
-    let historyResponse;
-    this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
-      .subscribe(
-        response => {
-          // TO DO - add account feature instead of using first entry in array
-          if (!!response.history && response.history[0].transactionsHistory.length > 0) {
-            historyResponse = response.history[0].transactionsHistory;
-            this.getTransactionInfo(historyResponse);
-          }
-        },
-        error => {
-          if (error.status === 0) {
-            this.cancelSubscriptions();
-          } else if (error.status >= 400) {
-            if (!error.error.errors[0].message) {
-              this.cancelSubscriptions();
-              this.startSubscriptions();
-            }
-          }
-        }
-      )
-    ;
-  };
-
-  private getTransactionInfo(transactions: any) {
-    this.transactionArray = [];
-
-    for (let transaction of transactions) {
-      let transactionType;
-      if (transaction.type === "send") {
-        transactionType = "sent";
-      } else if (transaction.type === "received") {
-        transactionType = "received";
-      } else if (transaction.type === "staked") {
-        transactionType = "staked";
-      }
-      let transactionId = transaction.id;
-      let transactionAmount = transaction.amount;
-      let transactionFee;
-      if (transaction.fee) {
-        transactionFee = transaction.fee;
-      } else {
-        transactionFee = 0;
-      }
-      let transactionConfirmedInBlock = transaction.confirmedInBlock;
-      let transactionTimestamp = transaction.timestamp;
-
-      this.transactionArray.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
-    }
+  private mapToTransactionInfo(transactions: TransactionsHistoryItem[]): TransactionInfo[] {
+    return transactions.map(transaction => {
+      return new TransactionInfo(
+        transaction.type == "send" ? "sent" : transaction.type,
+        transaction.id,
+        transaction.amount,
+        transaction.fee || 0,
+        transaction.confirmedInBlock,
+        transaction.timestamp);
+    });
   }
-
 }

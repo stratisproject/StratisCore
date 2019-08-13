@@ -22,27 +22,19 @@ import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 import { StratisApiService } from "@shared/services/stratis-api-service.i";
 import { Balances, GeneralInfo, StakingInfo, WalletFileData, WalletHistory } from "@shared/services/api-dtos";
+import { RestApi } from "@shared/services/rest-api";
 
 
 @Injectable()
-export class ApiService implements StratisApiService {
-  constructor(private http: HttpClient, private globalService: GlobalService, private modalService: ModalService, private router: Router) {
-    this.setApiUrl();
+export class ApiService extends RestApi implements StratisApiService {
+  private pollingInterval = interval(5000);
+
+  constructor(http: HttpClient, private globalService: GlobalService, private modalService: ModalService, private router: Router) {
+    super(globalService, http);
   };
 
-  private pollingInterval = interval(5000);
-  private apiPort;
-  private stratisApiUrl;
-  private daemonIP;
-
-  public setApiUrl(): void {
-    this.apiPort = this.globalService.getApiPort();
-    this.daemonIP = this.globalService.getDaemonIP();
-    this.stratisApiUrl = 'http://' + this.daemonIP + ':' + this.apiPort + '/api';
-  }
-
   public getNodeStatus(silent?: boolean): Observable<NodeStatus> {
-    return this.http.get<NodeStatus>(this.stratisApiUrl + '/node/status').pipe(
+    return this.get<NodeStatus>('node/status').pipe(
       catchError(err => this.handleHttpError(err, silent))
     );
   }
@@ -50,7 +42,7 @@ export class ApiService implements StratisApiService {
   public getNodeStatusInterval(silent?: boolean): Observable<NodeStatus> {
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get<NodeStatus>(this.stratisApiUrl + '/node/status')),
+      switchMap(() => this.get<NodeStatus>('node/status')),
       catchError(err => this.handleHttpError(err, silent))
     )
   }
@@ -58,20 +50,20 @@ export class ApiService implements StratisApiService {
   public getAddressBookAddresses(): Observable<any> {
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get(this.stratisApiUrl + '/AddressBook')),
+      switchMap(() => this.get('addressBook')),
       catchError(err => this.handleHttpError(err))
     )
   }
 
   public addAddressBookAddress(data: AddressLabel): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/AddressBook/address', JSON.stringify(data)).pipe(
+    return this.post('addressBook/address', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
 
   public removeAddressBookAddress(label: string): Observable<any> {
     let params = new HttpParams().set('label', label);
-    return this.http.delete(this.stratisApiUrl + '/AddressBook/address', {params}).pipe(
+    return this.delete('addressBook/address', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -80,7 +72,7 @@ export class ApiService implements StratisApiService {
    * Gets available wallets at the default path
    */
   public getWalletFiles(): Observable<WalletFileData> {
-    return this.http.get<WalletFileData>(this.stratisApiUrl + '/wallet/files').pipe(
+    return this.get<WalletFileData>('wallet/files').pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -91,7 +83,7 @@ export class ApiService implements StratisApiService {
       .set('walletName', data.walletName)
       .set('accountName', 'account 0');
 
-    return this.http.get(this.stratisApiUrl + '/wallet/extpubkey', {params}).pipe(
+    return this.get('wallet/extpubkey', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -104,7 +96,7 @@ export class ApiService implements StratisApiService {
       .set('language', 'English')
       .set('wordCount', '12');
 
-    return this.http.get(this.stratisApiUrl + '/wallet/mnemonic', {params}).pipe(
+    return this.get('wallet/mnemonic', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -113,7 +105,7 @@ export class ApiService implements StratisApiService {
    * Create a new Stratis wallet.
    */
   public createStratisWallet(data: WalletCreation): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/wallet/create/', JSON.stringify(data)).pipe(
+    return this.post('wallet/create/', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -122,7 +114,7 @@ export class ApiService implements StratisApiService {
    * Recover a Stratis wallet.
    */
   public recoverStratisWallet(data: WalletRecovery): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/wallet/recover/', JSON.stringify(data)).pipe(
+    return this.post('wallet/recover/', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -131,7 +123,7 @@ export class ApiService implements StratisApiService {
    * Load a Stratis wallet
    */
   public loadStratisWallet(data: WalletLoad): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/wallet/load/', JSON.stringify(data)).pipe(
+    return this.post('wallet/load/', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -140,7 +132,7 @@ export class ApiService implements StratisApiService {
    * Get wallet status info from the API.
    */
   public getWalletStatus(): Observable<any> {
-    return this.http.get(this.stratisApiUrl + '/wallet/status').pipe(
+    return this.get('wallet/status').pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -150,7 +142,7 @@ export class ApiService implements StratisApiService {
    */
   public getGeneralInfoOnce(data: WalletInfo): Observable<any> {
     let params = new HttpParams().set('Name', data.walletName);
-    return this.http.get(this.stratisApiUrl + '/wallet/general-info', {params}).pipe(
+    return this.get('wallet/general-info', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -162,7 +154,7 @@ export class ApiService implements StratisApiService {
     let params = new HttpParams().set('Name', data.walletName);
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get<GeneralInfo>(this.stratisApiUrl + '/wallet/general-info', {params})),
+      switchMap(() => this.get<GeneralInfo>('wallet/general-info', params)),
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -176,7 +168,7 @@ export class ApiService implements StratisApiService {
       .set('accountName', "account 0");
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get<Balances>(this.stratisApiUrl + '/wallet/balance', {params})),
+      switchMap(() => this.get<Balances>('wallet/balance', params)),
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -186,7 +178,7 @@ export class ApiService implements StratisApiService {
       .set('walletName', data.walletName)
       .set('accountName', "account 0");
 
-    return this.http.get<Balances>(this.stratisApiUrl + '/wallet/balance', {params}).pipe(
+    return this.get<Balances>('wallet/balance', params).pipe(
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -200,7 +192,7 @@ export class ApiService implements StratisApiService {
       .set('accountName', "account 0")
       .set('feeType', data.feeType)
       .set('allowUnconfirmed', "true");
-    return this.http.get(this.stratisApiUrl + '/wallet/maxbalance', {params}).pipe(
+    return this.get('wallet/maxbalance', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -208,15 +200,25 @@ export class ApiService implements StratisApiService {
   /**
    * Get a wallets transaction history info from the API.
    */
-  public getWalletHistory(data: WalletInfo): Observable<any> {
+  public getWalletHistoryPolling(data: WalletInfo): Observable<WalletHistory> {
     let params = new HttpParams()
       .set('walletName', data.walletName)
       .set('accountName', "account 0");
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get(this.stratisApiUrl + '/wallet/history', {params: params})),
+      switchMap(() => this.get<WalletHistory>('wallet/history', params)),
       catchError(err => this.handleHttpError(err))
     )
+  }
+
+  public getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
+
+    let params = new HttpParams()
+      .set('walletName', data.walletName)
+      .set('accountName', "account 0");
+
+    return this.get<WalletHistory>('wallet/history', params).pipe(
+      catchError(err => this.handleHttpError(err)))
   }
 
   /**
@@ -226,7 +228,7 @@ export class ApiService implements StratisApiService {
     let params = new HttpParams()
       .set('walletName', data.walletName)
       .set('accountName', "account 0");
-    return this.http.get(this.stratisApiUrl + '/wallet/unusedaddress', {params}).pipe(
+    return this.get('wallet/unusedaddress', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -239,7 +241,7 @@ export class ApiService implements StratisApiService {
       .set('walletName', data.walletName)
       .set('accountName', "account 0")
       .set('count', count);
-    return this.http.get(this.stratisApiUrl + '/wallet/unusedaddresses', {params}).pipe(
+    return this.get('wallet/unusedaddresses', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -251,7 +253,7 @@ export class ApiService implements StratisApiService {
     let params = new HttpParams()
       .set('walletName', data.walletName)
       .set('accountName', "account 0");
-    return this.http.get(this.stratisApiUrl + '/wallet/addresses', {params}).pipe(
+    return this.get('wallet/addresses', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -260,7 +262,7 @@ export class ApiService implements StratisApiService {
    * Estimate the fee of a transaction
    */
   public estimateFee(data: FeeEstimation): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/wallet/estimate-txfee', {
+    return this.post('wallet/estimate-txfee', {
       'walletName': data.walletName,
       'accountName': data.accountName,
       'recipients': [
@@ -280,7 +282,7 @@ export class ApiService implements StratisApiService {
    * Estimate the fee of a sidechain transaction
    */
   public estimateSidechainFee(data: SidechainFeeEstimation): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/wallet/estimate-txfee', {
+    return this.post('wallet/estimate-txfee', {
       'walletName': data.walletName,
       'accountName': data.accountName,
       'recipients': [
@@ -300,7 +302,7 @@ export class ApiService implements StratisApiService {
    * Build a transaction
    */
   public buildTransaction(data: TransactionBuilding): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/wallet/build-transaction', JSON.stringify(data)).pipe(
+    return this.post('wallet/build-transaction', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -309,7 +311,7 @@ export class ApiService implements StratisApiService {
    * Send transaction
    */
   public sendTransaction(data: TransactionSending): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/wallet/send-transaction', JSON.stringify(data)).pipe(
+    return this.post('wallet/send-transaction', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -320,7 +322,7 @@ export class ApiService implements StratisApiService {
       .set('walletName', walletName)
       .set('all', 'true')
       .set('resync', 'true');
-    return this.http.delete(this.stratisApiUrl + '/wallet/remove-transactions', {params}).pipe(
+    return this.delete('wallet/remove-transactions', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -331,7 +333,7 @@ export class ApiService implements StratisApiService {
       .set('walletName', data.name)
       .set('fromDate', data.fromDate.toDateString())
       .set('reSync', 'true');
-    return this.http.delete(this.stratisApiUrl + '/wallet/remove-transactions/', {params}).pipe(
+    return this.delete('wallet/remove-transactions/', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -340,7 +342,7 @@ export class ApiService implements StratisApiService {
    * Start staking
    */
   public startStaking(data: any): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/staking/startstaking', JSON.stringify(data)).pipe(
+    return this.post('staking/startstaking', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -351,7 +353,7 @@ export class ApiService implements StratisApiService {
   public getStakingInfo(): Observable<StakingInfo> {
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get<StakingInfo>(this.stratisApiUrl + '/staking/getstakinginfo')),
+      switchMap(() => this.get<StakingInfo>('staking/getstakinginfo')),
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -360,7 +362,7 @@ export class ApiService implements StratisApiService {
    * Stop staking
    */
   public stopStaking(): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/staking/stopstaking', 'true').pipe(
+    return this.post('staking/stopstaking', 'true').pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -369,7 +371,7 @@ export class ApiService implements StratisApiService {
    * Send shutdown signal to the daemon
    */
   public shutdownNode(): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/node/shutdown', 'corsProtection:true').pipe(
+    return this.post('node/shutdown', 'corsProtection:true').pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -379,14 +381,14 @@ export class ApiService implements StratisApiService {
     */
   public getAccountAddress(walletName: string): Observable<any> {
     let params = new HttpParams().set('walletName', walletName);
-    return this.http.get(this.stratisApiUrl + '/smartcontractwallet/account-address', {params}).pipe(
+    return this.get('smartcontractwallet/account-address', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
 
   public getAccountAddresses(walletName: string): any {
     let params = new HttpParams().set('walletName', walletName);
-    return this.http.get(this.stratisApiUrl + '/smartcontractwallet/account-addresses', {params}).pipe(
+    return this.get('smartcontractwallet/account-addresses', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -396,7 +398,7 @@ export class ApiService implements StratisApiService {
     */
   public getAccountBalance(walletName: string): Observable<any> {
     let params = new HttpParams().set('walletName', walletName);
-    return this.http.get(this.stratisApiUrl + '/smartcontractwallet/account-balance', {params}).pipe(
+    return this.get('smartcontractwallet/account-balance', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -408,7 +410,7 @@ export class ApiService implements StratisApiService {
     let params = new HttpParams().set('address', address);
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get(this.stratisApiUrl + '/smartcontractwallet/address-balance', {params})),
+      switchMap(() => this.get('smartcontractwallet/address-balance', params)),
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -422,7 +424,7 @@ export class ApiService implements StratisApiService {
       .set('address', address);
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.http.get<WalletHistory>(this.stratisApiUrl + '/smartcontractwallet/history', {params})),
+      switchMap(() => this.get<WalletHistory>('smartcontractwallet/history', params)),
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -431,7 +433,7 @@ export class ApiService implements StratisApiService {
     * Posts a contract creation transaction
     */
   public postCreateTransaction(transaction: any): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/smartcontractwallet/create', transaction).pipe(
+    return this.post('smartcontractwallet/create', transaction).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -440,7 +442,7 @@ export class ApiService implements StratisApiService {
     * Posts a contract call transaction
     */
   public postCallTransaction(transaction: any): Observable<any> {
-    return this.http.post(this.stratisApiUrl + '/smartcontractwallet/call', transaction).pipe(
+    return this.post('smartcontractwallet/call', transaction).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -450,7 +452,7 @@ export class ApiService implements StratisApiService {
     */
   public getReceipt(hash: string, silent: boolean = false): any {
     let params = new HttpParams().set('txHash', hash);
-    return this.http.get(this.stratisApiUrl + '/smartcontracts/receipt', {params}).pipe(
+    return this.get('smartcontracts/receipt', params).pipe(
       catchError(err => this.handleHttpError(err, silent))
     );
   }
@@ -460,11 +462,11 @@ export class ApiService implements StratisApiService {
   */
   public getReceiptSilent(hash: string): any {
     let params = new HttpParams().set('txHash', hash);
-    return this.http.get(this.stratisApiUrl + '/smartcontracts/receipt', {params});
+    return this.get('smartcontracts/receipt', params);
   }
 
   public localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {
-    return this.http.post<LocalExecutionResult>(this.stratisApiUrl + '/smartcontracts/local-call', localCall).pipe(
+    return this.post<LocalExecutionResult>('smartcontracts/local-call', localCall).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
