@@ -24,6 +24,7 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletComponent } from './wallet.component';
 import { TransactionsComponent } from './transactions/transactions.component';
+import { StakingComponent } from './staking/staking.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { TransactionsComponent } from './transactions/transactions.component';
     AboutComponent,
     GenerateAddressesComponent,
     ResyncComponent,
-    TransactionsComponent
+    TransactionsComponent,
+    StakingComponent
   ],
   entryComponents: [
     SendComponent,

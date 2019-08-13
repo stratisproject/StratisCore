@@ -1,21 +1,6 @@
-<!-- CONTENT -->
 <section class="col-12">
-  <!-- NO TRANSACTIONS -->
-  <div class="row">
-    <ng-template #noTransactions>
-      <section class="col-12 text-center my-4">
-        <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">
-      </section>
-      <div class="col-12 text-center">
-        <p>Click the down arrow for a receive address.</p>
-      </div>
-    </ng-template>
-  </div>
-  <!-- /NO TRANSACTIONS -->
-
   <div class="row" *ngIf="transactions; else noTransactions">
-    <!-- TRANSACTIONS -->
-    <div class="col-8" [class.col-12]="sidechainEnabled">
+    <div class="col-8" [class.col-12]="globalService.getSidechainEnabled()">
       <div class="card">
         <div class="card-header">Latest Transactions</div>
         <div class="card-body">
@@ -28,13 +13,13 @@
                 class="bubble bg-success"></span></th>
               <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
               <td class="text-left" *ngIf="transaction.transactionType == 'sent'">
-                <strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong>
+                <strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
               </td>
               <td class="text-left" *ngIf="transaction.transactionType == 'received'">
-                <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong>
+                <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
               </td>
               <td class="text-left" *ngIf="transaction.transactionType == 'staked'">
-                <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong>
+                <strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
               </td>
               <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
               <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a>
@@ -44,10 +29,22 @@
           </table>
           <div class="text-center my-2">
             <button type="button" class="btn btn-outline-primary"
-                    [class.btn-outline-stratis-green]="sidechainEnabled" (click)="goToHistory()">Go to History
+                    [class.btn-outline-stratis-green]="globalService.getSidechainEnabled()" (click)="goToHistory()">Go to History
             </button>
           </div>
         </div>
       </div>
     </div>
-    <!-- /TRANSACTIONS -->
+  </div>
+
+  <div class="row">
+    <ng-template #noTransactions>
+      <section class="col-12 text-center my-4">
+        <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">
+      </section>
+      <div class="col-12 text-center">
+        <p>Click the down arrow for a receive address.</p>
+      </div>
+    </ng-template>
+  </div>
+</section>
