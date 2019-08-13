@@ -13,7 +13,7 @@ export class NodeService {
   // Fallback to polling when SignalR is not available on older nodes.
   private pollingInterval: Observable<any>;
   private subscriptions: Subscription[] = [];
-  private blockCreatedSubject = new Subject<any>();
+  private blockConnectedSubject = new Subject<any>();
   private transactionReceivedSubject = new Subject<any>();
   private pollingSubscriptions: Subscription[] = [];
 
@@ -26,24 +26,21 @@ export class NodeService {
     private apiService: ApiService,
     private signalRService: SignalRService) {
 
-    this.signalRService.connect("events", (message) => {
-      this.useSignalR();
-      console.log(message);
-      // TODO: convert to appropriate subject next call
+    this.signalRService.registerOnMessageEventHandler("TransactionReceived", (message) => {
+      this.transactionReceivedSubject.next(message);
+    });
+
+    this.signalRService.registerOnMessageEventHandler("BlockConnected", (message) => {
+      this.blockConnectedSubject.next(message);
     });
 
     this.signalRService.onConnectionFailed.subscribe(e => {
       this.revertToPolling();
     });
-
-    this.subscriptions.push(this.transactionReceived().subscribe(txReceived => {
-      //this.apiService.getWalletBalance()
-      //this.walletUpdatedSubject.next()
-    }));
   }
 
   public blockCreated(): Observable<any> {
-    return this.blockCreatedSubject.asObservable();
+    return this.blockConnectedSubject.asObservable();
   }
 
   public transactionReceived(): Observable<any> {

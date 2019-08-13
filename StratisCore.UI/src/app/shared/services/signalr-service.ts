@@ -10,18 +10,33 @@ export interface SignalRConnectionInfo {
   signalRPort: string;
 }
 
+export interface MessageHandler {
+  messageType: string;
+  onEventMessageDelegate: (message: any) => void
+}
+
 @Injectable({
-  providedIn : "root"
+  providedIn: "root"
 })
 export class SignalRService implements ISignalRService {
   private connection: signalR.HubConnection;
+  private onMessageReceivedHandlers: Array<MessageHandler> = [];
 
   constructor(private http: HttpClient) {
+    // TODO: consider multiple Hub support
+    this.connect("events");
+  }
+
+  public registerOnMessageEventHandler(messageType: string, onEventMessageDelegate: (message: any) => void) {
+    this.onMessageReceivedHandlers.push({
+      messageType: messageType,
+      onEventMessageDelegate: onEventMessageDelegate
+    });
   }
 
   public onConnectionFailed: EventEmitter<Error> = new EventEmitter<Error>();
 
-  public connect(hubName: string, onEventMessageDelegate: (message: any) => void): void {
+  public connect(hubName: string): void {
     this.getConnectionInfo().subscribe((con: SignalRConnectionInfo) => {
 
       if (this.connection && this.connection.state && this.connection.state != 4) {
@@ -34,7 +49,7 @@ export class SignalRService implements ISignalRService {
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-      this.connection.on('receiveEvent', onEventMessageDelegate);
+      this.connection.on('receiveEvent', this.executeMessageDelegates);
 
       this.connection.onclose((error: Error) => {
         this.onConnectionFailed.emit(error);
@@ -48,7 +63,14 @@ export class SignalRService implements ISignalRService {
           console.log("Connected!");
         })
         .catch(console.error);
+    });
+  }
 
+  private executeMessageDelegates(message: any): void {
+    this.onMessageReceivedHandlers.forEach(handler => {
+      if (handler.messageType === message.messageType) {
+        handler.onEventMessageDelegate(message);
+      }
     });
   }
 

@@ -1,17 +1,19 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
-import { StakingInfo } from "@shared/services/api-dtos";
 import { GlobalService } from "@shared/services/global.service";
 import { ApiService } from "@shared/services/api.service";
 import { SecondsToStringPipe } from "@shared/pipes/seconds-to-string.pipe";
+import { StakingInfo } from "@shared/services/interfaces/api.i";
 
 @Injectable({
-  providedIn : "root"
+  providedIn: "root"
 })
 export class StakingService {
   private stakingInfoUpdatedSubject = new Subject<StakingInfo>();
   private isStopping: boolean;
   private isStarting: boolean;
+  private isStaking : boolean;
+
   private unconfirmedBalance: number;
   private confirmedBalance: number;
 
@@ -63,31 +65,24 @@ export class StakingService {
     this.apiService.getStakingInfo()
       .subscribe(
         response => {
-
           this.stakingInfoUpdatedSubject.next(response);
-          //
-          // const stakingResponse = response;
-          // this.stakingEnabled = stakingResponse.enabled;
-          // this.stakingActive = stakingResponse.staking;
-          // this.stakingWeight = stakingResponse.weight;
-          // this.netStakingWeight = stakingResponse.netStakeWeight;
-          // TODO:! this.awaitingMaturity = (this.unconfirmedBalance + this.confirmedBalance) - this.spendableBalance;
-          // this.expectedTime = stakingResponse.expectedTime;
-          // this.dateTime = new SecondsToStringPipe().transform(this.expectedTime);
+
+          // TODO: this.awaitingMaturity = (this.unconfirmedBalance + this.confirmedBalance) - this.spendableBalance;
+
           // if (this.stakingActive) {
           //   this.isStarting = false;
           // } else {
           //   this.isStopping = false;
           // }
-        }, error => {
-          if (error.status === 0) {
-            //  this.cancelSubscriptions();
-          } else if (error.status >= 400) {
-            if (!error.error.errors[0].message) {
-              //  this.cancelSubscriptions();
-              //  this.startSubscriptions();
-            }
-          }
+          // this.dateTime = new SecondsToStringPipe().transform(this.expectedTime);
+
+          // const stakingResponse = response;
+          // this.stakingEnabled = stakingResponse.enabled;
+          // this.stakingActive = stakingResponse.staking;
+          // this.stakingWeight = stakingResponse.weight;
+          // this.netStakingWeight = stakingResponse.netStakeWeight;
+
+          // this.expectedTime = stakingResponse.expectedTime;
         }
       );
   }

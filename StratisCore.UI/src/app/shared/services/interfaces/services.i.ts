@@ -14,7 +14,7 @@ import { LocalExecutionResult } from "@shared/models/local-execution-result";
 import { TokenBalanceRequest } from "../../../wallet/tokens/models/token-balance-request";
 
 export interface ISignalRService {
-  connect(hubName: string, newMessageHandler: (message: any) => void): void;
+  connect(hubName: string): void;
 }
 
 export interface IApiService {

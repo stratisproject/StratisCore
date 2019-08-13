@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { interval, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { interval, Observable } from 'rxjs';
 import { catchError, startWith, switchMap } from 'rxjs/operators';
 import { GlobalService } from './global.service';
 import { ModalService } from './modal.service';
@@ -28,8 +28,8 @@ import { Balances, GeneralInfo, StakingInfo, WalletFileData, WalletHistory } fro
 export class ApiService extends RestApi implements IApiService {
   private pollingInterval = interval(5000);
 
-  constructor(http: HttpClient, private globalService: GlobalService, private modalService: ModalService, private router: Router) {
-    super(globalService, http);
+  constructor(http: HttpClient, private globalService: GlobalService, modalService: ModalService, router: Router) {
+    super(globalService, http, modalService, router);
   };
 
   public getNodeStatus(silent?: boolean): Observable<NodeStatus> {
@@ -450,22 +450,5 @@ export class ApiService extends RestApi implements IApiService {
     }
 
     return params;
-  }
-
-  private handleHttpError(error: HttpErrorResponse, silent?: boolean) {
-    console.log(error);
-    if (error.status === 0) {
-      if (!silent) {
-        this.modalService.openModal(null, null);
-        this.router.navigate(['app']);
-      }
-    } else if (error.status >= 400) {
-      if (!error.error.errors[0].message) {
-        console.log(error);
-      } else {
-        this.modalService.openModal(null, error.error.errors[0].message);
-      }
-    }
-    return throwError(error);
   }
 }
