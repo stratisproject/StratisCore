@@ -15,7 +15,7 @@ import { TransactionsHistoryItem } from "@shared/services/api-dtos";
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
-  @Input() transactions: Observable<TransactionInfo[]>;
+  public transactions: Observable<TransactionInfo[]>;
 
   public constructor(
     private globalService: GlobalService,
