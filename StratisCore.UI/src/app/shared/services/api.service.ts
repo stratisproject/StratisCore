@@ -26,7 +26,7 @@ import { RestApi } from "@shared/services/rest-api";
 
 
 @Injectable({
-  providedIn : "root"
+  providedIn: "root"
 })
 export class ApiService extends RestApi implements StratisApiService {
   private pollingInterval = interval(5000);
@@ -81,11 +81,7 @@ export class ApiService extends RestApi implements StratisApiService {
 
   /** Gets the extended public key from a certain wallet */
   public getExtPubkey(data: WalletInfo): Observable<any> {
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', 'account 0');
-
-    return this.get('wallet/extpubkey', params).pipe(
+    return this.get('wallet/extpubkey', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -165,22 +161,15 @@ export class ApiService extends RestApi implements StratisApiService {
    * Get wallet balance info from the API.
    */
   public getWalletBalancePolling(data: WalletInfo): Observable<Balances> {
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', "account 0");
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.get<Balances>('wallet/balance', params)),
+      switchMap(() => this.get<Balances>('wallet/balance', this.getWalletParams(data))),
       catchError(err => this.handleHttpError(err))
     )
   }
 
   public getWalletBalance(data: WalletInfo): Observable<Balances> {
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', "account 0");
-
-    return this.get<Balances>('wallet/balance', params).pipe(
+    return this.get<Balances>('wallet/balance', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err))
     )
   }
@@ -188,13 +177,12 @@ export class ApiService extends RestApi implements StratisApiService {
   /**
    * Get the maximum sendable amount for a given fee from the API
    */
-  public getMaximumBalance(data): Observable<any> {
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', "account 0")
-      .set('feeType', data.feeType)
-      .set('allowUnconfirmed', "true");
-    return this.get('wallet/maxbalance', params).pipe(
+  public getMaximumBalance(data: WalletInfo): Observable<any> {
+    return this.get('wallet/maxbalance',
+      this.getWalletParams(data, {
+        feeType: data.feeType,
+        allowUnconfirmed: "true"
+      })).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -203,23 +191,15 @@ export class ApiService extends RestApi implements StratisApiService {
    * Get a wallets transaction history info from the API.
    */
   public getWalletHistoryPolling(data: WalletInfo): Observable<WalletHistory> {
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', "account 0");
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.get<WalletHistory>('wallet/history', params)),
+      switchMap(() => this.get<WalletHistory>('wallet/history', this.getWalletParams(data))),
       catchError(err => this.handleHttpError(err))
     )
   }
 
   public getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
-
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', "account 0");
-
-    return this.get<WalletHistory>('wallet/history', params).pipe(
+    return this.get<WalletHistory>('wallet/history', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err)))
   }
 
@@ -227,10 +207,7 @@ export class ApiService extends RestApi implements StratisApiService {
    * Get an unused receive address for a certain wallet from the API.
    */
   public getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', "account 0");
-    return this.get('wallet/unusedaddress', params).pipe(
+    return this.get('wallet/unusedaddress', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -239,11 +216,7 @@ export class ApiService extends RestApi implements StratisApiService {
    * Get multiple unused receive addresses for a certain wallet from the API.
    */
   public getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any> {
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', "account 0")
-      .set('count', count);
-    return this.get('wallet/unusedaddresses', params).pipe(
+    return this.get('wallet/unusedaddresses', this.getWalletParams(data, {count})).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -252,10 +225,7 @@ export class ApiService extends RestApi implements StratisApiService {
    * Get get all addresses for an account of a wallet from the API.
    */
   public getAllAddresses(data: WalletInfo): Observable<any> {
-    let params = new HttpParams()
-      .set('walletName', data.walletName)
-      .set('accountName', "account 0");
-    return this.get('wallet/addresses', params).pipe(
+    return this.get('wallet/addresses', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -471,6 +441,18 @@ export class ApiService extends RestApi implements StratisApiService {
     return this.post<LocalExecutionResult>('smartcontracts/local-call', localCall).pipe(
       catchError(err => this.handleHttpError(err))
     );
+  }
+
+  private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: string }): HttpParams {
+    const params = new HttpParams()
+      .set('walletName', walletInfo.walletName)
+      .set('accountName', `account ${walletInfo.account || 0}`);
+
+    if (extra) {
+      Object.keys(extra).forEach(key => params.set(key, extra[key]));
+    }
+
+    return params;
   }
 
   private handleHttpError(error: HttpErrorResponse, silent?: boolean) {

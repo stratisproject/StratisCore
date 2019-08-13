@@ -3,4 +3,6 @@ export class WalletInfo {
     public walletName: string,
     public account: number = 0) {
   }
+
+  public feeType? : string;
 }

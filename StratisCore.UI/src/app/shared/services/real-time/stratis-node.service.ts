@@ -4,7 +4,7 @@ import { SignalRService } from "@shared/services/signalr-service";
 import { NodeStatus } from "@shared/models/node-status";
 import { ApiService } from "@shared/services/api.service";
 import { WalletInfo } from "@shared/models/wallet-info";
-import { Balance, TransactionsHistoryItem } from "@shared/services/api-dtos";
+import { WalletBalance, TransactionsHistoryItem } from "@shared/services/api-dtos";
 
 @Injectable({
   providedIn : "root"
@@ -19,7 +19,7 @@ export class StratisNodeService {
   private pollingSubscriptions: Subscription[] = [];
 
 
-  private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<Balance> } = {};
+  private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
 
   private nodeStatusUpdatedSubject = new BehaviorSubject<NodeStatus>(null);
@@ -54,7 +54,7 @@ export class StratisNodeService {
   }
 
 
-  public wallet(walletInfo: WalletInfo): Observable<Balance> {
+  public wallet(walletInfo: WalletInfo): Observable<WalletBalance> {
     return this.getWalletSubject(walletInfo).asObservable();
   }
 
@@ -62,14 +62,14 @@ export class StratisNodeService {
     return this.getWalletHistorySubject(walletInfo).asObservable();
   }
 
-  private getWalletSubject(walletInfo: WalletInfo): BehaviorSubject<Balance> {
+  private getWalletSubject(walletInfo: WalletInfo): BehaviorSubject<WalletBalance> {
     if (!this.walletUpdatedSubjects[walletInfo.walletName]) {
-      this.walletUpdatedSubjects[walletInfo.walletName] = new BehaviorSubject<Balance>(null);
+      this.walletUpdatedSubjects[walletInfo.walletName] = new BehaviorSubject<WalletBalance>(null);
 
       // Initialise the wallet
       this.apiService.getWalletBalance(walletInfo).toPromise().then(data => {
         if (data.balances.length > 0 && data.balances[walletInfo.account]) {
-          this.walletUpdatedSubjects[walletInfo.walletName].next(new Balance(data.balances[walletInfo.account]));
+          this.walletUpdatedSubjects[walletInfo.walletName].next(new WalletBalance(data.balances[walletInfo.account]));
         }
       });
     }

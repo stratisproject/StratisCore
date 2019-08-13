@@ -6,7 +6,7 @@ import { SendComponent } from '../send/send.component';
 import { ReceiveComponent } from '../receive/receive.component';
 import { StratisNodeService } from "@shared/services/real-time/stratis-node.service";
 import { Observable } from "rxjs";
-import { Balance } from "@shared/services/api-dtos";
+import { WalletBalance } from "@shared/services/api-dtos";
 
 @Component({
   selector: 'dashboard-component',
@@ -16,7 +16,7 @@ import { Balance } from "@shared/services/api-dtos";
 
 export class DashboardComponent implements OnInit {
 
-  public wallet : Observable<Balance>;
+  public wallet : Observable<WalletBalance>;
 
   constructor(
     private nodeService: StratisNodeService,

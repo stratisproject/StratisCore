@@ -3,8 +3,8 @@ export interface WalletFileData {
   walletsFiles: [string];
 }
 
-export class Balance {
-  constructor(balance?: Balance) {
+export class WalletBalance {
+  constructor(balance?: WalletBalance) {
     if (balance) {
       Object.assign(this, balance);
     }
@@ -23,7 +23,7 @@ export class Balance {
 }
 
 export interface Balances {
-  balances: Balance[];
+  balances: WalletBalance[];
 }
 
 export interface TransactionsHistoryItem {
