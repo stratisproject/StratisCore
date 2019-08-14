@@ -14,7 +14,7 @@ import { GlobalService } from '@shared/services/global.service';
 @Injectable()
 export class TokensService {
   private savedTokens = 'savedTokens';
-  private defaultTokens = [new SavedToken('MEDI', undefined, 0, 'MediConnect - coming soon'), new SavedToken('GLU', undefined, 0, 'Gluon - coming soon')];
+  private defaultTokens = [];
 
   constructor(private apiService: ApiService, private storage: StorageService, private globalService: GlobalService) {
     this.savedTokens = `${globalService.getNetwork()}:savedTokens`
