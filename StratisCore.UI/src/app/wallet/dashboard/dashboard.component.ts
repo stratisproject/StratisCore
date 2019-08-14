@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private nodeService: NodeService,
     private apiService: ApiService,
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private modalService: NgbModal) {
   }
 
