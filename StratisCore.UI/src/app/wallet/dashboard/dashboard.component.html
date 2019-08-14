@@ -21,7 +21,8 @@
           <!-- /col-->
           <div class="col text-right">
             <p>
-              <a class="btn btn-lg btn-primary" (click)="openReceiveDialog()" [class.btn-secondary]="globalService.getSidechainEnabled()">
+              <a class="btn btn-lg btn-primary" (click)="openReceiveDialog()"
+                 [class.btn-secondary]="globalService.getSidechainEnabled()">
                 <i class="icon lnr lnr-arrow-down-circle"></i>
                 <span class="text-center text-uppercase">Receive</span>
               </a>
@@ -39,10 +40,15 @@
       <!-- /col-->
     </div>
     <!-- /JUMBOTRON-->
+    <div class="row">
+      <section class="col-8" [class.col-12]="globalService.getSidechainEnabled()">
+        <app-transactions></app-transactions>
+      </section>
+      <section class="col-4">
+        <app-staking></app-staking>
+      </section>
+    </div>
 
-    <app-transactions></app-transactions>
-
-    <app-staking></app-staking>
 
     <status-bar></status-bar>
   </section>

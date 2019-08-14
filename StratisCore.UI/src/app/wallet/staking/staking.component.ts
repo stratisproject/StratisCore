@@ -3,7 +3,7 @@ import { GlobalService } from "@shared/services/global.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { StakingService } from "@shared/services/staking-service";
 import { Observable } from "rxjs";
-import { WalletBalance } from "@shared/services/interfaces/api.i";
+import { StakingInfo, WalletBalance } from "@shared/services/interfaces/api.i";
 import { NodeService } from "@shared/services/node.service";
 
 @Component({
@@ -13,7 +13,9 @@ import { NodeService } from "@shared/services/node.service";
 })
 export class StakingComponent implements OnInit {
   private stakingForm: FormGroup;
-  public wallet : Observable<WalletBalance>;
+  public wallet: Observable<WalletBalance>;
+  public stakingInfo: Observable<StakingInfo>;
+
   constructor(
     private fb: FormBuilder,
     private stakingService: StakingService,
@@ -21,20 +23,10 @@ export class StakingComponent implements OnInit {
     private globalService: GlobalService) {
   }
 
-  public spendableBalance: number;
-  public stakingEnabled: boolean;
-  public stakingActive: boolean;
-  public stakingWeight: number;
-  public awaitingMaturity: number = 0;
-  public netStakingWeight: number;
-  public expectedTime: number;
-  public dateTime: string;
-  public isStarting: boolean;
-  public isStopping: boolean;
-
   public ngOnInit() {
-    this.wallet = this.nodeService.wallet(this.globalService.currentWallet);
     this.buildStakingForm();
+    this.wallet = this.nodeService.wallet(this.globalService.currentWallet);
+    this.stakingInfo = this.stakingService.stakingInfo();
   }
 
   private buildStakingForm(): void {
@@ -48,6 +40,8 @@ export class StakingComponent implements OnInit {
       name: this.globalService.getWalletName(),
       password: this.stakingForm.get('walletPassword').value
     };
+
+    this.stakingForm.patchValue({walletPassword: ""});
 
     this.stakingService.startStaking(walletData);
   }

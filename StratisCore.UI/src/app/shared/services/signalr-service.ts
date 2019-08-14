@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Observable } from "rxjs";
 import "@aspnet/signalr";
 import * as signalR from '@aspnet/signalr';
 import { HttpClient } from "@angular/common/http";
@@ -10,7 +9,7 @@ export interface SignalRConnectionInfo {
   signalRPort: string;
 }
 
-export interface MessageHandler {
+export interface SignalRMessageHandler {
   messageType: string;
   onEventMessageDelegate: (message: any) => void
 }
@@ -20,27 +19,27 @@ export interface MessageHandler {
 })
 export class SignalRService implements ISignalRService {
   private connection: signalR.HubConnection;
-  private onMessageReceivedHandlers: Array<MessageHandler> = [];
+  private onMessageReceivedHandlers: Array<SignalRMessageHandler> = [];
 
   constructor(private http: HttpClient) {
     // TODO: consider multiple Hub support
     this.connect("events");
   }
 
-  public registerOnMessageEventHandler(messageType: string, onEventMessageDelegate: (message: any) => void) {
+  public registerOnMessageEventHandler(messageType: string, onEventMessageReceivedHandler: (message: any) => void) {
     this.onMessageReceivedHandlers.push({
       messageType: messageType,
-      onEventMessageDelegate: onEventMessageDelegate
+      onEventMessageDelegate: onEventMessageReceivedHandler
     });
   }
 
   public onConnectionFailed: EventEmitter<Error> = new EventEmitter<Error>();
 
   public connect(hubName: string): void {
-    this.getConnectionInfo().subscribe((con: SignalRConnectionInfo) => {
+    this.getConnectionInfo().then((con: SignalRConnectionInfo) => {
 
       if (this.connection && this.connection.state && this.connection.state != 4) {
-        console.log('signlar connection abort');
+        console.log('signalR connection abort');
         this.connection.stop();
       }
 
@@ -49,7 +48,7 @@ export class SignalRService implements ISignalRService {
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-      this.connection.on('receiveEvent', this.executeMessageDelegates);
+      this.connection.on('receiveEvent', this.executeMessageReceivedHandlers);
 
       this.connection.onclose((error: Error) => {
         this.onConnectionFailed.emit(error);
@@ -66,7 +65,7 @@ export class SignalRService implements ISignalRService {
     });
   }
 
-  private executeMessageDelegates(message: any): void {
+  private executeMessageReceivedHandlers(message: any): void {
     this.onMessageReceivedHandlers.forEach(handler => {
       if (handler.messageType === message.messageType) {
         handler.onEventMessageDelegate(message);
@@ -74,7 +73,8 @@ export class SignalRService implements ISignalRService {
     });
   }
 
-  public getConnectionInfo(): Observable<SignalRConnectionInfo> {
-    return this.http.post<SignalRConnectionInfo>("getConnectionInfo", {});
+  public getConnectionInfo(): Promise<SignalRConnectionInfo> {
+    return this.http.get<SignalRConnectionInfo>("getConnectionInfo")
+      .toPromise();
   }
 }

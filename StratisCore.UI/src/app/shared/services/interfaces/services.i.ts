@@ -129,21 +129,6 @@ export interface IApiService {
   rescanWallet(data: WalletRescan): Observable<any>;
 
   /**
-   * Start staking
-   */
-  startStaking(data: any): Observable<any>;
-
-  /**
-   * Get staking info
-   */
-  getStakingInfo(): Observable<any>;
-
-  /**
-   * Stop staking
-   */
-  stopStaking(): Observable<any>;
-
-  /**
    * Send shutdown signal to the daemon
    */
   shutdownNode(): Observable<any>;
@@ -168,6 +153,5 @@ export interface IApiService {
 
   localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult>;
 
-  //handleHttpError(error: HttpErrorResponse, silent?: boolean): Observable<never>;
-}
+  }
 

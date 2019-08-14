@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { GlobalService } from "@shared/services/global.service";
-import { ModalService } from "@shared/services/modal.service";
-import { Router } from "@angular/router";
+import { ErrorService } from "@shared/services/error-service";
 
 @Injectable({
   providedIn: "root"
@@ -14,8 +13,8 @@ export class RestApi {
   constructor(
     globalService: GlobalService,
     private httpClient: HttpClient,
-    private modalService: ModalService,
-    private router: Router) {
+    private errorService: ErrorService
+  ) {
     this.API_URL = `http://${globalService.getDaemonIP()}:${globalService.getApiPort()}/api`;
   }
 
@@ -64,20 +63,7 @@ export class RestApi {
   }
 
   protected handleHttpError(error: HttpErrorResponse, silent?: boolean) {
-    console.log(error);
-    if (error.status === 0) {
-      if (!silent) {
-        this.modalService.openModal(null, null);
-        this.router.navigate(['app']);
-      }
-    } else if (error.status >= 400) {
-      if (!error.error.errors[0].message) {
-        console.log(error);
-      } else {
-        this.modalService.openModal(null, error.error.errors[0].message);
-      }
-    }
-    return throwError(error);
+    return this.errorService.handleHttpError(error, silent);
   }
 }
 

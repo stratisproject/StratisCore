@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { interval, Observable } from 'rxjs';
 import { catchError, startWith, switchMap } from 'rxjs/operators';
 import { GlobalService } from './global.service';
-import { ModalService } from './modal.service';
 import { AddressLabel } from '../models/address-label';
 import { WalletCreation } from '../models/wallet-creation';
 import { WalletRecovery } from '../models/wallet-recovery';
@@ -20,7 +18,8 @@ import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 import { RestApi } from "@shared/services/rest-api";
 import { IApiService } from "@shared/services/interfaces/services.i";
-import { Balances, GeneralInfo, StakingInfo, WalletFileData, WalletHistory } from "@shared/services/interfaces/api.i";
+import { Balances, GeneralInfo, WalletFileData, WalletHistory } from "@shared/services/interfaces/api.i";
+import { ErrorService } from "@shared/services/error-service";
 
 @Injectable({
   providedIn: "root"
@@ -28,8 +27,11 @@ import { Balances, GeneralInfo, StakingInfo, WalletFileData, WalletHistory } fro
 export class ApiService extends RestApi implements IApiService {
   private pollingInterval = interval(5000);
 
-  constructor(http: HttpClient, private globalService: GlobalService, modalService: ModalService, router: Router) {
-    super(globalService, http, modalService, router);
+  constructor(
+    http: HttpClient, 
+    private globalService: GlobalService,
+    errorService: ErrorService) {
+    super(globalService, http, errorService);
   };
 
   public getNodeStatus(silent?: boolean): Observable<NodeStatus> {
@@ -307,34 +309,6 @@ export class ApiService extends RestApi implements IApiService {
     );
   }
 
-  /**
-   * Start staking
-   */
-  public startStaking(data: any): Observable<any> {
-    return this.post('staking/startstaking', data).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Get staking info
-   */
-  public getStakingInfo(): Observable<StakingInfo> {
-    return this.pollingInterval.pipe(
-      startWith(0),
-      switchMap(() => this.get<StakingInfo>('staking/getstakinginfo')),
-      catchError(err => this.handleHttpError(err))
-    )
-  }
-
-  /**
-   * Stop staking
-   */
-  public stopStaking(): Observable<any> {
-    return this.post('staking/stopstaking', 'true').pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
 
   /**
    * Send shutdown signal to the daemon

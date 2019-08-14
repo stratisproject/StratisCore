@@ -76,8 +76,8 @@ export class NodeService {
       this.walletHistorySubjects[walletInfo.walletName] = new BehaviorSubject<TransactionsHistoryItem[]>(null);
 
       // Get initial Wallet History
-      this.apiService.getWalletHistory(walletInfo).toPromise().then(history => {
-          this.walletHistorySubjects[walletInfo.walletName].next(history[walletInfo.account]);
+      this.apiService.getWalletHistory(walletInfo).toPromise().then(response => {
+          this.walletHistorySubjects[walletInfo.walletName].next(response.history[walletInfo.account].transactionsHistory);
       });
     }
 
