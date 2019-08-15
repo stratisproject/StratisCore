@@ -90,7 +90,7 @@ export class SignalRService extends RestApi implements ISignalRService {
     });
   }
 
-  public getConnectionInfo(): Promise<SignalRConnectionInfo> {
+  private getConnectionInfo(): Promise<SignalRConnectionInfo> {
     return this.get<SignalRConnectionInfo>("signalR/getConnectionInfo")
       .toPromise();
   }

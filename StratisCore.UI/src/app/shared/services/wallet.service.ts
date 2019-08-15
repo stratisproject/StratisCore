@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { SignalRService } from "@shared/services/signalr-service";
 import { WalletInfo } from "@shared/models/wallet-info";
 import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from "@shared/services/interfaces/api.i";
-import { SignalREvent, SignalREvents } from "@shared/services/interfaces/signalr-events.i";
+import { BlockConnectedSignalREvent, SignalREvent, SignalREvents } from "@shared/services/interfaces/signalr-events.i";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { RestApi } from "@shared/services/rest-api";
@@ -30,18 +30,20 @@ export class WalletService extends RestApi {
       this.currentWallet = wallet;
     });
 
+    // When we get a TransactionReceived event get the WalletBalance and History using the RestApi
     signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.TransactionReceived,
       (message) => {
         this.transactionReceivedSubject.next(message);
+        this.refreshWallet();
+      });
 
+    // If we have unconfirmed amount refresh the wallet when a new block is connected.
+    signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
+      (message) => {
         const walletSubject = this.getWalletSubject(this.currentWallet);
-        const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
-
-        this.getWalletBalance(this.currentWallet).toPromise().then(
-          wallet => walletSubject.next(new WalletBalance(wallet.balances[this.currentWallet.account])));
-
-        this.getWalletHistory(this.currentWallet).toPromise().then(
-          response => walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory));
+        if (walletSubject.value.amountUnconfirmed > 0) {
+          this.refreshWallet();
+        }
       });
   }
 
@@ -106,5 +108,17 @@ export class WalletService extends RestApi {
     }
 
     return params;
+  }
+
+  private refreshWallet() : void
+  {
+    const walletSubject = this.getWalletSubject(this.currentWallet);
+    const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
+
+    this.getWalletBalance(this.currentWallet).toPromise().then(
+      wallet => walletSubject.next(new WalletBalance(wallet.balances[this.currentWallet.account])));
+
+    this.getWalletHistory(this.currentWallet).toPromise().then(
+      response => walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory));
   }
 }

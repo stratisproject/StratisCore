@@ -68,11 +68,6 @@ export interface IApiService {
   getGeneralInfoOnce(data: WalletInfo): Observable<any>;
 
   /**
-   * Get general wallet info from the API.
-   */
-  getGeneralInfo(data: WalletInfo): Observable<any>;
-
-  /**
    * Get the maximum sendable amount for a given fee from the API
    */
   getMaximumBalance(data): Observable<any>;

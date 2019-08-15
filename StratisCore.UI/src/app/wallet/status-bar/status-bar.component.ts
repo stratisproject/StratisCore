@@ -6,6 +6,7 @@ import { WalletInfo } from '@shared/models/wallet-info';
 import { StakingService } from "@shared/services/staking-service";
 import { tap } from "rxjs/operators";
 import { GeneralInfo } from "@shared/services/interfaces/api.i";
+import { NodeService } from "@shared/services/node-service";
 
 @Component({
   selector: 'status-bar',
@@ -13,21 +14,19 @@ import { GeneralInfo } from "@shared/services/interfaces/api.i";
   styleUrls: ['./status-bar.component.css']
 })
 export class StatusBarComponent implements OnInit {
-
   public generalInfo: Observable<GeneralInfo>;
   public percentSynced: string;
-
   public toolTip: string = '';
   public connectedNodesTooltip: string = '';
 
   constructor(
-    private apiService: ApiService,
+    private nodeService: NodeService,
     private stakingService: StakingService,
     private globalService: GlobalService) {
   }
 
   public ngOnInit(): void {
-    this.generalInfo = this.apiService.getGeneralInfo(new WalletInfo(this.globalService.getWalletName()))
+    this.generalInfo = this.nodeService.generalInfo()
       .pipe(tap(
         response => {
           const processedText = `Processed ${response.lastBlockSyncedHeight || '0'} out of ${response.chainTip} blocks.`;

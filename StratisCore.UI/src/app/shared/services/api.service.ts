@@ -18,7 +18,7 @@ import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 import { RestApi } from "@shared/services/rest-api";
 import { IApiService } from "@shared/services/interfaces/services.i";
-import { GeneralInfo, WalletFileData, WalletHistory } from "@shared/services/interfaces/api.i";
+import { WalletFileData, WalletHistory } from "@shared/services/interfaces/api.i";
 import { ErrorService } from "@shared/services/error-service";
 
 @Injectable({
@@ -142,18 +142,6 @@ export class ApiService extends RestApi implements IApiService {
     return this.get('wallet/general-info', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
-  }
-
-  /**
-   * Get general wallet info from the API.
-   */
-  public getGeneralInfo(data: WalletInfo): Observable<GeneralInfo> {
-    let params = new HttpParams().set('Name', data.walletName);
-    return this.pollingInterval.pipe(
-      startWith(0),
-      switchMap(() => this.get<GeneralInfo>('wallet/general-info', params)),
-      catchError(err => this.handleHttpError(err))
-    )
   }
 
   /**

@@ -1,19 +1,10 @@
 export interface SignalREvent {
-  type: number;
-  target: string;
-  arguments: any[];
+  nodeEventType: string;
 }
 
-export interface BlockConnectedSignalREvent extends SignalREvent {
-  type: number;
-  target: string;
-  arguments: BlockConnectedArgument[];
-}
-
-export interface BlockConnectedArgument {
+export interface BlockConnectedSignalREvent extends SignalREvent{
   hash: string;
   height: number;
-  nodeEventType: string;
 }
 
 export enum SignalREvents {
