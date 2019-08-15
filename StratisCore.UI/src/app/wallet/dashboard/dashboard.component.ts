@@ -5,7 +5,7 @@ import { GlobalService } from '@shared/services/global.service';
 import { SendComponent } from '../send/send.component';
 import { ReceiveComponent } from '../receive/receive.component';
 import { Observable } from "rxjs";
-import { NodeService } from "@shared/services/node.service";
+import { WalletService } from "@shared/services/wallet.service";
 import { WalletBalance } from "@shared/services/interfaces/api.i";
 
 @Component({
@@ -19,14 +19,14 @@ export class DashboardComponent implements OnInit {
   public wallet : Observable<WalletBalance>;
 
   constructor(
-    private nodeService: NodeService,
+    private walletService: WalletService,
     private apiService: ApiService,
     public globalService: GlobalService,
     private modalService: NgbModal) {
   }
 
   public ngOnInit() {
-    this.wallet = this.nodeService.wallet(this.globalService.currentWallet);
+    this.wallet = this.walletService.wallet();
   };
 
   public openSendDialog() {

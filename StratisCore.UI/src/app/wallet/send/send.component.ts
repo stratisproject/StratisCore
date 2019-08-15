@@ -19,6 +19,7 @@ import { SendConfirmationComponent } from './send-confirmation/send-confirmation
 
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { WalletService } from "@shared/services/wallet.service";
 
 @Component({
   selector: 'send-component',
@@ -29,7 +30,14 @@ import { debounceTime } from 'rxjs/operators';
 export class SendComponent implements OnInit, OnDestroy {
   @Input() address: string;
 
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, public activeModal: NgbActiveModal, private fb: FormBuilder) {
+  constructor(
+    private apiService: ApiService,
+    private walletService : WalletService,
+    private globalService: GlobalService,
+    private modalService: NgbModal,
+    private genericModalService: ModalService,
+    public activeModal: NgbActiveModal,
+    private fb: FormBuilder) {
     this.buildSendForm();
     this.buildSendToSidechainForm();
   }
@@ -359,14 +367,11 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   private getWalletBalance() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName());
-    this.walletBalanceSubscription = this.apiService.getWalletBalance(walletInfo)
+    this.walletBalanceSubscription = this.walletService.wallet()
       .subscribe(
         response => {
-          let balanceResponse = response;
-          //TO DO - add account feature instead of using first entry in array
-          this.totalBalance = balanceResponse.balances[0].amountConfirmed + balanceResponse.balances[0].amountUnconfirmed;
-          this.spendableBalance = balanceResponse.balances[0].spendableAmount;
+          this.totalBalance = response.amountConfirmed + response.amountUnconfirmed;
+          this.spendableBalance = response.spendableAmount;
         },
         error => {
           if (error.status === 0) {

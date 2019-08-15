@@ -6,7 +6,7 @@ import { GlobalService } from "@shared/services/global.service";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { NodeService } from "@shared/services/node.service";
+import { WalletService } from "@shared/services/wallet.service";
 import { TransactionsHistoryItem } from "@shared/services/interfaces/api.i";
 
 @Component({
@@ -19,13 +19,13 @@ export class TransactionsComponent implements OnInit {
 
   public constructor(
     private globalService: GlobalService,
-    private nodeService: NodeService,
+    private walletService: WalletService,
     private router: Router,
     private modalService: NgbModal) {
   }
 
   public ngOnInit(): void {
-    this.transactions = this.nodeService.walletHistory(this.globalService.currentWallet)
+    this.transactions = this.walletService.walletHistory()
       .pipe(map((history => {
         return (null != history && history.length > 0) ? this.mapToTransactionInfo(history) : null;
       })));

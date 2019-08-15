@@ -16,7 +16,7 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
 import { SecondsToStringPipe } from "@shared/pipes/seconds-to-string.pipe";
 import { ApiService } from "@shared/services/api.service";
 import { SignalRService } from "@shared/services/signalr-service";
-import { NodeService } from "@shared/services/node.service";
+import { WalletService } from "@shared/services/wallet.service";
 import { StakingService } from "@shared/services/staking-service";
 
 @NgModule({
@@ -32,7 +32,7 @@ import { StakingService } from "@shared/services/staking-service";
     ConfirmationModalComponent],
   providers : [
     ApiService,
-    NodeService,
+    WalletService,
     SignalRService,
     StakingService
   ],

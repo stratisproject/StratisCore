@@ -18,7 +18,7 @@ import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 import { RestApi } from "@shared/services/rest-api";
 import { IApiService } from "@shared/services/interfaces/services.i";
-import { Balances, GeneralInfo, WalletFileData, WalletHistory } from "@shared/services/interfaces/api.i";
+import { GeneralInfo, WalletFileData, WalletHistory } from "@shared/services/interfaces/api.i";
 import { ErrorService } from "@shared/services/error-service";
 
 @Injectable({
@@ -28,7 +28,7 @@ export class ApiService extends RestApi implements IApiService {
   private pollingInterval = interval(5000);
 
   constructor(
-    http: HttpClient, 
+    http: HttpClient,
     private globalService: GlobalService,
     errorService: ErrorService) {
     super(globalService, http, errorService);
@@ -157,23 +157,6 @@ export class ApiService extends RestApi implements IApiService {
   }
 
   /**
-   * Get wallet balance info from the API.
-   */
-  public getWalletBalancePolling(data: WalletInfo): Observable<Balances> {
-    return this.pollingInterval.pipe(
-      startWith(0),
-      switchMap(() => this.get<Balances>('wallet/balance', this.getWalletParams(data))),
-      catchError(err => this.handleHttpError(err))
-    )
-  }
-
-  public getWalletBalance(data: WalletInfo): Observable<Balances> {
-    return this.get<Balances>('wallet/balance', this.getWalletParams(data)).pipe(
-      catchError(err => this.handleHttpError(err))
-    )
-  }
-
-  /**
    * Get the maximum sendable amount for a given fee from the API
    */
   public getMaximumBalance(data: WalletInfoRequest): Observable<any> {
@@ -184,22 +167,6 @@ export class ApiService extends RestApi implements IApiService {
       })).pipe(
       catchError(err => this.handleHttpError(err))
     );
-  }
-
-  /**
-   * Get a wallets transaction history info from the API.
-   */
-  public getWalletHistoryPolling(data: WalletInfo): Observable<WalletHistory> {
-    return this.pollingInterval.pipe(
-      startWith(0),
-      switchMap(() => this.get<WalletHistory>('wallet/history', this.getWalletParams(data))),
-      catchError(err => this.handleHttpError(err))
-    )
-  }
-
-  public getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
-    return this.get<WalletHistory>('wallet/history', this.getWalletParams(data)).pipe(
-      catchError(err => this.handleHttpError(err)))
   }
 
   /**

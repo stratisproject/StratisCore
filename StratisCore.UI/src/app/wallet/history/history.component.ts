@@ -12,6 +12,7 @@ import { TransactionInfo } from '@shared/models/transaction-info';
 import { Subscription } from 'rxjs';
 
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
+import { WalletService } from "@shared/services/wallet.service";
 
 @Component({
   selector: 'history-component',
@@ -20,7 +21,8 @@ import { TransactionDetailsComponent } from '../transaction-details/transaction-
 })
 
 export class HistoryComponent {
-  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router) {}
+  constructor(private walletService: WalletService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router) {
+  }
 
   public transactions: TransactionInfo[];
   public coinUnit: string;
@@ -42,21 +44,20 @@ export class HistoryComponent {
   }
 
   private openTransactionDetailDialog(transaction: any) {
-    const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: "static" });
+    const modalRef = this.modalService.open(TransactionDetailsComponent, {backdrop: "static"});
     modalRef.componentInstance.transaction = transaction;
   }
 
-    // todo: add history in seperate service to make it reusable
+  // todo: add history in seperate service to make it reusable
   private getHistory() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName())
+    // let walletInfo = new WalletInfo(this.globalService.getWalletName())
     let historyResponse;
-    this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
+    this.walletHistorySubscription = this.walletService.walletHistory()
       .subscribe(
         response => {
-          //TO DO - add account feature instead of using first entry in array
-          if (!!response.history && response.history[0].transactionsHistory.length > 0) {
-            historyResponse = response.history[0].transactionsHistory;
-            this.getTransactionInfo(historyResponse);
+
+          if (response.length > 0) {
+            this.getTransactionInfo(response);
           }
         },
         error => {
@@ -102,7 +103,7 @@ export class HistoryComponent {
   }
 
   private cancelSubscriptions() {
-    if(this.walletHistorySubscription) {
+    if (this.walletHistorySubscription) {
       this.walletHistorySubscription.unsubscribe();
     }
   };

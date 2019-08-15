@@ -1,6 +1,7 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 import { ElectronService } from 'ngx-electron';
 import { WalletInfo } from "@shared/models/wallet-info";
+import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,8 @@ export class GlobalService {
 
   public coinUnit: string;
 
-  public currentWallet : WalletInfo;
+  public currentWallet: Observable<WalletInfo> = new BehaviorSubject<WalletInfo>(null);
+
 
   public getApplicationVersion() {
     return this.applicationVersion;
@@ -101,7 +103,7 @@ export class GlobalService {
 
   public setWalletName(currentWalletName: string) {
     this.currentWalletName = currentWalletName;
-    this.currentWallet = new WalletInfo(currentWalletName);
+    (<BehaviorSubject<WalletInfo>>this.currentWallet).next(new WalletInfo(currentWalletName));
   }
 
   public getCoinUnit() {

@@ -73,19 +73,9 @@ export interface IApiService {
   getGeneralInfo(data: WalletInfo): Observable<any>;
 
   /**
-   * Get wallet balance info from the API.
-   */
-  getWalletBalance(data: WalletInfo): Observable<any>;
-
-  /**
    * Get the maximum sendable amount for a given fee from the API
    */
   getMaximumBalance(data): Observable<any>;
-
-  /**
-   * Get a wallets transaction history info from the API.
-   */
-  getWalletHistory(data: WalletInfo): Observable<any>;
 
   /**
    * Get an unused receive address for a certain wallet from the API.

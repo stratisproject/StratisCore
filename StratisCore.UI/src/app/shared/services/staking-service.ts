@@ -12,7 +12,6 @@ import { ErrorService } from "@shared/services/error-service";
 })
 export class StakingService extends RestApi {
   private stakingInfoUpdatedSubject = new BehaviorSubject<StakingInfo>(null);
-
   public isStopping: boolean;
   public isStarting: boolean;
   public stakingEnabled: boolean;
