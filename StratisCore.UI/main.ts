@@ -15,6 +15,10 @@ let testnet;
 let sidechain;
 let nodaemon;
 const args = process.argv.slice(1);
+
+// Enable Signalr feature in daemon
+args.push("-enableSignalR");
+
 serve = args.some(val => val === '--serve' || val === '-serve');
 testnet = args.some(val => val === '--testnet' || val === '-testnet');
 sidechain = args.some(val => val === '--sidechain' || val === '-sidechain');
@@ -250,7 +254,7 @@ function createTray() {
       mainWindow.show();
     }
 
-    if (!mainWindow.isFocused()) {
+    if (!mainWindow.isFocused()) {\
       mainWindow.focus();
     }
   });

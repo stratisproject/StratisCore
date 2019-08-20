@@ -6,6 +6,8 @@ import { ISignalRService } from "@shared/services/interfaces/services.i";
 import { GlobalService } from "@shared/services/global.service";
 import { RestApi } from "@shared/services/rest-api";
 import { ErrorService } from "@shared/services/error-service";
+import { interval, Observable, Subscription } from "rxjs";
+import { tap } from "rxjs/operators";
 
 export interface SignalRConnectionInfo {
   signalRUri: string;
@@ -23,14 +25,18 @@ export interface SignalRMessageHandler {
 export class SignalRService extends RestApi implements ISignalRService {
   private connection: signalR.HubConnection;
   private onMessageReceivedHandlers: Array<SignalRMessageHandler> = [];
+  private connecting: boolean = false;
+  private connectSubscription: Subscription;
+  private connectInterval: Observable<number> = interval(10000).pipe(tap(() => {
+    // TODO: consider multiple Hub support
+    this.connect("events");
+  }));
 
   constructor(http: HttpClient,
               globalService: GlobalService,
               errorService: ErrorService) {
     super(globalService, http, errorService);
-
-    // TODO: consider multiple Hub support
-    this.connect("events");
+    this.connectToSignalR();
   }
 
   public registerOnMessageEventHandler<TMessage>(messageType: string, onEventMessageReceivedHandler: (message: TMessage) => void): void {
@@ -67,13 +73,14 @@ export class SignalRService extends RestApi implements ISignalRService {
       this.connection.onclose((error: Error) => {
         this.onConnectionFailed.emit(error);
         console.log(`disconnected ${error.message}`);
+        this.connectToSignalR();
       });
 
       console.log("connecting...");
 
       this.connection.start()
         .then(() => {
-          console.log("Connected!");
+          this.markAsConnected();
         })
         .catch(console.error);
     });
@@ -89,6 +96,23 @@ export class SignalRService extends RestApi implements ISignalRService {
       }
     });
   }
+
+  private markAsConnected(): void {
+    console.log("Connected!");
+    if (this.connectSubscription) {
+      this.connectSubscription.unsubscribe();
+      this.connectSubscription = null;
+      this.connecting = false;
+    }
+  }
+
+  private connectToSignalR(): void {
+    if (!this.connecting) {
+      this.connecting = true;
+      this.connectSubscription = this.connectInterval.subscribe();
+    }
+  }
+
 
   private getConnectionInfo(): Promise<SignalRConnectionInfo> {
     return this.get<SignalRConnectionInfo>("signalR/getConnectionInfo")
