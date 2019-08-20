@@ -70,6 +70,7 @@ export interface StakingInfo {
 }
 
 export interface GeneralInfo {
+  walletName : string;
   walletFilePath: string;
   network: string;
   creationTime: string;

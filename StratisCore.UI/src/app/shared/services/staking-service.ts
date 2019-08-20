@@ -1,11 +1,16 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, interval, Observable, Subject, Subscription } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { StakingInfo } from "@shared/services/interfaces/api.i";
-import { catchError, startWith, switchMap } from "rxjs/operators";
+import { catchError } from "rxjs/operators";
 import { RestApi } from "@shared/services/rest-api";
 import { GlobalService } from "@shared/services/global.service";
 import { HttpClient } from "@angular/common/http";
 import { ErrorService } from "@shared/services/error-service";
+import { SignalRService } from "@shared/services/signalr-service";
+import {
+  SignalREvents,
+  StakingInfoSignalREvent
+} from "@shared/services/interfaces/signalr-events.i";
 
 @Injectable({
   providedIn: "root"
@@ -16,14 +21,16 @@ export class StakingService extends RestApi {
   public isStarting: boolean;
   public stakingEnabled: boolean;
 
-  private stakingSubscription: Subscription;
-  private pollingInterval = interval(5000);
-
   constructor(
     http: HttpClient,
     globalService: GlobalService,
+    signalRService: SignalRService,
     errorService: ErrorService) {
-    super(globalService, http, errorService)
+    super(globalService, http, errorService);
+    signalRService.registerOnMessageEventHandler<StakingInfoSignalREvent>(
+      SignalREvents.StakingInfo, (message) => {
+        this.stakingInfoUpdatedSubject.next(message)
+      });
   }
 
   public startStaking(walletData: any): void {
@@ -35,21 +42,12 @@ export class StakingService extends RestApi {
       () => {
         this.stakingEnabled = true;
         this.isStarting = false;
-        this.stakingSubscription = this.getStakingHotObservable()
-          .subscribe(
-            response => {
-              this.stakingInfoUpdatedSubject.next(response);
-            });
-
         return true;
       },
       error => {
         console.log(error);
         this.stakingEnabled = false;
         this.isStarting = false;
-        if (this.stakingSubscription) {
-          this.stakingSubscription.unsubscribe();
-        }
         return false;
       });
   }
@@ -87,14 +85,5 @@ export class StakingService extends RestApi {
     return this.post('staking/stopstaking', 'true').pipe(
       catchError(err => this.handleHttpError(err))
     );
-  }
-
-  // TODO : Remove when SignalR Event exists;
-  public getStakingHotObservable(): Observable<StakingInfo> {
-    return this.pollingInterval.pipe(
-      startWith(0),
-      switchMap(() => this.get<StakingInfo>('staking/getstakinginfo')),
-      catchError(err => this.handleHttpError(err))
-    )
   }
 }

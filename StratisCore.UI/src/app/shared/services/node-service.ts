@@ -1,11 +1,15 @@
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { SignalRService } from "@shared/services/signalr-service";
 import { WalletInfo } from "@shared/models/wallet-info";
 import {
   GeneralInfo,
 } from "@shared/services/interfaces/api.i";
-import { BlockConnectedSignalREvent, SignalREvents } from "@shared/services/interfaces/signalr-events.i";
+import {
+  BlockConnectedSignalREvent,
+  SignalREvents,
+  WalletInfoSignalREvent
+} from "@shared/services/interfaces/signalr-events.i";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { RestApi } from "@shared/services/rest-api";
@@ -17,6 +21,7 @@ import { ErrorService } from "@shared/services/error-service";
 })
 export class NodeService extends RestApi {
   private generalInfoSubject: BehaviorSubject<GeneralInfo> = new BehaviorSubject<GeneralInfo>({
+    walletName: "",
     walletFilePath: "",
     network: "",
     creationTime: "",
@@ -41,6 +46,13 @@ export class NodeService extends RestApi {
       this.updateGeneralInfoForCurrentWallet();
     });
 
+    signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(
+      SignalREvents.WalletGeneralInfo, (message) => {
+        if (message.walletName === this.currentWallet.walletName) {
+          this.generalInfoSubject.next(message)
+        }
+      });
+
     // Update the GeneralInfo Subject when a new block is connected
     // This feels a little weak as we could un-sync? + Other properties we don't update
     // So maybe we should just get all the data once in a while?
@@ -55,13 +67,9 @@ export class NodeService extends RestApi {
               lastBlockSyncedHeight: message.height
             });
           }
-        } else {
-          // Make Api calls while we are in IBD mode
-          this.updateGeneralInfoForCurrentWallet();
         }
       })
   }
-
 
   public generalInfo(): Observable<GeneralInfo> {
     return this.generalInfoSubject.asObservable();
