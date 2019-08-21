@@ -9,6 +9,7 @@ import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { WalletRescan } from '@shared/models/wallet-rescan';
+import { NodeService } from "@shared/services/node-service";
 
 @Component({
   selector: 'app-resync',
@@ -17,7 +18,14 @@ import { WalletRescan } from '@shared/models/wallet-rescan';
 })
 export class ResyncComponent implements OnInit, OnDestroy {
 
-  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private fb: FormBuilder) { }
+  constructor(
+    private globalService: GlobalService,
+    private apiService: ApiService,
+    private nodeService: NodeService,
+    private genericModalService: ModalService,
+    private fb: FormBuilder) {
+  }
+
   private walletName: string;
   private lastBlockSyncedHeight: number;
   private chainTip: number;
@@ -85,7 +93,8 @@ export class ResyncComponent implements OnInit, OnDestroy {
       rescanDate,
       false,
       true
-    )
+    );
+
     this.apiService
       .rescanWallet(rescanData)
       .subscribe(
@@ -96,8 +105,7 @@ export class ResyncComponent implements OnInit, OnDestroy {
   }
 
   private getGeneralWalletInfo() {
-    let walletInfo = new WalletInfo(this.walletName);
-    this.generalWalletInfoSubscription = this.apiService.getGeneralInfo(walletInfo)
+    this.generalWalletInfoSubscription = this.nodeService.generalInfo()
       .subscribe(
         response =>  {
           let generalWalletInfoResponse = response;

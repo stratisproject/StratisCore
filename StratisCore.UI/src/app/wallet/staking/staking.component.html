@@ -1,0 +1,53 @@
+<ng-container *ngIf="(wallet | async) as _wallet">
+  <div *ngIf="_wallet.hasBalance && !globalService.getSidechainEnabled()">
+    <div class="card" *ngIf="!stakingService.stakingEnabled && !stakingService.isStarting">
+      <div class="card-header">Staking</div>
+      <div class="card-body">
+        <div class="alert alert-info text-center" role="alert">Unlock your wallet to start staking</div>
+        <form class="form-inline mb-3" [formGroup]="stakingForm">
+          <div class="form-group">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword"
+                   placeholder="Password">
+            <button type="button" id="flipcard" class="btn btn-outline-primary ml-2"
+                    [disabled]="stakingService.isStarting || !stakingForm.valid" (click)="startStaking()">Unlock
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="staking" class="card" *ngIf="stakingService.stakingEnabled || stakingService.isStarting">
+      <div class="card-header">
+        <span class="d-inline-block col-10 row">Staking</span>
+        <!-- <div class="toggle d-inline-block" id="switch">
+          <div class='toggle-text-off'>OFF</div>
+          <div class='glow-comp'></div>
+          <div class='toggle-button'></div>
+          <div class='toggle-text-on'>ON</div>
+        </div> -->
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-3">
+          <li *ngIf="stakingService.isStarting">Waiting for staking to start...</li>
+          <ng-container *ngIf="!stakingService.isStarting && (stakingInfo | async) as _stakingInfo">
+            <li>Staking weight:
+              <strong>{{ _stakingInfo.netStakeWeight | coinNotation | number: '1.0-0' }} {{ globalService.coinUnit }}</strong>
+            </li>
+            <li>Coins awaiting maturity:
+              <strong>{{ _wallet.awaitingMaturityIfStaking | coinNotation | number: '1.0-0' }} {{ globalService.coinUnit }}</strong>
+            </li>
+            <li>Network weight:
+              <strong>{{ _stakingInfo.netStakeWeight | coinNotation | number: '1.0-0' }} {{ globalService.coinUnit }}</strong>
+            </li>
+            <li class="mt-2">Expected reward time is:</li>
+            <li><strong>{{ _stakingInfo.expectedTime | secondsToString }}</strong></li>
+          </ng-container>
+        </ul>
+        <button type="button" class="btn btn-outline-light mb-3" [disabled]="stakingService.isStopping"
+                (click)="stopStaking()">
+          Stop Staking
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>
