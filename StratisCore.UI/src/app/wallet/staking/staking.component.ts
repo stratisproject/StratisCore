@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalService } from "@shared/services/global.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { StakingService } from "@shared/services/staking-service";
-import { Observable } from "rxjs";
-import { StakingInfo, WalletBalance } from "@shared/services/interfaces/api.i";
-import { WalletService } from "@shared/services/wallet.service";
+import { GlobalService } from '@shared/services/global.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { StakingService } from '@shared/services/staking-service';
+import { Observable } from 'rxjs';
+import { StakingInfo, WalletBalance } from '@shared/services/interfaces/api.i';
+import { WalletService } from '@shared/services/wallet.service';
 
 @Component({
   selector: 'app-staking',
@@ -31,7 +31,7 @@ export class StakingComponent implements OnInit {
 
   private buildStakingForm(): void {
     this.stakingForm = this.fb.group({
-      "walletPassword": ["", Validators.required]
+      'walletPassword': ['', Validators.required]
     });
   }
 
@@ -41,7 +41,7 @@ export class StakingComponent implements OnInit {
       password: this.stakingForm.get('walletPassword').value
     };
 
-    this.stakingForm.patchValue({walletPassword: ""});
+    this.stakingForm.patchValue({walletPassword: ''});
 
     this.stakingService.startStaking(walletData);
   }

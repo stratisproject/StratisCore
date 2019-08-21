@@ -1,19 +1,20 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { StakingInfo } from "@shared/services/interfaces/api.i";
-import { catchError } from "rxjs/operators";
-import { RestApi } from "@shared/services/rest-api";
-import { GlobalService } from "@shared/services/global.service";
-import { HttpClient } from "@angular/common/http";
-import { ErrorService } from "@shared/services/error-service";
-import { SignalRService } from "@shared/services/signalr-service";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { StakingInfo } from '@shared/services/interfaces/api.i';
+import { catchError } from 'rxjs/operators';
+import { RestApi } from '@shared/services/rest-api';
+import { GlobalService } from '@shared/services/global.service';
+import { HttpClient } from '@angular/common/http';
+import { ErrorService } from '@shared/services/error-service';
+import { SignalRService } from '@shared/services/signalr-service';
 import {
   SignalREvents,
   StakingInfoSignalREvent
-} from "@shared/services/interfaces/signalr-events.i";
+} from '@shared/services/interfaces/signalr-events.i';
+import { Log } from '../../wallet/tokens/services/logger.service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class StakingService extends RestApi {
   private stakingInfoUpdatedSubject = new BehaviorSubject<StakingInfo>(null);
@@ -29,7 +30,7 @@ export class StakingService extends RestApi {
     super(globalService, http, errorService);
     signalRService.registerOnMessageEventHandler<StakingInfoSignalREvent>(
       SignalREvents.StakingInfo, (message) => {
-        this.stakingInfoUpdatedSubject.next(message)
+        this.stakingInfoUpdatedSubject.next(message);
       });
   }
 
@@ -45,7 +46,7 @@ export class StakingService extends RestApi {
         return true;
       },
       error => {
-        console.log(error);
+        Log.error(error);
         this.stakingEnabled = false;
         this.isStarting = false;
         return false;
@@ -60,7 +61,7 @@ export class StakingService extends RestApi {
         () => {
           this.stakingEnabled = false;
           this.isStopping = false;
-          return true
+          return true;
         }, () => {
           this.stakingEnabled = false;
           this.isStopping = false;
@@ -76,7 +77,7 @@ export class StakingService extends RestApi {
     return this.post('staking/startstaking', data).pipe(
       catchError(err => {
         this.stakingEnabled = false;
-        return this.handleHttpError(err)
+        return this.handleHttpError(err);
       })
     );
   }

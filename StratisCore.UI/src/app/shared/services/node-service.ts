@@ -1,30 +1,30 @@
-import { BehaviorSubject, Observable } from "rxjs";
-import { Injectable } from "@angular/core";
-import { SignalRService } from "@shared/services/signalr-service";
-import { WalletInfo } from "@shared/models/wallet-info";
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { SignalRService } from '@shared/services/signalr-service';
+import { WalletInfo } from '@shared/models/wallet-info';
 import {
   GeneralInfo,
-} from "@shared/services/interfaces/api.i";
+} from '@shared/services/interfaces/api.i';
 import {
   BlockConnectedSignalREvent,
   SignalREvents,
   WalletInfoSignalREvent
-} from "@shared/services/interfaces/signalr-events.i";
-import { catchError } from "rxjs/operators";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { RestApi } from "@shared/services/rest-api";
-import { GlobalService } from "@shared/services/global.service";
-import { ErrorService } from "@shared/services/error-service";
+} from '@shared/services/interfaces/signalr-events.i';
+import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { RestApi } from '@shared/services/rest-api';
+import { GlobalService } from '@shared/services/global.service';
+import { ErrorService } from '@shared/services/error-service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class NodeService extends RestApi {
   private generalInfoSubject: BehaviorSubject<GeneralInfo> = new BehaviorSubject<GeneralInfo>({
-    walletName: "",
-    walletFilePath: "",
-    network: "",
-    creationTime: "",
+    walletName: '',
+    walletFilePath: '',
+    network: '',
+    creationTime: '',
     isDecrypted: false,
     lastBlockSyncedHeight: 0,
     chainTip: 0,
@@ -49,7 +49,7 @@ export class NodeService extends RestApi {
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(
       SignalREvents.WalletGeneralInfo, (message) => {
         if (message.walletName === this.currentWallet.walletName) {
-          this.generalInfoSubject.next(message)
+          this.generalInfoSubject.next(message);
         }
       });
 
@@ -68,7 +68,7 @@ export class NodeService extends RestApi {
             });
           }
         }
-      })
+      });
   }
 
   public generalInfo(): Observable<GeneralInfo> {
@@ -76,12 +76,12 @@ export class NodeService extends RestApi {
   }
 
   private updateGeneralInfoForCurrentWallet(): void {
-    let params = new HttpParams().set('Name', this.currentWallet.walletName);
+    const params = new HttpParams().set('Name', this.currentWallet.walletName);
 
     this.get<GeneralInfo>('wallet/general-info', params).pipe(
       catchError(err => this.handleHttpError(err)))
       .toPromise().then(generalInfo => {
-      this.generalInfoSubject.next(generalInfo)
+      this.generalInfoSubject.next(generalInfo);
     });
   }
 

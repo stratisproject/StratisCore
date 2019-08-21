@@ -1,13 +1,14 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import "@aspnet/signalr";
+import '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
-import { HttpClient } from "@angular/common/http";
-import { ISignalRService } from "@shared/services/interfaces/services.i";
-import { GlobalService } from "@shared/services/global.service";
-import { RestApi } from "@shared/services/rest-api";
-import { ErrorService } from "@shared/services/error-service";
-import { interval, Observable, Subscription } from "rxjs";
-import { tap } from "rxjs/operators";
+import { HttpClient } from '@angular/common/http';
+import { ISignalRService } from '@shared/services/interfaces/services.i';
+import { GlobalService } from '@shared/services/global.service';
+import { RestApi } from '@shared/services/rest-api';
+import { ErrorService } from '@shared/services/error-service';
+import { interval, Observable, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Log } from '../../wallet/tokens/services/logger.service';
 
 export interface SignalRConnectionInfo {
   signalRUri: string;
@@ -16,21 +17,13 @@ export interface SignalRConnectionInfo {
 
 export interface SignalRMessageHandler {
   messageType: string;
-  onEventMessageDelegate: (message: any) => void
+  onEventMessageDelegate: (message: any) => void;
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class SignalRService extends RestApi implements ISignalRService {
-  private connection: signalR.HubConnection;
-  private onMessageReceivedHandlers: Array<SignalRMessageHandler> = [];
-  private connecting: boolean = false;
-  private connectSubscription: Subscription;
-  private connectInterval: Observable<number> = interval(10000).pipe(tap(() => {
-    // TODO: consider multiple Hub support
-    this.connect("events");
-  }));
 
   constructor(http: HttpClient,
               globalService: GlobalService,
@@ -39,6 +32,17 @@ export class SignalRService extends RestApi implements ISignalRService {
     this.connectToSignalR();
   }
 
+  private connection: signalR.HubConnection;
+  private onMessageReceivedHandlers: Array<SignalRMessageHandler> = [];
+  private connecting = false;
+  private connectSubscription: Subscription;
+  private connectInterval: Observable<number> = interval(10000).pipe(tap(() => {
+    // TODO: consider multiple Hub support
+    this.connect('events');
+  }));
+
+  public onConnectionFailed: EventEmitter<Error> = new EventEmitter<Error>();
+
   public registerOnMessageEventHandler<TMessage>(messageType: string, onEventMessageReceivedHandler: (message: TMessage) => void): void {
     this.onMessageReceivedHandlers.push({
       messageType: messageType,
@@ -46,13 +50,11 @@ export class SignalRService extends RestApi implements ISignalRService {
     });
   }
 
-  public onConnectionFailed: EventEmitter<Error> = new EventEmitter<Error>();
-
   public connect(hubName: string): void {
     this.getConnectionInfo().then((con: SignalRConnectionInfo) => {
 
-      if (this.connection && this.connection.state && this.connection.state != 4) {
-        console.log('signalR connection abort');
+      if (this.connection && this.connection.state && this.connection.state !== 4) {
+        Log.warn('signalR connection abort');
         this.connection.stop();
       }
 
@@ -64,7 +66,7 @@ export class SignalRService extends RestApi implements ISignalRService {
       this.connection.on('receiveEvent',
         (message) => {
           try {
-            this.executeMessageReceivedHandlers(message)
+            this.executeMessageReceivedHandlers(message);
           } catch (e) {
             this.errorService.handleError(e, true);
           }
@@ -72,11 +74,11 @@ export class SignalRService extends RestApi implements ISignalRService {
 
       this.connection.onclose((error: Error) => {
         this.onConnectionFailed.emit(error);
-        console.log(`disconnected ${error.message}`);
+        Log.warn(`disconnected ${error.message}`);
         this.connectToSignalR();
       });
 
-      console.log("connecting...");
+      Log.info('connecting...');
 
       this.connection.start()
         .then(() => {
@@ -98,7 +100,7 @@ export class SignalRService extends RestApi implements ISignalRService {
   }
 
   private markAsConnected(): void {
-    console.log("Connected!");
+    Log.info('Connected!');
     if (this.connectSubscription) {
       this.connectSubscription.unsubscribe();
       this.connectSubscription = null;
@@ -113,9 +115,8 @@ export class SignalRService extends RestApi implements ISignalRService {
     }
   }
 
-
   private getConnectionInfo(): Promise<SignalRConnectionInfo> {
-    return this.get<SignalRConnectionInfo>("signalR/getConnectionInfo")
+    return this.get<SignalRConnectionInfo>('signalR/getConnectionInfo')
       .toPromise();
   }
 }

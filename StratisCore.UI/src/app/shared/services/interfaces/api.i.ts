@@ -18,7 +18,7 @@ export class WalletBalance {
   public spendableAmount: number;
 
   public get hasBalance(): boolean {
-    return (this.amountConfirmed + this.amountUnconfirmed) > 0
+    return (this.amountConfirmed + this.amountUnconfirmed) > 0;
   }
 
   public get awaitingMaturityIfStaking() {

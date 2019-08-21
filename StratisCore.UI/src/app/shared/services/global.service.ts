@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
-import { WalletInfo } from "@shared/models/wallet-info";
-import { BehaviorSubject, Observable } from "rxjs";
+import { WalletInfo } from '@shared/models/wallet-info';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +15,13 @@ export class GlobalService {
     this.setDaemonIP();
   }
 
-  private applicationVersion: string = "1.2.1";
-  private testnet: boolean = false;
-  private sidechain: boolean = false;
-  private mainApiPort: number = 37221;
-  private testApiPort: number = 38221;
-  private mainSideChainApiPort: number = 37223;
-  private testSideChainApiPort: number = 38223;
+  private applicationVersion = '1.2.1';
+  private testnet = false;
+  private sidechain = false;
+  private mainApiPort = 37221;
+  private testApiPort = 38221;
+  private mainSideChainApiPort = 37223;
+  private testSideChainApiPort = 38223;
   private apiPort: number;
   private walletPath: string;
   private currentWalletName: string;

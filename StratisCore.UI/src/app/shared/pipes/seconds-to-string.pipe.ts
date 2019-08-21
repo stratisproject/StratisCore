@@ -8,38 +8,37 @@ export class SecondsToStringPipe implements PipeTransform {
   }
 
   public transform(seconds: number): string {
-    let numDays = Math.floor(seconds / 86400);
-    let numHours = Math.floor((seconds % 86400) / 3600);
-    let numMinutes = Math.floor(((seconds % 86400) % 3600) / 60);
-    let numSeconds = ((seconds % 86400) % 3600) % 60;
-    let dateString = "";
+    const numDays = Math.floor(seconds / 86400);
+    const numHours = Math.floor((seconds % 86400) / 3600);
+    const numMinutes = Math.floor(((seconds % 86400) % 3600) / 60);
+    let dateString = '';
 
     if (numDays > 0) {
       if (numDays > 1) {
-        dateString += numDays + " days ";
+        dateString += numDays + ' days ';
       } else {
-        dateString += numDays + " day ";
+        dateString += numDays + ' day ';
       }
     }
 
     if (numHours > 0) {
       if (numHours > 1) {
-        dateString += numHours + " hours ";
+        dateString += numHours + ' hours ';
       } else {
-        dateString += numHours + " hour ";
+        dateString += numHours + ' hour ';
       }
     }
 
     if (numMinutes > 0) {
       if (numMinutes > 1) {
-        dateString += numMinutes + " minutes ";
+        dateString += numMinutes + ' minutes ';
       } else {
-        dateString += numMinutes + " minute ";
+        dateString += numMinutes + ' minute ';
       }
     }
 
-    if (dateString === "") {
-      dateString = "Unknown";
+    if (dateString === '') {
+      dateString = 'Unknown';
     }
 
     return dateString;

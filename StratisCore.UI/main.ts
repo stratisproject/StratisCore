@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
+
 if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
 }
@@ -17,7 +18,7 @@ let nodaemon;
 const args = process.argv.slice(1);
 
 // Enable Signalr feature in daemon
-args.push("-enableSignalR");
+args.push('-enableSignalR');
 
 serve = args.some(val => val === '--serve' || val === '-serve');
 testnet = args.some(val => val === '--testnet' || val === '-testnet');
@@ -44,7 +45,7 @@ if (testnet && !sidechain) {
 
 // Sets default arguments
 const coreargs = require('minimist')(args, {
-  default : {
+  default: {
     daemonip: 'localhost',
     apiport: apiPortDefault
   },
@@ -97,8 +98,7 @@ function createWindow() {
   });
 
   if (serve) {
-    require('electron-reload')(__dirname, {
-    });
+    require('electron-reload')(__dirname, {});
     mainWindow.loadURL('http://localhost:4200');
   } else {
     mainWindow.loadURL(url.format({
@@ -134,7 +134,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   if (serve) {
-    console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.')
+    console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.');
   } else {
     if (!nodaemon) {
       startDaemon();
@@ -190,12 +190,17 @@ function shutdownDaemon(daemonAddr, portNumber) {
   });
 
   request.write('true');
-  request.on('error', function (e) { });
-  request.on('timeout', function (e) { request.abort(); });
-  request.on('uncaughtException', function (e) { request.abort(); });
+  request.on('error', function (e) {
+  });
+  request.on('timeout', function (e) {
+    request.abort();
+  });
+  request.on('uncaughtException', function (e) {
+    request.abort();
+  });
 
   request.end(body);
-};
+}
 
 function startDaemon() {
   let daemonProcess;
@@ -236,25 +241,25 @@ function createTray() {
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Hide/Show',
-      click: function() {
+      click: function () {
         mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
       }
     },
     {
       label: 'Exit',
-      click: function() {
+      click: function () {
         app.quit();
       }
     }
   ]);
   systemTray.setToolTip(applicationName);
   systemTray.setContextMenu(contextMenu);
-  systemTray.on('click', function() {
+  systemTray.on('click', function () {
     if (!mainWindow.isVisible()) {
       mainWindow.show();
     }
 
-    if (!mainWindow.isFocused()) {\
+    if (!mainWindow.isFocused()) {
       mainWindow.focus();
     }
   });
@@ -274,18 +279,24 @@ function createMenu() {
   const menuTemplate = [{
     label: app.getName(),
     submenu: [
-      { label: 'About ' + app.getName(), selector: 'orderFrontStandardAboutPanel:' },
-      { label: 'Quit', accelerator: 'Command+Q', click: function() { app.quit(); }}
-    ]}, {
+      {label: 'About ' + app.getName(), selector: 'orderFrontStandardAboutPanel:'},
+      {
+        label: 'Quit', accelerator: 'Command+Q', click: function () {
+          app.quit();
+        }
+      }
+    ]
+  }, {
     label: 'Edit',
     submenu: [
-      { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
-      { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
-      { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
-      { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
-      { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
-      { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
-    ]}
+      {label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:'},
+      {label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:'},
+      {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
+      {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
+      {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
+      {label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:'}
+    ]
+  }
   ];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));

@@ -5,7 +5,8 @@ import { GlobalService } from '@shared/services/global.service';
 import { ApiService } from '@shared/services/api.service';
 import { ModalService } from '@shared/services/modal.service';
 import { WalletLoad } from '@shared/models/wallet-load';
-import { Subscription } from "rxjs";
+import { ReplaySubject, Subscription } from 'rxjs';
+import { Disposable } from '../wallet/tokens/models/disposable';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public sidechainEnabled: boolean;
-  public hasWallet: boolean = false;
+  public hasWallet = false;
   public isDecrypting = false;
 
 
@@ -51,8 +52,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private buildDecryptForm(): void {
     this.openWalletForm = this.fb.group({
-      "selectWallet": [{value: "", disabled: this.isDecrypting}, Validators.required],
-      "password": [{value: "", disabled: this.isDecrypting}, Validators.required]
+      'selectWallet': [{value: '', disabled: this.isDecrypting}, Validators.required],
+      'password': [{value: '', disabled: this.isDecrypting}, Validators.required]
     });
 
     this.subscriptions.push(this.openWalletForm.valueChanges
@@ -86,7 +87,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.globalService.setWalletPath(response.walletsPath);
           if (this.wallets.length > 0) {
             this.hasWallet = true;
-            for (let wallet in this.wallets) {
+            for (const wallet in this.wallets) {
               this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
             }
           } else {
@@ -110,10 +111,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public onDecryptClicked(): void {
     this.isDecrypting = true;
-    this.globalService.setWalletName(this.openWalletForm.get("selectWallet").value);
-    let walletLoad = new WalletLoad(
-      this.openWalletForm.get("selectWallet").value,
-      this.openWalletForm.get("password").value
+    this.globalService.setWalletName(this.openWalletForm.get('selectWallet').value);
+    const walletLoad = new WalletLoad(
+      this.openWalletForm.get('selectWallet').value,
+      this.openWalletForm.get('password').value
     );
     this.loadWallet(walletLoad);
   }
@@ -135,9 +136,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.apiService.getNodeStatus()
       .subscribe(
         response => {
-          let responseMessage = response;
-          this.globalService.setCoinUnit(responseMessage.coinTicker);
-          this.globalService.setNetwork(responseMessage.network);
+          this.globalService.setCoinUnit(response.coinTicker);
+          this.globalService.setNetwork(response.network);
         }
       )
     ;

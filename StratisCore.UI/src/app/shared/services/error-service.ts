@@ -1,11 +1,11 @@
-import { ModalService } from "@shared/services/modal.service";
-import { Router } from "@angular/router";
-import { HttpErrorResponse } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { Injectable } from "@angular/core";
+import { ModalService } from '@shared/services/modal.service';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class ErrorService {
   constructor(private modalService: ModalService,

@@ -13,11 +13,11 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GenericModalComponent } from './components/generic-modal/generic-modal.component';
 import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
-import { SecondsToStringPipe } from "@shared/pipes/seconds-to-string.pipe";
-import { ApiService } from "@shared/services/api.service";
-import { SignalRService } from "@shared/services/signalr-service";
-import { WalletService } from "@shared/services/wallet.service";
-import { StakingService } from "@shared/services/staking-service";
+import { SecondsToStringPipe } from '@shared/pipes/seconds-to-string.pipe';
+import { ApiService } from '@shared/services/api.service';
+import { SignalRService } from '@shared/services/signalr-service';
+import { WalletService } from '@shared/services/wallet.service';
+import { StakingService } from '@shared/services/staking-service';
 
 @NgModule({
   imports: [CommonModule],

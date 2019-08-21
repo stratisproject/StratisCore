@@ -1,17 +1,17 @@
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { Injectable } from "@angular/core";
-import { SignalRService } from "@shared/services/signalr-service";
-import { WalletInfo } from "@shared/models/wallet-info";
-import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from "@shared/services/interfaces/api.i";
-import { BlockConnectedSignalREvent, SignalREvent, SignalREvents } from "@shared/services/interfaces/signalr-events.i";
-import { catchError } from "rxjs/operators";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { RestApi } from "@shared/services/rest-api";
-import { GlobalService } from "@shared/services/global.service";
-import { ErrorService } from "@shared/services/error-service";
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { SignalRService } from '@shared/services/signalr-service';
+import { WalletInfo } from '@shared/models/wallet-info';
+import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from '@shared/services/interfaces/api.i';
+import { BlockConnectedSignalREvent, SignalREvent, SignalREvents } from '@shared/services/interfaces/signalr-events.i';
+import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { RestApi } from '@shared/services/rest-api';
+import { GlobalService } from '@shared/services/global.service';
+import { ErrorService } from '@shared/services/error-service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class WalletService extends RestApi {
   private transactionReceivedSubject = new Subject<SignalREvent>();
@@ -90,12 +90,12 @@ export class WalletService extends RestApi {
   private getWalletBalance(data: WalletInfo): Observable<Balances> {
     return this.get<Balances>('wallet/balance', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err))
-    )
+    );
   }
 
   public getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
     return this.get<WalletHistory>('wallet/history', this.getWalletParams(data)).pipe(
-      catchError(err => this.handleHttpError(err)))
+      catchError(err => this.handleHttpError(err)));
   }
 
   private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: string }): HttpParams {
@@ -110,8 +110,7 @@ export class WalletService extends RestApi {
     return params;
   }
 
-  private refreshWallet() : void
-  {
+  private refreshWallet(): void {
     const walletSubject = this.getWalletSubject(this.currentWallet);
     const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
 

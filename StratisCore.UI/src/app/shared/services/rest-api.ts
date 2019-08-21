@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GlobalService } from "@shared/services/global.service";
-import { ErrorService } from "@shared/services/error-service";
+import { GlobalService } from '@shared/services/global.service';
+import { ErrorService } from '@shared/services/error-service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class RestApi {
   protected API_URL;
@@ -32,34 +32,34 @@ export class RestApi {
   } {
     return {
       headers: new HttpHeaders({
-        "Accept": accept,
-        "Content-Type": contentType,
+        'Accept': accept,
+        'Content-Type': contentType,
 
       }),
       params: httpParams
-    }
+    };
   }
 
-  public get<TResult>(path: string, params?: HttpParams, accept: string = "application/json", contentType: string = "application/json"): Observable<TResult> {
-    let options = this.getHttpOptions(accept, contentType, params);
-    return <Observable<TResult>>this.httpClient.get(`${this.API_URL}/${path}`, options)
+  public get<TResult>(path: string, params?: HttpParams, accept: string = 'application/json', contentType: string = 'application/json'): Observable<TResult> {
+    const options = this.getHttpOptions(accept, contentType, params);
+    return <Observable<TResult>>this.httpClient.get(`${this.API_URL}/${path}`, options);
   }
 
   public post<TResult>(path: string, body: any, contentType?: string): Observable<TResult> {
-    return this.executeHttp<TResult>("post", path, body, contentType);
+    return this.executeHttp<TResult>('post', path, body, contentType);
   }
 
   public put<TResult>(path: string, body: any, contentType?: string): Observable<TResult> {
-    return this.executeHttp<TResult>("put", path, body, contentType);
+    return this.executeHttp<TResult>('put', path, body, contentType);
   }
 
   public delete<TResult>(path: string, params?: HttpParams, contentType?: string): Observable<TResult> {
-    return this.executeHttp<TResult>("delete", path, null, contentType, params);
+    return this.executeHttp<TResult>('delete', path, null, contentType, params);
   }
 
   protected executeHttp<TResult>(method: string, path: string, body: any, contentType?: string, params?: HttpParams): Observable<TResult> {
     return <Observable<TResult>>this.httpClient[method]
-    (`${this.API_URL}/${path}`, body, this.getHttpOptions("application/json", contentType || "application/json", params));
+    (`${this.API_URL}/${path}`, body, this.getHttpOptions('application/json', contentType || 'application/json', params));
   }
 
   protected handleHttpError(error: HttpErrorResponse, silent?: boolean) {

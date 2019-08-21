@@ -3,8 +3,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { GlobalService } from '@shared/services/global.service';
 import { TransactionInfo } from '@shared/models/transaction-info';
-import { NodeService } from "@shared/services/node-service";
-import { tap } from "rxjs/operators";
+import { NodeService } from '@shared/services/node-service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'transaction-details',
@@ -18,7 +18,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   constructor(private nodeService: NodeService, private globalService: GlobalService, public activeModal: NgbActiveModal) {
   }
 
-  public copied: boolean = false;
+  public copied = false;
   public coinUnit: string;
   public confirmations: number;
   private generalWalletInfoSubscription: Subscription;
@@ -44,7 +44,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
       this.lastBlockSyncedHeight = generalInfo.lastBlockSyncedHeight;
       this.calculateConfirmations();
     })).subscribe();
-  };
+  }
 
   private calculateConfirmations() {
     if (this.transaction.transactionConfirmedInBlock) {

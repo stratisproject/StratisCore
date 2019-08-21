@@ -1,17 +1,17 @@
-import { Observable } from "rxjs";
-import { NodeStatus } from "@shared/models/node-status";
-import { AddressLabel } from "@shared/models/address-label";
-import { WalletInfo } from "@shared/models/wallet-info";
-import { WalletCreation } from "@shared/models/wallet-creation";
-import { WalletRecovery } from "@shared/models/wallet-recovery";
-import { WalletLoad } from "@shared/models/wallet-load";
-import { FeeEstimation } from "@shared/models/fee-estimation";
-import { SidechainFeeEstimation } from "@shared/models/sidechain-fee-estimation";
-import { TransactionBuilding } from "@shared/models/transaction-building";
-import { TransactionSending } from "@shared/models/transaction-sending";
-import { WalletRescan } from "@shared/models/wallet-rescan";
-import { LocalExecutionResult } from "@shared/models/local-execution-result";
-import { TokenBalanceRequest } from "../../../wallet/tokens/models/token-balance-request";
+import { Observable } from 'rxjs';
+import { NodeStatus } from '@shared/models/node-status';
+import { AddressLabel } from '@shared/models/address-label';
+import { WalletInfo } from '@shared/models/wallet-info';
+import { WalletCreation } from '@shared/models/wallet-creation';
+import { WalletRecovery } from '@shared/models/wallet-recovery';
+import { WalletLoad } from '@shared/models/wallet-load';
+import { FeeEstimation } from '@shared/models/fee-estimation';
+import { SidechainFeeEstimation } from '@shared/models/sidechain-fee-estimation';
+import { TransactionBuilding } from '@shared/models/transaction-building';
+import { TransactionSending } from '@shared/models/transaction-sending';
+import { WalletRescan } from '@shared/models/wallet-rescan';
+import { LocalExecutionResult } from '@shared/models/local-execution-result';
+import { TokenBalanceRequest } from '../../../wallet/tokens/models/token-balance-request';
 
 export interface ISignalRService {
   connect(hubName: string): void;

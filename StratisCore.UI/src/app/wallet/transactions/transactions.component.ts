@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { TransactionInfo } from "@shared/models/transaction-info";
-import { TransactionDetailsComponent } from "../transaction-details/transaction-details.component";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { GlobalService } from "@shared/services/global.service";
-import { Router } from "@angular/router";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { WalletService } from "@shared/services/wallet.service";
-import { TransactionsHistoryItem } from "@shared/services/interfaces/api.i";
+import { TransactionInfo } from '@shared/models/transaction-info';
+import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { GlobalService } from '@shared/services/global.service';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { WalletService } from '@shared/services/wallet.service';
+import { TransactionsHistoryItem } from '@shared/services/interfaces/api.i';
 
 @Component({
   selector: 'app-transactions',
@@ -32,7 +32,7 @@ export class TransactionsComponent implements OnInit {
   }
 
   public openTransactionDetailDialog(transaction: TransactionInfo): void {
-    const modalRef = this.modalService.open(TransactionDetailsComponent, {backdrop: "static", keyboard: false});
+    const modalRef = this.modalService.open(TransactionDetailsComponent, {backdrop: 'static', keyboard: false});
     modalRef.componentInstance.transaction = transaction;
   }
 
@@ -44,7 +44,7 @@ export class TransactionsComponent implements OnInit {
 
     return transactions.map(transaction => {
       return new TransactionInfo(
-        transaction.type == "send" ? "sent" : transaction.type,
+        transaction.type === 'send' ? 'sent' : transaction.type,
         transaction.id,
         transaction.amount,
         transaction.fee || 0,
