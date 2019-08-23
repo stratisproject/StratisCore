@@ -16,13 +16,13 @@ import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
-import { RestApi } from "@shared/services/rest-api";
-import { IApiService } from "@shared/services/interfaces/services.i";
-import { WalletFileData, WalletHistory } from "@shared/services/interfaces/api.i";
-import { ErrorService } from "@shared/services/error-service";
+import { RestApi } from '@shared/services/rest-api';
+import { IApiService } from '@shared/services/interfaces/services.i';
+import { WalletFileData, WalletHistory } from '@shared/services/interfaces/api.i';
+import { ErrorService } from '@shared/services/error-service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class ApiService extends RestApi implements IApiService {
   private pollingInterval = interval(5000);
@@ -32,7 +32,7 @@ export class ApiService extends RestApi implements IApiService {
     private globalService: GlobalService,
     errorService: ErrorService) {
     super(globalService, http, errorService);
-  };
+  }
 
   public getNodeStatus(silent?: boolean): Observable<NodeStatus> {
     return this.get<NodeStatus>('node/status').pipe(
@@ -44,16 +44,12 @@ export class ApiService extends RestApi implements IApiService {
     return this.pollingInterval.pipe(
       startWith(0),
       switchMap(() => this.get<NodeStatus>('node/status')),
-      catchError(err => this.handleHttpError(err, silent))
-    )
+      catchError(err => this.handleHttpError(err, silent)));
   }
 
   public getAddressBookAddresses(): Observable<any> {
-    return this.pollingInterval.pipe(
-      startWith(0),
-      switchMap(() => this.get('addressBook')),
-      catchError(err => this.handleHttpError(err))
-    )
+    return this.get('addressBook').pipe(
+      catchError(err => this.handleHttpError(err)));
   }
 
   public addAddressBookAddress(data: AddressLabel): Observable<any> {
@@ -63,7 +59,7 @@ export class ApiService extends RestApi implements IApiService {
   }
 
   public removeAddressBookAddress(label: string): Observable<any> {
-    let params = new HttpParams().set('label', label);
+    const params = new HttpParams().set('label', label);
     return this.delete('addressBook/address', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
@@ -89,7 +85,7 @@ export class ApiService extends RestApi implements IApiService {
    * Get a new mnemonic
    */
   public getNewMnemonic(): Observable<any> {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('language', 'English')
       .set('wordCount', '12');
 
@@ -138,7 +134,7 @@ export class ApiService extends RestApi implements IApiService {
    * Get general wallet info from the API once.
    */
   public getGeneralInfoOnce(data: WalletInfo): Observable<any> {
-    let params = new HttpParams().set('Name', data.walletName);
+    const params = new HttpParams().set('Name', data.walletName);
     return this.get('wallet/general-info', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
@@ -151,7 +147,7 @@ export class ApiService extends RestApi implements IApiService {
     return this.get('wallet/maxbalance',
       this.getWalletParams(data, {
         feeType: data.feeType,
-        allowUnconfirmed: "true"
+        allowUnconfirmed: 'true'
       })).pipe(
       catchError(err => this.handleHttpError(err))
     );
@@ -244,7 +240,7 @@ export class ApiService extends RestApi implements IApiService {
 
   /** Remove transaction */
   public removeTransaction(walletName: string): Observable<any> {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('walletName', walletName)
       .set('all', 'true')
       .set('resync', 'true');
@@ -255,7 +251,7 @@ export class ApiService extends RestApi implements IApiService {
 
   /** Rescan wallet from a certain date using remove-transactions */
   public rescanWallet(data: WalletRescan): Observable<any> {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('walletName', data.name)
       .set('fromDate', data.fromDate.toDateString())
       .set('reSync', 'true');
@@ -278,14 +274,14 @@ export class ApiService extends RestApi implements IApiService {
     * Get the active smart contract wallet address.
     */
   public getAccountAddress(walletName: string): Observable<any> {
-    let params = new HttpParams().set('walletName', walletName);
+    const params = new HttpParams().set('walletName', walletName);
     return this.get('smartcontractwallet/account-address', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
 
   public getAccountAddresses(walletName: string): any {
-    let params = new HttpParams().set('walletName', walletName);
+    const params = new HttpParams().set('walletName', walletName);
     return this.get('smartcontractwallet/account-addresses', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
@@ -295,7 +291,7 @@ export class ApiService extends RestApi implements IApiService {
     * Get the balance of the active smart contract address.
     */
   public getAccountBalance(walletName: string): Observable<any> {
-    let params = new HttpParams().set('walletName', walletName);
+    const params = new HttpParams().set('walletName', walletName);
     return this.get('smartcontractwallet/account-balance', params).pipe(
       catchError(err => this.handleHttpError(err))
     );
@@ -305,26 +301,26 @@ export class ApiService extends RestApi implements IApiService {
     * Get the balance of the active smart contract address.
     */
   public getAddressBalance(address: string): Observable<any> {
-    let params = new HttpParams().set('address', address);
+    const params = new HttpParams().set('address', address);
     return this.pollingInterval.pipe(
       startWith(0),
       switchMap(() => this.get('smartcontractwallet/address-balance', params)),
       catchError(err => this.handleHttpError(err))
-    )
+    );
   }
 
   /*
     * Gets the transaction history of the smart contract account.
     */
   public getAccountHistory(walletName: string, address: string): Observable<WalletHistory> {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('walletName', walletName)
       .set('address', address);
     return this.pollingInterval.pipe(
       startWith(0),
       switchMap(() => this.get<WalletHistory>('smartcontractwallet/history', params)),
       catchError(err => this.handleHttpError(err))
-    )
+    );
   }
 
   /*
@@ -349,7 +345,7 @@ export class ApiService extends RestApi implements IApiService {
     * Returns the receipt for a particular txhash, or empty JSON.
     */
   public getReceipt(hash: string, silent: boolean = false): any {
-    let params = new HttpParams().set('txHash', hash);
+    const params = new HttpParams().set('txHash', hash);
     return this.get('smartcontracts/receipt', params).pipe(
       catchError(err => this.handleHttpError(err, silent))
     );
@@ -359,7 +355,7 @@ export class ApiService extends RestApi implements IApiService {
     Setting the silent flag is not enough because the error format returned by /receipt still causes a modal to be displayed.
   */
   public getReceiptSilent(hash: string): any {
-    let params = new HttpParams().set('txHash', hash);
+    const params = new HttpParams().set('txHash', hash);
     return this.get('smartcontracts/receipt', params);
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -15,82 +15,25 @@ import { GlobalService } from '@shared/services/global.service';
   templateUrl: './confirm-mnemonic.component.html',
   styleUrls: ['./confirm-mnemonic.component.css']
 })
-export class ConfirmMnemonicComponent implements OnInit {
+export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
 
-  public secretWordIndexGenerator = new SecretWordIndexGenerator();
-
-  constructor(private apiService: ApiService, private genericModalService: ModalService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder, private globalService: GlobalService) {
+  constructor(
+    private apiService: ApiService,
+    private genericModalService: ModalService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
+    private globalService: GlobalService) {
     this.buildMnemonicForm();
   }
+
+  public secretWordIndexGenerator = new SecretWordIndexGenerator();
   private newWallet: WalletCreation;
   private subscription: Subscription;
   public sidechainEnabled: boolean;
   public mnemonicForm: FormGroup;
-  public matchError: string = "";
+  public matchError = '';
   public isCreating: boolean;
-
-  ngOnInit() {
-    this.sidechainEnabled = this.globalService.getSidechainEnabled();
-    this.subscription = this.route.queryParams.subscribe(params => {
-      this.newWallet = new WalletCreation(
-        params["name"],
-        params["mnemonic"],
-        params["password"],
-        params["passphrase"]
-      )
-    });
-  }
-
-  private buildMnemonicForm(): void {
-    this.mnemonicForm = this.fb.group({
-      "word1": ["",
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(24),
-          Validators.pattern(/^[a-zA-Z]*$/)
-        ])
-      ],
-      "word2": ["",
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(24),
-          Validators.pattern(/^[a-zA-Z]*$/)
-        ])
-      ],
-      "word3": ["",
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(24),
-          Validators.pattern(/^[a-zA-Z]*$/)
-        ])
-      ]
-    });
-
-    this.mnemonicForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
-
-    this.onValueChanged();
-  }
-
-  onValueChanged(data?: any) {
-    if (!this.mnemonicForm) { return; }
-    const form = this.mnemonicForm;
-    for (const field in this.formErrors) {
-      this.formErrors[field] = '';
-      const control = form.get(field);
-      if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field];
-        for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' ';
-        }
-      }
-    }
-
-    this.matchError = "";
-  }
 
   formErrors = {
     'word1': '',
@@ -119,6 +62,71 @@ export class ConfirmMnemonicComponent implements OnInit {
     }
   };
 
+  ngOnInit() {
+    this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    this.subscription = this.route.queryParams.subscribe(params => {
+      this.newWallet = new WalletCreation(
+        params['name'],
+        params['mnemonic'],
+        params['password'],
+        params['passphrase']
+      );
+    });
+  }
+
+  private buildMnemonicForm(): void {
+    this.mnemonicForm = this.fb.group({
+      'word1': ['',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(24),
+          Validators.pattern(/^[a-zA-Z]*$/)
+        ])
+      ],
+      'word2': ['',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(24),
+          Validators.pattern(/^[a-zA-Z]*$/)
+        ])
+      ],
+      'word3': ['',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(24),
+          Validators.pattern(/^[a-zA-Z]*$/)
+        ])
+      ]
+    });
+
+    this.mnemonicForm.valueChanges
+      .subscribe(data => this.onValueChanged(data));
+
+    this.onValueChanged();
+  }
+
+  onValueChanged(data?: any) {
+    if (!this.mnemonicForm) {
+      return;
+    }
+    const form = this.mnemonicForm;
+    for (const field in this.formErrors) {
+      this.formErrors[field] = '';
+      const control = form.get(field);
+      if (control && control.dirty && !control.valid) {
+        const messages = this.validationMessages[field];
+        for (const key in control.errors) {
+          this.formErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+
+    this.matchError = '';
+  }
+
   public onConfirmClicked() {
     this.checkMnemonic();
     if (this.checkMnemonic()) {
@@ -128,19 +136,26 @@ export class ConfirmMnemonicComponent implements OnInit {
   }
 
   public onBackClicked() {
-    this.router.navigate(['/setup/create/show-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password, passphrase: this.newWallet.passphrase }});
+    this.router.navigate(['/setup/create/show-mnemonic'], {
+      queryParams: {
+        name: this.newWallet.name,
+        mnemonic: this.newWallet.mnemonic,
+        password: this.newWallet.password,
+        passphrase: this.newWallet.passphrase
+      }
+    });
   }
 
   private checkMnemonic(): boolean {
-    let mnemonic = this.newWallet.mnemonic;
-    let mnemonicArray = mnemonic.split(" ");
+    const mnemonic = this.newWallet.mnemonic;
+    const mnemonicArray = mnemonic.split(' ');
 
     if (this.mnemonicForm.get('word1').value.trim() === mnemonicArray[this.secretWordIndexGenerator.index1] &&
-        this.mnemonicForm.get('word2').value.trim() === mnemonicArray[this.secretWordIndexGenerator.index2] &&
-        this.mnemonicForm.get('word3').value.trim() === mnemonicArray[this.secretWordIndexGenerator.index3]) {
+      this.mnemonicForm.get('word2').value.trim() === mnemonicArray[this.secretWordIndexGenerator.index2] &&
+      this.mnemonicForm.get('word3').value.trim() === mnemonicArray[this.secretWordIndexGenerator.index3]) {
       return true;
     } else {
-      this.matchError = 'The secret words do not match.'
+      this.matchError = 'The secret words do not match.';
       return false;
     }
   }
@@ -149,12 +164,17 @@ export class ConfirmMnemonicComponent implements OnInit {
     this.apiService.createStratisWallet(wallet)
       .subscribe(
         response => {
-          this.genericModalService.openModal("Wallet Created", "Your wallet has been created.<br>Keep your secret words, password and passphrase safe!");
+          this.genericModalService.openModal(
+            'Wallet Created', 'Your wallet has been created.<br>Keep your secret words, password and passphrase safe!');
           this.router.navigate(['']);
         },
         error => {
           this.isCreating = false;
         }
       );
+  }
+
+  public ngOnDestroy(): void {
+
   }
 }

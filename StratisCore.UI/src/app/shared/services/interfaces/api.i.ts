@@ -18,6 +18,7 @@ export class WalletBalance {
   public spendableAmount: number;
 
   public get hasBalance(): boolean {
+    return false;
     return (this.amountConfirmed + this.amountUnconfirmed) > 0;
   }
 

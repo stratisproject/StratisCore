@@ -23,7 +23,7 @@ export interface IApiService {
 
   getNodeStatusInterval(silent?: boolean): Observable<NodeStatus>;
 
-  getAddressBookAddresses(): Observable<any>;
+  // getAddressBookAddresses(): Observable<any>;
 
   addAddressBookAddress(data: AddressLabel): Observable<any>;
 
@@ -138,5 +138,5 @@ export interface IApiService {
 
   localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult>;
 
-  }
+}
 

@@ -20,7 +20,7 @@ export class SendConfirmationComponent implements OnInit {
   @Input() hasOpReturn: boolean;
   constructor(private globalService: GlobalService, public activeModal: NgbActiveModal) { }
 
-  public showDetails: boolean = false;
+  public showDetails = false;
   public coinUnit: string;
 
   ngOnInit() {

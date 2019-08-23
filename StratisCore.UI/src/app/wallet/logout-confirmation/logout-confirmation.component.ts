@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-
-import { ApiService } from '@shared/services/api.service';
+import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
-import { StakingService } from "@shared/services/staking-service";
+import { StakingService } from '@shared/services/staking-service';
 
 @Component({
   selector: 'app-logout-confirmation',
@@ -30,7 +27,7 @@ export class LogoutConfirmationComponent implements OnInit {
 
   public onLogout() {
     if (!this.sidechainEnabled) {
-      this.stakingService.stopStaking()
+      this.stakingService.stopStaking();
 
     }
     this.activeModal.close();

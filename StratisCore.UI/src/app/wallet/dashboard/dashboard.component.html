@@ -42,14 +42,14 @@
     <!-- /JUMBOTRON-->
     <div class="row">
       <section class="col-8" [class.col-12]="globalService.getSidechainEnabled()">
-        <app-transactions></app-transactions>
+
+        <app-transactions title="Latest Transactions" [maxTransactionCount]="5" [enableShowHistoryButton]="true">
+        </app-transactions>
       </section>
-      <section class="col-4">
-        <app-staking></app-staking>
-      </section>
+
+      <app-staking></app-staking>
+
     </div>
-
-
     <status-bar></status-bar>
   </section>
   <!-- /CONTAINER-->

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
-import { WalletInfo } from '@shared/models/wallet-info';
 import { StakingService } from '@shared/services/staking-service';
 import { tap } from 'rxjs/operators';
 import { GeneralInfo } from '@shared/services/interfaces/api.i';
