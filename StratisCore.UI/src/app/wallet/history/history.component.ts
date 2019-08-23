@@ -1,13 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
+
+import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
+
+import { WalletInfo } from '@shared/models/wallet-info';
 import { TransactionInfo } from '@shared/models/transaction-info';
+
 import { Subscription } from 'rxjs';
+
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
-import { WalletService } from '@shared/services/wallet.service';
-import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'history-component',
@@ -15,18 +19,13 @@ import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
   styleUrls: ['./history.component.css'],
 })
 
-export class HistoryComponent implements OnInit, OnDestroy {
-  constructor(
-    private walletService: WalletService,
-    private globalService: GlobalService,
-    private modalService: NgbModal,
-    private genericModalService: ModalService,
-    private router: Router) {
-  }
+export class HistoryComponent {
+  constructor(private apiService: ApiService, private globalService: GlobalService, private modalService: NgbModal, private genericModalService: ModalService, private router: Router) {}
 
   public transactions: TransactionInfo[];
   public coinUnit: string;
-  public pageNumber = 1;
+  public pageNumber: number = 1;
+  private errorMessage: string;
   private walletHistorySubscription: Subscription;
 
   ngOnInit() {
@@ -43,18 +42,21 @@ export class HistoryComponent implements OnInit, OnDestroy {
   }
 
   private openTransactionDetailDialog(transaction: any) {
-    const modalRef = this.modalService.open(TransactionDetailsComponent, {backdrop: 'static'});
+    const modalRef = this.modalService.open(TransactionDetailsComponent, { backdrop: "static" });
     modalRef.componentInstance.transaction = transaction;
   }
 
-  // todo: add history in seperate service to make it reusable
+    // todo: add history in seperate service to make it reusable
   private getHistory() {
-    this.walletHistorySubscription = this.walletService.walletHistory()
+    let walletInfo = new WalletInfo(this.globalService.getWalletName())
+    let historyResponse;
+    this.walletHistorySubscription = this.apiService.getWalletHistory(walletInfo)
       .subscribe(
         response => {
-
-          if (response.length > 0) {
-            this.getTransactionInfo(response);
+          //TO DO - add account feature instead of using first entry in array
+          if (!!response.history && response.history[0].transactionsHistory.length > 0) {
+            historyResponse = response.history[0].transactionsHistory;
+            this.getTransactionInfo(historyResponse);
           }
         },
         error => {
@@ -69,45 +71,41 @@ export class HistoryComponent implements OnInit, OnDestroy {
         }
       )
     ;
-  }
+  };
 
   private getTransactionInfo(transactions: any) {
     this.transactions = [];
 
-    for (const transaction of transactions) {
+    for (let transaction of transactions) {
       let transactionType;
-      if (transaction.type === 'send') {
-        transactionType = 'sent';
-      } else if (transaction.type === 'received') {
-        transactionType = 'received';
-      } else if (transaction.type === 'staked') {
-        transactionType = 'staked';
+      if (transaction.type === "send") {
+        transactionType = "sent";
+      } else if (transaction.type === "received") {
+        transactionType = "received";
+      } else if (transaction.type === "staked") {
+        transactionType = "staked";
       }
-      const transactionId = transaction.id;
-      const transactionAmount = transaction.amount;
+      let transactionId = transaction.id;
+      let transactionAmount = transaction.amount;
       let transactionFee;
       if (transaction.fee) {
         transactionFee = transaction.fee;
       } else {
         transactionFee = 0;
       }
-      const transactionConfirmedInBlock = transaction.confirmedInBlock;
-      const transactionTimestamp = transaction.timestamp;
-      this.transactions.push(new TransactionInfo(
-        transactionType,
-        transactionId,
-        transactionAmount,
-        transactionFee,
-        transactionConfirmedInBlock,
-        transactionTimestamp));
+      let transactionConfirmedInBlock = transaction.confirmedInBlock;
+      let transactionTimestamp = transaction.timestamp;
+      let transactionConfirmed;
+
+      this.transactions.push(new TransactionInfo(transactionType, transactionId, transactionAmount, transactionFee, transactionConfirmedInBlock, transactionTimestamp));
     }
   }
 
   private cancelSubscriptions() {
-    if (this.walletHistorySubscription) {
+    if(this.walletHistorySubscription) {
       this.walletHistorySubscription.unsubscribe();
     }
-  }
+  };
 
   private startSubscriptions() {
     this.getHistory();
