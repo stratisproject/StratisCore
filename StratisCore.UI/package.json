@@ -62,7 +62,8 @@
   "dependencies": {
     "electron-context-menu": "0.14.0",
     "ngx-pagination": "4.1.0",
-    "ngx-qrcode2": "0.0.9"
+    "ngx-qrcode2": "0.0.9",
+    "minimist": "1.2.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.803.0",
@@ -96,7 +97,6 @@
     "karma-coverage-istanbul-reporter": "2.1.0",
     "karma-jasmine": "2.0.1",
     "karma-jasmine-html-reporter": "1.4.2",
-    "minimist": "1.2.0",
     "ngx-bootstrap": "5.1.1",
     "ngx-clipboard": "12.2.1",
     "ngx-electron": "2.1.1",
