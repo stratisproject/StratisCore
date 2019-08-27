@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { GlobalService } from '@shared/services/global.service';
 
@@ -18,7 +18,9 @@ export class SendConfirmationComponent implements OnInit {
   @Input() sidechainEnabled: boolean;
   @Input() opReturnAmount: number;
   @Input() hasOpReturn: boolean;
-  constructor(private globalService: GlobalService, public activeModal: NgbActiveModal) { }
+
+  constructor(private globalService: GlobalService, public activeModal: NgbActiveModal) {
+  }
 
   public showDetails = false;
   public coinUnit: string;

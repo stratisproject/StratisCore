@@ -4,11 +4,15 @@ import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from '@shared/services/interfaces/api.i';
 import { BlockConnectedSignalREvent, SignalREvent, SignalREvents } from '@shared/services/interfaces/signalr-events.i';
-import { catchError } from 'rxjs/operators';
+import { catchError, map, flatMap } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
+import { Transaction } from '@shared/models/transaction';
+import { TransactionSending } from '@shared/models/transaction-sending';
+import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
+import { FeeEstimation } from '@shared/models/fee-estimation';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +63,37 @@ export class WalletService extends RestApi {
     return this.getWalletHistorySubject(this.currentWallet).asObservable();
   }
 
+  public estimateFee(feeEstimation: FeeEstimation): Observable<any> {
+    return this.post('wallet/estimate-txfee', feeEstimation).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  public getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
+    return this.get<WalletHistory>('wallet/history', this.getWalletParams(data)).pipe(
+      catchError(err => this.handleHttpError(err)));
+  }
+
+  public sendTransaction(transaction: Transaction): Promise<TransactionResponse> {
+    return this.buildAndSendTransaction(transaction).toPromise();
+  }
+
+  private buildAndSendTransaction(transaction: Transaction): Observable<TransactionResponse> {
+    return this.post<BuildTransactionResponse>('wallet/build-transaction', transaction).pipe(
+      map(response => {
+        response.isSideChain = transaction.isSideChainTransaction;
+        return response;
+      }),
+      flatMap((buildTransactionResponse) => {
+        return this.post('wallet/send-transaction', new TransactionSending(buildTransactionResponse.hex)).pipe(
+          map(() => {
+            return new TransactionResponse(buildTransactionResponse.fee, buildTransactionResponse.isSideChain);
+          }));
+      }),
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
   private getWalletSubject(walletInfo: WalletInfo): BehaviorSubject<WalletBalance> {
     if (!this.walletUpdatedSubjects[walletInfo.walletName]) {
       this.walletUpdatedSubjects[walletInfo.walletName] = new BehaviorSubject<WalletBalance>(null);
@@ -70,7 +105,6 @@ export class WalletService extends RestApi {
         }
       });
     }
-
     return this.walletUpdatedSubjects[walletInfo.walletName];
   }
 
@@ -83,7 +117,6 @@ export class WalletService extends RestApi {
         this.walletHistorySubjects[walletInfo.walletName].next(response.history[walletInfo.account].transactionsHistory);
       });
     }
-
     return this.walletHistorySubjects[walletInfo.walletName];
   }
 
@@ -91,11 +124,6 @@ export class WalletService extends RestApi {
     return this.get<Balances>('wallet/balance', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
-  }
-
-  public getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
-    return this.get<WalletHistory>('wallet/history', this.getWalletParams(data)).pipe(
-      catchError(err => this.handleHttpError(err)));
   }
 
   private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: string }): HttpParams {
@@ -106,7 +134,6 @@ export class WalletService extends RestApi {
     if (extra) {
       Object.keys(extra).forEach(key => params.set(key, extra[key]));
     }
-
     return params;
   }
 

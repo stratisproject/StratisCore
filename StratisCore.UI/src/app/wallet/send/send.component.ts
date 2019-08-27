@@ -1,25 +1,19 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl } from '@angular/forms';
-
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
 import { NumberToStringPipe } from '@shared/pipes/number-to-string.pipe';
-
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
 import { FeeEstimation } from '@shared/models/fee-estimation';
-import { SidechainFeeEstimation } from '@shared/models/sidechain-fee-estimation';
-import { TransactionBuilding } from '@shared/models/transaction-building';
-import { TransactionSending } from '@shared/models/transaction-sending';
-import { WalletInfo, WalletInfoRequest } from '@shared/models/wallet-info';
-
+import { Transaction } from '@shared/models/transaction';
+import { WalletInfoRequest } from '@shared/models/wallet-info';
 import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
-
 import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
+import { SendComponentResources } from './send-component-resources';
 
 @Component({
   selector: 'send-component',
@@ -28,7 +22,6 @@ import { WalletService } from '@shared/services/wallet.service';
 })
 
 export class SendComponent implements OnInit, OnDestroy {
-
   constructor(
     private apiService: ApiService,
     private walletService: WalletService,
@@ -46,7 +39,6 @@ export class SendComponent implements OnInit, OnDestroy {
   public sendForm: FormGroup;
   public sendToSidechainForm: FormGroup;
   public sidechainEnabled: boolean;
-  public hasOpReturn: boolean;
   public coinUnit: string;
   public isSending = false;
   public estimatedFee = 0;
@@ -56,71 +48,29 @@ export class SendComponent implements OnInit, OnDestroy {
   public apiError: string;
   public firstTitle: string;
   public secondTitle: string;
+
+  // The opReturnAmount is for compatibilty with StratisX, opReturnAmount needs to be greater than 0 to pass the MemPool
+  // Validation rules.
   public opReturnAmount = 1;
   public confirmationText: string;
-  private transactionHex: string;
-  private responseMessage: any;
-  private transaction: TransactionBuilding;
+  private transaction: Transaction;
   private walletBalanceSubscription: Subscription;
-
-  sendFormErrors = {
+  private sendFormErrors = {
     'address': '',
     'amount': '',
     'fee': '',
     'password': ''
   };
 
-  sendValidationMessages = {
-    'address': {
-      'required': 'An address is required.',
-      'minlength': 'An address is at least 26 characters long.'
-    },
-    'amount': {
-      'required': 'An amount is required.',
-      'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-      'min': 'The amount has to be more or equal to 0.00001.',
-      'max': 'The total transaction amount exceeds your spendable balance.'
-    },
-    'fee': {
-      'required': 'A fee is required.'
-    },
-    'password': {
-      'required': 'Your password is required.'
-    }
-  };
-
-  sendToSidechainFormErrors = {
-    'destionationAddress': '',
+  private sendToSidechainFormErrors = {
+    'destinationAddress': '',
     'federationAddress': '',
     'amount': '',
     'fee': '',
     'password': ''
   };
 
-  sendToSidechainValidationMessages = {
-    'destinationAddress': {
-      'required': 'An address is required.',
-      'minlength': 'An address is at least 26 characters long.'
-    },
-    'federationAddress': {
-      'required': 'An address is required.',
-      'minlength': 'An address is at least 26 characters long.'
-    },
-    'amount': {
-      'required': 'An amount is required.',
-      'pattern': 'Enter a valid transaction amount. Only positive numbers and no more than 8 decimals are allowed.',
-      'min': 'The amount has to be more or equal to 1.',
-      'max': 'The total transaction amount exceeds your spendable balance.'
-    },
-    'fee': {
-      'required': 'A fee is required.'
-    },
-    'password': {
-      'required': 'Your password is required.'
-    }
-  };
-
-  ngOnInit() {
+  public ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     if (this.sidechainEnabled) {
       this.firstTitle = 'Sidechain';
@@ -129,22 +79,28 @@ export class SendComponent implements OnInit, OnDestroy {
       this.firstTitle = 'Mainchain';
       this.secondTitle = 'Sidechain';
     }
-    this.startSubscriptions();
+    this.getWalletBalance();
     this.coinUnit = this.globalService.getCoinUnit();
     if (this.address) {
       this.sendForm.patchValue({'address': this.address});
     }
 
-    this.confirmationText = this.sidechainEnabled ? 'Please note that sending from a sidechain to the mainchain requires 240 confirmations.' : 'Please note that sending from the mainchain to a sidechain requires 500 confirmations.';
+    this.confirmationText = this.sidechainEnabled
+      ? 'Please note that sending from a sidechain to the mainchain requires 240 confirmations.'
+      : 'Please note that sending from the mainchain to a sidechain requires 500 confirmations.';
   }
 
-  ngOnDestroy() {
-    this.cancelSubscriptions();
+  public ngOnDestroy() {
+    this.walletBalanceSubscription.unsubscribe();
   }
+
   private buildSendForm(): void {
     this.sendForm = this.fb.group({
       'address': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      'amount': ['', Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(0.00001), (control: AbstractControl) => Validators.max((this.spendableBalance - this.estimatedFee) / 100000000)(control)])],
+      'amount': ['', Validators.compose([Validators.required,
+        Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
+        Validators.min(0.00001),
+        (control: AbstractControl) => Validators.max((this.spendableBalance - this.estimatedFee) / 100000000)(control)])],
       'fee': ['medium', Validators.required],
       'password': ['', Validators.required]
     });
@@ -157,7 +113,10 @@ export class SendComponent implements OnInit, OnDestroy {
     this.sendToSidechainForm = this.fb.group({
       'federationAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       'destinationAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      'amount': ['', Validators.compose([Validators.required, Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/), Validators.min(1), (control: AbstractControl) => Validators.max((this.spendableBalance - this.estimatedFee) / 100000000)(control)])],
+      'amount': ['', Validators.compose([Validators.required,
+        Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
+        Validators.min(1),
+        (control: AbstractControl) => Validators.max((this.spendableBalance - this.estimatedFee) / 100000000)(control)])],
       'fee': ['medium', Validators.required],
       'password': ['', Validators.required]
     });
@@ -175,7 +134,7 @@ export class SendComponent implements OnInit, OnDestroy {
       this.sendFormErrors[field] = '';
       const control = form.get(field);
       if (control && control.dirty && !control.valid) {
-        const messages = this.sendValidationMessages[field];
+        const messages = SendComponentResources.sendValidationMessages[field];
         for (const key in control.errors) {
           this.sendFormErrors[field] += messages[key] + ' ';
         }
@@ -185,7 +144,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.apiError = '';
 
     if (this.sendForm.get('address').valid && this.sendForm.get('amount').valid) {
-      this.estimateFee();
+      this.estimateFee(false);
     }
   }
 
@@ -198,7 +157,7 @@ export class SendComponent implements OnInit, OnDestroy {
       this.sendToSidechainFormErrors[field] = '';
       const control = form.get(field);
       if (control && control.dirty && !control.valid) {
-        const messages = this.sendToSidechainValidationMessages[field];
+        const messages = SendComponentResources.sendToSidechainValidationMessages[field];
         for (const key in control.errors) {
           this.sendToSidechainFormErrors[field] += messages[key] + ' ';
         }
@@ -207,17 +166,19 @@ export class SendComponent implements OnInit, OnDestroy {
 
     this.apiError = '';
 
-    if (this.sendToSidechainForm.get('destinationAddress').valid && this.sendToSidechainForm.get('federationAddress').valid && this.sendToSidechainForm.get('amount').valid) {
-      this.estimateSidechainFee();
+    if (this.sendToSidechainForm.get('destinationAddress').valid
+      && this.sendToSidechainForm.get('federationAddress').valid
+      && this.sendToSidechainForm.get('amount').valid) {
+      this.estimateFee(true);
     }
   }
 
+  // NB: This is not currently used
   public getMaxBalance() {
     let balanceResponse;
     const walletRequest = new WalletInfoRequest(this.globalService.getWalletName(), 0, this.sendForm.get('fee').value);
-
     this.apiService.getMaximumBalance(walletRequest)
-      .subscribe(
+      .pipe(tap(
         response => {
           balanceResponse = response;
         },
@@ -228,21 +189,21 @@ export class SendComponent implements OnInit, OnDestroy {
           this.sendForm.patchValue({amount: +new CoinNotationPipe().transform(balanceResponse.maxSpendableAmount)});
           this.estimatedFee = balanceResponse.fee;
         }
-      );
+      )).toPromise();
   }
-  public estimateFee() {
+
+  public estimateFee(isSideChain: boolean) {
     const transaction = new FeeEstimation(
       this.globalService.getWalletName(),
       'account 0',
-      this.sendForm.get('address').value.trim(),
+      this.sendForm.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
       this.sendForm.get('amount').value,
       this.sendForm.get('fee').value,
       true
     );
 
-    this.apiService.estimateFee(transaction)
-      .subscribe(
-        response => {
+    this.walletService.estimateFee(transaction).toPromise()
+      .then(response => {
           this.estimatedFee = response;
         },
         error => {
@@ -251,114 +212,36 @@ export class SendComponent implements OnInit, OnDestroy {
       );
   }
 
-  public estimateSidechainFee() {
-    const sidechainTransaction = new SidechainFeeEstimation(
-      this.globalService.getWalletName(),
-      'account 0',
-      this.sendToSidechainForm.get('federationAddress').value.trim(),
-      this.sendToSidechainForm.get('destinationAddress').value.trim(),
-      this.sendToSidechainForm.get('amount').value,
-      this.sendToSidechainForm.get('fee').value,
-      true
-    );
-
-    this.apiService.estimateSidechainFee(sidechainTransaction)
-      .subscribe(
-        response => {
-          this.estimatedSidechainFee = response;
-        },
-        error => {
-          this.apiError = error.error.errors[0].message;
-        }
-      );
+  public send(sendToSideChain?: boolean) {
+    this.isSending = true;
+    this.walletService.sendTransaction(this.getTransaction(sendToSideChain))
+      .then(transactionResponse => {
+        this.estimatedFee = transactionResponse.transactionFee;
+        this.activeModal.close('Close clicked');
+        this.openConfirmationModal(transactionResponse.isSideChain);
+        this.isSending = false;
+      }).catch(error => {
+      this.isSending = false;
+      this.apiError = error.error.errors[0].message;
+    });
   }
 
-  public buildTransaction() {
-    this.transaction = new TransactionBuilding(
+  private getTransaction(isSideChain?: boolean): Transaction {
+    const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
+    return new Transaction(
       this.globalService.getWalletName(),
       'account 0',
-      this.sendForm.get('password').value,
-      this.sendForm.get('address').value.trim(),
-      this.sendForm.get('amount').value,
-      // this.sendForm.get("fee").value,
+      form.get('password').value,
+      form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
+      form.get('amount').value,
       // TO DO: use coin notation
-      this.estimatedFee / 100000000,
-      true,
-      false
-    );
-
-    this.apiService
-      .buildTransaction(this.transaction)
-      .subscribe(
-        response => {
-          this.estimatedFee = response.fee;
-          this.transactionHex = response.hex;
-          if (this.isSending) {
-            this.hasOpReturn = false;
-            this.sendTransaction(this.transactionHex);
-          }
-        },
-        error => {
-          this.isSending = false;
-          this.apiError = error.error.errors[0].message;
-        }
-      );
-  }
-  public buildSidechainTransaction() {
-    this.transaction = new TransactionBuilding(
-      this.globalService.getWalletName(),
-      'account 0',
-      this.sendToSidechainForm.get('password').value,
-      this.sendToSidechainForm.get('federationAddress').value.trim(),
-      this.sendToSidechainForm.get('amount').value,
-      // this.sendToSidechainForm.get("fee").value,
-      // TO DO: use coin notation
-      this.estimatedSidechainFee / 100000000,
+      (isSideChain ? this.estimatedSidechainFee : this.estimatedFee) / 100000000,
       true,
       false,
-      this.sendToSidechainForm.get('destinationAddress').value.trim(),
-      new NumberToStringPipe().transform((this.opReturnAmount / 100000000))
+
+      isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
+      isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null
     );
-
-    this.apiService.buildTransaction(this.transaction)
-      .subscribe(
-        response => {
-          this.estimatedSidechainFee = response.fee;
-          this.transactionHex = response.hex;
-          if (this.isSending) {
-            this.hasOpReturn = true;
-            this.sendTransaction(this.transactionHex);
-          }
-        },
-        error => {
-          this.isSending = false;
-          this.apiError = error.error.errors[0].message;
-        }
-      );
-  }
-  public send() {
-    this.isSending = true;
-    this.buildTransaction();
-  }
-  public sendToSidechain() {
-    this.isSending = true;
-    this.buildSidechainTransaction();
-  }
-
-  private sendTransaction(hex: string) {
-    const transaction = new TransactionSending(hex);
-    this.apiService
-      .sendTransaction(transaction)
-      .subscribe(
-        response => {
-          this.activeModal.close('Close clicked');
-          this.openConfirmationModal();
-        },
-        error => {
-          this.isSending = false;
-          this.apiError = error.error.errors[0].message;
-        }
-      );
   }
 
   private getWalletBalance() {
@@ -368,33 +251,18 @@ export class SendComponent implements OnInit, OnDestroy {
           this.totalBalance = response.amountConfirmed + response.amountUnconfirmed;
           this.spendableBalance = response.spendableAmount;
         },
-        error => {
-          if (error.status === 0) {
-            this.cancelSubscriptions();
-          } else if (error.status >= 400) {
-            if (!error.error.errors[0].message) {
-              this.cancelSubscriptions();
-              this.startSubscriptions();
-            }
-          }
-        }
       );
   }
-  private openConfirmationModal() {
-    const modalRef = this.modalService.open(SendConfirmationComponent, {backdrop: 'static'});
-    modalRef.componentInstance.transaction = this.transaction;
-    modalRef.componentInstance.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
-    modalRef.componentInstance.sidechainEnabled = this.sidechainEnabled;
-    modalRef.componentInstance.opReturnAmount = this.opReturnAmount;
-    modalRef.componentInstance.hasOpReturn = this.hasOpReturn;
-  }
 
-  private cancelSubscriptions() {
-    if (this.walletBalanceSubscription) {
-      this.walletBalanceSubscription.unsubscribe();
-    }
-  }
-  private startSubscriptions() {
-    this.getWalletBalance();
+  private openConfirmationModal(isSideChainTransaction: boolean) {
+    const component = this.modalService
+      .open(SendConfirmationComponent, {backdrop: 'static'})
+      .componentInstance as SendConfirmationComponent;
+
+    component.transaction = this.transaction;
+    component.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
+    component.sidechainEnabled = this.sidechainEnabled;
+    component.opReturnAmount = this.opReturnAmount;
+    component.hasOpReturn = isSideChainTransaction;
   }
 }

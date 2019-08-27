@@ -7,7 +7,7 @@ import { WalletRecovery } from '@shared/models/wallet-recovery';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { SidechainFeeEstimation } from '@shared/models/sidechain-fee-estimation';
-import { TransactionBuilding } from '@shared/models/transaction-building';
+import { Transaction } from '@shared/models/transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { WalletRescan } from '@shared/models/wallet-rescan';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
@@ -86,26 +86,6 @@ export interface IApiService {
    * Get get all addresses for an account of a wallet from the API.
    */
   getAllAddresses(data: WalletInfo): Observable<any>;
-
-  /**
-   * Estimate the fee of a transaction
-   */
-  estimateFee(data: FeeEstimation): Observable<any>;
-
-  /**
-   * Estimate the fee of a sidechain transaction
-   */
-  estimateSidechainFee(data: SidechainFeeEstimation): Observable<any>;
-
-  /**
-   * Build a transaction
-   */
-  buildTransaction(data: TransactionBuilding): Observable<any>;
-
-  /**
-   * Send transaction
-   */
-  sendTransaction(data: TransactionSending): Observable<any>;
 
   /** Remove transaction */
   removeTransaction(walletName: string): Observable<any>;

@@ -10,7 +10,7 @@ import { WalletLoad } from '../models/wallet-load';
 import { WalletInfo, WalletInfoRequest } from '../models/wallet-info';
 import { SidechainFeeEstimation } from '../models/sidechain-fee-estimation';
 import { FeeEstimation } from '../models/fee-estimation';
-import { TransactionBuilding } from '../models/transaction-building';
+import { Transaction } from '../models/transaction';
 import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
@@ -176,64 +176,6 @@ export class ApiService extends RestApi implements IApiService {
    */
   public getAllAddresses(data: WalletInfo): Observable<any> {
     return this.get('wallet/addresses', this.getWalletParams(data)).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Estimate the fee of a transaction
-   */
-  public estimateFee(data: FeeEstimation): Observable<any> {
-    return this.post('wallet/estimate-txfee', {
-      'walletName': data.walletName,
-      'accountName': data.accountName,
-      'recipients': [
-        {
-          'destinationAddress': data.recipients[0].destinationAddress,
-          'amount': data.recipients[0].amount
-        }
-      ],
-      'feeType': data.feeType,
-      'allowUnconfirmed': true
-    }).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Estimate the fee of a sidechain transaction
-   */
-  public estimateSidechainFee(data: SidechainFeeEstimation): Observable<any> {
-    return this.post('wallet/estimate-txfee', {
-      'walletName': data.walletName,
-      'accountName': data.accountName,
-      'recipients': [
-        {
-          'destinationAddress': data.recipients[0].destinationAddress,
-          'amount': data.recipients[0].amount
-        }
-      ],
-      'feeType': data.feeType,
-      'allowUnconfirmed': true
-    }).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Build a transaction
-   */
-  public buildTransaction(data: TransactionBuilding): Observable<any> {
-    return this.post('wallet/build-transaction', data).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Send transaction
-   */
-  public sendTransaction(data: TransactionSending): Observable<any> {
-    return this.post('wallet/send-transaction', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
