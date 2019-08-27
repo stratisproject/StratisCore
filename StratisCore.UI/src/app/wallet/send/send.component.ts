@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
@@ -13,7 +13,8 @@ import { SendConfirmationComponent } from './send-confirmation/send-confirmation
 import { Subscription } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
-import { SendComponentResources } from './send-component-resources';
+import { SendComponentFormResources } from './send-component-form-resources';
+import { FormHelper } from '@shared/forms/form-helper';
 
 @Component({
   selector: 'send-component',
@@ -30,8 +31,19 @@ export class SendComponent implements OnInit, OnDestroy {
     private genericModalService: ModalService,
     public activeModal: NgbActiveModal,
     private fb: FormBuilder) {
-    this.buildSendForm();
-    this.buildSendToSidechainForm();
+
+    this.sendForm = SendComponentFormResources.buildSendForm(fb,
+      () => (this.spendableBalance - this.estimatedFee) / 100000000);
+
+    this.sendToSidechainForm = SendComponentFormResources.buildSendToSidechainForm(fb,
+      () => (this.spendableBalance - this.estimatedSidechainFee) / 100000000);
+
+    this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(300))
+      .subscribe(data => this.onSendValueChanged(data, false)));
+
+    this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(300))
+      .subscribe(data => this.onSendValueChanged(data, true)));
+
   }
 
   @Input() address: string;
@@ -53,22 +65,9 @@ export class SendComponent implements OnInit, OnDestroy {
   // Validation rules.
   public opReturnAmount = 1;
   public confirmationText: string;
-  private transaction: Transaction;
-  private walletBalanceSubscription: Subscription;
-  private sendFormErrors = {
-    'address': '',
-    'amount': '',
-    'fee': '',
-    'password': ''
-  };
-
-  private sendToSidechainFormErrors = {
-    'destinationAddress': '',
-    'federationAddress': '',
-    'amount': '',
-    'fee': '',
-    'password': ''
-  };
+  private subscriptions: Subscription[] = [];
+  private sendFormErrors: any = {};
+  private sendToSidechainFormErrors: any = {};
 
   public ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
@@ -91,90 +90,37 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.walletBalanceSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  private buildSendForm(): void {
-    this.sendForm = this.fb.group({
-      'address': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      'amount': ['', Validators.compose([Validators.required,
-        Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
-        Validators.min(0.00001),
-        (control: AbstractControl) => Validators.max((this.spendableBalance - this.estimatedFee) / 100000000)(control)])],
-      'fee': ['medium', Validators.required],
-      'password': ['', Validators.required]
-    });
-
-    this.sendForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendValueChanged(data));
-  }
-
-  private buildSendToSidechainForm(): void {
-    this.sendToSidechainForm = this.fb.group({
-      'federationAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      'destinationAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      'amount': ['', Validators.compose([Validators.required,
-        Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
-        Validators.min(1),
-        (control: AbstractControl) => Validators.max((this.spendableBalance - this.estimatedFee) / 100000000)(control)])],
-      'fee': ['medium', Validators.required],
-      'password': ['', Validators.required]
-    });
-
-    this.sendToSidechainForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendToSidechainValueChanged(data));
-  }
-
-  onSendValueChanged(data?: any) {
-    if (!this.sendForm) {
+  private onSendValueChanged(data: any, isSideChain: boolean): void {
+    const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
+    if (!form) {
       return;
     }
-    const form = this.sendForm;
-    for (const field in this.sendFormErrors) {
-      this.sendFormErrors[field] = '';
-      const control = form.get(field);
-      if (control && control.dirty && !control.valid) {
-        const messages = SendComponentResources.sendValidationMessages[field];
-        for (const key in control.errors) {
-          this.sendFormErrors[field] += messages[key] + ' ';
-        }
-      }
-    }
+
+    FormHelper.ValidateForm(form,
+      isSideChain
+        ? this.sendToSidechainFormErrors
+        : this.sendFormErrors,
+      isSideChain
+        ? SendComponentFormResources.sendToSidechainValidationMessages
+        : SendComponentFormResources.sendValidationMessages
+    );
 
     this.apiError = '';
 
-    if (this.sendForm.get('address').valid && this.sendForm.get('amount').valid) {
-      this.estimateFee(false);
-    }
-  }
+    const isValidForFeeEstimate = (isSideChain
+      ? form.get('destinationAddress').valid && form.get('federationAddress').valid
+      : form.get('address').valid) && form.get('amount').valid;
 
-  onSendToSidechainValueChanged(data?: any) {
-    if (!this.sendToSidechainForm) {
-      return;
-    }
-    const form = this.sendToSidechainForm;
-    for (const field in this.sendToSidechainFormErrors) {
-      this.sendToSidechainFormErrors[field] = '';
-      const control = form.get(field);
-      if (control && control.dirty && !control.valid) {
-        const messages = SendComponentResources.sendToSidechainValidationMessages[field];
-        for (const key in control.errors) {
-          this.sendToSidechainFormErrors[field] += messages[key] + ' ';
-        }
-      }
-    }
-
-    this.apiError = '';
-
-    if (this.sendToSidechainForm.get('destinationAddress').valid
-      && this.sendToSidechainForm.get('federationAddress').valid
-      && this.sendToSidechainForm.get('amount').valid) {
-      this.estimateFee(true);
+    if (isValidForFeeEstimate) {
+      this.estimateFee(form, isSideChain);
     }
   }
 
   // NB: This is not currently used
-  public getMaxBalance() {
+  public getMaxBalance(): void {
     let balanceResponse;
     const walletRequest = new WalletInfoRequest(this.globalService.getWalletName(), 0, this.sendForm.get('fee').value);
     this.apiService.getMaximumBalance(walletRequest)
@@ -192,19 +138,23 @@ export class SendComponent implements OnInit, OnDestroy {
       )).toPromise();
   }
 
-  public estimateFee(isSideChain: boolean) {
+  public estimateFee(form: FormGroup, isSideChain: boolean): void {
     const transaction = new FeeEstimation(
       this.globalService.getWalletName(),
       'account 0',
-      this.sendForm.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
-      this.sendForm.get('amount').value,
-      this.sendForm.get('fee').value,
+      form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
+      form.get('amount').value,
+      form.get('fee').value,
       true
     );
 
     this.walletService.estimateFee(transaction).toPromise()
       .then(response => {
-          this.estimatedFee = response;
+          if (isSideChain) {
+            this.estimatedSidechainFee = response;
+          } else {
+            this.estimatedFee = response;
+          }
         },
         error => {
           this.apiError = error.error.errors[0].message;
@@ -212,7 +162,7 @@ export class SendComponent implements OnInit, OnDestroy {
       );
   }
 
-  public send(sendToSideChain?: boolean) {
+  public send(sendToSideChain?: boolean): void {
     this.isSending = true;
     this.walletService.sendTransaction(this.getTransaction(sendToSideChain))
       .then(transactionResponse => {
@@ -245,13 +195,13 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   private getWalletBalance() {
-    this.walletBalanceSubscription = this.walletService.wallet()
+    this.subscriptions.push(this.walletService.wallet()
       .subscribe(
         response => {
           this.totalBalance = response.amountConfirmed + response.amountUnconfirmed;
           this.spendableBalance = response.spendableAmount;
         },
-      );
+      ));
   }
 
   private openConfirmationModal(isSideChainTransaction: boolean) {

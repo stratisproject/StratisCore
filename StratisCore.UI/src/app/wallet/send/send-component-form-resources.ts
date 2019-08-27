@@ -1,4 +1,6 @@
-export class SendComponentResources {
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+export class SendComponentFormResources {
   public static sendValidationMessages = {
     'address': {
       'required': 'An address is required.',
@@ -40,4 +42,31 @@ export class SendComponentResources {
       'required': 'Your password is required.'
     }
   };
+
+  public static buildSendForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
+    return fb.group({
+      'address': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      'amount': ['', Validators.compose([Validators.required,
+        Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
+        Validators.min(0.00001),
+        (control: AbstractControl) => Validators.max(balanceCalculator())(control)])],
+      'fee': ['medium', Validators.required],
+      'password': ['', Validators.required]
+    });
+  }
+
+  public static buildSendToSidechainForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
+    return fb.group({
+      'federationAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      'destinationAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      'amount': ['', Validators.compose([Validators.required,
+        Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
+        Validators.min(1),
+        (control: AbstractControl) => Validators.max((balanceCalculator()) / 100000000)(control)])],
+      'fee': ['medium', Validators.required],
+      'password': ['', Validators.required]
+    });
+  }
+
+
 }
