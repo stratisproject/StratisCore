@@ -1,14 +1,7 @@
 export class WalletInfo {
-  constructor(
-    public walletName: string,
-    public account: number = 0) {
+  constructor(walletName: string) {
+    this.walletName = walletName;
   }
-}
 
-export class WalletInfoRequest extends WalletInfo {
-  constructor(walletName: string,
-              account: number = 0,
-              public feeType?: string) {
-    super(walletName, account);
-  }
+  public walletName: string;
 }

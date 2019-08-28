@@ -1,7 +1,5 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import { ElectronService } from 'ngx-electron';
-import { WalletInfo } from '@shared/models/wallet-info';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,59 +13,56 @@ export class GlobalService {
     this.setDaemonIP();
   }
 
-  private applicationVersion = '1.2.1';
-  private testnet = false;
-  private sidechain = false;
-  private mainApiPort = 37221;
-  private testApiPort = 38221;
-  private mainSideChainApiPort = 37223;
-  private testSideChainApiPort = 38223;
+  private applicationVersion: string = "1.2.1";
+  private testnet: boolean = false;
+  private sidechain: boolean = false;
+  private mainApiPort: number = 37221;
+  private testApiPort: number = 38221;
+  private mainSideChainApiPort: number = 37223;
+  private testSideChainApiPort: number = 38223;
   private apiPort: number;
   private walletPath: string;
   private currentWalletName: string;
+  private coinUnit: string;
   private network: string;
   private daemonIP: string;
 
-  public coinUnit: string;
 
-  public currentWallet: Observable<WalletInfo> = new BehaviorSubject<WalletInfo>(null);
-
-
-  public getApplicationVersion() {
+  getApplicationVersion() {
     return this.applicationVersion;
   }
 
-  public setApplicationVersion() {
+  setApplicationVersion() {
     if (this.electronService.isElectronApp) {
       this.applicationVersion = this.electronService.remote.app.getVersion();
     }
   }
 
-  public getTestnetEnabled() {
+  getTestnetEnabled() {
     return this.testnet;
   }
 
-  public setTestnetEnabled() {
+  setTestnetEnabled() {
     if (this.electronService.isElectronApp) {
       this.testnet = this.electronService.ipcRenderer.sendSync('get-testnet');
     }
   }
 
-  public getSidechainEnabled() {
+  getSidechainEnabled() {
     return this.sidechain;
   }
 
-  public setSidechainEnabled() {
+  setSidechainEnabled() {
     if (this.electronService.isElectronApp) {
       this.sidechain = this.electronService.ipcRenderer.sendSync('get-sidechain');
     }
   }
 
-  public getApiPort() {
+  getApiPort() {
     return this.apiPort;
   }
 
-  public setApiPort() {
+  setApiPort() {
     if (this.electronService.isElectronApp) {
       this.apiPort = this.electronService.ipcRenderer.sendSync('get-port');
     } else if (this.testnet && !this.sidechain) {
@@ -81,44 +76,43 @@ export class GlobalService {
     }
   }
 
-  public getWalletPath() {
+  getWalletPath() {
     return this.walletPath;
   }
 
-  public setWalletPath(walletPath: string) {
+  setWalletPath(walletPath: string) {
     this.walletPath = walletPath;
   }
 
-  public getNetwork() {
+  getNetwork() {
     return this.network;
   }
 
-  public setNetwork(network: string) {
+  setNetwork(network: string) {
     this.network = network;
   }
 
-  public getWalletName() {
+  getWalletName() {
     return this.currentWalletName;
   }
 
-  public setWalletName(currentWalletName: string) {
+  setWalletName(currentWalletName: string) {
     this.currentWalletName = currentWalletName;
-    (<BehaviorSubject<WalletInfo>>this.currentWallet).next(new WalletInfo(currentWalletName));
   }
 
-  public getCoinUnit() {
+  getCoinUnit() {
     return this.coinUnit;
   }
 
-  public setCoinUnit(coinUnit: string) {
+  setCoinUnit(coinUnit: string) {
     this.coinUnit = coinUnit;
   }
 
-  public getDaemonIP() {
+  getDaemonIP() {
     return this.daemonIP;
   }
 
-  public setDaemonIP() {
+  setDaemonIP() {
     if (this.electronService.isElectronApp) {
       this.daemonIP = this.electronService.ipcRenderer.sendSync('get-daemonip');
     } else {

@@ -1,4 +1,5 @@
-<div class="status" *ngIf="(generalInfo | async) as _generalInfo">
+<!-- STATUSBAR -->
+<div class="status">
   <ul class="list-inline align-self-center row">
     <li *ngIf="!(percentSynced == '100%')" class="list-inline-item mx-1" placement="top" ngbTooltip="{{toolTip}}">
       <i class="lnr lnr-cloud-sync text-warning"></i>
@@ -10,13 +11,14 @@
     </li>
     <li class="list-inline-item mx-1" placement="top" ngbTooltip="{{ connectedNodesTooltip }}">
       <i class="lnr lnr-earth text-black"></i>
-      <small class="text-black">{{ _generalInfo.connectedNodes }}</small>
+      <small class="text-black">{{ connectedNodes }}</small>
     </li>
-    <li *ngIf="!stakingService.stakingEnabled && !globalService.getSidechainEnabled()" class="list-inline-item mx-1" placement="top" ngbTooltip="Not staking">
+    <li *ngIf="!stakingEnabled && !sidechainsEnabled" class="list-inline-item mx-1" placement="top" ngbTooltip="Not staking">
       <i class="lnr lnr-lock text-danger"></i>
     </li>
-    <li *ngIf="stakingService.stakingEnabled && !globalService.getSidechainEnabled()" class="list-inline-item mx-1" placement="top" ngbTooltip="Staking">
+    <li *ngIf="stakingEnabled && !sidechainsEnabled" class="list-inline-item mx-1" placement="top" ngbTooltip="Staking">
       <i class="lnr lnr-lock text-success"></i>
     </li>
   </ul>
 </div>
+<!-- /STATUSBAR -->
