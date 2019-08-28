@@ -20,14 +20,14 @@ export class AddNewAddressComponent {
     this.buildAddressForm();
   }
 
-  private addressForm: FormGroup;
+  public addressForm: FormGroup;
 
-  private formErrors = {
+  public formErrors = {
     'label': '',
     'address': ''
   };
 
-  private validationMessages = {
+  public validationMessages = {
     'label': {
       'required': 'Please enter a label for your address.',
       'minlength': 'A label needs to be at least 2 characters long.',

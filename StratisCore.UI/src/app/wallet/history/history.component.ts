@@ -15,7 +15,7 @@ import { map, tap } from 'rxjs/operators';
 })
 
 export class HistoryComponent implements OnInit {
-  private walletHistory: Observable<TransactionInfo[]>;
+  public walletHistory: Observable<TransactionInfo[]>;
   @Input() public enablePagination: boolean;
   @Input() public enableShowHistoryButton: boolean;
   @Input() public maxTransactionCount: number;
