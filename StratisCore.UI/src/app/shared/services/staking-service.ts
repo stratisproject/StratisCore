@@ -29,8 +29,11 @@ export class StakingService extends RestApi {
     errorService: ErrorService) {
     super(globalService, http, errorService);
     signalRService.registerOnMessageEventHandler<StakingInfoSignalREvent>(
-      SignalREvents.StakingInfo, (message) => {
-        this.stakingInfoUpdatedSubject.next(message);
+      SignalREvents.StakingInfo, (stakingInfo) => {
+        if (stakingInfo.enabled !== this.stakingEnabled) {
+          this.stakingEnabled = stakingInfo.enabled;
+        }
+        this.stakingInfoUpdatedSubject.next(stakingInfo);
       });
   }
 
