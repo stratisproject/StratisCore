@@ -1,9 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
 import { GlobalService } from '@shared/services/global.service';
-
 import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
 
 @Component({

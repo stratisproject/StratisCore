@@ -7,6 +7,7 @@ import { ReceiveComponent } from '../receive/receive.component';
 import { Observable } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
 import { WalletBalance } from '@shared/services/interfaces/api.i';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'dashboard-component',
@@ -17,6 +18,7 @@ import { WalletBalance } from '@shared/services/interfaces/api.i';
 export class DashboardComponent implements OnInit {
 
   public wallet: Observable<WalletBalance>;
+  public transactionCount: Observable<number>;
 
   constructor(
     private walletService: WalletService,
@@ -27,6 +29,7 @@ export class DashboardComponent implements OnInit {
 
   public ngOnInit() {
     this.wallet = this.walletService.wallet();
+    this.transactionCount = this.walletService.walletHistory().pipe(map(items => items ? items.length : 0));
   }
 
   public openSendDialog() {

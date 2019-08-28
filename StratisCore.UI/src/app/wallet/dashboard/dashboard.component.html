@@ -41,14 +41,24 @@
     </div>
     <!-- /JUMBOTRON-->
     <div class="row">
-      <section class="col-8" [class.col-12]="globalService.getSidechainEnabled()">
-
-        <app-transactions title="Latest Transactions" [maxTransactionCount]="5" [enableShowHistoryButton]="true">
+      <div class="col-8" *ngIf="(transactionCount | async) > 0 else noTransactions"
+           [class.col-12]="globalService.getSidechainEnabled()">
+        <app-transactions title="Latest Transactions"
+                          [maxTransactionCount]="5" [enableShowHistoryButton]="true">
         </app-transactions>
-      </section>
+      </div>
+      <div class="col-4" *ngIf="!globalService.getSidechainEnabled()">
+        <app-staking></app-staking>
+      </div>
 
-      <app-staking></app-staking>
-
+      <ng-template #noTransactions>
+        <section class="col-12 text-center my-4">
+          <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">
+        </section>
+        <div class="col-12 text-center">
+          <p>Click the down arrow for a receive address.</p>
+        </div>
+      </ng-template>
     </div>
     <status-bar></status-bar>
   </section>

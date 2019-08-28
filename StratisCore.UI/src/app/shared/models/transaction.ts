@@ -14,7 +14,7 @@ export class Transaction {
     public accountName: string,
     public password: string,
     destinationAddress: string,
-    amount: string,
+    public amount: string,
     public feeAmount: number,
     public allowUnconfirmed: boolean,
     public shuffleOutputs: boolean,

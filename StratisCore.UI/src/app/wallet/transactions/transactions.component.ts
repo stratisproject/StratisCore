@@ -32,10 +32,9 @@ export class TransactionsComponent implements OnInit {
   public ngOnInit(): void {
     this.transactions = this.walletService.walletHistory()
       .pipe(map((historyItems => {
-        return null;
-        // return (null != historyItems && historyItems.length > 0)
-        //   ? TransactionInfo.mapFromTransactionsHistoryItems(historyItems, this.maxTransactionCount)
-        //   : null;
+        return (null != historyItems && historyItems.length > 0)
+          ? TransactionInfo.mapFromTransactionsHistoryItems(historyItems, this.maxTransactionCount)
+          : null;
       })));
   }
 

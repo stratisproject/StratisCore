@@ -6,7 +6,7 @@ import { ModalService } from '@shared/services/modal.service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { Observable } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'history-component',
@@ -30,14 +30,19 @@ export class HistoryComponent implements OnInit {
   }
 
   public transactions: TransactionInfo[];
+  public transactionCount: number;
   public coinUnit: string;
   public pageNumber = 1;
 
   public ngOnInit(): void {
     this.walletHistory = this.walletService.walletHistory()
-      .pipe(map(historyItems => {
-        return TransactionInfo.mapFromTransactionsHistoryItems(historyItems);
-      }));
+      .pipe(
+        tap((historyItems) => {
+          this.transactionCount = historyItems ? historyItems.length : 0;
+        }),
+        map(historyItems => {
+          return historyItems ? TransactionInfo.mapFromTransactionsHistoryItems(historyItems) : [];
+        }));
     this.coinUnit = this.globalService.getCoinUnit();
   }
 

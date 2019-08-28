@@ -15,7 +15,7 @@ import { debounceTime, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
 import { SendComponentFormResources } from './send-component-form-resources';
 import { FormHelper } from '@shared/forms/form-helper';
-import { TransactionResponse } from "@shared/models/transaction-response";
+import { TransactionResponse } from '@shared/models/transaction-response';
 
 @Component({
   selector: 'send-component',
@@ -62,7 +62,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public firstTitle: string;
   public secondTitle: string;
 
-  // The opReturnAmount is for compatibilty with StratisX, opReturnAmount needs to be greater than 0 to pass the MemPool
+  // The opReturnAmount is for compatibility with StratisX, opReturnAmount needs to be greater than 0 to pass the MemPool
   // Validation rules.
   public opReturnAmount = 1;
   public confirmationText: string;
@@ -189,7 +189,6 @@ export class SendComponent implements OnInit, OnDestroy {
       (isSideChain ? this.estimatedSidechainFee : this.estimatedFee) / 100000000,
       true,
       false,
-
       isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
       isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null
     );
