@@ -15,6 +15,7 @@ import { debounceTime, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
 import { SendComponentFormResources } from './send-component-form-resources';
 import { FormHelper } from '@shared/forms/form-helper';
+import { TransactionResponse } from "@shared/models/transaction-response";
 
 @Component({
   selector: 'send-component',
@@ -168,7 +169,7 @@ export class SendComponent implements OnInit, OnDestroy {
       .then(transactionResponse => {
         this.estimatedFee = transactionResponse.transactionFee;
         this.activeModal.close('Close clicked');
-        this.openConfirmationModal(transactionResponse.isSideChain);
+        this.openConfirmationModal(transactionResponse);
         this.isSending = false;
       }).catch(error => {
       this.isSending = false;
@@ -204,15 +205,15 @@ export class SendComponent implements OnInit, OnDestroy {
       ));
   }
 
-  private openConfirmationModal(isSideChainTransaction: boolean) {
+  private openConfirmationModal(transactionResponse: TransactionResponse) {
     const component = this.modalService
       .open(SendConfirmationComponent, {backdrop: 'static'})
       .componentInstance as SendConfirmationComponent;
 
-    component.transaction = this.transaction;
+    component.transaction = transactionResponse.transaction;
     component.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
     component.sidechainEnabled = this.sidechainEnabled;
     component.opReturnAmount = this.opReturnAmount;
-    component.hasOpReturn = isSideChainTransaction;
+    component.hasOpReturn = transactionResponse.isSideChain;
   }
 }

@@ -62,7 +62,7 @@ export class SendComponentFormResources {
       'amount': ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(1),
-        (control: AbstractControl) => Validators.max((balanceCalculator()) / 100000000)(control)])],
+        (control: AbstractControl) => Validators.max(balanceCalculator())(control)])],
       'fee': ['medium', Validators.required],
       'password': ['', Validators.required]
     });

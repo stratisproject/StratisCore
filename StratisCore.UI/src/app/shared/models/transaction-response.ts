@@ -1,5 +1,7 @@
+import { Transaction } from '@shared/models/transaction';
+
 export class TransactionResponse {
-  constructor(public transactionFee: number, public isSideChain: boolean) {
+  constructor(public transaction: Transaction, public transactionFee: number, public isSideChain: boolean) {
   }
 }
 

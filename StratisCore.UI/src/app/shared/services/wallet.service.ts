@@ -87,7 +87,7 @@ export class WalletService extends RestApi {
       flatMap((buildTransactionResponse) => {
         return this.post('wallet/send-transaction', new TransactionSending(buildTransactionResponse.hex)).pipe(
           map(() => {
-            return new TransactionResponse(buildTransactionResponse.fee, buildTransactionResponse.isSideChain);
+            return new TransactionResponse(transaction, buildTransactionResponse.fee, buildTransactionResponse.isSideChain);
           }));
       }),
       catchError(err => this.handleHttpError(err))
