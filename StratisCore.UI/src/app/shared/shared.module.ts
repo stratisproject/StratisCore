@@ -13,12 +13,50 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { GenericModalComponent } from './components/generic-modal/generic-modal.component';
 import { LoadingModalComponent } from './components/loading-modal/loading-modal.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
+import { SecondsToStringPipe } from '@shared/pipes/seconds-to-string.pipe';
+import { ApiService } from '@shared/services/api.service';
+import { SignalRService } from '@shared/services/signalr-service';
+import { WalletService } from '@shared/services/wallet.service';
+import { StakingService } from '@shared/services/staking-service';
 
 @NgModule({
-  imports: [ CommonModule ],
-  declarations: [ CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective, GenericModalComponent, LoadingModalComponent, ConfirmationModalComponent ],
-  exports: [ CommonModule, ReactiveFormsModule, FormsModule, NgbModule, NgxElectronModule, NgxQRCodeModule, NgxPaginationModule, ClipboardModule, GenericModalComponent, CoinNotationPipe, NumberToStringPipe, AutoFocusDirective, PasswordValidationDirective, LoadingModalComponent, ConfirmationModalComponent ],
-  entryComponents: [ GenericModalComponent, ConfirmationModalComponent ]
+  imports: [CommonModule],
+  declarations: [
+    CoinNotationPipe,
+    NumberToStringPipe,
+    SecondsToStringPipe,
+    AutoFocusDirective,
+    PasswordValidationDirective,
+    GenericModalComponent,
+    LoadingModalComponent,
+    ConfirmationModalComponent],
+  providers : [
+    ApiService,
+    WalletService,
+    SignalRService,
+    StakingService
+  ],
+  exports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    NgbModule,
+    NgxElectronModule,
+    NgxQRCodeModule,
+    NgxPaginationModule,
+    ClipboardModule,
+    GenericModalComponent,
+    CoinNotationPipe,
+    NumberToStringPipe,
+    SecondsToStringPipe,
+    AutoFocusDirective,
+    PasswordValidationDirective,
+    LoadingModalComponent,
+    ConfirmationModalComponent],
+  entryComponents: [
+    GenericModalComponent,
+    ConfirmationModalComponent]
 })
 
-export class SharedModule { }
+export class SharedModule {
+}

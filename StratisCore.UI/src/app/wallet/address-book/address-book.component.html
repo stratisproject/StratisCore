@@ -12,7 +12,7 @@
             </ng-template>
           </div>
           <div *ngIf="addresses; else noAddresses">
-            <div class="row" *ngFor="let addressRow of addresses">
+            <div class="row" *ngFor="let addressRow of addresses | async">
                 <div class="card Addresses col-12 my-1">
                     <div class="card-body">
                         <dl class="d-flex align-items-center mb-0">

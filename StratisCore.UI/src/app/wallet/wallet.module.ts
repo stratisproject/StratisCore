@@ -23,6 +23,8 @@ import { TokensModule } from './tokens/tokens.module';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletComponent } from './wallet.component';
+import { TransactionsComponent } from './transactions/transactions.component';
+import { StakingComponent } from './staking/staking.component';
 
 @NgModule({
   imports: [
@@ -50,7 +52,9 @@ import { WalletComponent } from './wallet.component';
     ExtPubkeyComponent,
     AboutComponent,
     GenerateAddressesComponent,
-    ResyncComponent
+    ResyncComponent,
+    TransactionsComponent,
+    StakingComponent
   ],
   entryComponents: [
     SendComponent,
