@@ -3,7 +3,8 @@ import { ApiService } from '@shared/services/api.service';
 import { Observable, of } from 'rxjs';
 
 export class SmartContractsContractItem {
-  constructor(public blockId: string, public type: string, public hash: string, public destinationAddress: string, public amount: number) { }
+  constructor(
+    public blockId: string, public type: string, public hash: string, public destinationAddress: string, public amount: number) { }
 }
 
 export class ContractTransactionItem {
@@ -44,41 +45,41 @@ export class SmartContractsService implements SmartContractsServiceBase {
   }
 
   PostCall(createTransaction: any): Observable<any> {
-    return this.apiService.postCallTransaction(createTransaction)
+    return this.apiService.postCallTransaction(createTransaction);
   }
 
   PostCreate(createTransaction: any): Observable<any> {
-    return this.apiService.postCreateTransaction(createTransaction)
+    return this.apiService.postCreateTransaction(createTransaction);
   }
 
   GetHistory(walletName: string, address: string): Observable<any> {
-    return this.apiService.getAccountHistory(walletName, address)
+    return this.apiService.getAccountHistory(walletName, address);
   }
 
   GetBalance(walletName: string): Observable<any> {
-    return this.apiService.getAccountBalance(walletName)
+    return this.apiService.getAccountBalance(walletName);
   }
 
   GetAddressBalance(address: string): Observable<any> {
-    return this.apiService.getAddressBalance(address)
+    return this.apiService.getAddressBalance(address);
   }
 
   GetAddress(walletName: string): Observable<any> {
-    return this.apiService.getAccountAddress(walletName)
+    return this.apiService.getAccountAddress(walletName);
   }
 
   GetAddresses(walletName: string): Observable<any> {
-    return this.apiService.getAccountAddresses(walletName)
+    return this.apiService.getAccountAddresses(walletName);
   }
 
   GetContracts(walletName: string): Observable<SmartContractsContractItem[]> {
     return of([
-      new SmartContractsContractItem('7809', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 10898025),
-      new SmartContractsContractItem('7810', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 11898025),
-      new SmartContractsContractItem('7811', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 12898025),
-      new SmartContractsContractItem('7812', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 13898025),
-      new SmartContractsContractItem('7813', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 14898025),
-      new SmartContractsContractItem('7814', 'Transfert', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 15898025),
+      new SmartContractsContractItem('7809', 'Transfer', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 10898025),
+      new SmartContractsContractItem('7810', 'Transfer', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 11898025),
+      new SmartContractsContractItem('7811', 'Transfer', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 12898025),
+      new SmartContractsContractItem('7812', 'Transfer', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 13898025),
+      new SmartContractsContractItem('7813', 'Transfer', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 14898025),
+      new SmartContractsContractItem('7814', 'Transfer', 'bbdbcae72f1085710', 'SdrP9wvxZmaG7t3UAjxxyB6RNT9FV1Z2Sn', 15898025),
     ]);
   }
 

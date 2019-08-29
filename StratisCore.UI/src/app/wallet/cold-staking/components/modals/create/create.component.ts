@@ -8,7 +8,7 @@ import { ColdStakingCreateSuccessComponent } from '../create-success/create-succ
 import { Router } from '@angular/router';
 
 type FeeType = { id: number, display: string };
-enum HotColdWallet { Hot = 1, Cold };
+enum HotColdWallet { Hot = 1, Cold }
 
 @Component({
     selector: 'app-create',
@@ -71,7 +71,7 @@ export class ColdStakingCreateComponent {
         this.canCreate = this._amountFormatted.length && this._destinationAddress.length && this.passwordValid;
     }
 
-    createClicked() {
+    public createClicked() {
         this.stakingService.CreateColdstaking(this.globalService.getWalletName())
             .subscribe(success => {
                 if (success) {

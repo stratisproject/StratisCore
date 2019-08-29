@@ -296,3 +296,5 @@ project.lock.json
 /StratisCore.UI/main.js
 /StratisCore.UI/main.js.map
 .vscode/
+
+StratisCore.UI/.idea/.idea.StratisCore.UI.dir/.idea/
