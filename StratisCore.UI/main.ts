@@ -89,7 +89,10 @@ function createWindow() {
     frame: true,
     minWidth: 1150,
     minHeight: 650,
-    title: applicationName
+    title: applicationName,
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
 
   if (serve) {
