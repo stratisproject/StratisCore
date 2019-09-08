@@ -15,10 +15,6 @@ let testnet;
 let sidechain;
 let nodaemon;
 const args = process.argv.slice(1);
-
-// Enable SignalR feature in daemon
-args.push('-enableSignalR');
-
 serve = args.some(val => val === '--serve' || val === '-serve');
 testnet = args.some(val => val === '--testnet' || val === '-testnet');
 sidechain = args.some(val => val === '--sidechain' || val === '-sidechain');
@@ -129,9 +125,6 @@ function createWindow() {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
-
-  // Remove menu, new from Electron 5
-  mainWindow.removeMenu();
 
 }
 
