@@ -13,8 +13,8 @@
             }"></span></th>
 
           <td class="text-uppercase text-left">{{ _transaction.transactionType }}</td>
-          <td class="text-left">
-            <strong>- {{ _transaction.transactionAmount + _transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
+          <td class="text-left">{{_transaction.transactionType == 'sent' ? '- ' : '+ '}}
+            <strong> {{ _transaction.transactionAmount + _transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
           </td>
           <td class="text-left">{{ _transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
           <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(_transaction)">details</a>
