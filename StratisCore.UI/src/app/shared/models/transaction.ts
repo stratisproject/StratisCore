@@ -23,11 +23,8 @@ export class Transaction {
     public changeAddress?: string,
     public isSideChainTransaction?: boolean) {
     this.recipients = [new Recipient(destinationAddress, amount)];
-    this.sender = changeAddress;
   }
-
   public recipients: Recipient[];
-  public sender: string;
 }
 
 export class FeeTransaction extends Transaction {

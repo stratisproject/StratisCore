@@ -9,11 +9,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
-import { Transaction } from '@shared/models/transaction';
+import { FeeTransaction, Transaction } from '@shared/models/transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { CurrentAccountService } from "@shared/services/current-account.service";
+import { ReturnStatement } from "@angular/compiler";
 
 @Injectable({
   providedIn: 'root'
@@ -68,9 +69,24 @@ export class WalletService extends RestApi {
   }
 
   public estimateFee(feeEstimation: FeeEstimation): Observable<any> {
-    return this.post('wallet/estimate-txfee', feeEstimation).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
+
+    //TODO: What is the intrinsic link between Smart Contacts and Accounts Enabled?
+    if (this.accountsEnabled) {
+
+      feeEstimation.changeAddress = this.currentAccountService.getAddress();
+      feeEstimation.shuffleOutputs = false;
+
+      return this.post('/smartcontracts/estimate-fee', feeEstimation).pipe(
+        catchError(err => this.handleHttpError(err))
+      );
+    } else {
+
+      feeEstimation.shuffleOutputs = true;
+
+      return this.post('wallet/estimate-txfee', feeEstimation).pipe(
+        catchError(err => this.handleHttpError(err))
+      );
+    }
   }
 
   public getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
@@ -83,7 +99,20 @@ export class WalletService extends RestApi {
   }
 
   private buildAndSendTransaction(transaction: Transaction): Observable<TransactionResponse> {
-    return this.post<BuildTransactionResponse>('wallet/build-transaction', transaction).pipe(
+
+    if (this.accountsEnabled) {
+      transaction.shuffleOutputs = !this.accountsEnabled;
+      if (this.globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress()) {
+        // Only set a change address if we're on a sidechain and there's a current account selected
+        transaction.changeAddress = this.currentAccountService.getAddress();
+      }
+    }
+
+    const observable = this.accountsEnabled
+      ? this.post<BuildTransactionResponse>('/smartcontracts/build-transaction', transaction)
+      : this.post<BuildTransactionResponse>('wallet/build-transaction', transaction);
+
+    return observable.pipe(
       map(response => {
         response.isSideChain = transaction.isSideChainTransaction;
         return response;

@@ -11,7 +11,7 @@ export class RestApi {
   protected API_URL;
 
   constructor(
-    globalService: GlobalService,
+    protected globalService: GlobalService,
     protected httpClient: HttpClient,
     protected errorService: ErrorService
   ) {

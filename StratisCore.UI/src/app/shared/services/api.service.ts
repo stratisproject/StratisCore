@@ -29,7 +29,7 @@ export class ApiService extends RestApi implements IApiService {
 
   constructor(
     http: HttpClient,
-    private globalService: GlobalService,
+    globalService: GlobalService,
     errorService: ErrorService) {
     super(globalService, http, errorService);
   }
@@ -300,21 +300,6 @@ export class ApiService extends RestApi implements IApiService {
 
   public localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {
     return this.post<LocalExecutionResult>('/smartcontracts/local-call', localCall).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Build a transaction for use on an account-based sidechain.
-   */
-  public buildContractTransaction(data: Transaction): Observable<any> {
-    return this.post('/smartcontracts/build-transaction', JSON.stringify(data)).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  public estimateContractTransactionFee(data: FeeTransaction): Observable<any> {
-    return this.post('/smartcontracts/estimate-fee', JSON.stringify(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
