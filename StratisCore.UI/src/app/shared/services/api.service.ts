@@ -10,7 +10,7 @@ import { WalletLoad } from '../models/wallet-load';
 import { WalletInfo, WalletInfoRequest } from '../models/wallet-info';
 import { SidechainFeeEstimation } from '../models/sidechain-fee-estimation';
 import { FeeEstimation } from '../models/fee-estimation';
-import { Transaction } from '../models/transaction';
+import { FeeTransaction, Transaction } from '../models/transaction';
 import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
@@ -283,12 +283,9 @@ export class ApiService extends RestApi implements IApiService {
     );
   }
 
-  /*
-    * Returns the receipt for a particular txhash, or empty JSON.
-    */
   public getReceipt(hash: string, silent: boolean = false): any {
-    const params = new HttpParams().set('txHash', hash);
-    return this.get('smartcontracts/receipt', params).pipe(
+    let params = new HttpParams().set('txHash', hash);
+    return this.get('/smartcontracts/receipt', params).pipe(
       catchError(err => this.handleHttpError(err, silent))
     );
   }
@@ -297,12 +294,27 @@ export class ApiService extends RestApi implements IApiService {
     Setting the silent flag is not enough because the error format returned by /receipt still causes a modal to be displayed.
   */
   public getReceiptSilent(hash: string): any {
-    const params = new HttpParams().set('txHash', hash);
-    return this.get('smartcontracts/receipt', params);
+    let params = new HttpParams().set('txHash', hash);
+    return this.get('/smartcontracts/receipt', params);
   }
 
   public localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {
-    return this.post<LocalExecutionResult>('smartcontracts/local-call', localCall).pipe(
+    return this.post<LocalExecutionResult>('/smartcontracts/local-call', localCall).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Build a transaction for use on an account-based sidechain.
+   */
+  public buildContractTransaction(data: Transaction): Observable<any> {
+    return this.post('/smartcontracts/build-transaction', JSON.stringify(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  public estimateContractTransactionFee(data: FeeTransaction): Observable<any> {
+    return this.post('/smartcontracts/estimate-fee', JSON.stringify(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }

@@ -13,6 +13,7 @@ import { HistoryComponent } from './history/history.component';
 import { SmartContractsComponent } from './smart-contracts/components/smart-contracts.component';
 import { TokensComponent } from './tokens/components/tokens.component';
 import { WalletComponent } from './wallet.component';
+import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 
 const routes: Routes = [
   {
@@ -31,8 +32,8 @@ const routes: Routes = [
           { path: 'resync', component: ResyncComponent }
         ]
       },
-      { path: 'smart-contracts', component: SmartContractsComponent },
-      { path: 'tokens', component: TokensComponent },
+      { path: 'smart-contracts', component: SmartContractsComponent, canActivate: [AccountSelectedGuard] },
+      { path: 'tokens', component: TokensComponent, canActivate: [AccountSelectedGuard] },
       { path: 'address-book', component: AddressBookComponent }
     ]
   },

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, of } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
+import { switchMap, catchError, take } from 'rxjs/operators';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -9,6 +9,7 @@ import { GlobalService } from '@shared/services/global.service';
 import { TransactionComponent, Mode } from './modals/transaction/transaction.component';
 import { ModalService } from '@shared/services/modal.service';
 import { takeUntil } from 'rxjs/operators';
+import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Component({
     selector: 'app-smart-contracts',
@@ -18,7 +19,6 @@ import { takeUntil } from 'rxjs/operators';
 export class SmartContractsComponent implements OnInit, OnDestroy {
 
     private walletName = '';
-    addresses: string[];
     addressChangedSubject: Subject<string>;
     balance: number;
     selectedAddress: string;
@@ -30,58 +30,31 @@ export class SmartContractsComponent implements OnInit, OnDestroy {
         private smartContractsService: SmartContractsServiceBase,
         private clipboardService: ClipboardService,
         private modalService: NgbModal,
-        private genericModalService: ModalService) {
+        private genericModalService: ModalService,
+        private currentAccountService: CurrentAccountService) {
 
         this.coinUnit = this.globalService.getCoinUnit();
         this.walletName = this.globalService.getWalletName();
-        this.addressChangedSubject = new Subject();
+        this.selectedAddress = this.currentAccountService.getAddress();
 
-        this.smartContractsService
-            .GetAddresses(this.walletName)
+        this.smartContractsService.GetAddressBalance(this.selectedAddress)
             .pipe(
-              catchError(error => {
-                this.showApiError('Error retrieving addressses. ' + error);
+                catchError(error => {
+                    this.showApiError('Error retrieving balance. ' + error);
+                    return of(0);
+                }),
+                take(1)
+            )
+            .subscribe(balance => this.balance = balance);
+
+        this.smartContractsService.GetHistory(this.walletName, this.selectedAddress)
+            .pipe(catchError(error => {
+                this.showApiError('Error retrieving transactions. ' + error);
                 return of([]);
-              }),
-              takeUntil(this.unsubscribe))
-            .subscribe(addresses => {
-                if (addresses && addresses.length > 0) {
-                    this.addressChangedSubject.next(addresses[0]);
-                    this.addresses = addresses;
-                }
-            });
-
-        this.addressChangedSubject
-                .pipe(
-                  switchMap(x => this.smartContractsService.GetAddressBalance(x)
-                    .pipe(
-                      catchError(error => {
-                          this.showApiError('Error retrieving balance. ' + error);
-                          return of(0);
-                      })
-                    )
-                  ),
-                  takeUntil(this.unsubscribe)
-                )
-                .subscribe(balance => this.balance = balance);
-
-        this.addressChangedSubject
-            .pipe(
-              switchMap(address => this.smartContractsService.GetHistory(this.walletName, address)
-                .pipe(catchError(error => {
-                    this.showApiError('Error retrieving transactions. ' + error);
-                    return of([]);
-                  })
-                )
-              ),
-              takeUntil(this.unsubscribe)
+                }),
+                take(1)
             )
             .subscribe(history => this.history = history);
-
-
-        this.addressChangedSubject
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe(address => this.selectedAddress = address);
     }
 
     ngOnInit() {
@@ -94,10 +67,6 @@ export class SmartContractsComponent implements OnInit, OnDestroy {
 
     showApiError(error: string) {
         this.genericModalService.openModal('Error', error);
-    }
-
-    addressChanged(address: string) {
-        this.addressChangedSubject.next(address);
     }
 
     clipboardAddressClicked() {

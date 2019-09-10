@@ -7,7 +7,7 @@ import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
 import { NumberToStringPipe } from '@shared/pipes/number-to-string.pipe';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FeeEstimation } from '@shared/models/fee-estimation';
-import { Transaction } from '@shared/models/transaction';
+import { FeeTransaction, Transaction } from '@shared/models/transaction';
 import { WalletInfoRequest } from '@shared/models/wallet-info';
 import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,8 @@ import { WalletService } from '@shared/services/wallet.service';
 import { SendComponentFormResources } from './send-component-form-resources';
 import { FormHelper } from '@shared/forms/form-helper';
 import { TransactionResponse } from '@shared/models/transaction-response';
+import { CurrentAccountService } from "@shared/services/current-account.service";
+import { WalletBalance } from "@shared/services/interfaces/api.i";
 
 @Component({
   selector: 'send-component',
@@ -24,12 +26,17 @@ import { TransactionResponse } from '@shared/models/transaction-response';
 })
 
 export class SendComponent implements OnInit, OnDestroy {
+
+  private accountsEnabled: boolean;
+
+
   constructor(
     private apiService: ApiService,
     private walletService: WalletService,
     private globalService: GlobalService,
     private modalService: NgbModal,
     private genericModalService: ModalService,
+    private currentAccountService: CurrentAccountService,
     public activeModal: NgbActiveModal,
     private fb: FormBuilder) {
 
@@ -72,6 +79,8 @@ export class SendComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
     if (this.sidechainEnabled) {
       this.firstTitle = 'Sidechain';
       this.secondTitle = 'Mainchain';
@@ -179,6 +188,10 @@ export class SendComponent implements OnInit, OnDestroy {
 
   private getTransaction(isSideChain?: boolean): Transaction {
     const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
+
+    // Only set a change address if we're on a sidechain and there's a current account selected
+    let setSender = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
     return new Transaction(
       this.globalService.getWalletName(),
       'account 0',
@@ -202,6 +215,34 @@ export class SendComponent implements OnInit, OnDestroy {
           this.spendableBalance = response.spendableAmount;
         },
       ));
+  }
+
+  public estimateAccountsFee() {
+
+    let estimationTx = new FeeTransaction(
+      this.globalService.getWalletName(),
+      "account 0",
+      this.sendForm.get("password").value,
+      this.sendForm.get("address").value.trim(),
+      this.sendForm.get("amount").value,
+      null, // This must be set to null to get the tx builder to estimate a fee.
+      true,
+      false
+    );
+
+    estimationTx.sender = this.currentAccountService.getAddress();
+    estimationTx.feeType = this.sendForm.get("fee").value; // Must be set to get the tx builder to estimate a fee.
+
+    this.apiService.estimateContractTransactionFee(estimationTx)
+      .subscribe(
+        response => {
+          console.log("Estimated fee: " + response);
+          this.estimatedFee = response;
+        },
+        error => {
+          this.apiError = error.error.errors[0].message;
+        }
+      );
   }
 
   private openConfirmationModal(transactionResponse: TransactionResponse) {

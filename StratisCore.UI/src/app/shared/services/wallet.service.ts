@@ -13,6 +13,7 @@ import { Transaction } from '@shared/models/transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';
+import { CurrentAccountService } from "@shared/services/current-account.service";
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +23,16 @@ export class WalletService extends RestApi {
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
   private currentWallet: WalletInfo;
+  public accountsEnabled: boolean;
 
   constructor(
     globalService: GlobalService,
     http: HttpClient,
     errorService: ErrorService,
+    private currentAccountService: CurrentAccountService,
     signalRService: SignalRService) {
     super(globalService, http, errorService);
+    this.accountsEnabled = globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress();
 
     globalService.currentWallet.subscribe(wallet => {
       this.currentWallet = wallet;
@@ -135,6 +139,13 @@ export class WalletService extends RestApi {
       Object.keys(extra).forEach(key => params.set(key, extra[key]));
     }
     return params;
+  }
+
+  private getReceivedByAddress(address: string): Observable<any> {
+    let params = new HttpParams()
+      .set('address', address);
+    return this.get('/wallet/received-by-address', params)
+      .pipe(catchError(err => this.handleHttpError(err)));
   }
 
   private refreshWallet(): void {

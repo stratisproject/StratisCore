@@ -20,9 +20,16 @@ export class Transaction {
     public shuffleOutputs: boolean,
     public opReturnData?: string,
     public opReturnAmount?: string,
+    public changeAddress?: string,
     public isSideChainTransaction?: boolean) {
     this.recipients = [new Recipient(destinationAddress, amount)];
+    this.sender = changeAddress;
   }
-  public recipients: Recipient[];
 
+  public recipients: Recipient[];
+  public sender: string;
+}
+
+export class FeeTransaction extends Transaction {
+  feeType: string;
 }

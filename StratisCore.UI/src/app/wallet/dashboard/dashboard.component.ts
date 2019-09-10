@@ -36,6 +36,7 @@ export class DashboardComponent implements OnInit {
     this.modalService.open(SendComponent, {backdrop: 'static', keyboard: false});
   }
 
+
   public openReceiveDialog() {
     this.modalService.open(ReceiveComponent, {backdrop: 'static', keyboard: false});
   }
