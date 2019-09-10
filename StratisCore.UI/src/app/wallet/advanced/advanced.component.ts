@@ -9,10 +9,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 export class AdvancedComponent implements OnInit, OnDestroy {
   ngOnInit() {
-
   }
 
   ngOnDestroy() {
-
   }
 }

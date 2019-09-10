@@ -1,48 +1,20 @@
 <section id="GUI" class="light">
- <!-- CONTAINER -->
   <section id="content" class="light col-10 mx-auto">
-
-    <!-- CONTENT -->
-    <section class="col-12">
-      <div class="row">
-        <!-- TRANSACTIONS -->
-        <div class="col">
-          <div class="card mb-4" *ngIf="transactions; else noTransactions">
-            <div class="card-header">Transaction History</div>
-            <div class="card-body">
-              <table class="table table-sm">
-                <tbody>
-                  <tr *ngFor="let transaction of transactions | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
-                    <th class="text-center" *ngIf="!transaction.transactionConfirmedInBlock"><span class="bubble bg-warning"></span></th>
-                    <th class="text-center" *ngIf="transaction.transactionConfirmedInBlock"><span class="bubble bg-success"></span></th>
-                    <td class="text-uppercase text-left">{{ transaction.transactionType }}</td>
-                    <td class="text-left" *ngIf="transaction.transactionType == 'sent'"><strong>- {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
-                    <td class="text-left" *ngIf="transaction.transactionType == 'received'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
-                    <td class="text-left" *ngIf="transaction.transactionType == 'staked'"><strong>+ {{ transaction.transactionAmount + transaction.transactionFee | coinNotation }} {{ coinUnit }}</strong></td>
-                    <td class="text-left">{{ transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-                    <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(transaction)">details</a></td>
-                  </tr>
-                </tbody>
-              </table>
-              <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
-            </div>
-          </div>
-          <ng-template #noTransactions><em class="muted">Looks like you haven't made any transactions yet.</em></ng-template>
-        </div>
-        <!-- <section>
-              <nav aria-label="Page navigation example">
-              <ul class="pagination justify-content-end">
-                <li class="page-item disabled"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#">Next</a>
-                </li>
-              </ul>
-            </nav>
-            </section> -->
-      <!-- /TRANSACTIONS -->
+    <div class="row">
+      <div class="col" *ngIf="(walletHistory | async)">
+        <app-transactions *ngIf="transactionCount > 0; else noTransactions" [enablePagination]="true"
+                          title="Transaction History"></app-transactions>
       </div>
-    </section>
-  <!-- /CONTENT -->
+    </div>
+    <ng-template #noTransactions>
+      <section class="col-12">
+        <div class="card mb-4">
+          <div class="card-header">Transaction History</div>
+          <div class="card-body">
+            <em class="muted">Looks like you haven't made any transactions yet.</em>
+          </div>
+        </div>
+      </section>
+    </ng-template>
+  </section>
 </section>

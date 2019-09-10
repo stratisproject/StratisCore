@@ -1,0 +1,34 @@
+<div *ngIf="(transactions | async) let _transactions;">
+  <div class="card">
+    <div class="card-header">{{title}}</div>
+    <div class="card-body">
+      <table class="table table-sm">
+        <tbody>
+        <tr *ngFor="let _transaction of _transactions | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          <th class="text-center">
+            <span class="bubble"
+                  [ngClass]="{
+            'bg-warning' : !_transaction.transactionConfirmedInBlock,
+            'bg-success' : _transaction.transactionConfirmedInBlock
+            }"></span></th>
+
+          <td class="text-uppercase text-left">{{ _transaction.transactionType }}</td>
+          <td class="text-left">{{_transaction.transactionType == 'sent' ? '- ' : '+ '}}
+            <strong> {{ _transaction.transactionAmount + _transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
+          </td>
+          <td class="text-left">{{ _transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
+          <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(_transaction)">details</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <pagination-controls *ngIf="enablePagination" (pageChange)="pageNumber = $event"></pagination-controls>
+      <div *ngIf="enableShowHistoryButton" class="text-center my-2">
+        <button type="button" class="btn btn-outline-primary"
+                [class.btn-outline-stratis-green]="globalService.getSidechainEnabled()" (click)="goToHistory()">
+          Go to History
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component } from '@angular/core';
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
-import { ModalService } from '@shared/services/modal.service';
-
 import { WalletInfo } from '@shared/models/wallet-info';
 
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CurrentAccountService } from '@shared/services/current-account.service';
+import { ModalService } from "@shared/services/modal.service";
 
 @Component({
   selector: 'receive-component',
@@ -17,23 +15,27 @@ import { CurrentAccountService } from '@shared/services/current-account.service'
 
 export class ReceiveComponent {
   accountsEnabled: boolean;
-  constructor(private apiService: ApiService, private globalService: GlobalService, public activeModal: NgbActiveModal, private genericModalService: ModalService, private currentAccountService: CurrentAccountService) {}
+  constructor(
+    private apiService: ApiService,
+    private globalService: GlobalService,
+    public activeModal: NgbActiveModal,
+    private genericModalService: ModalService,
+    private currentAccountService: CurrentAccountService) {}
 
-  public address: any = "";
+  public address: any = '';
   public qrString: any;
-  public copied: boolean = false;
+  public copied = false;
   public showAll = false;
   public allAddresses: any;
   public usedAddresses: string[];
   public unusedAddresses: string[];
   public changeAddresses: string[];
-  public pageNumberUsed: number = 1;
-  public pageNumberUnused: number = 1;
-  public pageNumberChange: number = 1;
+  public pageNumberUsed = 1;
+  public pageNumberUnused = 1;
+  public pageNumberChange = 1;
   public sidechainEnabled: boolean;
-  private errorMessage: string;
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
 
@@ -46,21 +48,21 @@ export class ReceiveComponent {
     }
   }
 
-  public onCopiedClick() {
+  public onCopiedClick(): void {
     this.copied = true;
   }
 
-  public showAllAddresses(){
+  public showAllAddresses(): void {
     this.getAddresses();
     this.showAll = true;
   }
 
-  public showOneAddress(){
+  public showOneAddress(): void {
     this.getUnusedReceiveAddresses();
     this.showAll = false;
   }
 
-  private getUnusedReceiveAddresses() {
+  private getUnusedReceiveAddresses(): void {
     const walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.apiService.getUnusedReceiveAddress(walletInfo)
       .subscribe(
@@ -83,9 +85,10 @@ export class ReceiveComponent {
   }
 
   private getAddresses() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName())
+    let walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.apiService.getAllAddresses(walletInfo)
-      .subscribe(
+      .toPromise()
+      .then(
         response => {
           this.allAddresses = [];
           this.usedAddresses = [];
@@ -93,7 +96,7 @@ export class ReceiveComponent {
           this.changeAddresses = [];
           this.allAddresses = response.addresses;
 
-          for (let address of this.allAddresses) {
+          for (const address of this.allAddresses) {
             if (address.isUsed) {
               this.usedAddresses.push(address.address);
             } else if (address.isChange) {
@@ -102,7 +105,6 @@ export class ReceiveComponent {
               this.unusedAddresses.push(address.address);
             }
           }
-        }
-      );
+        });
   }
 }

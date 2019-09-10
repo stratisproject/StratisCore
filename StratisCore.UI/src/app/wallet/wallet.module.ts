@@ -24,6 +24,8 @@ import { TransactionDetailsComponent } from './transaction-details/transaction-d
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
+import { TransactionsComponent } from './transactions/transactions.component';
+import { StakingComponent } from './staking/staking.component';
 
 @NgModule({
   imports: [
@@ -51,7 +53,9 @@ import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
     ExtPubkeyComponent,
     AboutComponent,
     GenerateAddressesComponent,
-    ResyncComponent
+    ResyncComponent,
+    TransactionsComponent,
+    StakingComponent
   ],
   providers: [
     AccountSelectedGuard
