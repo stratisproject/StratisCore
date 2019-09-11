@@ -3,7 +3,25 @@ export interface WalletFileData {
   walletsFiles: [string];
 }
 
+export interface AddressBalance {
+  satoshi: number;
+}
+
+export interface Address {
+  address: string;
+  isUsed: boolean;
+  isChange: boolean;
+  amountConfirmed: AddressBalance;
+  amountUnconfirmed: AddressBalance;
+}
+
 export class WalletBalance {
+
+  private _amountConfirmed: number;
+  private _amountUnconfirmed: number;
+  private _spendableAmount: number;
+  private _useAddress: boolean;
+
   constructor(balance?: WalletBalance) {
     if (balance) {
       Object.assign(this, balance);
@@ -13,9 +31,43 @@ export class WalletBalance {
   public accountName: string;
   public accountHdPath: string;
   public coinType: number;
-  public amountConfirmed: number;
-  public amountUnconfirmed: number;
-  public spendableAmount: number;
+
+  public get amountConfirmed(): number {
+    return this._useAddress ? this.currentAddress.amountConfirmed.satoshi : this._amountConfirmed;
+  }
+
+  public get amountUnconfirmed(): number {
+    return this._useAddress ? this.currentAddress.amountUnconfirmed.satoshi : this._amountUnconfirmed;
+  }
+
+  public get spendableAmount(): number {
+    if (this._useAddress) {
+      return this.currentAddress.amountConfirmed.satoshi - this.currentAddress.amountUnconfirmed.satoshi;
+    }
+    return this._spendableAmount;
+  }
+
+  public set amountConfirmed(value: number) {
+    this._amountConfirmed = value;
+  }
+
+  public set amountUnconfirmed(value: number) {
+    this._amountUnconfirmed = value;
+  }
+
+  public set spendableAmount(value: number) {
+    this._spendableAmount = value;
+  }
+
+  public addresses: Address[];
+
+  public currentAddress: Address;
+
+  public withCurrentAddress(address: string): WalletBalance {
+    this._useAddress = true;
+    this.currentAddress = this.addresses.find(add => add.address === address);
+    return this;
+  }
 
   public get hasBalance(): boolean {
     return (this.amountConfirmed + this.amountUnconfirmed) > 0;
@@ -24,7 +76,6 @@ export class WalletBalance {
   public get awaitingMaturityIfStaking() {
     return (this.amountUnconfirmed + this.amountConfirmed) - this.spendableAmount;
   }
-
 }
 
 export interface Balances {
@@ -70,7 +121,7 @@ export interface StakingInfo {
 }
 
 export interface GeneralInfo {
-  walletName : string;
+  walletName: string;
   walletFilePath: string;
   network: string;
   creationTime: string;
@@ -79,5 +130,6 @@ export interface GeneralInfo {
   chainTip: number;
   isChainSynced: boolean;
   connectedNodes: number;
+  accountsBalances : WalletBalance[];
 }
 

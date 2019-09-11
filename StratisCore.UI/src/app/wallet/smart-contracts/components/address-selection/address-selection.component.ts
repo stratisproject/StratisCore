@@ -8,6 +8,7 @@ import { CurrentAccountService } from '@shared/services/current-account.service'
 import { Router } from '@angular/router';
 import { ApiService } from '@shared/services/api.service';
 import { WalletInfo } from '@shared/models/wallet-info';
+import { WalletService } from "@shared/services/wallet.service";
 
 @Component({
   selector: 'app-address-selection',
@@ -24,17 +25,17 @@ export class AddressSelectionComponent implements OnInit {
   unsubscribe: Subject<void> = new Subject();
 
   constructor(private globalService: GlobalService,
-    private apiService: ApiService,
-    private currentAccountService: CurrentAccountService,
-    private router: Router,
-    private clipboardService: ClipboardService) { 
-      
-      this.coinUnit = this.globalService.getCoinUnit();
-      this.walletName = this.globalService.getWalletName();
-      this.addressChangedSubject = new Subject();
+              private walletService: WalletService,
+              private currentAccountService: CurrentAccountService,
+              private router: Router,
+              private clipboardService: ClipboardService) {
 
-    this.apiService
-      .getAllAddresses(new WalletInfo(this.walletName))
+    this.coinUnit = this.globalService.getCoinUnit();
+    this.walletName = this.globalService.getWalletName();
+    this.addressChangedSubject = new Subject();
+
+    this.walletService
+      .getAllAddressesForWallet(new WalletInfo(this.walletName))
       .pipe(
         catchError(error => {
           console.log('Error retrieving addressses. ' + error);
@@ -42,13 +43,13 @@ export class AddressSelectionComponent implements OnInit {
         }),
         takeUntil(this.unsubscribe))
       .subscribe(addresses => {
-          if (addresses && addresses.hasOwnProperty("addresses")) {
-            if (addresses.addresses.length > 0) {
-              this.addressChangedSubject.next(addresses.addresses[0].address);
-              this.addresses = addresses.addresses.filter(a => a.isChange === false || (a.amountConfirmed > 0 || a.amountUnconfirmed > 0));
-              this.selectedAddress = this.addresses[0].address;
-            }
+        if (addresses && addresses.hasOwnProperty("addresses")) {
+          if (addresses.addresses.length > 0) {
+            this.addressChangedSubject.next(addresses.addresses[0].address);
+            this.addresses = addresses.addresses.filter(a => a.isChange === false || (a.amountConfirmed > 0 || a.amountUnconfirmed > 0));
+            this.selectedAddress = this.addresses[0].address;
           }
+        }
       });
   }
 
@@ -77,7 +78,7 @@ export class AddressSelectionComponent implements OnInit {
 
   clipboardAddressClicked() {
     if (this.selectedAddress && this.clipboardService.copyFromContent(this.selectedAddress)) {
-        console.log(`Copied ${this.selectedAddress} to clipboard`);
+      console.log(`Copied ${this.selectedAddress} to clipboard`);
     }
-}
+  }
 }

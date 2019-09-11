@@ -154,28 +154,10 @@ export class ApiService extends RestApi implements IApiService {
   }
 
   /**
-   * Get an unused receive address for a certain wallet from the API.
-   */
-  public getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
-    return this.get('wallet/unusedaddress', this.getWalletParams(data)).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
    * Get multiple unused receive addresses for a certain wallet from the API.
    */
   public getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any> {
     return this.get('wallet/unusedaddresses', this.getWalletParams(data, {count})).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Get get all addresses for an account of a wallet from the API.
-   */
-  public getAllAddresses(data: WalletInfo): Observable<any> {
-    return this.get('wallet/addresses', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }

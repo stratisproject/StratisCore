@@ -3,7 +3,12 @@ import { Injectable } from '@angular/core';
 import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from '@shared/services/interfaces/api.i';
-import { BlockConnectedSignalREvent, SignalREvent, SignalREvents } from '@shared/services/interfaces/signalr-events.i';
+import {
+  BlockConnectedSignalREvent,
+  SignalREvent,
+  SignalREvents,
+  WalletInfoSignalREvent
+} from '@shared/services/interfaces/signalr-events.i';
 import { catchError, map, flatMap } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
@@ -43,14 +48,22 @@ export class WalletService extends RestApi {
     signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.TransactionReceived,
       (message) => {
         this.transactionReceivedSubject.next(message);
-        this.refreshWallet();
       });
 
-    // If we have unconfirmed amount refresh the wallet when a new block is connected.
-    signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
+    signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
         const walletSubject = this.getWalletSubject(this.currentWallet);
-        if (walletSubject.value.amountUnconfirmed > 0) {
+
+        const currentAccount = message.accountsBalances.find(acc => acc.accountName == `account ${this.currentWallet.account}`);
+        if (currentAccount)
+        {
+
+        }
+        const walletBalance = new WalletBalance(message);
+
+
+
+        if (walletSubject.value && walletSubject.value.amountUnconfirmed > 0) {
           this.refreshWallet();
         }
       });
@@ -58,6 +71,18 @@ export class WalletService extends RestApi {
 
   public transactionReceived(): Observable<any> {
     return this.transactionReceivedSubject.asObservable();
+  }
+
+  public getAllAddressesForWallet(data: WalletInfo): Observable<any> {
+    return this.get('wallet/addresses', this.getWalletParams(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  public getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
+    return this.get('wallet/unusedaddress', this.getWalletParams(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
   public wallet(): Observable<WalletBalance> {
@@ -90,7 +115,14 @@ export class WalletService extends RestApi {
   }
 
   public getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
-    return this.get<WalletHistory>('wallet/history', this.getWalletParams(data)).pipe(
+    let extra = null;
+    if (this.accountsEnabled) {
+      extra = {
+        address: this.currentAccountService.getAddress()
+      }
+    }
+
+    return this.get<WalletHistory>('wallet/history', this.getWalletParams(data, extra)).pipe(
       catchError(err => this.handleHttpError(err)));
   }
 

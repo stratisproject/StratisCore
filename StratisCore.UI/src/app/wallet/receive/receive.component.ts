@@ -6,6 +6,7 @@ import { WalletInfo } from '@shared/models/wallet-info';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { ModalService } from "@shared/services/modal.service";
+import { WalletService } from "@shared/services/wallet.service";
 
 @Component({
   selector: 'receive-component',
@@ -16,7 +17,7 @@ import { ModalService } from "@shared/services/modal.service";
 export class ReceiveComponent {
   accountsEnabled: boolean;
   constructor(
-    private apiService: ApiService,
+    private walletService: WalletService,
     private globalService: GlobalService,
     public activeModal: NgbActiveModal,
     private genericModalService: ModalService,
@@ -64,7 +65,7 @@ export class ReceiveComponent {
 
   private getUnusedReceiveAddresses(): void {
     const walletInfo = new WalletInfo(this.globalService.getWalletName());
-    this.apiService.getUnusedReceiveAddress(walletInfo)
+    this.walletService.getUnusedReceiveAddress(walletInfo)
       .subscribe(
         response => {
             this.address = response;
@@ -86,7 +87,7 @@ export class ReceiveComponent {
 
   private getAddresses() {
     let walletInfo = new WalletInfo(this.globalService.getWalletName());
-    this.apiService.getAllAddresses(walletInfo)
+    this.walletService.getAllAddressesForWallet(walletInfo)
       .toPromise()
       .then(
         response => {
