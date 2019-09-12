@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from "rxjs";
 
 /*
  * Used to maintain the state of the currently selected address in CirrusCore.
@@ -8,23 +9,28 @@ import { Injectable } from '@angular/core';
 })
 export class CurrentAccountService {
 
-  address: string;
+  private _currentAddress: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-  constructor() { }
-
-  getAddress() {
-    return this.address;
+  constructor() {
   }
 
-  setAddress(value: string) {
-    this.address = value;
+  public get currentAddress(): Observable<string> {
+    return this._currentAddress.asObservable();
   }
 
-  hasActiveAddress() {
-    return !!this.address;
+  public getAddress(): string {
+    return this._currentAddress.value;
   }
 
-  clearAddress() {
-    this.address = undefined;
+  public setAddress(value: string): void {
+    this._currentAddress.next(value);
+  }
+
+  public hasActiveAddress(): boolean {
+    return !!this._currentAddress.value
+  }
+
+  public clearAddress(): void {
+    this._currentAddress.next(null);
   }
 }

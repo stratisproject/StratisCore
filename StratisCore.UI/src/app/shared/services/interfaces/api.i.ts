@@ -15,6 +15,7 @@ export interface Address {
   amountUnconfirmed: AddressBalance;
 }
 
+
 export class WalletBalance {
 
   private _amountConfirmed: number;
@@ -22,9 +23,13 @@ export class WalletBalance {
   private _spendableAmount: number;
   private _useAddress: boolean;
 
-  constructor(balance?: WalletBalance) {
+  constructor(balance?: WalletBalance, currentAddress?: Address) {
     if (balance) {
       Object.assign(this, balance);
+    }
+
+    if (currentAddress) {
+      this.setCurrentAccountAddress(currentAddress.address);
     }
   }
 
@@ -63,7 +68,7 @@ export class WalletBalance {
 
   public currentAddress: Address;
 
-  public withCurrentAddress(address: string): WalletBalance {
+  public setCurrentAccountAddress(address: string): WalletBalance {
     this._useAddress = true;
     this.currentAddress = this.addresses.find(add => add.address === address);
     return this;
@@ -130,6 +135,6 @@ export interface GeneralInfo {
   chainTip: number;
   isChainSynced: boolean;
   connectedNodes: number;
-  accountsBalances : WalletBalance[];
+  accountsBalances?: WalletBalance[];
 }
 

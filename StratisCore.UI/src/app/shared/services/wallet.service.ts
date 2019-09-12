@@ -4,7 +4,6 @@ import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from '@shared/services/interfaces/api.i';
 import {
-  BlockConnectedSignalREvent,
   SignalREvent,
   SignalREvents,
   WalletInfoSignalREvent
@@ -14,12 +13,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
-import { FeeTransaction, Transaction } from '@shared/models/transaction';
+import { Transaction } from '@shared/models/transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { CurrentAccountService } from "@shared/services/current-account.service";
-import { ReturnStatement } from "@angular/compiler";
 
 @Injectable({
   providedIn: 'root'
@@ -38,34 +36,28 @@ export class WalletService extends RestApi {
     private currentAccountService: CurrentAccountService,
     signalRService: SignalRService) {
     super(globalService, http, errorService);
-    this.accountsEnabled = globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress();
 
     globalService.currentWallet.subscribe(wallet => {
       this.currentWallet = wallet;
+    });
+
+    currentAccountService.currentAddress.subscribe(() => {
+      this.accountsEnabled = globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress();
+      this.updateWalletForCurrentAddress();
     });
 
     // When we get a TransactionReceived event get the WalletBalance and History using the RestApi
     signalRService.registerOnMessageEventHandler<SignalREvent>(SignalREvents.TransactionReceived,
       (message) => {
         this.transactionReceivedSubject.next(message);
+        this.refreshWallet();
+        this.refreshWalletHistory();
       });
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
-        const walletSubject = this.getWalletSubject(this.currentWallet);
-
-        const currentAccount = message.accountsBalances.find(acc => acc.accountName == `account ${this.currentWallet.account}`);
-        if (currentAccount)
-        {
-
-        }
-        const walletBalance = new WalletBalance(message);
-
-
-
-        if (walletSubject.value && walletSubject.value.amountUnconfirmed > 0) {
-          this.refreshWallet();
-        }
+        const walletBalance = message.accountsBalances.find(acc => acc.accountName == `account ${this.currentWallet.account}`);
+        this.updateWalletForCurrentAddress(walletBalance);
       });
   }
 
@@ -166,7 +158,7 @@ export class WalletService extends RestApi {
       // Initialise the wallet
       this.getWalletBalance(walletInfo).toPromise().then(data => {
         if (data.balances.length > 0 && data.balances[walletInfo.account]) {
-          this.walletUpdatedSubjects[walletInfo.walletName].next(new WalletBalance(data.balances[walletInfo.account]));
+          this.updateWalletForCurrentAddress(data.balances[walletInfo.account]);
         }
       });
     }
@@ -192,30 +184,42 @@ export class WalletService extends RestApi {
   }
 
   private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: string }): HttpParams {
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('walletName', walletInfo.walletName)
       .set('accountName', `account ${walletInfo.account || 0}`);
 
     if (extra) {
-      Object.keys(extra).forEach(key => params.set(key, extra[key]));
+      Object.keys(extra).forEach(key => params = params.set(key, extra[key]));
     }
     return params;
   }
 
-  private getReceivedByAddress(address: string): Observable<any> {
-    let params = new HttpParams()
-      .set('address', address);
-    return this.get('/wallet/received-by-address', params)
-      .pipe(catchError(err => this.handleHttpError(err)));
+  private updateWalletForCurrentAddress(walletBalance?: WalletBalance): void {
+    const walletSubject = this.getWalletSubject(this.currentWallet);
+
+    const newBalance = new WalletBalance(
+      walletBalance || walletSubject.value,
+      walletSubject.value ? walletSubject.value.currentAddress : null);
+
+    if (this.accountsEnabled) {
+      if (null == newBalance.currentAddress || newBalance.currentAddress.address !== this.currentAccountService.getAddress()) {
+        newBalance.setCurrentAccountAddress(this.currentAccountService.getAddress());
+        this.refreshWalletHistory();
+      }
+    }
+
+    walletSubject.next(newBalance);
   }
 
   private refreshWallet(): void {
-    const walletSubject = this.getWalletSubject(this.currentWallet);
-    const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
-
     this.getWalletBalance(this.currentWallet).toPromise().then(
-      wallet => walletSubject.next(new WalletBalance(wallet.balances[this.currentWallet.account])));
+      wallet => {
+        this.updateWalletForCurrentAddress(wallet.balances[this.currentWallet.account]);
+      });
+  }
 
+  private refreshWalletHistory(): void {
+    const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
     this.getWalletHistory(this.currentWallet).toPromise().then(
       response => walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory));
   }
