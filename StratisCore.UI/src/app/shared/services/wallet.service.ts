@@ -8,7 +8,7 @@ import {
   SignalREvents,
   WalletInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
-import { catchError, map, flatMap } from 'rxjs/operators';
+import { catchError, map, flatMap, tap } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
@@ -90,10 +90,10 @@ export class WalletService extends RestApi {
     //TODO: What is the intrinsic link between Smart Contacts and Accounts Enabled?
     if (this.accountsEnabled) {
 
-      feeEstimation.changeAddress = this.currentAccountService.getAddress();
+      feeEstimation.sender = this.currentAccountService.getAddress();
       feeEstimation.shuffleOutputs = false;
 
-      return this.post('/smartcontracts/estimate-fee', feeEstimation).pipe(
+      return this.post('smartcontracts/estimate-fee', feeEstimation).pipe(
         catchError(err => this.handleHttpError(err))
       );
     } else {
@@ -128,12 +128,12 @@ export class WalletService extends RestApi {
       transaction.shuffleOutputs = !this.accountsEnabled;
       if (this.globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress()) {
         // Only set a change address if we're on a sidechain and there's a current account selected
-        transaction.changeAddress = this.currentAccountService.getAddress();
+        transaction.sender = this.currentAccountService.getAddress()
       }
     }
 
     const observable = this.accountsEnabled
-      ? this.post<BuildTransactionResponse>('/smartcontracts/build-transaction', transaction)
+      ? this.post<BuildTransactionResponse>('smartcontracts/build-transaction', transaction)
       : this.post<BuildTransactionResponse>('wallet/build-transaction', transaction);
 
     return observable.pipe(
@@ -145,7 +145,9 @@ export class WalletService extends RestApi {
         return this.post('wallet/send-transaction', new TransactionSending(buildTransactionResponse.hex)).pipe(
           map(() => {
             return new TransactionResponse(transaction, buildTransactionResponse.fee, buildTransactionResponse.isSideChain);
-          }));
+          }),
+          tap(() => this.refreshWallet())
+        );
       }),
       catchError(err => this.handleHttpError(err))
     );

@@ -34,5 +34,6 @@ export class FeeEstimation {
   feeType: string;
   allowUnconfirmed: boolean;
   changeAddress: string;
+  sender: string;
   shuffleOutputs: boolean;
 }

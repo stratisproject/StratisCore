@@ -24,7 +24,9 @@ export class Transaction {
     public isSideChainTransaction?: boolean) {
     this.recipients = [new Recipient(destinationAddress, amount)];
   }
+
   public recipients: Recipient[];
+  public sender: string;
 }
 
 export class FeeTransaction extends Transaction {
