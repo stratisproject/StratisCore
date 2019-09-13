@@ -66,7 +66,8 @@ export class ReceiveComponent {
   private getUnusedReceiveAddresses(): void {
     const walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.walletService.getUnusedReceiveAddress(walletInfo)
-      .subscribe(
+      .toPromise()
+      .then(
         response => {
             this.address = response;
             this.setQrString(response);
