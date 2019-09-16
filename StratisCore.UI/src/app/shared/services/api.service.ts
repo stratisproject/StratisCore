@@ -8,10 +8,6 @@ import { WalletCreation } from '../models/wallet-creation';
 import { WalletRecovery } from '../models/wallet-recovery';
 import { WalletLoad } from '../models/wallet-load';
 import { WalletInfo, WalletInfoRequest } from '../models/wallet-info';
-import { SidechainFeeEstimation } from '../models/sidechain-fee-estimation';
-import { FeeEstimation } from '../models/fee-estimation';
-import { FeeTransaction, Transaction } from '../models/transaction';
-import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
@@ -267,7 +263,7 @@ export class ApiService extends RestApi implements IApiService {
 
   public getReceipt(hash: string, silent: boolean = false): any {
     const params = new HttpParams().set('txHash', hash);
-    return this.get('/smartcontracts/receipt', params).pipe(
+    return this.get('smartcontracts/receipt', params).pipe(
       catchError(err => this.handleHttpError(err, silent))
     );
   }
@@ -277,11 +273,11 @@ export class ApiService extends RestApi implements IApiService {
   */
   public getReceiptSilent(hash: string): any {
     const params = new HttpParams().set('txHash', hash);
-    return this.get('/smartcontracts/receipt', params);
+    return this.get('smartcontracts/receipt', params);
   }
 
   public localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {
-    return this.post<LocalExecutionResult>('/smartcontracts/local-call', localCall).pipe(
+    return this.post<LocalExecutionResult>('smartcontracts/local-call', localCall).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }

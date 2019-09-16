@@ -64,11 +64,11 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     private currentAccountService: CurrentAccountService) {
 
     this.walletName = this.globalService.getWalletName();
-    
+
     this.availableTokens = this.tokenService.GetAvailableTokens();
     this.availableTokens.push(new Token('Custom', 'custom', 'custom'));
     this.coinUnit = this.globalService.getCoinUnit();
-    this.selectedAddress = this.currentAccountService.getAddress();
+    this.selectedAddress = this.currentAccountService.address;
 
     this.smartContractsService.GetHistory(this.walletName, this.selectedAddress)
       .pipe(catchError(error => {
@@ -87,8 +87,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         }),
         take(1)
       )
-      .subscribe(balance => this.balance = balance);  
-  
+      .subscribe(balance => this.balance = balance);
+
     // Update requested token balances
     this.tokenBalanceRefreshRequested$
       .pipe(
@@ -96,8 +96,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         switchMap(tokensToReload => this.updateTokenBalances(tokensToReload)),
         takeUntil(this.disposed$)
       )
-      .subscribe();    
-    
+      .subscribe();
+
     interval(this.pollingInterval)
       .pipe(
         switchMap(() => this.updateTokenBalances(this.tokens)),
@@ -107,8 +107,8 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   }
 
   private updateTokenBalances(tokens: SavedToken[]) {
-    let tokensWithAddresses = tokens.filter(token => !!token.address);
-    tokensWithAddresses.forEach(token => this.tokenLoading[token.address] = "loading");
+    const tokensWithAddresses = tokens.filter(token => !!token.address);
+    tokensWithAddresses.forEach(token => this.tokenLoading[token.address] = 'loading');
     return forkJoin(tokensWithAddresses.map(token => {
       return this.tokenService
         .GetTokenBalance(new TokenBalanceRequest(token.address, this.selectedAddress))
@@ -116,24 +116,25 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
           Log.error(error);
           Log.log(`Error getting token balance for token address ${token.address}`);
           return of(null);
-        }), 
+        }),
         tap(balance => {
           if (balance === null) {
-            token.balance === null;
-            this.tokenLoading[token.address] = "error";
+            token.balance = null;
+            this.tokenLoading[token.address] = 'error';
             return;
           }
 
-          this.tokenLoading[token.address] = "loaded";
-          if (balance !== token.balance)
+          this.tokenLoading[token.address] = 'loaded';
+          if (balance !== token.balance) {
             token.balance = balance;
+          }
         }));
     }));
   }
 
   ngOnInit() {
     // Clear all the balances to start with
-    let tokens = this.tokenService.GetSavedTokens();
+    const tokens = this.tokenService.GetSavedTokens();
     tokens.forEach(t => t.balance = null);
     this.tokens = tokens;
 

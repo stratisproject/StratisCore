@@ -61,7 +61,7 @@ export class AddressSelectionComponent implements OnInit, OnDestroy {
   }
 
   getAddress() {
-    return this.currentAccountService.getAddress();
+    return this.currentAccountService.address;
   }
 
   addressChanged(address: string) {
@@ -70,7 +70,7 @@ export class AddressSelectionComponent implements OnInit, OnDestroy {
 
   next() {
     if (this.selectedAddress) {
-      this.currentAccountService.setAddress(this.selectedAddress);
+      this.currentAccountService.address = this.selectedAddress;
       this.router.navigate(['wallet/dashboard']);
     }
   }

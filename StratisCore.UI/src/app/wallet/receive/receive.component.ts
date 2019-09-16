@@ -75,7 +75,7 @@ export class ReceiveComponent implements OnInit {
   }
 
   private getAccountAddress() {
-    this.address = this.currentAccountService.getAddress();
+    this.address = this.currentAccountService.address;
     this.setQrString(this.address);
   }
 
