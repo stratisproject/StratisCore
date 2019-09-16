@@ -57,6 +57,10 @@ export class GlobalService {
     return this.sidechain;
   }
 
+  public get networkName() {
+    return this.sidechain ? 'cirrus' : 'stratis';
+  }
+
   public setSidechainEnabled() {
     if (this.electronService.isElectronApp) {
       this.sidechain = this.electronService.ipcRenderer.sendSync('get-sidechain');

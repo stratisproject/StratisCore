@@ -17,7 +17,7 @@ import { Transaction } from '@shared/models/transaction';
 import { TransactionSending } from '@shared/models/transaction-sending';
 import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';
-import { CurrentAccountService } from "@shared/services/current-account.service";
+import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -56,7 +56,7 @@ export class WalletService extends RestApi {
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
-        const walletBalance = message.accountsBalances.find(acc => acc.accountName == `account ${this.currentWallet.account}`);
+        const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
         this.updateWalletForCurrentAddress(walletBalance);
       });
   }
@@ -86,8 +86,7 @@ export class WalletService extends RestApi {
   }
 
   public estimateFee(feeEstimation: FeeEstimation): Observable<any> {
-
-    //TODO: What is the intrinsic link between Smart Contacts and Accounts Enabled?
+    // TODO: What is the intrinsic link between Smart Contacts and Accounts Enabled?
     if (this.accountsEnabled) {
 
       feeEstimation.sender = this.currentAccountService.getAddress();
@@ -111,7 +110,7 @@ export class WalletService extends RestApi {
     if (this.accountsEnabled) {
       extra = {
         address: this.currentAccountService.getAddress()
-      }
+      };
     }
 
     return this.get<WalletHistory>('wallet/history', this.getWalletParams(data, extra)).pipe(
@@ -128,7 +127,7 @@ export class WalletService extends RestApi {
       transaction.shuffleOutputs = !this.accountsEnabled;
       if (this.globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress()) {
         // Only set a change address if we're on a sidechain and there's a current account selected
-        transaction.sender = this.currentAccountService.getAddress()
+        transaction.sender = this.currentAccountService.getAddress();
       }
     }
 

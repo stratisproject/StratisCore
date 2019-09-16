@@ -10,15 +10,16 @@ export class AccountSelectedGuard implements CanActivate {
   constructor(
     private router: Router,
     private globalService: GlobalService,
-    private currentAccountService: CurrentAccountService) {    
+    private currentAccountService: CurrentAccountService) {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     // If we're not on a sidechain we never want to enable these routes
-    if (!this.globalService.getSidechainEnabled())
+    if (!this.globalService.getSidechainEnabled()) {
       return false;
+    }
 
-    let accountsEnabled = this.currentAccountService.hasActiveAddress();
+    const accountsEnabled = this.currentAccountService.hasActiveAddress();
 
     if (!accountsEnabled) {
       this.router.navigate(['/address-selection'])

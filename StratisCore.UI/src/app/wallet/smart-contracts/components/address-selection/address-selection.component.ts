@@ -1,21 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalService } from '@shared/services/global.service';
-import { SmartContractsServiceBase } from '../../smart-contracts.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { catchError, takeUntil, switchMap } from 'rxjs/operators';
+import { catchError, takeUntil } from 'rxjs/operators';
 import { of, Subject } from 'rxjs';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { Router } from '@angular/router';
-import { ApiService } from '@shared/services/api.service';
 import { WalletInfo } from '@shared/models/wallet-info';
-import { WalletService } from "@shared/services/wallet.service";
+import { WalletService } from '@shared/services/wallet.service';
+import { Log } from '../../../tokens/services/logger.service';
 
 @Component({
   selector: 'app-address-selection',
   templateUrl: './address-selection.component.html',
   styleUrls: ['./address-selection.component.css']
 })
-export class AddressSelectionComponent implements OnInit {
+export class AddressSelectionComponent implements OnInit, OnDestroy {
 
   private walletName = '';
   addresses: any[];
@@ -38,12 +37,12 @@ export class AddressSelectionComponent implements OnInit {
       .getAllAddressesForWallet(new WalletInfo(this.walletName))
       .pipe(
         catchError(error => {
-          console.log('Error retrieving addressses. ' + error);
+          Log.error(error);
           return of([]);
         }),
         takeUntil(this.unsubscribe))
       .subscribe(addresses => {
-        if (addresses && addresses.hasOwnProperty("addresses")) {
+        if (addresses && addresses.hasOwnProperty('addresses')) {
           if (addresses.addresses.length > 0) {
             this.addressChangedSubject.next(addresses.addresses[0].address);
             this.addresses = addresses.addresses.filter(a => a.isChange === false || (a.amountConfirmed > 0 || a.amountUnconfirmed > 0));
@@ -78,7 +77,7 @@ export class AddressSelectionComponent implements OnInit {
 
   clipboardAddressClicked() {
     if (this.selectedAddress && this.clipboardService.copyFromContent(this.selectedAddress)) {
-      console.log(`Copied ${this.selectedAddress} to clipboard`);
+      Log.info(`Copied ${this.selectedAddress} to clipboard`);
     }
   }
 }
