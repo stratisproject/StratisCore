@@ -1,7 +1,7 @@
 $upstream_repo = "https://github.com/stratisproject/StratisCore.git"
 $submodule_name = "StratisBitcoinFullNode"
 $temp_branch_name = "submodule-update"
-$branch = "master"
+$branch = "release-fixes"
 $temp_folder = 'submodule-update-temp-branch'
 $branch_submodule_to_update = "release/3.0.5.0rc" # or "release/3.0.1.0"
 

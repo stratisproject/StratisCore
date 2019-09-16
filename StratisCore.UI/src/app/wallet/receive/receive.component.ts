@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { WalletInfo } from '@shared/models/wallet-info';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CurrentAccountService } from '@shared/services/current-account.service';
-import { ModalService } from "@shared/services/modal.service";
-import { WalletService } from "@shared/services/wallet.service";
+import { ModalService } from '@shared/services/modal.service';
+import { WalletService } from '@shared/services/wallet.service';
 
 @Component({
   selector: 'receive-component',
@@ -14,7 +14,7 @@ import { WalletService } from "@shared/services/wallet.service";
   styleUrls: ['./receive.component.css'],
 })
 
-export class ReceiveComponent {
+export class ReceiveComponent implements OnInit {
   accountsEnabled: boolean;
   constructor(
     private walletService: WalletService,
@@ -42,8 +42,7 @@ export class ReceiveComponent {
 
     if (!this.accountsEnabled) {
       this.getUnusedReceiveAddresses();
-    }
-    else {
+    } else {
       // If accounts are enabled, we just use the account address
       this.getAccountAddress();
     }
@@ -82,12 +81,11 @@ export class ReceiveComponent {
 
   private setQrString(address: string) {
     // TODO: fix this later to use the actual sidechain name instead of 'cirrus'
-    const networkName = this.globalService.getSidechainEnabled() ? 'cirrus' : 'stratis';
-    this.qrString = `${networkName}:${address}`;
+    this.qrString = `${this.globalService.networkName}:${address}`;
   }
 
   private getAddresses() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName());
+    const walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.walletService.getAllAddressesForWallet(walletInfo)
       .toPromise()
       .then(

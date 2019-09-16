@@ -266,7 +266,7 @@ export class ApiService extends RestApi implements IApiService {
   }
 
   public getReceipt(hash: string, silent: boolean = false): any {
-    let params = new HttpParams().set('txHash', hash);
+    const params = new HttpParams().set('txHash', hash);
     return this.get('/smartcontracts/receipt', params).pipe(
       catchError(err => this.handleHttpError(err, silent))
     );
@@ -276,7 +276,7 @@ export class ApiService extends RestApi implements IApiService {
     Setting the silent flag is not enough because the error format returned by /receipt still causes a modal to be displayed.
   */
   public getReceiptSilent(hash: string): any {
-    let params = new HttpParams().set('txHash', hash);
+    const params = new HttpParams().set('txHash', hash);
     return this.get('/smartcontracts/receipt', params);
   }
 
