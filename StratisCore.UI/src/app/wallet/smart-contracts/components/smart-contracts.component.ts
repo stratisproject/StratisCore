@@ -35,7 +35,7 @@ export class SmartContractsComponent implements OnInit, OnDestroy {
 
         this.coinUnit = this.globalService.getCoinUnit();
         this.walletName = this.globalService.getWalletName();
-        this.selectedAddress = this.currentAccountService.getAddress();
+        this.selectedAddress = this.currentAccountService.address;
 
         this.smartContractsService.GetAddressBalance(this.selectedAddress)
             .pipe(

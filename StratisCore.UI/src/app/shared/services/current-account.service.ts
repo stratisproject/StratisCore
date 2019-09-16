@@ -18,16 +18,16 @@ export class CurrentAccountService {
     return this._currentAddress.asObservable();
   }
 
-  public getAddress(): string {
+  public get address(): string {
     return this._currentAddress.value;
   }
 
-  public setAddress(value: string): void {
+  public set address(value: string) {
     this._currentAddress.next(value);
   }
 
   public hasActiveAddress(): boolean {
-    return !!this._currentAddress.value
+    return !!this._currentAddress.value;
   }
 
   public clearAddress(): void {

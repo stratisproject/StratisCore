@@ -10,13 +10,13 @@
               <select class="form-control" [(ngModel)]="selectedAddress" [ngModelOptions]="{standalone: true}"
                 (change)="addressChanged($event.target.value)">
                 <option *ngFor="let address of addresses; let i = index;" [value]="address.address"
-                  [style.font-weight]="address.amountConfirmed > 0 ? 'bold' : ''">[{{i}}] - {{address.address}} - ({{ address.amountConfirmed | coinNotation | number : '1.2-2' }} {{ coinUnit }})</option>
+                  [style.font-weight]="address.amountConfirmed > 0 ? 'bold' : ''">[{{i}}] - {{address.address}} - ({{ address.amountConfirmed | coinNotation | number : '1.3-3' }} {{ coinUnit }})</option>
               </select>
               <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
                 data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
                 (click)="clipboardAddressClicked()">
                 <i class="lnr lnr-file-add"></i>
-              </button>              
+              </button>
             </div>
           </div>
         </section>

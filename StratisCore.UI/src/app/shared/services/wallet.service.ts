@@ -99,7 +99,7 @@ export class WalletService extends RestApi {
     // TODO: What is the intrinsic link between Smart Contacts and Accounts Enabled?
     if (this.accountsEnabled) {
 
-      feeEstimation.sender = this.currentAccountService.getAddress();
+      feeEstimation.sender = this.currentAccountService.address;
       feeEstimation.shuffleOutputs = false;
 
       return this.post('smartcontracts/estimate-fee', feeEstimation).pipe(
@@ -119,7 +119,7 @@ export class WalletService extends RestApi {
     let extra = null;
     if (this.accountsEnabled) {
       extra = {
-        address: this.currentAccountService.getAddress()
+        address: this.currentAccountService.address
       };
     }
 
@@ -137,7 +137,7 @@ export class WalletService extends RestApi {
       transaction.shuffleOutputs = !this.accountsEnabled;
       if (this.globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress()) {
         // Only set a change address if we're on a sidechain and there's a current account selected
-        transaction.sender = this.currentAccountService.getAddress();
+        transaction.sender = this.currentAccountService.address;
       }
     }
 
@@ -216,8 +216,8 @@ export class WalletService extends RestApi {
       walletSubject.value ? walletSubject.value.currentAddress : null);
 
     if (this.accountsEnabled) {
-      if (null == newBalance.currentAddress || newBalance.currentAddress.address !== this.currentAccountService.getAddress()) {
-        newBalance.setCurrentAccountAddress(this.currentAccountService.getAddress());
+      if (null == newBalance.currentAddress || newBalance.currentAddress.address !== this.currentAccountService.address) {
+        newBalance.setCurrentAccountAddress(this.currentAccountService.address);
         this.refreshWalletHistory();
       }
     }
