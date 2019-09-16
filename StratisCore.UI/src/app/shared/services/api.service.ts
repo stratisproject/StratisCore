@@ -10,7 +10,7 @@ import { WalletLoad } from '../models/wallet-load';
 import { WalletInfo, WalletInfoRequest } from '../models/wallet-info';
 import { SidechainFeeEstimation } from '../models/sidechain-fee-estimation';
 import { FeeEstimation } from '../models/fee-estimation';
-import { Transaction } from '../models/transaction';
+import { FeeTransaction, Transaction } from '../models/transaction';
 import { TransactionSending } from '../models/transaction-sending';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
@@ -29,7 +29,7 @@ export class ApiService extends RestApi implements IApiService {
 
   constructor(
     http: HttpClient,
-    private globalService: GlobalService,
+    globalService: GlobalService,
     errorService: ErrorService) {
     super(globalService, http, errorService);
   }
@@ -154,28 +154,10 @@ export class ApiService extends RestApi implements IApiService {
   }
 
   /**
-   * Get an unused receive address for a certain wallet from the API.
-   */
-  public getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
-    return this.get('wallet/unusedaddress', this.getWalletParams(data)).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
    * Get multiple unused receive addresses for a certain wallet from the API.
    */
   public getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any> {
     return this.get('wallet/unusedaddresses', this.getWalletParams(data, {count})).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Get get all addresses for an account of a wallet from the API.
-   */
-  public getAllAddresses(data: WalletInfo): Observable<any> {
-    return this.get('wallet/addresses', this.getWalletParams(data)).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -283,12 +265,9 @@ export class ApiService extends RestApi implements IApiService {
     );
   }
 
-  /*
-    * Returns the receipt for a particular txhash, or empty JSON.
-    */
   public getReceipt(hash: string, silent: boolean = false): any {
     const params = new HttpParams().set('txHash', hash);
-    return this.get('smartcontracts/receipt', params).pipe(
+    return this.get('/smartcontracts/receipt', params).pipe(
       catchError(err => this.handleHttpError(err, silent))
     );
   }
@@ -298,11 +277,11 @@ export class ApiService extends RestApi implements IApiService {
   */
   public getReceiptSilent(hash: string): any {
     const params = new HttpParams().set('txHash', hash);
-    return this.get('smartcontracts/receipt', params);
+    return this.get('/smartcontracts/receipt', params);
   }
 
   public localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {
-    return this.post<LocalExecutionResult>('smartcontracts/local-call', localCall).pipe(
+    return this.post<LocalExecutionResult>('/smartcontracts/local-call', localCall).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }

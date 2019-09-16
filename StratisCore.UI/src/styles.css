@@ -9300,6 +9300,36 @@ img {
   border: 1px solid #C0DCED;
 }
 
+.tokens .card {
+  min-height: 120px;
+}
+
+.tokens .card:hover {
+  border-color: #3BB0BA !important;
+}
+
+.tokens .card .card-header {
+  padding: 1rem 1.25rem;
+}
+
+.tokens .card .card-body {
+  padding: 0rem 1rem 1rem 1rem;
+}
+
+.tokens .card .sub {
+  font-size: 1.625rem;
+  margin-bottom: 0 !important;
+}
+
+.tokens .card .sub strong {
+  font-weight: 600;
+}
+
+.tokens .card .sub small {
+  font-weight: light;
+  font-size: 50%;
+}
+
 .code-block {
   padding: .5rem;
   border-radius: 0.3rem;

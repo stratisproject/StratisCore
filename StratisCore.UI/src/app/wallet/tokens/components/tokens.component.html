@@ -5,15 +5,23 @@
       <div class="col-12">
         <section class="row d-flex align-items-center">
 
-          <div class="col-9">
+          <div class="col-4">
+            <div class="card">
+              <div class="card-header">Address Balance</div>
+              <div class="card-body d-flex align-items-center">
+                <p class="sub">
+                  <sc-balance [balance]="balance" [coinUnit]="coinUnit"></sc-balance>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-5">
             <div class="card">
               <div class="card-header">Active address</div>
               <div class="card-body d-flex align-items-center">
                 <div style="display: flex; flex-direction: row">
-                  <select class="form-control" [(ngModel)]="selectedAddress" [ngModelOptions]="{standalone: true}"
-                    (change)="addressChanged($event.target.value)">
-                    <option *ngFor="let address of addresses">{{address}}</option>
-                  </select>
+                  {{selectedAddress}}
                   <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
                     data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
                     (click)="clipboardAddressClicked()">
@@ -46,30 +54,51 @@
                 <th class="text-center col-1" scope="col">Ticker</th>
                 <th class="text-left col-2" scope="col">Name</th>
                 <th class="text-left col-2" scope="col">Balance</th>
-                <th class="text-left col-4" scope="col">Address</th>
-                <th class="text-right col-3" scope="col">&nbsp;</th>
+                <th class="text-left col-5" scope="col">Address</th>
+                <th class="text-right col-2" scope="col">&nbsp;</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of tokens$ | async" class="d-flex">
+              <tr class="d-flex">
+                <td class="text-center col-1" scope="col"><span class="badge badge-info">MEDI</span></td>
+                <td class="text-left col-2" scope="col">Mediconnect</td>
+                <td class="text-left col-7 text-center" scope="col">
+                  Coming soon
+                </td>
+                <td class="text-right col-2" scope="col"></td>
+              </tr>
+              <tr class="d-flex">
+                  <td class="text-center col-1" scope="col"><span class="badge badge-info">GLU</span></td>
+                  <td class="text-left col-2" scope="col">Gluon</td>
+                  <td class="text-left col-7 text-center" scope="col">
+                    Coming soon
+                  </td>
+                  <td class="text-right col-2" scope="col"></td>
+                </tr>
+              <tr *ngFor="let item of tokens" class="d-flex">
                 <td class="text-center col-1" scope="col"><span class="badge badge-info">{{item.ticker}}</span></td>
                 <td class="text-left col-2" scope="col">{{ item.name }}</td>
-                <td class="text-left col-2" scope="col">{{ item.balance }}</td>
-                <td class="text-left col-4" scope="col">
+                <td class="text-left col-2" scope="col">
+                  {{ item.balance === null && tokenLoading[item.address] === 'loading' ? 'Loading...' : item.balance }}
+                </td>
+                <td class="text-left col-5" scope="col">
                   {{ item.address }}
                   <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
                     data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
-                    (click)="copyTokenAddress(item.address)">
+                    (click)="copyTokenAddress(item.address)"
+                    *ngIf="item.address">
                     <i class="lnr lnr-file-add"></i>
                   </button>
                 </td>
-                <td class="text-right col-3" scope="col">
-                  <button type="button" class="btn btn-sm btn-stratis-green" (click)="send(item)"><i
-                      class="icon lnr lnr-arrow-up-circle"></i> Send
-                  </button>&nbsp;
-                  <button type="button" class="btn btn-sm btn-danger" (click)="delete(item)"><i
-                      class="icon lnr lnr-cross-circle"></i>
-                  </button>
+                <td class="text-right col-2" scope="col">
+                  <ng-container *ngIf="item.address">
+                    <button type="button" class="btn btn-sm btn-stratis-green" (click)="send(item)"><i
+                        class="icon lnr lnr-arrow-up-circle"></i> Send
+                    </button>&nbsp;
+                    <button type="button" class="btn btn-sm btn-danger" (click)="delete(item)"><i
+                        class="icon lnr lnr-cross-circle"></i>
+                    </button>
+                  </ng-container>
                 </td>
               </tr>
             </tbody>

@@ -32,7 +32,6 @@ export class HistoryComponent implements OnInit {
   public transactions: TransactionInfo[];
   public transactionCount: number;
   public coinUnit: string;
-  public pageNumber = 1;
 
   public ngOnInit(): void {
     this.walletHistory = this.walletService.walletHistory()

@@ -23,6 +23,7 @@ import { TokensModule } from './tokens/tokens.module';
 import { TransactionDetailsComponent } from './transaction-details/transaction-details.component';
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletComponent } from './wallet.component';
+import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { StakingComponent } from './staking/staking.component';
 
@@ -55,6 +56,9 @@ import { StakingComponent } from './staking/staking.component';
     ResyncComponent,
     TransactionsComponent,
     StakingComponent
+  ],
+  providers: [
+    AccountSelectedGuard
   ],
   entryComponents: [
     SendComponent,

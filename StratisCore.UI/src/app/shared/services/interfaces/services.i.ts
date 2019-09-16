@@ -73,19 +73,9 @@ export interface IApiService {
   getMaximumBalance(data): Observable<any>;
 
   /**
-   * Get an unused receive address for a certain wallet from the API.
-   */
-  getUnusedReceiveAddress(data: WalletInfo): Observable<any>;
-
-  /**
    * Get multiple unused receive addresses for a certain wallet from the API.
    */
   getUnusedReceiveAddresses(data: WalletInfo, count: string): Observable<any>;
-
-  /**
-   * Get get all addresses for an account of a wallet from the API.
-   */
-  getAllAddresses(data: WalletInfo): Observable<any>;
 
   /** Remove transaction */
   removeTransaction(walletName: string): Observable<any>;

@@ -102,7 +102,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
           return;
         }
 
-        this.activeModal.close('ok');
+        this.activeModal.close(savedToken);
       });
   }
 

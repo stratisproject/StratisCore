@@ -16,6 +16,7 @@ import { WalletService } from '@shared/services/wallet.service';
 import { SendComponentFormResources } from './send-component-form-resources';
 import { FormHelper } from '@shared/forms/form-helper';
 import { TransactionResponse } from '@shared/models/transaction-response';
+import { CurrentAccountService } from "@shared/services/current-account.service";
 
 @Component({
   selector: 'send-component',
@@ -24,12 +25,15 @@ import { TransactionResponse } from '@shared/models/transaction-response';
 })
 
 export class SendComponent implements OnInit, OnDestroy {
+  private accountsEnabled: boolean;
+
   constructor(
     private apiService: ApiService,
     private walletService: WalletService,
     private globalService: GlobalService,
     private modalService: NgbModal,
     private genericModalService: ModalService,
+    private currentAccountService: CurrentAccountService,
     public activeModal: NgbActiveModal,
     private fb: FormBuilder) {
 
@@ -72,6 +76,8 @@ export class SendComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
     if (this.sidechainEnabled) {
       this.firstTitle = 'Sidechain';
       this.secondTitle = 'Mainchain';
@@ -179,6 +185,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
   private getTransaction(isSideChain?: boolean): Transaction {
     const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
+
     return new Transaction(
       this.globalService.getWalletName(),
       'account 0',
@@ -188,7 +195,7 @@ export class SendComponent implements OnInit, OnDestroy {
       // TO DO: use coin notation
       (isSideChain ? this.estimatedSidechainFee : this.estimatedFee) / 100000000,
       true,
-      false,
+      !this.accountsEnabled, // Shuffle Outputs
       isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
       isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null
     );

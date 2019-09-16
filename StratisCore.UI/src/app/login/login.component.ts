@@ -123,7 +123,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.apiService.loadStratisWallet(walletLoad)
       .subscribe(
         response => {
-          this.router.navigate(['wallet/dashboard']);
+          this.sidechainEnabled 
+            ? this.router.navigate(['address-selection'])
+            : this.router.navigate(['wallet/dashboard']);
         },
         error => {
           this.isDecrypting = false;

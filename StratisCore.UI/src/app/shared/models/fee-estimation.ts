@@ -9,17 +9,31 @@ export class Recipient {
 }
 
 export class FeeEstimation {
-    constructor(walletName: string, accountName: string, destinationAddress: string, amount: string, feeType: string, allowUnconfirmed: boolean) {
-        this.walletName = walletName;
-        this.accountName = accountName;
-        this.recipients = [new Recipient(destinationAddress, amount)];
-        this.feeType = feeType;
-        this.allowUnconfirmed = allowUnconfirmed;
-    }
+  constructor(
+    walletName: string,
+    accountName: string,
+    destinationAddress: string,
+    amount: string,
+    feeType: string,
+    allowUnconfirmed: boolean,
+    shuffleOutputs?: boolean,
+    changeAddress?: string
+  ) {
+    this.walletName = walletName;
+    this.accountName = accountName;
+    this.recipients = [new Recipient(destinationAddress, amount)];
+    this.feeType = feeType;
+    this.allowUnconfirmed = allowUnconfirmed;
+    this.shuffleOutputs = shuffleOutputs;
+    this.changeAddress = changeAddress
+  }
 
-    walletName: string;
-    accountName: string;
-    recipients: Recipient[];
-    feeType: string;
-    allowUnconfirmed: boolean;
+  walletName: string;
+  accountName: string;
+  recipients: Recipient[];
+  feeType: string;
+  allowUnconfirmed: boolean;
+  changeAddress: string;
+  sender: string;
+  shuffleOutputs: boolean;
 }

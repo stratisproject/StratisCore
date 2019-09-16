@@ -8,11 +8,13 @@ import { ApiInterceptor } from '@shared/http-interceptors/api-interceptor';
 import { LoginComponent } from './login/login.component';
 import { SetupModule } from './setup/setup.module';
 import { WalletModule } from './wallet/wallet.module';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   imports: [
     BrowserModule,
     HttpClientModule,
+    BrowserAnimationsModule,
     SharedModule,
     SetupModule,
     WalletModule,

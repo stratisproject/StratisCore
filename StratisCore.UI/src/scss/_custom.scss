@@ -572,6 +572,26 @@ img {pointer-events: none !important;}
   }
 }
 
+// Tokens
+.tokens {
+  .card {
+    min-height: 120px;
+    &:hover {border-color: $stratis-green !important;}
+
+    .card-header {padding: 1rem 1.25rem;}
+    .card-body {padding: 0rem 1rem 1rem 1rem;}
+    .sub {
+      font-size: ($font-size-base * 2);
+      margin-bottom: 0 !important;
+      strong {font-weight: 600;}
+      small {
+        font-weight: light;
+        font-size: 50%;
+      }
+    }
+  }
+}
+
 // <pre> styling
 .code-block {
   padding: .5rem;
