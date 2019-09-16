@@ -4,6 +4,7 @@ import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from '@shared/services/interfaces/api.i';
 import {
+  BlockConnectedSignalREvent,
   SignalREvent,
   SignalREvents,
   WalletInfoSignalREvent
@@ -58,6 +59,15 @@ export class WalletService extends RestApi {
       (message) => {
         const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
         this.updateWalletForCurrentAddress(walletBalance);
+      });
+
+    // If we have unconfirmed amount refresh the wallet when a new block is connected.
+    signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
+      (message) => {
+        const walletSubject = this.getWalletSubject(this.currentWallet);
+        if (walletSubject.value.amountUnconfirmed > 0) {
+          this.refreshWalletHistory();
+        }
       });
   }
 
@@ -145,7 +155,10 @@ export class WalletService extends RestApi {
           map(() => {
             return new TransactionResponse(transaction, buildTransactionResponse.fee, buildTransactionResponse.isSideChain);
           }),
-          tap(() => this.refreshWallet())
+          tap(() => {
+            this.refreshWallet();
+            this.refreshWalletHistory();
+          })
         );
       }),
       catchError(err => this.handleHttpError(err))
