@@ -57,8 +57,10 @@ export class WalletService extends RestApi {
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
-        const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
-        this.updateWalletForCurrentAddress(walletBalance);
+        if (message.walletName === this.currentWallet.walletName) {
+          const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
+          this.updateWalletForCurrentAddress(walletBalance);
+        }
       });
 
     // If we have unconfirmed amount refresh the wallet when a new block is connected.

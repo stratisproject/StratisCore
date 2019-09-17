@@ -142,7 +142,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   if (serve) {
-    console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.')
+    console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.');
   } else {
     if (!nodaemon) {
       startDaemon();
@@ -208,7 +208,7 @@ function shutdownDaemon(daemonAddr, portNumber) {
   });
 
   request.end(body);
-};
+}
 
 function startDaemon() {
   let daemonProcess;
