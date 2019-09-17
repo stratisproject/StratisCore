@@ -59,7 +59,7 @@ export class WalletBalance {
   }
 
   public set spendableAmount(value: number) {
-    this._spendableAmount =  value;
+    this._spendableAmount = value;
   }
 
   public addresses: Address[];
