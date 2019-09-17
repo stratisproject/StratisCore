@@ -1,4 +1,4 @@
-$StratisCoreDir = "/Users/iandavies/src/stratis/StratisCore"
+$StratisCoreDir = Resolve-Path "./../"
 $Arg = "electron-builder build --macos --x64 --config ./electron-builder.json"
 if ( Test-Path -Path $StratisCoreDir\StratisCore.UI\app-builds )
 {
