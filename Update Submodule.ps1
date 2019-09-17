@@ -1,9 +1,9 @@
-$upstream_repo = "https://github.com/stratisproject/StratisCore.git"
+$upstream_repo = "git@github.com:ianadavies/StratisCore.git"
 $submodule_name = "StratisBitcoinFullNode"
 $temp_branch_name = "submodule-update"
-$branch = "release-fixes"
+$branch = "id-multiple-wallet-and-json-fix"
 $temp_folder = 'submodule-update-temp-branch'
-$branch_submodule_to_update = "release/3.0.5.0rc" # or "release/3.0.1.0"
+$branch_submodule_to_update = "release/3.0.5.0-rc" # or "release/3.0.1.0"
 
 Write-Host "Cloning..." -foregroundcolor "magenta"
 git clone -b $branch $upstream_repo $temp_folder
