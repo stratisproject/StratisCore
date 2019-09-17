@@ -3,7 +3,7 @@ export interface WalletFileData {
   walletsFiles: [string];
 }
 
-export interface AddressBalance {
+export interface Money {
   satoshi: number;
 }
 
@@ -11,13 +11,11 @@ export interface Address {
   address: string;
   isUsed: boolean;
   isChange: boolean;
-  amountConfirmed: AddressBalance;
-  amountUnconfirmed: AddressBalance;
+  amountConfirmed: number;
+  amountUnconfirmed: number;
 }
 
-
 export class WalletBalance {
-
   private _amountConfirmed: number;
   private _amountUnconfirmed: number;
   private _spendableAmount: number;
@@ -38,16 +36,16 @@ export class WalletBalance {
   public coinType: number;
 
   public get amountConfirmed(): number {
-    return this._useAddress ? this.currentAddress.amountConfirmed.satoshi : this._amountConfirmed;
+    return this._useAddress ? this.currentAddress.amountConfirmed : this._amountConfirmed;
   }
 
   public get amountUnconfirmed(): number {
-    return this._useAddress ? this.currentAddress.amountUnconfirmed.satoshi : this._amountUnconfirmed;
+    return this._useAddress ? this.currentAddress.amountUnconfirmed : this._amountUnconfirmed;
   }
 
   public get spendableAmount(): number {
     if (this._useAddress) {
-      return this.currentAddress.amountConfirmed.satoshi - this.currentAddress.amountUnconfirmed.satoshi;
+      return this.currentAddress.amountConfirmed - this.currentAddress.amountUnconfirmed;
     }
     return this._spendableAmount;
   }

@@ -17,18 +17,18 @@ export class TokensService {
   private defaultTokens = [];
 
   constructor(private apiService: ApiService, private storage: StorageService, private globalService: GlobalService) {
-    this.savedTokens = `${globalService.getNetwork()}:savedTokens`
+    this.savedTokens = `${globalService.getNetwork()}:savedTokens`;
 
     // Upgrade wallets using the old format
-    let oldTokens = this.storage.getItem<SavedToken[]>('savedTokens');
-    if(oldTokens) {
+    const oldTokens = this.storage.getItem<SavedToken[]>('savedTokens');
+    if (oldTokens) {
       this.UpdateTokens(oldTokens);
       this.storage.removeItem('savedTokens');
     }
    }
 
   GetSavedTokens(): SavedToken[] {
-    let savedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
+    const savedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
     return savedTokens ? [...this.defaultTokens, ...savedTokens] : this.defaultTokens;
   }
 
@@ -76,10 +76,10 @@ export class TokensService {
     return this.apiService.localCall(request)
       .pipe(
         map(response => {
-          // Temporary workaround for non-camel-cased API response          
-          let anyResponse = (<any>response);
-          let result = new LocalExecutionResult();
-          result.gasConsumed = anyResponse.hasOwnProperty('GasConsumed') ? anyResponse.GasConsumed : anyResponse.gasConsumed;          
+          // Temporary workaround for non-camel-cased API response
+          const anyResponse = (<any>response);
+          const result = new LocalExecutionResult();
+          result.gasConsumed = anyResponse.hasOwnProperty('GasConsumed') ? anyResponse.GasConsumed : anyResponse.gasConsumed;
           result.return = anyResponse.hasOwnProperty('Return') ? anyResponse.Return : anyResponse.return;
           result.revert = anyResponse.hasOwnProperty('Revert') ? anyResponse.Revert : anyResponse.revert;
           result.logs = anyResponse.hasOwnProperty('Logs') ? anyResponse.Revert : anyResponse.logs;
