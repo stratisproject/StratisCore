@@ -64,10 +64,12 @@ export class WalletService extends RestApi {
       });
 
     // If we have unconfirmed amount refresh the wallet when a new block is connected.
+    // Currently we also refreshWalletHistory on all BlockConnected events on mainnet
+    // to show Staking Rewards, TODO : this needs a SignalR Event also
     signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
       (message) => {
         const walletSubject = this.getWalletSubject(this.currentWallet);
-        if (walletSubject.value.amountUnconfirmed > 0) {
+        if (!this.globalService.getSidechainEnabled() || walletSubject.value.amountUnconfirmed > 0) {
           this.refreshWalletHistory();
         }
       });
