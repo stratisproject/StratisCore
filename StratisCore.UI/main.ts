@@ -15,6 +15,7 @@ let serve;
 let testnet;
 let sidechain;
 let nodaemon;
+let devtools;
 
 const args = process.argv.slice(1);
 
@@ -26,6 +27,7 @@ serve = args.some(val => val === '--serve' || val === '-serve');
 testnet = args.some(val => val === '--testnet' || val === '-testnet');
 sidechain = args.some(val => val === '--sidechain' || val === '-sidechain');
 nodaemon = args.some(val => val === '--nodaemon' || val === '-nodaemon');
+devtools = args.some(val => val === '--devtools' || val === '-devtools');
 
 if (buildForSidechain) {
   sidechain = true;
@@ -113,7 +115,7 @@ function createWindow() {
     }));
   }
 
-  if (serve) {
+  if (serve || devtools) {
     mainWindow.webContents.openDevTools();
   }
 

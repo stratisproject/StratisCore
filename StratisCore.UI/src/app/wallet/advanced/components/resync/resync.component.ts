@@ -4,12 +4,11 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 import { Subscription } from 'rxjs';
 
-import { WalletInfo } from '@shared/models/wallet-info';
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { WalletRescan } from '@shared/models/wallet-rescan';
-import { NodeService } from "@shared/services/node-service";
+import { NodeService } from '@shared/services/node-service';
 
 @Component({
   selector: 'app-resync',
@@ -26,16 +25,28 @@ export class ResyncComponent implements OnInit, OnDestroy {
     private fb: FormBuilder) {
   }
 
+
+
   private walletName: string;
   private lastBlockSyncedHeight: number;
   private chainTip: number;
   private isChainSynced: boolean;
-  public isSyncing: boolean = true;
+  public isSyncing = true;
   private generalWalletInfoSubscription: Subscription;
-  public minDate = new Date("2009-08-09");
+  public minDate = new Date('2009-08-09');
   public maxDate = new Date();
   public bsConfig: Partial<BsDatepickerConfig>;
   public rescanWalletForm: FormGroup;
+
+  formErrors = {
+    'walletDate': ''
+  };
+
+  validationMessages = {
+    'walletDate': {
+      'required': 'Please choose the date the wallet should sync from.'
+    }
+  };
 
   ngOnInit() {
     this.walletName = this.globalService.getWalletName();
@@ -50,7 +61,7 @@ export class ResyncComponent implements OnInit, OnDestroy {
 
   private buildRescanWalletForm(): void {
     this.rescanWalletForm = this.fb.group({
-      "walletDate": ["", Validators.required],
+      'walletDate': ['', Validators.required],
     });
 
     this.rescanWalletForm.valueChanges
@@ -74,21 +85,11 @@ export class ResyncComponent implements OnInit, OnDestroy {
     }
   }
 
-  formErrors = {
-    'walletDate': ''
-  };
-
-  validationMessages = {
-    'walletDate': {
-      'required': 'Please choose the date the wallet should sync from.'
-    }
-  };
-
   public onResyncClicked() {
-    let rescanDate = new Date(this.rescanWalletForm.get("walletDate").value);
+    const rescanDate = new Date(this.rescanWalletForm.get('walletDate').value);
     rescanDate.setDate(rescanDate.getDate() - 1);
 
-    let rescanData = new WalletRescan(
+    const rescanData = new WalletRescan(
       this.walletName,
       rescanDate,
       false,
@@ -99,7 +100,7 @@ export class ResyncComponent implements OnInit, OnDestroy {
       .rescanWallet(rescanData)
       .subscribe(
         response => {
-          this.genericModalService.openModal("Resyncing", "Your wallet is now resyncing. The time remaining depends on the size and creation time of your wallet. The wallet dashboard shows your progress.");
+          this.genericModalService.openModal('Resyncing', 'Your wallet is now resyncing. The time remaining depends on the size and creation time of your wallet. The wallet dashboard shows your progress.');
         }
       );
   }
@@ -108,12 +109,12 @@ export class ResyncComponent implements OnInit, OnDestroy {
     this.generalWalletInfoSubscription = this.nodeService.generalInfo()
       .subscribe(
         response =>  {
-          let generalWalletInfoResponse = response;
+          const generalWalletInfoResponse = response;
           this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
           this.chainTip = generalWalletInfoResponse.chainTip;
           this.isChainSynced = generalWalletInfoResponse.isChainSynced;
 
-          if (this.isChainSynced && this.lastBlockSyncedHeight == this.chainTip) {
+          if (this.isChainSynced && this.lastBlockSyncedHeight === this.chainTip) {
             this.isSyncing = false;
           } else {
             this.isSyncing = true;
@@ -124,14 +125,12 @@ export class ResyncComponent implements OnInit, OnDestroy {
         }
       )
     ;
-  };
-
+  }
   private cancelSubscriptions() {
-    if(this.generalWalletInfoSubscription) {
+    if (this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
     }
-  };
-
+  }
   private startSubscriptions() {
     this.getGeneralWalletInfo();
   }

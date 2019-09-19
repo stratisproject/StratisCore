@@ -18,14 +18,27 @@ export class GenerateAddressesComponent implements OnInit {
 
   public generateAddressesForm: FormGroup;
   public addresses: string[];
-  public pageNumber: number = 1;
+  public pageNumber = 1;
+
+  formErrors = {
+    'generateAddresses': ''
+  };
+
+  validationMessages = {
+    'generateAddresses': {
+      'required': 'Please enter an amount to generate.',
+      'pattern': 'Please enter a number between 1 and 10.',
+      'min': 'Please generate at least one address.',
+      'max': 'You can only generate 1000 addresses at once.'
+    }
+  };
 
   ngOnInit() {
   }
 
   private buildGenerateAddressesForm() {
-    this.generateAddressesForm= this.fb.group({
-      "generateAddresses": ["", Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(1000)])]
+    this.generateAddressesForm = this.fb.group({
+      'generateAddresses': ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(1), Validators.max(1000)])]
     });
 
     this.generateAddressesForm.valueChanges
@@ -49,22 +62,9 @@ export class GenerateAddressesComponent implements OnInit {
     }
   }
 
-  formErrors = {
-    'generateAddresses': ''
-  };
-
-  validationMessages = {
-    'generateAddresses': {
-      'required': 'Please enter an amount to generate.',
-      'pattern': 'Please enter a number between 1 and 10.',
-      'min': 'Please generate at least one address.',
-      'max': 'You can only generate 1000 addresses at once.'
-    }
-  };
-
   public onGenerateClicked() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName());
-    this.apiService.getUnusedReceiveAddresses(walletInfo, this.generateAddressesForm.get("generateAddresses").value)
+    const walletInfo = new WalletInfo(this.globalService.getWalletName());
+    this.apiService.getUnusedReceiveAddresses(walletInfo, this.generateAddressesForm.get('generateAddresses').value)
       .subscribe(
         response => {
           this.addresses = response;

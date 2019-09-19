@@ -28,6 +28,7 @@ export class WalletService extends RestApi {
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
   private currentWallet: WalletInfo;
+  private ibdMode: boolean;
   public accountsEnabled: boolean;
 
   constructor(
@@ -57,6 +58,7 @@ export class WalletService extends RestApi {
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
+        this.ibdMode = !message.isChainSynced;
         if (message.walletName === this.currentWallet.walletName) {
           const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
           this.updateWalletForCurrentAddress(walletBalance);
@@ -64,10 +66,16 @@ export class WalletService extends RestApi {
       });
 
     // If we have unconfirmed amount refresh the wallet when a new block is connected.
+    // Currently we also refreshWalletHistory on all BlockConnected events on mainnet
+    // to show Staking Rewards, TODO : this needs a SignalR Event also
     signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
       (message) => {
+        if (this.ibdMode) {
+          return;
+        }
+
         const walletSubject = this.getWalletSubject(this.currentWallet);
-        if (walletSubject.value.amountUnconfirmed > 0) {
+        if ((!this.globalService.getSidechainEnabled()) || walletSubject.value.amountUnconfirmed > 0) {
           this.refreshWalletHistory();
         }
       });
@@ -117,7 +125,7 @@ export class WalletService extends RestApi {
     }
   }
 
-  public getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
+  private getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
     let extra = null;
     if (this.accountsEnabled) {
       extra = {

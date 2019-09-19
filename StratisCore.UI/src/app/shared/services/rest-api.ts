@@ -45,16 +45,17 @@ export class RestApi {
     return <Observable<TResult>>this.httpClient.get(`${this.API_URL}/${path}`, options);
   }
 
+  public delete<TResult>(path: string, params?: HttpParams, accept: string = 'application/json', contentType: string = 'application/json'): Observable<TResult> {
+    const options = this.getHttpOptions(accept, contentType, params);
+    return <Observable<TResult>>this.httpClient.delete(`${this.API_URL}/${path}`, options);
+  }
+
   public post<TResult>(path: string, body: any, contentType?: string): Observable<TResult> {
     return this.executeHttp<TResult>('post', path, body, contentType);
   }
 
   public put<TResult>(path: string, body: any, contentType?: string): Observable<TResult> {
     return this.executeHttp<TResult>('put', path, body, contentType);
-  }
-
-  public delete<TResult>(path: string, params?: HttpParams, contentType?: string): Observable<TResult> {
-    return this.executeHttp<TResult>('delete', path, null, contentType, params);
   }
 
   protected executeHttp<TResult>(method: string, path: string, body: any, contentType?: string, params?: HttpParams): Observable<TResult> {
