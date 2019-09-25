@@ -105,9 +105,9 @@ export class WalletService extends RestApi {
     return this.getWalletHistorySubject(this.currentWallet).asObservable();
   }
 
-  public estimateFee(feeEstimation: FeeEstimation): Observable<any> {
+  public estimateFee(feeEstimation: FeeEstimation, toSidechain: boolean): Observable<any> {
     // TODO: What is the intrinsic link between Smart Contacts and Accounts Enabled?
-    if (this.accountsEnabled) {
+    if (this.accountsEnabled && toSidechain) {
 
       feeEstimation.sender = this.currentAccountService.address;
       feeEstimation.shuffleOutputs = false;

@@ -16,7 +16,7 @@ import { WalletService } from '@shared/services/wallet.service';
 import { SendComponentFormResources } from './send-component-form-resources';
 import { FormHelper } from '@shared/forms/form-helper';
 import { TransactionResponse } from '@shared/models/transaction-response';
-import { CurrentAccountService } from "@shared/services/current-account.service";
+import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Component({
   selector: 'send-component',
@@ -44,10 +44,10 @@ export class SendComponent implements OnInit, OnDestroy {
       () => (this.spendableBalance - this.estimatedSidechainFee) / 100000000);
 
     this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendValueChanged(data, false)));
+      .subscribe(data => this.onSendValueChanged(data, false, this.sidechainEnabled)));
 
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendValueChanged(data, true)));
+      .subscribe(data => this.onSendValueChanged(data, true, !this.sidechainEnabled)));
 
   }
 
@@ -100,29 +100,29 @@ export class SendComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  private onSendValueChanged(data: any, isSideChain: boolean): void {
-    const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
+  private onSendValueChanged(data: any, crossChainTransfer: boolean, toSidechain: boolean): void {
+    const form = crossChainTransfer ? this.sendToSidechainForm : this.sendForm;
     if (!form) {
       return;
     }
 
     FormHelper.ValidateForm(form,
-      isSideChain
+      crossChainTransfer
         ? this.sendToSidechainFormErrors
         : this.sendFormErrors,
-      isSideChain
+      crossChainTransfer
         ? SendComponentFormResources.sendToSidechainValidationMessages
         : SendComponentFormResources.sendValidationMessages
     );
 
     this.apiError = '';
 
-    const isValidForFeeEstimate = (isSideChain
+    const isValidForFeeEstimate = (crossChainTransfer
       ? form.get('destinationAddress').valid && form.get('federationAddress').valid
       : form.get('address').valid) && form.get('amount').valid;
 
     if (isValidForFeeEstimate) {
-      this.estimateFee(form, isSideChain);
+      this.estimateFee(form, crossChainTransfer, toSidechain);
     }
   }
 
@@ -145,19 +145,19 @@ export class SendComponent implements OnInit, OnDestroy {
       )).toPromise();
   }
 
-  public estimateFee(form: FormGroup, isSideChain: boolean): void {
+  public estimateFee(form: FormGroup, crossChainTransfer: boolean, toSidechain: boolean): void {
     const transaction = new FeeEstimation(
       this.globalService.getWalletName(),
       'account 0',
-      form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
+      form.get(this.sidechainEnabled ? 'federationAddress' : 'address').value.trim(),
       form.get('amount').value,
       form.get('fee').value,
       true
     );
 
-    this.walletService.estimateFee(transaction).toPromise()
+    this.walletService.estimateFee(transaction, toSidechain).toPromise()
       .then(response => {
-          if (isSideChain) {
+          if (this.sidechainEnabled) {
             this.estimatedSidechainFee = response;
           } else {
             this.estimatedFee = response;
