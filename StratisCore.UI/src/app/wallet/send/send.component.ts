@@ -157,7 +157,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
     this.walletService.estimateFee(transaction, toSidechain).toPromise()
       .then(response => {
-          if (this.sidechainEnabled) {
+          if (crossChainTransfer) {
             this.estimatedSidechainFee = response;
           } else {
             this.estimatedFee = response;
