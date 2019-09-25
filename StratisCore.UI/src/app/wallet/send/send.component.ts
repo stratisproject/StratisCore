@@ -149,7 +149,7 @@ export class SendComponent implements OnInit, OnDestroy {
     const transaction = new FeeEstimation(
       this.globalService.getWalletName(),
       'account 0',
-      form.get(this.sidechainEnabled ? 'federationAddress' : 'address').value.trim(),
+      form.get(crossChainTransfer ? 'federationAddress' : 'address').value.trim(),
       form.get('amount').value,
       form.get('fee').value,
       true
