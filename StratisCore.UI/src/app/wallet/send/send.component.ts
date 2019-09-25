@@ -44,10 +44,10 @@ export class SendComponent implements OnInit, OnDestroy {
       () => (this.spendableBalance - this.estimatedSidechainFee) / 100000000);
 
     this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendValueChanged(data, false, this.sidechainEnabled)));
+      .subscribe(data => this.onSendValueChanged(data, false)));
 
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendValueChanged(data, true, !this.sidechainEnabled)));
+      .subscribe(data => this.onSendValueChanged(data, true)));
 
   }
 
@@ -100,7 +100,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  private onSendValueChanged(data: any, crossChainTransfer: boolean, toSidechain: boolean): void {
+  private onSendValueChanged(data: any, crossChainTransfer: boolean): void {
     const form = crossChainTransfer ? this.sendToSidechainForm : this.sendForm;
     if (!form) {
       return;
@@ -122,7 +122,7 @@ export class SendComponent implements OnInit, OnDestroy {
       : form.get('address').valid) && form.get('amount').valid;
 
     if (isValidForFeeEstimate) {
-      this.estimateFee(form, crossChainTransfer, toSidechain);
+      this.estimateFee(form, crossChainTransfer);
     }
   }
 
@@ -145,7 +145,7 @@ export class SendComponent implements OnInit, OnDestroy {
       )).toPromise();
   }
 
-  public estimateFee(form: FormGroup, crossChainTransfer: boolean, toSidechain: boolean): void {
+  public estimateFee(form: FormGroup, crossChainTransfer: boolean): void {
     const transaction = new FeeEstimation(
       this.globalService.getWalletName(),
       'account 0',
@@ -155,7 +155,7 @@ export class SendComponent implements OnInit, OnDestroy {
       true
     );
 
-    this.walletService.estimateFee(transaction, toSidechain).toPromise()
+    this.walletService.estimateFee(transaction).toPromise()
       .then(response => {
           if (crossChainTransfer) {
             this.estimatedSidechainFee = response;
