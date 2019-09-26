@@ -1,24 +1,19 @@
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Injectable } from '@angular/core';
-import { SignalRService } from '@shared/services/signalr-service';
-import { WalletInfo } from '@shared/models/wallet-info';
-import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from '@shared/services/interfaces/api.i';
-import {
-  BlockConnectedSignalREvent,
-  SignalREvent,
-  SignalREvents,
-  WalletInfoSignalREvent
-} from '@shared/services/interfaces/signalr-events.i';
-import { catchError, map, flatMap, tap } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { RestApi } from '@shared/services/rest-api';
-import { GlobalService } from '@shared/services/global.service';
-import { ErrorService } from '@shared/services/error-service';
-import { Transaction } from '@shared/models/transaction';
-import { TransactionSending } from '@shared/models/transaction-sending';
-import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
+import { Injectable } from '@angular/core';
 import { FeeEstimation } from '@shared/models/fee-estimation';
+import { Transaction } from '@shared/models/transaction';
+import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
+import { TransactionSending } from '@shared/models/transaction-sending';
+import { WalletInfo } from '@shared/models/wallet-info';
 import { CurrentAccountService } from '@shared/services/current-account.service';
+import { ErrorService } from '@shared/services/error-service';
+import { GlobalService } from '@shared/services/global.service';
+import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from '@shared/services/interfaces/api.i';
+import { BlockConnectedSignalREvent, SignalREvent, SignalREvents, WalletInfoSignalREvent } from '@shared/services/interfaces/signalr-events.i';
+import { RestApi } from '@shared/services/rest-api';
+import { SignalRService } from '@shared/services/signalr-service';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { catchError, flatMap, map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -106,9 +101,8 @@ export class WalletService extends RestApi {
   }
 
   public estimateFee(feeEstimation: FeeEstimation): Observable<any> {
-    const transferToSidechain = !this.globalService.getSidechainEnabled();
     // TODO: What is the intrinsic link between Smart Contacts and Accounts Enabled?
-    if (this.accountsEnabled && transferToSidechain) {
+    if (this.accountsEnabled) {
 
       feeEstimation.sender = this.currentAccountService.address;
       feeEstimation.shuffleOutputs = false;
