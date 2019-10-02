@@ -31,7 +31,7 @@
           <li *ngIf="stakingService.isStarting">Waiting for staking to start...</li>
           <ng-container *ngIf="!stakingService.isStarting && (stakingInfo | async) as _stakingInfo">
             <li>Staking weight:
-              <strong>{{ _stakingInfo.netStakeWeight | coinNotation | number: '1.0-0' }} {{ globalService.coinUnit }}</strong>
+              <strong>{{ _stakingInfo.weight | coinNotation | number: '1.0-0' }} {{ globalService.coinUnit }}</strong>
             </li>
             <li>Coins awaiting maturity:
               <strong>{{ _wallet.awaitingMaturityIfStaking | coinNotation | number: '1.0-0' }} {{ globalService.coinUnit }}</strong>
