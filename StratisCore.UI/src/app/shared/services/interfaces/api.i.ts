@@ -1,6 +1,5 @@
-export interface WalletFileData {
-  walletsPath: string;
-  walletsFiles: [string];
+export interface WalletNamesData {
+  walletNames: Array<string>;
 }
 
 export interface Money {

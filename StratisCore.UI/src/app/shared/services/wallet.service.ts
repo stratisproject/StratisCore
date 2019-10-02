@@ -2,7 +2,12 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
-import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory } from '@shared/services/interfaces/api.i';
+import {
+  Balances,
+  TransactionsHistoryItem,
+  WalletBalance,
+  WalletHistory, WalletNamesData
+} from '@shared/services/interfaces/api.i';
 import {
   BlockConnectedSignalREvent,
   SignalREvent,
@@ -19,6 +24,7 @@ import { TransactionSending } from '@shared/models/transaction-sending';
 import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { CurrentAccountService } from '@shared/services/current-account.service';
+import { WalletLoad } from '@shared/models/wallet-load';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +65,7 @@ export class WalletService extends RestApi {
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
         this.ibdMode = !message.isChainSynced;
-        if (message.walletName === this.currentWallet.walletName) {
+        if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
           const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
           this.updateWalletForCurrentAddress(walletBalance);
         }
@@ -73,13 +79,27 @@ export class WalletService extends RestApi {
         if (this.ibdMode) {
           return;
         }
-
-        const walletSubject = this.getWalletSubject(this.currentWallet);
-        if ((!this.globalService.getSidechainEnabled()) || walletSubject.value.amountUnconfirmed > 0) {
-          this.refreshWalletHistory();
+        if (this.currentWallet) {
+          const walletSubject = this.getWalletSubject(this.currentWallet);
+          if ((!this.globalService.getSidechainEnabled()) || walletSubject.value.amountUnconfirmed > 0) {
+            this.refreshWalletHistory();
+          }
         }
       });
   }
+
+  public getWalletNames(): Observable<WalletNamesData> {
+    return this.get<WalletNamesData>('wallet/list-wallets').pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  public loadStratisWallet(data: WalletLoad): Observable<any> {
+    return this.post('wallet/load/', data).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
 
   public transactionReceived(): Observable<any> {
     return this.transactionReceivedSubject.asObservable();
@@ -219,6 +239,10 @@ export class WalletService extends RestApi {
   }
 
   private updateWalletForCurrentAddress(walletBalance?: WalletBalance): void {
+    if (!this.currentWallet) {
+      return;
+    }
+
     const walletSubject = this.getWalletSubject(this.currentWallet);
 
     const newBalance = new WalletBalance(

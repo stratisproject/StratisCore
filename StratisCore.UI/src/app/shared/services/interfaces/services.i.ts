@@ -29,11 +29,6 @@ export interface IApiService {
 
   removeAddressBookAddress(label: string): Observable<any>;
 
-  /**
-   * Gets available wallets at the default path
-   */
-  getWalletFiles(): Observable<any>;
-
   /** Gets the extended public key from a certain wallet */
   getExtPubkey(data: WalletInfo): Observable<any>;
 
@@ -51,11 +46,6 @@ export interface IApiService {
    * Recover a Stratis wallet.
    */
   recoverStratisWallet(data: WalletRecovery): Observable<any>;
-
-  /**
-   * Load a Stratis wallet
-   */
-  loadStratisWallet(data: WalletLoad): Observable<any>;
 
   /**
    * Get wallet status info from the API.
