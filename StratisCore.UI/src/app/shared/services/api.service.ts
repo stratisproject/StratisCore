@@ -6,7 +6,6 @@ import { GlobalService } from './global.service';
 import { AddressLabel } from '../models/address-label';
 import { WalletCreation } from '../models/wallet-creation';
 import { WalletRecovery } from '../models/wallet-recovery';
-import { WalletLoad } from '../models/wallet-load';
 import { WalletInfo, WalletInfoRequest } from '../models/wallet-info';
 import { NodeStatus } from '../models/node-status';
 import { WalletRescan } from '../models/wallet-rescan';
@@ -14,7 +13,7 @@ import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 import { RestApi } from '@shared/services/rest-api';
 import { IApiService } from '@shared/services/interfaces/services.i';
-import { WalletFileData, WalletHistory } from '@shared/services/interfaces/api.i';
+import {  WalletHistory } from '@shared/services/interfaces/api.i';
 import { ErrorService } from '@shared/services/error-service';
 
 @Injectable({
@@ -61,14 +60,6 @@ export class ApiService extends RestApi implements IApiService {
     );
   }
 
-  /**
-   * Gets available wallets at the default path
-   */
-  public getWalletFiles(): Observable<WalletFileData> {
-    return this.get<WalletFileData>('wallet/files').pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
 
   /** Gets the extended public key from a certain wallet */
   public getExtPubkey(data: WalletInfo): Observable<any> {
@@ -104,15 +95,6 @@ export class ApiService extends RestApi implements IApiService {
    */
   public recoverStratisWallet(data: WalletRecovery): Observable<any> {
     return this.post('wallet/recover/', data).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Load a Stratis wallet
-   */
-  public loadStratisWallet(data: WalletLoad): Observable<any> {
-    return this.post('wallet/load/', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
