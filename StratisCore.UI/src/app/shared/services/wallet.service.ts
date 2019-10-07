@@ -25,6 +25,7 @@ import { BuildTransactionResponse, TransactionResponse } from '@shared/models/tr
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { WalletLoad } from '@shared/models/wallet-load';
+import { WalletResync } from '@shared/models/wallet-rescan';
 
 @Injectable({
   providedIn: 'root'
@@ -100,7 +101,6 @@ export class WalletService extends RestApi {
     );
   }
 
-
   public transactionReceived(): Observable<any> {
     return this.transactionReceivedSubject.asObservable();
   }
@@ -113,6 +113,15 @@ export class WalletService extends RestApi {
 
   public getUnusedReceiveAddress(data: WalletInfo): Observable<any> {
     return this.get('wallet/unusedaddress', this.getWalletParams(data)).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  public rescanWallet(data: WalletResync): Observable<any> {
+    return this.post('wallet/sync-from-date/', data).pipe(
+      tap(() => {
+        this.refreshWalletHistory();
+      }),
       catchError(err => this.handleHttpError(err))
     );
   }
