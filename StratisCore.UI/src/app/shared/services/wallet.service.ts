@@ -65,7 +65,14 @@ export class WalletService extends RestApi {
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
+
+        // Get History once chain is synced
+        if (this.ibdMode && message.isChainSynced) {
+          this.refreshWalletHistory();
+        }
+
         this.ibdMode = !message.isChainSynced;
+
         if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
           const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
           this.updateWalletForCurrentAddress(walletBalance);
