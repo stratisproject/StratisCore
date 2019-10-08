@@ -20,7 +20,7 @@ export class SendComponentFormResources {
     }
   };
 
-  public static sendToSidechainValidationMessages = {
+  public static crossChainSendValidationMessages = {
     'destinationAddress': {
       'required': 'An address is required.',
       'minlength': 'An address is at least 26 characters long.'
@@ -55,7 +55,7 @@ export class SendComponentFormResources {
     });
   }
 
-  public static buildSendToSidechainForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
+  public static buildCrossChainSendForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
     return fb.group({
       'federationAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       'destinationAddress': ['', Validators.compose([Validators.required, Validators.minLength(26)])],
@@ -67,6 +67,4 @@ export class SendComponentFormResources {
       'password': ['', Validators.required]
     });
   }
-
-
 }

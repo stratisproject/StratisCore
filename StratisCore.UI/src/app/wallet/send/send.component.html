@@ -82,26 +82,26 @@
         </ngb-tab>
         <ngb-tab id="stratis-green-bg" class="nav-link stratis-green" title="{{ secondTitle }}">
           <ng-template ngbTabContent>
-            <form [formGroup]="sendToSidechainForm">
+            <form [formGroup]="crossChainSendForm">
               <!--<div class="form-group has-danger clearfix">-->
               <div class="form-group clearfix">
                 <label class="float-left" for="amount">Amount</label>
                 <label class="float-right" for="totalAmount">Available: {{ totalBalance | coinNotation }} {{ coinUnit }}</label>
                 <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
-                <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.amount" [class.is-valid]="!sendToSidechainFormErrors.amount && sendToSidechainForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
-                <div *ngIf="sendToSidechainFormErrors.amount" class="invalid-feedback">{{ sendToSidechainFormErrors.amount }}</div>
+                <input type="text" class="form-control" [class.is-invalid]="crossChainSendFormErrors.amount" [class.is-valid]="!crossChainSendFormErrors.amount && crossChainSendForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
+                <div *ngIf="crossChainSendFormErrors.amount" class="invalid-feedback">{{ crossChainSendFormErrors.amount }}</div>
               </div>
               <!--<div class="form-group has-success">-->
               <div class="form-group clearfix">
                 <label for="federationAddress">{{ firstTitle }} federation address</label>
-                <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.federationAddress" [class.is-valid]="!sendToSidechainFormErrors.federaionAddress && sendToSidechainForm.get('federationAddress').valid" formControlName="federationAddress" placeholder="Please enter the federation address here.">
-                <div *ngIf="sendToSidechainFormErrors.federationAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.federationAddress }}</div>
+                <input type="text" class="form-control" [class.is-invalid]="crossChainSendFormErrors.federationAddress" [class.is-valid]="!crossChainSendFormErrors.federaionAddress && crossChainSendForm.get('federationAddress').valid" formControlName="federationAddress" placeholder="Please enter the federation address here.">
+                <div *ngIf="crossChainSendFormErrors.federationAddress" class="invalid-feedback">{{ crossChainSendFormErrors.federationAddress }}</div>
               </div>
               <!--<div class="form-group has-success">-->
               <div class="form-group clearfix">
                 <label for="destinationAddress">{{ secondTitle }} destination address</label>
-                <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.destinationAddress" [class.is-valid]="!sendToSidechainFormErrors.destinationAddress && sendToSidechainForm.get('destinationAddress').valid" formControlName="destinationAddress" id="destinationAddress" placeholder="Please enter the sidechain destination address here.">
-                <div *ngIf="sendToSidechainFormErrors.destinationAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.destinationAddress }}</div>
+                <input type="text" class="form-control" [class.is-invalid]="crossChainSendFormErrors.destinationAddress" [class.is-valid]="!crossChainSendFormErrors.destinationAddress && crossChainSendForm.get('destinationAddress').valid" formControlName="destinationAddress" id="destinationAddress" placeholder="Please enter the sidechain destination address here.">
+                <div *ngIf="crossChainSendFormErrors.destinationAddress" class="invalid-feedback">{{ crossChainSendFormErrors.destinationAddress }}</div>
               </div>
               <div class="form-group clearfix">
                 <label>Transaction Fee</label>
@@ -138,14 +138,14 @@
               </div>
               <div class="form-group clearfix">
                 <label for="walletPassword">Wallet Password</label>
-                <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password" [class.is-valid]="!sendToSidechainFormErrors.password && sendToSidechainForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
-                <div *ngIf="sendToSidechainFormErrors.password" class="invalid-feedback">{{sendToSidechainFormErrors.password}}</div>
+                <input type="password" class="form-control" [class.is-invalid]="crossChainSendFormErrors.password" [class.is-valid]="!crossChainSendFormErrors.password && crossChainSendForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
+                <div *ngIf="crossChainSendFormErrors.password" class="invalid-feedback">{{crossChainSendFormErrors.password}}</div>
               </div>
               <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
             </form>
             <div class="modal-footer p-0">
               <button *ngIf="!isSending" type="button" [disabled]="isSending" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
-              <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-block" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee" (click)="send(true)">Send</button>
+              <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-block" [disabled]="!crossChainSendForm.valid || isSending || !estimatedSidechainFee" (click)="send(true)">Send</button>
               <!-- SVG -->
               <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
                 <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
