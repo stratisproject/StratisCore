@@ -1,3 +1,6 @@
+import { Log } from "../../../wallet/tokens/services/logger.service";
+import { add } from "ngx-bootstrap/chronos";
+
 export interface WalletNamesData {
   walletNames: Array<string>;
 }
@@ -66,8 +69,19 @@ export class WalletBalance {
   public currentAddress: Address;
 
   public setCurrentAccountAddress(address: string): WalletBalance {
-    this._useAddress = true;
-    this.currentAddress = this.addresses.find(add => add.address === address);
+
+    if (this.addresses) {
+      this.currentAddress = this.addresses.find(a => a.address === address);
+    }
+
+    if (this.currentAddress) {
+      this._useAddress = true;
+    } else {
+      Log.error({
+        name: 'Address not found',
+        message: `The address ${address} was not found.`
+      });
+    }
     return this;
   }
 
