@@ -35,6 +35,7 @@ export class WalletService extends RestApi {
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
   private currentWallet: WalletInfo;
+  private isSyncing: boolean;
   private ibdMode: boolean;
   public accountsEnabled: boolean;
 
@@ -66,17 +67,22 @@ export class WalletService extends RestApi {
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
 
-        // Get History once chain is synced
-        if (this.ibdMode && message.isChainSynced) {
+        // Update wallet history after chain is synced or IBD mode completed
+        const syncCompleted = (this.isSyncing && message.lastBlockSyncedHeight === message.chainTip)
+          || (this.ibdMode && message.isChainSynced);
+
+        this.isSyncing = message.lastBlockSyncedHeight !== message.chainTip;
+        this.ibdMode = !message.isChainSynced;
+
+        if (syncCompleted) {
           this.refreshWalletHistory();
         }
-
-        this.ibdMode = !message.isChainSynced;
 
         if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
           const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
           this.updateWalletForCurrentAddress(walletBalance);
         }
+
       });
 
     // If we have unconfirmed amount refresh the wallet when a new block is connected.
@@ -84,7 +90,7 @@ export class WalletService extends RestApi {
     // to show Staking Rewards, TODO : this needs a SignalR Event also
     signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
       (message) => {
-        if (this.ibdMode) {
+        if (this.isSyncing) {
           return;
         }
         if (this.currentWallet) {
