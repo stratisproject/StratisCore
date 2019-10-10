@@ -14,7 +14,7 @@ import {
   SignalREvents,
   WalletInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
-import { catchError, map, flatMap, tap } from 'rxjs/operators';
+import { catchError, map, flatMap, tap, debounceTime } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
@@ -37,6 +37,7 @@ export class WalletService extends RestApi {
   private currentWallet: WalletInfo;
   private isSyncing: boolean;
   private ibdMode: boolean;
+  private blockConnectedSubject: BehaviorSubject<BlockConnectedSignalREvent> = new BehaviorSubject<BlockConnectedSignalREvent>(null);
   public accountsEnabled: boolean;
 
   constructor(
@@ -90,16 +91,21 @@ export class WalletService extends RestApi {
     // to show Staking Rewards, TODO : this needs a SignalR Event also
     signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
       (message) => {
-        if (this.isSyncing) {
-          return;
-        }
-        if (this.currentWallet) {
-          const walletSubject = this.getWalletSubject(this.currentWallet);
-          if ((!this.globalService.getSidechainEnabled()) || walletSubject.value.amountUnconfirmed > 0) {
-            this.refreshWalletHistory();
-          }
-        }
+        this.blockConnectedSubject.next(message);
       });
+
+    // Debounce these as after IBD mode we get large number of BlockConnected events
+    this.blockConnectedSubject.pipe(debounceTime(1000)).subscribe(message => {
+      if (this.isSyncing) {
+        return;
+      }
+      if (this.currentWallet) {
+        const walletSubject = this.getWalletSubject(this.currentWallet);
+        if ((!this.globalService.getSidechainEnabled()) || walletSubject.value.amountUnconfirmed > 0) {
+          this.refreshWalletHistory();
+        }
+      }
+    });
   }
 
   public getWalletNames(): Observable<WalletNamesData> {
