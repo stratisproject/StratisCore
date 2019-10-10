@@ -91,7 +91,6 @@ export class WalletService extends RestApi {
     // to show Staking Rewards, TODO : this needs a SignalR Event also
     signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
       (message) => {
-        console.log('Block Connected');
         this.blockConnectedSubject.next(message);
       });
 
