@@ -80,7 +80,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setTitle() {
-    const applicationName = this.sidechainEnabled ? 'Cirrus Core' : 'Stratis Core';
+    const applicationName = this.sidechainEnabled ? 'Cirrus Core (Hackathon Edition)' : 'Stratis Core';
     const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
     const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
 
