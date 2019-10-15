@@ -8,7 +8,7 @@ if (os.arch() === 'arm') {
 }
 
 // Set to true if you want to build Core for sidechains
-const buildForSidechain = false;
+const buildForSidechain = true;
 const daemonName = buildForSidechain ? 'Stratis.CirrusD' : 'Stratis.StratisD';
 
 let serve;
@@ -33,7 +33,7 @@ if (buildForSidechain) {
   sidechain = true;
 }
 
-const applicationName = sidechain ? 'Cirrus Core' : 'Stratis Core';
+const applicationName = sidechain ? 'Cirrus Core (Hackathon Edition)' : 'Stratis Core';
 
 // Set default API port according to network
 let apiPortDefault;
@@ -47,11 +47,18 @@ if (testnet && !sidechain) {
   apiPortDefault = 37223;
 }
 
+
 // Sets default arguments
 const coreargs = require('minimist')(args, {
   default: {
     daemonip: 'localhost',
-    apiport: apiPortDefault
+    apiport: apiPortDefault,
+	datadir: app.getPath('appData') + '\\Cirrus Hackathon',
+	bootstrap: 1,
+	txindex: 1,
+	defaultwalletname: 'Hackathon',
+	defaultwalletpassword: 'stratis',
+	unlockwallet: 1
   },
 });
 
@@ -60,6 +67,25 @@ let daemonIP;
 let apiPort;
 daemonIP = coreargs.daemonip;
 apiPort = coreargs.apiport;
+
+let datadir
+datadir = coreargs.datadir;
+
+let bootstrap
+bootstrap = coreargs.bootstrap;
+
+let txindex
+txindex = coreargs.txindex;
+
+let defaultwalletname
+defaultwalletname = coreargs.defaultwalletname;
+
+let defaultwalletpassword
+defaultwalletpassword = coreargs.defaultwalletpassword;
+
+let unlockwallet
+unlockwallet = coreargs.unlockwallet;
+
 
 // Prevents daemon from starting if connecting to remote daemon.
 if (daemonIP !== 'localhost') {
@@ -225,8 +251,15 @@ function startDaemon() {
     daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
   }
 
-  const spawnArgs = args.filter(arg => arg.startsWith('-'))
+  let spawnArgs = args.filter(arg => arg.startsWith('-'))
     .join('&').replace(/--/g, '-').split('&');
+
+  spawnArgs.push('-datadir=' + datadir)
+  spawnArgs.push('-bootstrap=' + bootstrap)
+  spawnArgs.push('-txindex=' + txindex)
+  spawnArgs.push('-defaultwalletname=' + defaultwalletname)
+  spawnArgs.push('-defaultwalletpassword=' + defaultwalletpassword)
+  spawnArgs.push('-unlockwallet=' + unlockwallet)
 
   console.log('Starting daemon ' + daemonPath);
   console.log(spawnArgs);
@@ -234,7 +267,7 @@ function startDaemon() {
   daemonProcess = spawnDaemon(daemonPath, spawnArgs, {
     detached: true
   });
-
+  
   daemonProcess.stdout.on('data', (data) => {
     writeLog(`Stratis: ${data}`);
   });

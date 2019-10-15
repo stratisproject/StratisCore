@@ -8,7 +8,7 @@
     <div class="col-8 right-login d-flex align-content-center flex-wrap">
       <form class="col-6 mx-auto d-flex align-content-center flex-wrap">
         <div class="col-12 text-center">
-          <h3 class="display-4 mb-4">Welcome</h3>
+          <h3 class="display-4 mb-4">Welcome to Hackathon</h3>
         </div>
         <form *ngIf="hasWallet" class="form-group col-12" [formGroup]="openWalletForm">
           <select class="custom-select col-12" formControlName="selectWallet">
@@ -16,7 +16,7 @@
             <option *ngFor="let wallet of wallets" [value]="wallet">{{ wallet }}</option>
           </select>
           <div class="form-group mt-3">
-            <input type="password" class="form-control" id="Password" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" formControlName="password" placeholder="Enter your password." (keyup.enter)="onEnter()">
+            <input type="password" class="form-control" id="Password" [class.is-invalid]="formErrors.password" [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid" id="Password" formControlName="password" formControlName="password" placeholder="Password: stratis" (keyup.enter)="onEnter()">
             <div *ngIf="formErrors.password" class="invalid-feedback">{{ formErrors.password }}</div>
           </div>
         </form>
