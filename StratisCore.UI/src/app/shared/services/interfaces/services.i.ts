@@ -75,8 +75,6 @@ export interface IApiService {
 
   getAccountBalance(walletName: string): Observable<any>;
 
-  getAddressBalance(address: string): Observable<any>;
-
   getAccountHistory(walletName: string, address: string): Observable<any>;
 
   postCreateTransaction(transaction: any): Observable<any>;
