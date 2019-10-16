@@ -1,7 +1,7 @@
 <div *ngIf="loading">
-    <div class="login">
+    <div class="login ">
         <div class="row align-items-center h-100">
-            <div id="logoAnim" class="mb-4 mx-auto">
+            <div id="logoAnim" class="mx-auto">
                 <svg class="mb-4" width="250px" height="217px" viewBox="0 0 375 325" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink">
                     <defs>
@@ -22,9 +22,9 @@
                         </g>
                     </g>
                 </svg>
-                <div class="loadingText mt-4 col-12 text-center">Loading, please wait...</div>
-                <div *ngIf="apiConnected" class="loadingText col-12 text-center">Connected to the API. Waiting for node to initialize.</div>
             </div>
+            <div *ngIf="!apiConnected" class="loadingText mt-4 col-12 text-center">Loading, please wait...</div>
+            <div *ngIf="apiConnected" class="loadingText mt-4 col-12 text-center">Connected to the API. Waiting for node to initialize.</div>
         </div>
     </div>
 </div>

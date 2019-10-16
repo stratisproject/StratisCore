@@ -27,8 +27,14 @@ export class StatusBarComponent implements OnInit {
     this.generalInfo = this.nodeService.generalInfo()
       .pipe(tap(
         response => {
+          let percentSyncedNumber = ((response.lastBlockSyncedHeight / response.chainTip) * 100);
+          if (percentSyncedNumber.toFixed(0) === '100' && response.lastBlockSyncedHeight !== response.chainTip) {
+            percentSyncedNumber = 99;
+          }
+          this.percentSynced = percentSyncedNumber.toFixed(0) + '%';
           const processedText = `Processed ${response.lastBlockSyncedHeight || '0'} out of ${response.chainTip} blocks.`;
-          this.toolTip = `Synchronizing.  ${processedText}`;
+
+          this.toolTip = `Synchronizing. ${processedText}`;
 
           if (response.connectedNodes === 1) {
             this.connectedNodesTooltip = '1 connection';
@@ -36,19 +42,8 @@ export class StatusBarComponent implements OnInit {
             this.connectedNodesTooltip = `${response.connectedNodes} connections`;
           }
 
-          if (!response.isChainSynced) {
-            this.percentSynced = 'syncing...';
-          } else {
-            let percentSyncedNumber = ((response.lastBlockSyncedHeight / response.chainTip) * 100);
-            if (percentSyncedNumber.toFixed(0) === '100' && response.lastBlockSyncedHeight !== response.chainTip) {
-              percentSyncedNumber = 99;
-            }
-
-            this.percentSynced = percentSyncedNumber.toFixed(0) + '%';
-
-            if (this.percentSynced === '100%') {
-              this.toolTip = `Up to date.  ${processedText}`;
-            }
+          if (percentSyncedNumber === 100) {
+            this.toolTip = `Up to date.  ${processedText}`;
           }
         }));
   }

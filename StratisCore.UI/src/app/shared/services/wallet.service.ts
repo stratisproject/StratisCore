@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
@@ -35,10 +35,11 @@ export class WalletService extends RestApi {
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
   private currentWallet: WalletInfo;
-  private isSyncing: boolean;
-  private ibdMode: boolean;
   private blockConnectedSubject: BehaviorSubject<BlockConnectedSignalREvent> = new BehaviorSubject<BlockConnectedSignalREvent>(null);
+
   public accountsEnabled: boolean;
+  public isSyncing: boolean;
+  public ibdMode: boolean;
 
   constructor(
     globalService: GlobalService,
@@ -67,7 +68,6 @@ export class WalletService extends RestApi {
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
-
         // Update wallet history after chain is synced or IBD mode completed
         const syncCompleted = (this.isSyncing && message.lastBlockSyncedHeight === message.chainTip)
           || (this.ibdMode && message.isChainSynced);
@@ -83,7 +83,6 @@ export class WalletService extends RestApi {
           const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
           this.updateWalletForCurrentAddress(walletBalance);
         }
-
       });
 
     // If we have unconfirmed amount refresh the wallet when a new block is connected.
@@ -139,6 +138,8 @@ export class WalletService extends RestApi {
   public rescanWallet(data: WalletResync): Observable<any> {
     return this.post('wallet/sync-from-date/', data).pipe(
       tap(() => {
+        this.isSyncing = true;
+        this.clearWalletHistory(data.date.getTime());
         this.refreshWalletHistory();
       }),
       catchError(err => this.handleHttpError(err))
@@ -250,7 +251,9 @@ export class WalletService extends RestApi {
   }
 
   private getWalletBalance(data: WalletInfo): Observable<Balances> {
-    return this.get<Balances>('wallet/balance', this.getWalletParams(data)).pipe(
+    return this.get<Balances>('wallet/balance', this.getWalletParams(data, {
+      'includeBalanceByAddress': `${this.accountsEnabled}`
+    })).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -298,5 +301,10 @@ export class WalletService extends RestApi {
     const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
     this.getWalletHistory(this.currentWallet).toPromise().then(
       response => walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory));
+  }
+
+  private clearWalletHistory(fromDate: number): void {
+    const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
+    walletHistorySubject.next(Array.from(walletHistorySubject.value.filter(item => item.timestamp < fromDate)));
   }
 }

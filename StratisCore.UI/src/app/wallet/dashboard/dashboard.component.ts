@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
   public transactionCount: Observable<number>;
 
   constructor(
-    private walletService: WalletService,
+    public walletService: WalletService,
     private apiService: ApiService,
     public globalService: GlobalService,
     private modalService: NgbModal) {
