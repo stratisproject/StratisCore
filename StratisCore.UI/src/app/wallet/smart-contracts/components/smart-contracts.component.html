@@ -58,7 +58,7 @@
                 <th scope="col">Amount</th>
                 <th scope="col">Transaction Fee</th>
                 <th scope="col">Gas Fee</th>
-                <th scope="col"></th>
+                <th scope="col">API</th>
               </tr>
             </thead>
             <tbody>
@@ -87,7 +87,9 @@
                 <td>
                   <sc-balance [balance]="item.gasFee" [coinUnit]="coinUnit"></sc-balance>
                 </td>
-                <td>&nbsp;</td>
+                <td>
+                  <a (click)="openApiBrowser(item.to)">Browse API</a>
+                </td>
               </tr>
 
             </tbody>

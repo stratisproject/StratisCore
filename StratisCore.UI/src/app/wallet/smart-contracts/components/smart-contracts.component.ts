@@ -10,6 +10,7 @@ import { TransactionComponent, Mode } from './modals/transaction/transaction.com
 import { ModalService } from '@shared/services/modal.service';
 import { takeUntil } from 'rxjs/operators';
 import { CurrentAccountService } from '@shared/services/current-account.service';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
     selector: 'app-smart-contracts',
@@ -31,7 +32,8 @@ export class SmartContractsComponent implements OnInit, OnDestroy {
         private clipboardService: ClipboardService,
         private modalService: NgbModal,
         private genericModalService: ModalService,
-        private currentAccountService: CurrentAccountService) {
+        private currentAccountService: CurrentAccountService,
+        private electron: ElectronService) {
 
         this.coinUnit = this.globalService.getCoinUnit();
         this.walletName = this.globalService.getWalletName();
@@ -104,4 +106,10 @@ export class SmartContractsComponent implements OnInit, OnDestroy {
                     this.showApiError('Error retrieving receipt. ' + error);
             });
     }
+
+    openApiBrowser(address: string) {
+        let url = `http://${this.globalService.getDaemonIP()}:${this.globalService.getApiPort()}/swagger/index.html?urls.primaryName=Contract ${address}`;
+
+        this.electron.shell.openExternal(url);
+    };
 }
