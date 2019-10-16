@@ -22,7 +22,6 @@ export abstract class SmartContractsServiceBase {
   GetReceiptSilent(hash: string): Observable<string> { return of(); }
   GetAddresses(walletName: string): Observable<string[]> { return of(); }
   GetBalance(walletName: string): Observable<number> { return of(); }
-  GetAddressBalance(address: string): Observable<number> { return of(); }
   GetAddress(walletName: string): Observable<string> { return of(); }
   GetContracts(walletName: string): Observable<SmartContractsContractItem[]> { return of(); }
   GetSenderAddresses(walletName: string): Observable<string[]> { return of(); }
@@ -58,10 +57,6 @@ export class SmartContractsService implements SmartContractsServiceBase {
 
   GetBalance(walletName: string): Observable<any> {
     return this.apiService.getAccountBalance(walletName);
-  }
-
-  GetAddressBalance(address: string): Observable<any> {
-    return this.apiService.getAddressBalance(address);
   }
 
   GetAddress(walletName: string): Observable<any> {
