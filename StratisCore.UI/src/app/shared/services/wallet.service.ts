@@ -298,9 +298,11 @@ export class WalletService extends RestApi {
   }
 
   private refreshWalletHistory(): void {
-    const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
-    this.getWalletHistory(this.currentWallet).toPromise().then(
-      response => walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory));
+    if (this.currentWallet) {
+      const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
+      this.getWalletHistory(this.currentWallet).toPromise().then(
+        response => walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory));
+    }
   }
 
   private clearWalletHistory(fromDate: number): void {
