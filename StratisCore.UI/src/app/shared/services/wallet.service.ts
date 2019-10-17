@@ -53,9 +53,11 @@ export class WalletService extends RestApi {
       this.currentWallet = wallet;
     });
 
-    currentAccountService.currentAddress.subscribe(() => {
+    currentAccountService.currentAddress.subscribe((address) => {
       this.accountsEnabled = globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress();
-      this.updateWalletForCurrentAddress();
+      if (null != address) {
+        this.updateWalletForCurrentAddress();
+      }
     });
 
     // When we get a TransactionReceived event get the WalletBalance and History using the RestApi
@@ -283,6 +285,7 @@ export class WalletService extends RestApi {
     if (this.accountsEnabled) {
       if (null == newBalance.currentAddress || newBalance.currentAddress.address !== this.currentAccountService.address) {
         newBalance.setCurrentAccountAddress(this.currentAccountService.address);
+        this.clearWalletHistory(0);
         this.refreshWalletHistory();
       }
     }
@@ -306,7 +309,9 @@ export class WalletService extends RestApi {
   }
 
   private clearWalletHistory(fromDate: number): void {
-    const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
-    walletHistorySubject.next(Array.from(walletHistorySubject.value.filter(item => item.timestamp < fromDate)));
+    if (this.currentWallet) {
+      const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
+      walletHistorySubject.next(Array.from((walletHistorySubject.value || []).filter(item => item.timestamp < fromDate)));
+    }
   }
 }
