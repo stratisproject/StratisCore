@@ -27,7 +27,8 @@ export class StatusBarComponent implements OnInit {
     this.generalInfo = this.nodeService.generalInfo()
       .pipe(tap(
         response => {
-          let percentSyncedNumber = ((response.lastBlockSyncedHeight / response.chainTip) * 100);
+          // If ChainTip is behind wallet stop sync percent being greater than 100%.
+          let percentSyncedNumber = Math.min((response.lastBlockSyncedHeight / response.chainTip) * 100, 100);
           if (percentSyncedNumber.toFixed(0) === '100' && response.lastBlockSyncedHeight !== response.chainTip) {
             percentSyncedNumber = 99;
           }
