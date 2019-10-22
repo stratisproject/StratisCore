@@ -56,7 +56,7 @@ const coreargs = require('minimist')(args, {
 	port: portDefault,
 	signalrport: 38823,
 	rpcServer: 1,
-	rpcallowip: '0.0.0.0/0',
+	rpcallowip: '127.0.0.0/8',
 	rpcport: 16175,
 	rpcuser: 'stratis',
 	rpcpassword: 'stratis',
@@ -343,8 +343,8 @@ function startDaemon() {
   
   if (instance == 1) {
 	  spawnArgs.push('-bootstrap=' + bootstrap)
-	  spawnArgs.push('-defaultwalletmnemonic', 'basic exotic crack drink left judge tourist giggle muscle unique horn body')
-	  spawnArgs.push('-poaminingkey', 'basic exotic crack drink left judge tourist giggle muscle unique horn body')
+	  spawnArgs.push('-defaultwalletmnemonic=basic exotic crack drink left judge tourist giggle muscle unique horn body')
+	  spawnArgs.push('-poaminingkey=basic exotic crack drink left judge tourist giggle muscle unique horn body')
   } else if (addnode == 'auto') {
 	  var i
 	  for (i = 0; i < instance-1; i++) {
