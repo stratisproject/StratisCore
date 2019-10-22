@@ -221,17 +221,17 @@ export class TransactionComponent implements OnInit {
 
     if (this.mode === Mode.Call) {
       // tslint:disable-next-line:max-line-length
-      this.gasLimit = new FormControl(this.gasCallLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
+      this.gasLimit = new FormControl(this.gasLimitMaximum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
     }
 
     if (this.mode === Mode.Create) {
       // tslint:disable-next-line:max-line-length
-      this.gasLimit = new FormControl(this.gasCreateLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
+      this.gasLimit = new FormControl(this.gasLimitMaximum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
     }
 
     if (this.mode === Mode.IssueToken) {
       // tslint:disable-next-line:max-line-length
-      this.gasLimit = new FormControl(this.gasCreateTokenLimitMinimum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
+      this.gasLimit = new FormControl(this.gasLimitMaximum, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasLimitValidator, gasLimitMaximumValidator, Validators.min(0)]);
     }
 
     this.methodName = new FormControl('', [Validators.required, Validators.nullValidator]);
