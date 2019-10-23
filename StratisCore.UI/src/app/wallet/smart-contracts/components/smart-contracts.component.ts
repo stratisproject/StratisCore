@@ -44,8 +44,7 @@ export class SmartContractsComponent implements OnInit, OnDestroy {
                 catchError(error => {
                     this.showApiError('Error retrieving balance. ' + error);
                     return of(0);
-                }),
-                take(1)
+                })
             )
             .subscribe(balance => this.balance = balance);
 
@@ -53,8 +52,7 @@ export class SmartContractsComponent implements OnInit, OnDestroy {
             .pipe(catchError(error => {
                 this.showApiError('Error retrieving transactions. ' + error);
                 return of([]);
-                }),
-                take(1)
+                })
             )
             .subscribe(history => this.history = history);
     }
