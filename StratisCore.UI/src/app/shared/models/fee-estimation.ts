@@ -11,11 +11,9 @@ export class Recipient {
     if (null == recipient) {
       return false;
     }
-
     if (this === recipient) {
       return true;
     }
-
     return this.destinationAddress === recipient.destinationAddress
       && Number.parseFloat(this.amount).toFixed(8) === Number.parseFloat(recipient.amount).toFixed(8);
   }
@@ -54,11 +52,9 @@ export class FeeEstimation {
     if (null == feeEstimation) {
       return false;
     }
-
     if (this === feeEstimation) {
       return true;
     }
-
     return this.changeAddress === feeEstimation.changeAddress
       && this.allowUnconfirmed === feeEstimation.allowUnconfirmed
       && this.feeType === feeEstimation.feeType
@@ -70,9 +66,5 @@ export class FeeEstimation {
           .find(r => r.destinationAddress === recipient.destinationAddress) || new Recipient(null, null))
           .equals(recipient);
       });
-
-
   }
-
-
 }
