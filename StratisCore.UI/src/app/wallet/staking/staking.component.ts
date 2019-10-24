@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalService } from '@shared/services/global.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { StakingService } from '@shared/services/staking-service';
-import { Observable } from 'rxjs';
+import { GlobalService } from '@shared/services/global.service';
 import { StakingInfo, WalletBalance } from '@shared/services/interfaces/api.i';
+import { StakingService } from '@shared/services/staking-service';
 import { WalletService } from '@shared/services/wallet.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-staking',
@@ -12,15 +12,17 @@ import { WalletService } from '@shared/services/wallet.service';
   styleUrls: ['./staking.component.css']
 })
 export class StakingComponent implements OnInit {
-  private stakingForm: FormGroup;
+  public stakingForm: FormGroup;
   public wallet: Observable<WalletBalance>;
   public stakingInfo: Observable<StakingInfo>;
+  public coinUnit = '';
 
   constructor(
     private fb: FormBuilder,
-    private stakingService: StakingService,
+    public stakingService: StakingService,
     private walletService: WalletService,
     private globalService: GlobalService) {
+      this.coinUnit = globalService.coinUnit;
   }
 
   public ngOnInit() {
