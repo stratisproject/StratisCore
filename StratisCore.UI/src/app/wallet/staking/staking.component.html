@@ -1,5 +1,5 @@
 <ng-container *ngIf="(wallet | async) as _wallet">
-  <div *ngIf="_wallet.hasBalance">
+  <div *ngIf="!_wallet || _wallet.hasBalance">
     <div class="card" *ngIf="!stakingService.stakingEnabled && !stakingService.isStarting">
       <div class="card-header">Staking</div>
       <div class="card-body">
@@ -31,13 +31,13 @@
           <li *ngIf="stakingService.isStarting">Waiting for staking to start...</li>
           <ng-container *ngIf="!stakingService.isStarting && (stakingInfo | async) as _stakingInfo">
             <li>Staking weight:
-              <strong>{{ _stakingInfo.weight | coinNotation | number: '1.0-0' }} {{ globalService.coinUnit }}</strong>
+              <strong>{{ _stakingInfo.weight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong>
             </li>
             <li>Coins awaiting maturity:
-              <strong>{{ _wallet.awaitingMaturityIfStaking | coinNotation | number: '1.0-0' }} {{ globalService.coinUnit }}</strong>
+              <strong>{{ (_wallet?.awaitingMaturityIfStaking || 0) | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong>
             </li>
             <li>Network weight:
-              <strong>{{ _stakingInfo.netStakeWeight | coinNotation | number: '1.0-0' }} {{ globalService.coinUnit }}</strong>
+              <strong>{{ _stakingInfo.netStakeWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong>
             </li>
             <li class="mt-2">Expected reward time is:</li>
             <li><strong>{{ _stakingInfo.expectedTime | secondsToString }}</strong></li>
