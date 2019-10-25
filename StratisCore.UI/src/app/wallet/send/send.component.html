@@ -32,11 +32,11 @@
               <div class="form-group clearfix">
                   <ng-container *ngIf="status | async let _status">
                     <label>Transaction Fee</label>
-                    <div style="height:30px">
-                      <small *ngIf="!estimatedFee && !_status.estimating" class="blockText text-danger">Please enter a valid amount and destination address to calculate the fee.</small>
-                      <label *ngIf="estimatedFee && !_status.estimating" class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+                    <div *ngIf="!_status.estimating" style="height:35px">
+                      <small *ngIf="!estimatedFee" class="blockText text-danger">Please enter a valid amount and destination address to calculate the fee.</small>
+                      <label *ngIf="estimatedFee" class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
                     </div>
-                    <div  [ngClass]="{'invisible': !_status.estimating}" class="Loading LoadingSend">
+                    <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}" class="Loading LoadingSend">
                       <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                           <g id="anim" fill-rule="nonzero">
@@ -121,11 +121,11 @@
                 <label>Transaction Fee</label>
                 <ng-container *ngIf="status | async let _status">
                   <label>Transaction Fee</label>
-                  <div style="height:30px">
-                    <small *ngIf="!estimatedFee && !_status.estimating" class="blockText text-danger">Please enter a valid amount and destination address to calculate the fee.</small>
-                    <label *ngIf="estimatedFee && !_status.estimating" class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+                  <div *ngIf="!_status.estimating" style="height:35px">
+                    <small *ngIf="!estimatedFee" class="blockText text-danger">Please enter a valid amount and destination address to calculate the fee.</small>
+                    <label *ngIf="estimatedFee" class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
                   </div>
-                  <div  [ngClass]="{'invisible': !_status.estimating}" class="Loading LoadingSend">
+                  <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}" class="Loading LoadingSend">
                     <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                       <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <g id="anim" fill-rule="nonzero">
