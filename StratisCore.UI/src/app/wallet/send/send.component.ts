@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
@@ -10,22 +10,28 @@ import { FeeEstimation } from '@shared/models/fee-estimation';
 import { Transaction } from '@shared/models/transaction';
 import { WalletInfoRequest } from '@shared/models/wallet-info';
 import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
 import { SendComponentFormResources } from './send-component-form-resources';
 import { FormHelper } from '@shared/forms/form-helper';
 import { TransactionResponse } from '@shared/models/transaction-response';
-import { CurrentAccountService } from "@shared/services/current-account.service";
+import { CurrentAccountService } from '@shared/services/current-account.service';
+
+
+export interface FeeStatus {
+  estimating: boolean;
+}
 
 @Component({
   selector: 'send-component',
   templateUrl: './send.component.html',
   styleUrls: ['./send.component.css'],
 })
-
 export class SendComponent implements OnInit, OnDestroy {
   private accountsEnabled: boolean;
+  public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
+  private last: FeeEstimation = null;
 
   constructor(
     private apiService: ApiService,
@@ -43,11 +49,11 @@ export class SendComponent implements OnInit, OnDestroy {
     this.sendToSidechainForm = SendComponentFormResources.buildSendToSidechainForm(fb,
       () => (this.spendableBalance - this.estimatedSidechainFee) / 100000000);
 
-    this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendValueChanged(data, false)));
+    this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(500))
+      .subscribe(data => this.validateForm(data, false)));
 
-    this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendValueChanged(data, true)));
+    this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(500))
+      .subscribe(data => this.validateForm(data, true)));
 
   }
 
@@ -100,7 +106,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  private onSendValueChanged(data: any, isSideChain: boolean): void {
+  private validateForm(data: any, isSideChain: boolean): void {
     const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
     if (!form) {
       return;
@@ -155,18 +161,28 @@ export class SendComponent implements OnInit, OnDestroy {
       true
     );
 
-    this.walletService.estimateFee(transaction).toPromise()
-      .then(response => {
-          if (isSideChain) {
-            this.estimatedSidechainFee = response;
-          } else {
-            this.estimatedFee = response;
+    if (!transaction.equals(this.last)) {
+      this.last = transaction;
+      const progressDelay = setTimeout(() =>
+        this.status.next({estimating: true}), 100);
+
+      this.walletService.estimateFee(transaction).toPromise()
+        .then(response => {
+            if (isSideChain) {
+              this.estimatedSidechainFee = response;
+            } else {
+              this.estimatedFee = response;
+            }
+            clearTimeout(progressDelay);
+            this.status.next({estimating: false});
+          },
+          error => {
+            clearTimeout(progressDelay);
+            this.status.next({estimating: false});
+            this.apiError = error.error.errors[0].message;
           }
-        },
-        error => {
-          this.apiError = error.error.errors[0].message;
-        }
-      );
+        );
+    }
   }
 
   public send(sendToSideChain?: boolean): void {

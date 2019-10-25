@@ -22,7 +22,7 @@ export class AccountSelectedGuard implements CanActivate {
     const accountsEnabled = this.currentAccountService.hasActiveAddress();
 
     if (!accountsEnabled) {
-      this.router.navigate(['/address-selection'])
+      this.router.navigate(['/address-selection']);
       return false;
     }
 
