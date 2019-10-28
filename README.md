@@ -2,7 +2,7 @@
 | :---- | :------ | :---- |
 | [![Build Status](https://dev.azure.com/StratisProject/StratisCore/_apis/build/status/Hosted%20Windows%20Container)](https://dev.azure.com/StratisProject/StratisCore/_build/latest?definitionId=16) | [![Build Status](https://dev.azure.com/StratisProject/StratisCore/_apis/build/status/Hosted%20macOS)](https://dev.azure.com/StratisProject/StratisCore/_build/latest?definitionId=18) | [![Build Status](https://dev.azure.com/StratisProject/StratisCore/_apis/build/status/Hosted%20Ubuntu%201604)](https://dev.azure.com/StratisProject/StratisCore/_build/latest?definitionId=17)
 
-# Stratis Core
+# Stratis Core - developer edition for hackathon
 
 This is the repository of the Stratis Core Wallet, a full node staking wallet using Electron and Angular at the front-end and .NET Core with C# in the back-end.
 
