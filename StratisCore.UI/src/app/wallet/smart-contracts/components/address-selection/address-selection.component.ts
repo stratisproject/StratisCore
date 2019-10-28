@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { WalletService } from '@shared/services/wallet.service';
 import { Log } from '../../../tokens/services/logger.service';
+import { AddressBalance } from '@shared/models/address-balance';
 
 @Component({
   selector: 'app-address-selection',
@@ -38,14 +39,15 @@ export class AddressSelectionComponent implements OnInit, OnDestroy {
       .pipe(
         catchError(error => {
           Log.error(error);
-          return of([]);
+          return of(<AddressBalance>{addresses: []});
         }),
         takeUntil(this.unsubscribe))
-      .subscribe(addresses => {
-        if (addresses && addresses.hasOwnProperty('addresses')) {
-          if (addresses.addresses.length > 0) {
-            this.addressChangedSubject.next(addresses.addresses[0].address);
-            this.addresses = addresses.addresses.filter(a => a.isChange === false || (a.amountConfirmed > 0 || a.amountUnconfirmed > 0));
+      .subscribe(addressBalance => {
+        if (addressBalance && addressBalance.hasOwnProperty('addresses')) {
+          if (addressBalance.addresses.length > 0) {
+            this.addressChangedSubject.next(addressBalance.addresses[0].address);
+            this.addresses = addressBalance.addresses
+              .filter(a => a.isChange === false || (a.amountConfirmed > 0 || a.amountUnconfirmed > 0));
             this.selectedAddress = this.addresses[0].address;
           }
         }

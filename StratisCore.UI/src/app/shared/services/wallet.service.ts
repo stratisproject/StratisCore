@@ -26,6 +26,7 @@ import { FeeEstimation } from '@shared/models/fee-estimation';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { WalletResync } from '@shared/models/wallet-rescan';
+import { AddressBalance } from "@shared/models/address-balance";
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,6 @@ export class WalletService extends RestApi {
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
   private currentWallet: WalletInfo;
-  private blockConnectedSubject: BehaviorSubject<BlockConnectedSignalREvent> = new BehaviorSubject<BlockConnectedSignalREvent>(null);
 
   public accountsEnabled: boolean;
   public isSyncing: boolean;
@@ -54,7 +54,7 @@ export class WalletService extends RestApi {
     });
 
     currentAccountService.currentAddress.subscribe((address) => {
-      this.accountsEnabled = globalService.getSidechainEnabled() && this.currentAccountService.hasActiveAddress();
+      this.accountsEnabled = globalService.getSidechainEnabled();
       if (null != address) {
         this.updateWalletForCurrentAddress();
       }
@@ -74,39 +74,20 @@ export class WalletService extends RestApi {
         const syncCompleted = (this.isSyncing && message.lastBlockSyncedHeight === message.chainTip)
           || (this.ibdMode && message.isChainSynced);
 
+        let historyRefreshed = false;
         this.isSyncing = message.lastBlockSyncedHeight !== message.chainTip;
         this.ibdMode = !message.isChainSynced;
 
         if (syncCompleted) {
           this.refreshWalletHistory();
+          historyRefreshed = true;
         }
 
         if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
           const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
-          this.updateWalletForCurrentAddress(walletBalance);
+          this.updateWalletForCurrentAddress(walletBalance, historyRefreshed);
         }
       });
-
-    // If we have unconfirmed amount refresh the wallet when a new block is connected.
-    // Currently we also refreshWalletHistory on all BlockConnected events on mainnet
-    // to show Staking Rewards, TODO : this needs a SignalR Event also
-    signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
-      (message) => {
-        this.blockConnectedSubject.next(message);
-      });
-
-    // Debounce these as after IBD mode we get large number of BlockConnected events
-    this.blockConnectedSubject.pipe(debounceTime(1000)).subscribe(message => {
-      if (this.isSyncing) {
-        return;
-      }
-      if (this.currentWallet) {
-        const walletSubject = this.getWalletSubject(this.currentWallet);
-        if ((!this.globalService.getSidechainEnabled()) || walletSubject.value.amountUnconfirmed > 0) {
-          this.refreshWalletHistory();
-        }
-      }
-    });
   }
 
   public getWalletNames(): Observable<WalletNamesData> {
@@ -125,8 +106,12 @@ export class WalletService extends RestApi {
     return this.transactionReceivedSubject.asObservable();
   }
 
-  public getAllAddressesForWallet(data: WalletInfo): Observable<any> {
-    return this.get('wallet/addresses', this.getWalletParams(data)).pipe(
+  public getAllAddressesForWallet(data: WalletInfo): Observable<AddressBalance> {
+    return this.get<AddressBalance>('wallet/addresses', this.getWalletParams(data)).pipe(
+      map((response => {
+        response.addresses = response.addresses.sort((a, b) => b.amountConfirmed - a.amountConfirmed);
+        return response;
+      })),
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -179,6 +164,12 @@ export class WalletService extends RestApi {
   private getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
     let extra = null;
     if (this.accountsEnabled) {
+      if (!this.currentAccountService.address) {
+        return of(<WalletHistory>{
+          history: []
+        });
+      }
+
       extra = {
         address: this.currentAccountService.address
       };
@@ -246,7 +237,9 @@ export class WalletService extends RestApi {
 
       // Get initial Wallet History
       this.getWalletHistory(walletInfo).toPromise().then(response => {
-        this.walletHistorySubjects[walletInfo.walletName].next(response.history[walletInfo.account].transactionsHistory);
+        if (response.history[walletInfo.account]) {
+          this.walletHistorySubjects[walletInfo.walletName].next(response.history[walletInfo.account].transactionsHistory);
+        }
       });
     }
     return this.walletHistorySubjects[walletInfo.walletName];
@@ -271,23 +264,30 @@ export class WalletService extends RestApi {
     return params;
   }
 
-  private updateWalletForCurrentAddress(walletBalance?: WalletBalance): void {
+  private updateWalletForCurrentAddress(walletBalance?: WalletBalance, historyRefreshed?: boolean): void {
     if (!this.currentWallet) {
       return;
     }
 
     const walletSubject = this.getWalletSubject(this.currentWallet);
-
     const newBalance = new WalletBalance(
       walletBalance || walletSubject.value,
       walletSubject.value ? walletSubject.value.currentAddress : null);
 
     if (this.accountsEnabled) {
-      if (null == newBalance.currentAddress || newBalance.currentAddress.address !== this.currentAccountService.address) {
+      if (null != this.currentAccountService.address
+        && (null == newBalance.currentAddress || newBalance.currentAddress.address !== this.currentAccountService.address)) {
         newBalance.setCurrentAccountAddress(this.currentAccountService.address);
         this.clearWalletHistory(0);
         this.refreshWalletHistory();
+        historyRefreshed = true;
       }
+    }
+
+    if (!historyRefreshed && (walletSubject.value
+      && (walletSubject.value.amountConfirmed !== newBalance.amountConfirmed
+        || walletSubject.value.amountUnconfirmed !== newBalance.amountUnconfirmed))) {
+      this.refreshWalletHistory();
     }
 
     walletSubject.next(newBalance);
@@ -304,7 +304,11 @@ export class WalletService extends RestApi {
     if (this.currentWallet) {
       const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
       this.getWalletHistory(this.currentWallet).toPromise().then(
-        response => walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory));
+        response => {
+          if (response.history[this.currentWallet.account]) {
+            walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory);
+          }
+        });
     }
   }
 
