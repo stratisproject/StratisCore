@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalService } from '@shared/services/global.service';
 import { StakingInfo, WalletBalance } from '@shared/services/interfaces/api.i';
@@ -12,8 +12,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./staking.component.css']
 })
 export class StakingComponent implements OnInit {
+  @Input() public wallet: WalletBalance;
   public stakingForm: FormGroup;
-  public wallet: Observable<WalletBalance>;
   public stakingInfo: Observable<StakingInfo>;
   public coinUnit = '';
 
@@ -27,7 +27,6 @@ export class StakingComponent implements OnInit {
 
   public ngOnInit() {
     this.buildStakingForm();
-    this.wallet = this.walletService.wallet();
     this.stakingInfo = this.stakingService.stakingInfo();
   }
 

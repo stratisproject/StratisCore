@@ -1,5 +1,5 @@
-<ng-container *ngIf="(wallet | async) as _wallet">
-  <div *ngIf="!_wallet || _wallet.hasBalance">
+<ng-container>
+  <div *ngIf="!wallet || wallet.hasBalance">
     <div class="card" *ngIf="!stakingService.stakingEnabled && !stakingService.isStarting">
       <div class="card-header">Staking</div>
       <div class="card-body">
@@ -34,7 +34,7 @@
               <strong>{{ _stakingInfo.weight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong>
             </li>
             <li>Coins awaiting maturity:
-              <strong>{{ (_wallet?.awaitingMaturityIfStaking || 0) | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong>
+              <strong>{{ (wallet?.awaitingMaturityIfStaking || 0) | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong>
             </li>
             <li>Network weight:
               <strong>{{ _stakingInfo.netStakeWeight | coinNotation | number: '1.0-0' }} {{ coinUnit }}</strong>
