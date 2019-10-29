@@ -133,7 +133,11 @@ export class WalletService extends RestApi {
       };
     }
 
-    return this.get<WalletHistory>('wallet/history', this.getWalletParams(data, extra)).pipe(
+    const observable = this.accountsEnabled
+      ? this.get<WalletHistory>('smartcontractwallet/transaction-history', this.getWalletParams(data, extra))
+      : this.get<WalletHistory>('wallet/history', this.getWalletParams(data, extra));
+
+    return observable.pipe(
       catchError(err => this.handleHttpError(err)));
   }
 
