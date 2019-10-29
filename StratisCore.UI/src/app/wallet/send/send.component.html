@@ -118,7 +118,6 @@
                 <div *ngIf="sendToSidechainFormErrors.destinationAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.destinationAddress }}</div>
               </div>
               <div class="form-group clearfix">
-                <label>Transaction Fee</label>
                 <ng-container *ngIf="status | async let _status">
                   <label>Transaction Fee</label>
                   <div *ngIf="!_status.estimating" style="height:35px">
