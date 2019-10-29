@@ -1,21 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
+import { CurrentAccountService } from '@shared/services/current-account.service';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { ClipboardService } from 'ngx-clipboard';
-import {
-  BehaviorSubject,
-  combineLatest,
-  forkJoin,
-  interval,
-  Observable,
-  of,
-  ReplaySubject,
-  Subject,
-  throwError,
-} from 'rxjs';
-import { catchError, first, map, switchMap, takeUntil, distinctUntilChanged, tap, take, startWith } from 'rxjs/operators';
+import { forkJoin, interval, Observable, of, ReplaySubject, Subject, throwError } from 'rxjs';
+import { catchError, first, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
 import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
@@ -29,7 +20,6 @@ import { TokensService } from '../services/tokens.service';
 import { AddTokenComponent } from './add-token/add-token.component';
 import { ProgressComponent } from './progress/progress.component';
 import { SendTokenComponent } from './send-token/send-token.component';
-import { CurrentAccountService } from '@shared/services/current-account.service';
 
 @Component({
   selector: 'app-tokens',
@@ -170,7 +160,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
         Log.info('Refresh token list');
 
-        this.tokens.push(value);
+        this.updateTokenCollection(value);
         this.tokenBalanceRefreshRequested$.next([value]);
       }
     });
@@ -224,7 +214,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
             const token = new SavedToken(value.symbol, newTokenAddress, 0, value.name);
             this.tokenService.AddToken(token);
             progressModal.close('ok');
-            this.tokens.push(token);
+            this.updateTokenCollection(token);
             this.tokenBalanceRefreshRequested$.next([token]);
           },
           error => {
@@ -325,5 +315,16 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
           }
         );
     });
+  }
+
+  private updateTokenCollection(token: SavedToken) {
+    if (!token) { return; }
+
+    const existingTokenIndex = this.tokens.map(t => t.address).indexOf(token.address);
+    if (existingTokenIndex >= 0) {
+      this.tokens.splice(existingTokenIndex, 1);
+    }
+
+    this.tokens.push(token);
   }
 }
