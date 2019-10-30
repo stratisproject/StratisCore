@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { ApiService } from '@shared/services/api.service';
+import { GlobalService } from '@shared/services/global.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -9,9 +10,10 @@ import { Result, ResultStatus } from '../models/result';
 import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
 import { StorageService } from './storage.service';
-import { GlobalService } from '@shared/services/global.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TokensService {
   private savedTokens = 'savedTokens';
   private defaultTokens = [];
@@ -28,8 +30,8 @@ export class TokensService {
    }
 
   GetSavedTokens(): SavedToken[] {
-    const savedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
-    return savedTokens ? [...this.defaultTokens, ...savedTokens] : this.defaultTokens;
+    const storedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
+    return !!storedTokens ? [...this.defaultTokens, ...storedTokens] : this.defaultTokens;
   }
 
   GetAvailableTokens(): Token[] {
@@ -46,7 +48,7 @@ export class TokensService {
 
   AddToken(token: SavedToken): Result<SavedToken> {
     if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
-    const tokens = this.GetSavedTokens();
+    const tokens = this.GetSavedTokens() || [];
 
     const index = tokens.map(t => t.address).indexOf(token.address);
     if (index >= 0) { return new Result(ResultStatus.Error, 'Specified token is already saved'); }
@@ -58,7 +60,7 @@ export class TokensService {
 
   RemoveToken(token: SavedToken): Result<SavedToken> {
     if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
-    const tokens = this.GetSavedTokens();
+    const tokens = this.GetSavedTokens() || [];
     const index = tokens.map(t => t.address).indexOf(token.address);
     if (index < 0) { return new Result(ResultStatus.Error, 'Specified token was not found'); }
     tokens.splice(index, 1);
