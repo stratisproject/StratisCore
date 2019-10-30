@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { Log } from './logger.service';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class StorageService {
 
   getText(key: string): string {
