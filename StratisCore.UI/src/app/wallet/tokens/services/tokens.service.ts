@@ -31,12 +31,7 @@ export class TokensService {
 
   GetSavedTokens(): SavedToken[] {
     const storedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
-    let tokens = !!storedTokens ? [...this.defaultTokens, ...storedTokens] : this.defaultTokens;
-
-    // Dedupe. TODO: we may need to remove this later if issue with token duplication is spotted.
-    tokens = Array.from(new Set(tokens.map(t => JSON.stringify(t)))).map(t => JSON.parse(t));
-
-    return tokens;
+    return !!storedTokens ? [...this.defaultTokens, ...storedTokens] : [...this.defaultTokens];
   }
 
   GetAvailableTokens(): Token[] {
