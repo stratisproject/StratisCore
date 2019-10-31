@@ -31,7 +31,7 @@ export class TokensService {
 
   GetSavedTokens(): SavedToken[] {
     const storedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
-    return !!storedTokens ? [...this.defaultTokens, ...storedTokens] : this.defaultTokens;
+    return !!storedTokens ? [...this.defaultTokens, ...storedTokens] : [...this.defaultTokens];
   }
 
   GetAvailableTokens(): Token[] {
