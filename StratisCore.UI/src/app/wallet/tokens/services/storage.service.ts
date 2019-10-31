@@ -8,6 +8,10 @@ import { Log } from './logger.service';
 })
 export class StorageService {
 
+  constructor() {
+    localStorage.setItem('init', 'true');
+  }
+
   getText(key: string): string {
     const serialisedItemData = localStorage.getItem(key);
     return serialisedItemData;
