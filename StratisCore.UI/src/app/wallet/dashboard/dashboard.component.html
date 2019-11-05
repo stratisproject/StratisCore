@@ -47,8 +47,8 @@
                           [maxTransactionCount]="5" [enableShowHistoryButton]="true">
         </app-transactions>
       </div>
-      <div class="col-4" *ngIf="!globalService.getSidechainEnabled() && !walletService.ibdMode">
-        <app-staking></app-staking>
+      <div class="col-4" *ngIf="(transactionCount | async) > 0 && !globalService.getSidechainEnabled() && !walletService.ibdMode">
+        <app-staking [wallet]="(wallet | async)"></app-staking>
       </div>
 
       <ng-template #noTransactions>
