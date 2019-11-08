@@ -18,7 +18,8 @@ import { NodeStatus } from '@shared/models/node-status';
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
+  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) {
+  }
 
   private subscription: Subscription;
   private statusIntervalSubscription: Subscription;
@@ -62,9 +63,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.apiConnected = true;
         this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
           .subscribe(
-            response =>  {
+            response => {
               const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-              if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
+              const walletFeatureResponse = response.featuresData.find(x => x.namespace === 'Stratis.Bitcoin.Features.Wallet.WalletFeature');
+              if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized'
+                && walletFeatureResponse && walletFeatureResponse.state === 'Initialized') {
                 this.loading = false;
                 this.statusIntervalSubscription.unsubscribe();
                 this.router.navigate(['login']);
