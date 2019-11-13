@@ -27,12 +27,16 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly TryDelayMilliseconds = 3000;
   public sidechainEnabled;
   public apiConnected = false;
-
+  private walletFeatureNamespace = null;
   loading = true;
   loadingFailed = false;
 
   ngOnInit() {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    this.walletFeatureNamespace = this.sidechainEnabled
+      ? 'Stratis.Bitcoin.Features.SmartContracts.Wallet.SmartContractWalletFeature'
+      : 'Stratis.Bitcoin.Features.Wallet.WalletFeature';
+
     this.setTitle();
     this.tryStart();
   }
@@ -65,7 +69,7 @@ export class AppComponent implements OnInit, OnDestroy {
           .subscribe(
             response => {
               const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-              const walletFeatureResponse = response.featuresData.find(x => x.namespace === 'Stratis.Bitcoin.Features.Wallet.WalletFeature');
+              const walletFeatureResponse = response.featuresData.find(x => x.namespace === this.walletFeatureNamespace);
               if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized'
                 && walletFeatureResponse && walletFeatureResponse.state === 'Initialized') {
                 this.loading = false;
