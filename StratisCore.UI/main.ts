@@ -2,10 +2,14 @@ import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
+import * as log from "electron-log";
 
 if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
 }
+
+// Set the log level to info. This is only for logging in this Electron main process.
+log.transports.file.level = 'info';
 
 // Set to true if you want to build Core for sidechains
 const buildForSidechain = false;
@@ -21,7 +25,7 @@ const args = process.argv.slice(1);
 
 args.push('--enableSignalR');
 
-console.log(args);
+writeLog('Startup with arguments: ', args);
 
 serve = args.some(val => val === '--serve' || val === '-serve');
 testnet = args.some(val => val === '--testnet' || val === '-testnet');
@@ -144,7 +148,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   if (serve) {
-    console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.');
+    writeLog('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.')
   } else {
     if (!nodaemon) {
       startDaemon();
@@ -228,8 +232,8 @@ function startDaemon() {
   const spawnArgs = args.filter(arg => arg.startsWith('-'))
     .join('&').replace(/--/g, '-').split('&');
 
-  console.log('Starting daemon ' + daemonPath);
-  console.log(spawnArgs);
+  writeLog('Starting daemon:', daemonPath);
+  writeLog('Spawn arguments:', spawnArgs);
 
   daemonProcess = spawnDaemon(daemonPath, spawnArgs, {
     detached: true
@@ -287,8 +291,19 @@ function createTray() {
   });
 }
 
-function writeLog(msg) {
-  console.log(msg);
+function writeDebug(msg, ...params: any[]) {
+  console.log(msg, ...params);
+  log.debug(msg, ...params);
+}
+
+function writeLog(msg, ...params: any[]) {
+  console.log(msg, ...params);
+  log.info(msg, ...params);
+}
+
+function writeError(msg, ...params: any[]) {
+  console.error(msg, ...params);
+  log.error(msg, ...params);
 }
 
 function createMenu() {
