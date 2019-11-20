@@ -69,23 +69,23 @@ export interface IApiService {
    */
   shutdownNode(): Observable<any>;
 
-  getAccountAddress(walletName: string): Observable<any>;
-
-  getAccountAddresses(walletName: string): any;
-
-  getAccountBalance(walletName: string): Observable<any>;
-
-  getAccountHistory(walletName: string, address: string): Observable<any>;
-
-  postCreateTransaction(transaction: any): Observable<any>;
-
-  postCallTransaction(transaction: any): Observable<any>;
-
-  getReceipt(hash: string, silent: boolean): any;
-
-  getReceiptSilent(hash: string): any;
-
-  localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult>;
+  // getAccountAddress(walletName: string): Observable<any>;
+  //
+  // getAccountAddresses(walletName: string): any;
+  //
+  // getAccountBalance(walletName: string): Observable<any>;
+  //
+  // getAccountHistory(walletName: string, address: string): Observable<any>;
+  //
+  // postCreateTransaction(transaction: any): Observable<any>;
+  //
+  // postCallTransaction(transaction: any): Observable<any>;
+  //
+  // getReceipt(hash: string, silent: boolean): any;
+  //
+  // getReceiptSilent(hash: string): any;
+  //
+  // localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult>;
 
 }
 

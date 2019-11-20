@@ -10,7 +10,6 @@ import { forkJoin, interval, Observable, of, ReplaySubject, Subject, throwError 
 import { catchError, first, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 
 import { Mode, TransactionComponent } from '../../smart-contracts/components/modals/transaction/transaction.component';
-import { SmartContractsServiceBase } from '../../smart-contracts/smart-contracts.service';
 import { Disposable } from '../models/disposable';
 import { Mixin } from '../models/mixin';
 import { SavedToken, Token } from '../models/token';
@@ -21,6 +20,7 @@ import { TokensService } from '../services/tokens.service';
 import { AddTokenComponent } from './add-token/add-token.component';
 import { ProgressComponent } from './progress/progress.component';
 import { SendTokenComponent } from './send-token/send-token.component';
+import { SmartContractsServiceBase } from "../../smart-contracts/smart-contracts-service.base";
 
 @Component({
   selector: 'app-tokens',
