@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 
-import { SmartContractsServiceBase } from '../../../smart-contracts.service';
+import { SmartContractsServiceBase } from "../../../smart-contracts-service.base";
 
 export enum Mode { Call, Create, IssueToken }
 export class Parameter {

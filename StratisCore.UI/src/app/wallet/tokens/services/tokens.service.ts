@@ -10,13 +10,14 @@ import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
 import { StorageService } from './storage.service';
 import { GlobalService } from '@shared/services/global.service';
+import { SmartContractsService } from "../../smart-contracts/smart-contracts.service";
 
 @Injectable()
 export class TokensService {
   private savedTokens = 'savedTokens';
   private defaultTokens = [];
 
-  constructor(private apiService: ApiService, private storage: StorageService, private globalService: GlobalService) {
+  constructor(private smartContractService: SmartContractsService, private storage: StorageService, private globalService: GlobalService) {
     this.savedTokens = `${globalService.getNetwork()}:savedTokens`;
 
     // Upgrade wallets using the old format
@@ -73,7 +74,7 @@ export class TokensService {
   }
 
   LocalCall(request: LocalCallRequest): Observable<LocalExecutionResult> {
-    return this.apiService.localCall(request)
+    return this.smartContractService.LocalCall(request)
       .pipe(
         map(response => {
           // Temporary workaround for non-camel-cased API response

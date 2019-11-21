@@ -4,12 +4,13 @@ import { catchError, take } from 'rxjs/operators';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SmartContractsServiceBase, ContractTransactionItem } from '../smart-contracts.service';
+import { ContractTransactionItem } from '../smart-contracts.service';
 import { GlobalService } from '@shared/services/global.service';
 import { TransactionComponent, Mode } from './modals/transaction/transaction.component';
 import { ModalService } from '@shared/services/modal.service';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { WalletService } from '@shared/services/wallet.service';
+import { SmartContractsServiceBase } from "../smart-contracts-service.base";
 
 @Component({
   selector: 'app-smart-contracts',
@@ -40,14 +41,11 @@ export class SmartContractsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.walletService.wallet()
       .subscribe(balance => this.balance = balance.amountConfirmed));
 
-    this.smartContractsService.GetHistory(this.walletName, this.selectedAddress)
+    this.subscriptions.push(this.smartContractsService.GetHistory(this.walletName, this.selectedAddress)
       .pipe(catchError(error => {
-          this.showApiError('Error retrieving transactions. ' + error);
-          return of([]);
-        }),
-        take(1)
-      )
-      .subscribe(history => this.history = history);
+        this.showApiError('Error retrieving transactions. ' + error);
+        return of([]);
+      })).subscribe(history => this.history = history));
   }
 
   ngOnInit() {
