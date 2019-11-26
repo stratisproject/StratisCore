@@ -18,6 +18,7 @@ import { ApiService } from '@shared/services/api.service';
 import { SignalRService } from '@shared/services/signalr-service';
 import { WalletService } from '@shared/services/wallet.service';
 import { StakingService } from '@shared/services/staking-service';
+import { SideBarComponent } from "@shared/components/side-bar/side-bar.component";
 
 @NgModule({
   imports: [CommonModule],
@@ -29,8 +30,9 @@ import { StakingService } from '@shared/services/staking-service';
     PasswordValidationDirective,
     GenericModalComponent,
     LoadingModalComponent,
-    ConfirmationModalComponent],
-  providers : [
+    ConfirmationModalComponent,
+    SideBarComponent],
+  providers: [
     ApiService,
     WalletService,
     SignalRService,
@@ -52,7 +54,9 @@ import { StakingService } from '@shared/services/staking-service';
     AutoFocusDirective,
     PasswordValidationDirective,
     LoadingModalComponent,
-    ConfirmationModalComponent],
+    ConfirmationModalComponent,
+    SideBarComponent
+  ],
   entryComponents: [
     GenericModalComponent,
     ConfirmationModalComponent]

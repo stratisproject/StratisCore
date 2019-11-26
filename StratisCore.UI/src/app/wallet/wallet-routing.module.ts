@@ -14,12 +14,16 @@ import { SmartContractsComponent } from './smart-contracts/components/smart-cont
 import { TokensComponent } from './tokens/components/tokens.component';
 import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
+import { ReceiveComponent } from "./receive/receive.component";
+import { SendComponent } from "./send/send.component";
 
 const routes: Routes = [
   {
     path: 'wallet', component: WalletComponent, children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'send', component: SendComponent, canActivate: [AccountSelectedGuard] },
+      { path: 'receive', component: ReceiveComponent, canActivate: [AccountSelectedGuard] },
       { path: 'history', component: HistoryComponent },
       { path: 'staking', component: ColdStakingOverviewComponent },
       {
