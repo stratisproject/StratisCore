@@ -5,7 +5,7 @@ import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
 import { NumberToStringPipe } from '@shared/pipes/number-to-string.pipe';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { Transaction } from '@shared/models/transaction';
 import { WalletInfoRequest } from '@shared/models/wallet-info';
@@ -38,9 +38,7 @@ export class SendComponent implements OnInit, OnDestroy {
     private walletService: WalletService,
     private globalService: GlobalService,
     private modalService: NgbModal,
-    private genericModalService: ModalService,
     private currentAccountService: CurrentAccountService,
-    public activeModal: NgbActiveModal,
     private fb: FormBuilder) {
 
     this.sendForm = SendComponentFormResources.buildSendForm(fb,
@@ -190,7 +188,6 @@ export class SendComponent implements OnInit, OnDestroy {
     this.walletService.sendTransaction(this.getTransaction(sendToSideChain))
       .then(transactionResponse => {
         this.estimatedFee = transactionResponse.transactionFee;
-        this.activeModal.close('Close clicked');
         this.openConfirmationModal(transactionResponse);
         this.isSending = false;
       }).catch(error => {
