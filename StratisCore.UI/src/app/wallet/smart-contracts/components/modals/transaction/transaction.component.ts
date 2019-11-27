@@ -204,8 +204,8 @@ export class TransactionComponent implements OnInit {
     this.parameters = new FormArray([]);
     this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
     this.totalSupply = new FormControl(21 * 1000 * 1000, [Validators.min(1), Validators.required]);
-    this.tokenName = new FormControl('My token', [Validators.required]);
-    this.tokenSymbol = new FormControl('MTK', [Validators.required]);
+    this.tokenName = new FormControl('', [Validators.required]);
+    this.tokenSymbol = new FormControl('', [Validators.required]);
 
     if (this.mode === Mode.Call) {
       this.contractAddress = new FormControl('', [Validators.required, Validators.nullValidator]);
