@@ -1,0 +1,11 @@
+<div class="stratis-side-bar">
+  <div class="stratis-side-bar-container">
+    <ng-container *ngFor="let sideBarItem of sideBarItems">
+      <div *ngIf="sideBarItem.visible | async" (click)="onSelect(sideBarItem)"
+           [ngClass]="getClasses(sideBarItem)">
+        {{sideBarItem.displayText}}
+      </div>
+    </ng-container>
+  </div>
+</div>
+
