@@ -29,23 +29,22 @@
     <!-- /JUMBOTRON-->
     <div class="row">
       <div class="col-12" *ngIf="(transactionCount | async) > 0">
-        <app-transactions title="Latest Transactions"
-                          [maxTransactionCount]="40" [enableShowHistoryButton]="false">
+        <app-transactions title="Latest Transactions" [enableShowHistoryButton]="false">
         </app-transactions>
       </div>
-<!--      <div class="col-4"-->
-<!--           *ngIf="(transactionCount | async) > 0 && !globalService.getSidechainEnabled() && !walletService.ibdMode">-->
-<!--        <app-staking [wallet]="(wallet | async)"></app-staking>-->
-<!--      </div>-->
+      <!--      <div class="col-4"-->
+      <!--           *ngIf="(transactionCount | async) > 0 && !globalService.getSidechainEnabled() && !walletService.ibdMode">-->
+      <!--        <app-staking [wallet]="(wallet | async)"></app-staking>-->
+      <!--      </div>-->
 
-<!--      <ng-template #noTransactions>-->
-<!--        <section class="col-12 text-center my-4">-->
-<!--          <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">-->
-<!--        </section>-->
-<!--        <div class="col-12 text-center">-->
-<!--          <p>Click the down arrow for a receive address.</p>-->
-<!--        </div>-->
-<!--      </ng-template>-->
+      <!--      <ng-template #noTransactions>-->
+      <!--        <section class="col-12 text-center my-4">-->
+      <!--          <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">-->
+      <!--        </section>-->
+      <!--        <div class="col-12 text-center">-->
+      <!--          <p>Click the down arrow for a receive address.</p>-->
+      <!--        </div>-->
+      <!--      </ng-template>-->
     </div>
     <status-bar></status-bar>
   </section>

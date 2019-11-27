@@ -1,7 +1,10 @@
-<div *ngIf="(transactions | async) let _transactions;">
+<div *ngIf="(transactions | async) let _transactions;" infiniteScroll
+     [infiniteScrollDistance]="4"
+     [scrollWindow]="true"
+     (scrolled)="onScroll()">
   <table class="table">
     <tbody>
-    <tr *ngFor="let _transaction of _transactions | paginate: { itemsPerPage: 20, currentPage: pageNumber }">
+    <tr *ngFor="let _transaction of _transactions">
       <th class="text-center">
             <span class="bubble"
                   [ngClass]="{

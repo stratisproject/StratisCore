@@ -51,6 +51,7 @@ export class WalletService extends RestApi {
 
     globalService.currentWallet.subscribe(wallet => {
       this.currentWallet = wallet;
+
     });
 
     currentAccountService.currentAddress.subscribe((address) => {
@@ -65,7 +66,6 @@ export class WalletService extends RestApi {
       (message) => {
         this.transactionReceivedSubject.next(message);
         this.refreshWallet();
-        this.refreshWalletHistory();
       });
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
@@ -79,7 +79,6 @@ export class WalletService extends RestApi {
         this.ibdMode = !message.isChainSynced;
 
         if (syncCompleted) {
-          this.refreshWalletHistory();
           historyRefreshed = true;
         }
 
@@ -127,18 +126,18 @@ export class WalletService extends RestApi {
       tap(() => {
         this.isSyncing = true;
         this.clearWalletHistory(data.date.getTime());
-        this.refreshWalletHistory();
+        this.paginateHistory()
       }),
       catchError(err => this.handleHttpError(err))
     );
   }
 
   public wallet(): Observable<WalletBalance> {
-    return this.getWalletSubject(this.currentWallet).asObservable();
+    return this.getWalletSubject().asObservable();
   }
 
   public walletHistory(): Observable<TransactionsHistoryItem[]> {
-    return this.getWalletHistorySubject(this.currentWallet).asObservable();
+    return this.getWalletHistorySubject().asObservable();
   }
 
   public estimateFee(feeEstimation: FeeEstimation): Observable<any> {
@@ -161,26 +160,53 @@ export class WalletService extends RestApi {
     }
   }
 
-  private getWalletHistory(data: WalletInfo): Observable<WalletHistory> {
-    let extra = null;
-    if (this.accountsEnabled) {
-      if (!this.currentAccountService.address) {
-        return of(<WalletHistory>{
-          history: []
-        });
-      }
-
-      extra = {
-        address: this.currentAccountService.address
-      };
+  public paginateHistory(take?: number, prevOutputTxTime?: number, prevOutputIndex?: number): void {
+    let extra = {};
+    if (take) {
+      extra = Object.assign(extra, {
+        prevOutputTxTime: prevOutputTxTime,
+        prevOutputIndex: prevOutputIndex,
+        take: take || 40
+      });
     }
 
-    return this.get<WalletHistory>('wallet/history', this.getWalletParams(data, extra)).pipe(
-      catchError(err => this.handleHttpError(err)));
+    if (this.accountsEnabled) {
+      extra = Object.assign(extra, {
+        address: this.currentAccountService.address
+      });
+    }
+
+    this.get<WalletHistory>('wallet/history',
+      this.getWalletParams(this.currentWallet, extra)).pipe(map((response) => {
+        return response.history[this.currentWallet.account].transactionsHistory;
+      }),
+      catchError(err => this.handleHttpError(err))).toPromise().then(history => {
+      this.applyHistory(history)
+    });
+  }
+
+  private applyHistory(history: TransactionsHistoryItem[]): void {
+    const subject = this.getWalletHistorySubject();
+    const existingItems = subject.value;
+    const newItems = [];
+    history.forEach(item => {
+      if (existingItems.findIndex(existing => existing.id === item.id) === -1) {
+        newItems.push(item);
+      }
+    });
+    let set = existingItems.concat(newItems);
+    subject.next(set.sort((a, b) => b.timestamp - a.timestamp));
   }
 
   public sendTransaction(transaction: Transaction): Promise<TransactionResponse> {
     return this.buildAndSendTransaction(transaction).toPromise();
+  }
+
+  public getTransactionCount(): Observable<number> {
+    return this.get<any>('wallet/transactionCount', this.getWalletParams(this.currentWallet))
+      .pipe(map(result => {
+        return result.transactionCount as number;
+      }), catchError(err => this.handleHttpError(err)));
   }
 
   private buildAndSendTransaction(transaction: Transaction): Observable<TransactionResponse> {
@@ -209,7 +235,7 @@ export class WalletService extends RestApi {
           }),
           tap(() => {
             this.refreshWallet();
-            this.refreshWalletHistory();
+            //  this.refreshWalletHistory();
           })
         );
       }),
@@ -217,32 +243,28 @@ export class WalletService extends RestApi {
     );
   }
 
-  private getWalletSubject(walletInfo: WalletInfo): BehaviorSubject<WalletBalance> {
-    if (!this.walletUpdatedSubjects[walletInfo.walletName]) {
-      this.walletUpdatedSubjects[walletInfo.walletName] = new BehaviorSubject<WalletBalance>(null);
+  private getWalletSubject(): BehaviorSubject<WalletBalance> {
+    if (!this.walletUpdatedSubjects[this.currentWallet.walletName]) {
+      this.walletUpdatedSubjects[this.currentWallet.walletName] = new BehaviorSubject<WalletBalance>(null);
 
       // Initialise the wallet
-      this.getWalletBalance(walletInfo).toPromise().then(data => {
-        if (data.balances.length > 0 && data.balances[walletInfo.account]) {
-          this.updateWalletForCurrentAddress(data.balances[walletInfo.account]);
+      this.getWalletBalance(this.currentWallet).toPromise().then(data => {
+        if (data.balances.length > 0 && data.balances[this.currentWallet.account]) {
+          this.updateWalletForCurrentAddress(data.balances[this.currentWallet.account]);
         }
       });
     }
-    return this.walletUpdatedSubjects[walletInfo.walletName];
+    return this.walletUpdatedSubjects[this.currentWallet.walletName];
   }
 
-  private getWalletHistorySubject(walletInfo: WalletInfo): BehaviorSubject<TransactionsHistoryItem[]> {
-    if (!this.walletHistorySubjects[walletInfo.walletName]) {
-      this.walletHistorySubjects[walletInfo.walletName] = new BehaviorSubject<TransactionsHistoryItem[]>(null);
+  private getWalletHistorySubject(): BehaviorSubject<TransactionsHistoryItem[]> {
+    if (!this.walletHistorySubjects[this.currentWallet.walletName]) {
+      this.walletHistorySubjects[this.currentWallet.walletName] = new BehaviorSubject<TransactionsHistoryItem[]>([]);
 
       // Get initial Wallet History
-      this.getWalletHistory(walletInfo).toPromise().then(response => {
-        if (response.history[walletInfo.account]) {
-          this.walletHistorySubjects[walletInfo.walletName].next(response.history[walletInfo.account].transactionsHistory);
-        }
-      });
+      this.paginateHistory(40);
     }
-    return this.walletHistorySubjects[walletInfo.walletName];
+    return this.walletHistorySubjects[this.currentWallet.walletName];
   }
 
   private getWalletBalance(data: WalletInfo): Observable<Balances> {
@@ -259,7 +281,11 @@ export class WalletService extends RestApi {
       .set('accountName', `account ${walletInfo.account || 0}`);
 
     if (extra) {
-      Object.keys(extra).forEach(key => params = params.set(key, extra[key]));
+      Object.keys(extra).forEach(key => {
+        if (extra[key] != null) {
+          params = params.set(key, extra[key]);
+        }
+      });
     }
     return params;
   }
@@ -269,7 +295,7 @@ export class WalletService extends RestApi {
       return;
     }
 
-    const walletSubject = this.getWalletSubject(this.currentWallet);
+    const walletSubject = this.getWalletSubject();
     const newBalance = new WalletBalance(
       walletBalance || walletSubject.value,
       walletSubject.value ? walletSubject.value.currentAddress : null);
@@ -279,7 +305,7 @@ export class WalletService extends RestApi {
         && (null == newBalance.currentAddress || newBalance.currentAddress.address !== this.currentAccountService.address)) {
         newBalance.setCurrentAccountAddress(this.currentAccountService.address);
         this.clearWalletHistory(0);
-        this.refreshWalletHistory();
+        this.paginateHistory();
         historyRefreshed = true;
       }
     }
@@ -287,7 +313,7 @@ export class WalletService extends RestApi {
     if (!historyRefreshed && (walletSubject.value
       && (walletSubject.value.amountConfirmed !== newBalance.amountConfirmed
         || walletSubject.value.amountUnconfirmed !== newBalance.amountUnconfirmed))) {
-      this.refreshWalletHistory();
+      this.paginateHistory()
     }
 
     walletSubject.next(newBalance);
@@ -300,21 +326,21 @@ export class WalletService extends RestApi {
       });
   }
 
-  private refreshWalletHistory(): void {
-    if (this.currentWallet) {
-      const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
-      this.getWalletHistory(this.currentWallet).toPromise().then(
-        response => {
-          if (response.history[this.currentWallet.account]) {
-            walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory);
-          }
-        });
-    }
-  }
+  // private refreshWalletHistory(): void {
+  //   if (this.currentWallet) {
+  //     const walletHistorySubject = this.getWalletHistorySubject();
+  //     this.getWalletHistory(this.currentWallet).toPromise().then(
+  //       response => {
+  //         if (response.history[this.currentWallet.account]) {
+  //           walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory);
+  //         }
+  //       });
+  //   }
+  // }
 
   private clearWalletHistory(fromDate: number): void {
     if (this.currentWallet) {
-      const walletHistorySubject = this.getWalletHistorySubject(this.currentWallet);
+      const walletHistorySubject = this.getWalletHistorySubject();
       walletHistorySubject.next(Array.from((walletHistorySubject.value || []).filter(item => item.timestamp < fromDate)));
     }
   }

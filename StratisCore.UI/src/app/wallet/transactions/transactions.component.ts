@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class TransactionsComponent implements OnInit {
   @Input() public maxTransactionCount: number;
   @Input() public title: string;
   @Output() public rowClicked: EventEmitter<TransactionInfo> = new EventEmitter();
-  public pageNumber = 1;
+  private last: TransactionInfo;
 
   public constructor(
     private globalService: GlobalService,
@@ -35,7 +35,10 @@ export class TransactionsComponent implements OnInit {
         return (null != historyItems && historyItems.length > 0)
           ? TransactionInfo.mapFromTransactionsHistoryItems(historyItems, this.maxTransactionCount)
           : null;
-      })));
+      })),tap(items => {
+        let history = items as TransactionInfo[];
+        this.last = history && history.length > 0 ? history[history.length - 1] : <TransactionInfo>{};
+      }));
   }
 
   public openTransactionDetailDialog(transaction: TransactionInfo): void {
@@ -44,7 +47,8 @@ export class TransactionsComponent implements OnInit {
     modalRef.componentInstance.transaction = transaction;
   }
 
-  public goToHistory(): Promise<boolean> {
-    return this.router.navigate(['/wallet/history']);
+  onScroll() {
+    this.walletService.paginateHistory(40, this.last.transactionTimestamp, this.last.txOutputIndex);
+    console.log("scroll");
   }
 }
