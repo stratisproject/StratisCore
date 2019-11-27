@@ -66,9 +66,8 @@
                 </div>
                 <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
               </form>
-              <div class="modal-footer p-0">
+              <div>
                 <ng-container *ngIf="status | async let _status">
-                <button *ngIf="!isSending" type="button" [disabled]="isSending" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
                 <button *ngIf="!isSending" type="button" class="btn btn-primary btn-block" [disabled]="!sendForm.valid || isSending || !estimatedFee || _status.estimating" (click)="send()">Send</button>
                 <!-- SVG -->
                 <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
@@ -160,8 +159,7 @@
                 </div>
                 <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
               </form>
-              <div class="modal-footer p-0">
-                <button *ngIf="!isSending" type="button" [disabled]="isSending" class="btn btn-outline-light" (click)="activeModal.close('Close click')">Cancel</button>
+              <div>
                 <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-block" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee" (click)="send(true)">Send</button>
                 <!-- SVG -->
                 <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
