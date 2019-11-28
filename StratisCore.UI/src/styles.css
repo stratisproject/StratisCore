@@ -9308,7 +9308,7 @@ img {
 }
 
 #GUI #content {
-  padding-top: 2rem;
+  /*padding-top: 2rem;*/
 }
 
 #GUI #content .jumbotron strong {
@@ -9678,15 +9678,13 @@ img {
 }
 
 #GUI .status {
-  background: #fff;
   width: auto;
   height: 36px;
-  border: 1px solid #DEE0EC;
-  border-radius: 80px;
   position: fixed;
-  top: 2%;
-  right: 2%;
+  bottom: 10px;
+  left: 1px;
   text-align: center;
+  color: white;
 }
 
 #GUI .status .lnr {
@@ -9702,27 +9700,25 @@ img {
 }
 
 #GUI .status li {
-  font-size: .9em;
+  font-size: 1.3em;
   position: relative;
   float: left;
   margin-right: 4px;
 }
 
 #GUI .status li.pending i {
-  font-size: .9em;
   color: #ffc107;
 }
 
 #GUI .status li.statusOK i {
-  color: #28a745;
-  font-size: .9em;
+  color: white;
   position: absolute;
 }
 
 #GUI .status li small {
-  margin-left: 5px;
-  font-size: 80%;
+  margin-left: 7px;
   font-weight: 600;
+  vertical-align: top;
 }
 
 .modal label {
@@ -11666,19 +11662,29 @@ app-side-bar {
   cursor: pointer;
 
 }
+
 .side-bar-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 7px 0 0 7px;
   -webkit-transition: background-color 0.2s;
 }
 
-.content{
+.content {
   position: relative;
   margin-left: 250px;
 }
 
-.lnr-transaction
-{
+#account-header {
+  position: fixed;
+  width: 100%;
+  background-color: rgba(250,251,252,0.98);
+  z-index: 1;
+  height: 140px;
+  border-radius: 0;
+  -webkit-box-shadow: 10px 25px 2px -1px rgba(250,251,252,0.8);
+}
+
+.lnr-transaction {
   font-family: 'Linearicons-Free';
   font-size: 1.5em;
   color: rgba(21, 139, 207, 1);
@@ -11690,38 +11696,38 @@ app-side-bar {
   border-radius: 7px 0 0 7px;
 }
 
-.side-bar-item-icon:before{
+.side-bar-item-icon:before {
   font-family: 'Linearicons-Free';
   font-size: 1.5em;
   vertical-align: sub;
   margin-right: 20px;
 }
 
-.side-bar-item-account:before{
+.side-bar-item-account:before {
   content: "\e800";
 }
 
-.side-bar-item-staking:before{
+.side-bar-item-staking:before {
   content: "\e80f";
 }
 
-.side-bar-item-send:before{
+.side-bar-item-send:before {
   content: "\e883";
 }
 
-.side-bar-item-receive:before{
+.side-bar-item-receive:before {
   content: "\e884";
 }
 
-.side-bar-item-address:before{
+.side-bar-item-address:before {
   content: "\e828";
 }
 
-.side-bar-item-explorer:before{
+.side-bar-item-explorer:before {
   content: "\e88e";
 }
 
-.side-bar-item-advanced:before{
+.side-bar-item-advanced:before {
   content: "\e810";
 }
 

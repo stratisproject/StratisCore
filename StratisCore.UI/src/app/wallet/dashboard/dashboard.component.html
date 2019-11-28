@@ -1,53 +1,24 @@
-<section id="GUI" class="light">
-  <!-- CONTAINER -->
-  <section id="content" class="col-11 mx-auto">
-    <!-- JUMBOTRON-->
-    <div class="jumbotron jumbotron-fluid">
-      <div class="col-12">
-        <div class="row d-flex align-items-center">
-          <div class="col-9 text-left" *ngIf="(wallet| async) as _wallet">
-            <h5>Balance</h5>
-            <p class="lead">
-              <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
-              <small class="text-uppercase"> {{ globalService.coinUnit }}</small>
-            </p>
-            <ul class="list-unstyled">
-              <li>
-                <strong>{{ (_wallet.amountUnconfirmed | coinNotation) || (0 | coinNotation) }}</strong>
-                <em> (unconfirmed)</em>
-              </li>
-            </ul>
-          </div>
-          <!-- /col-->
-
-          <!-- /col-->
-        </div>
-        <!-- /row-->
+<section id="GUI" class="light"><!-- CONTAINER -->
+    <div class="jumbotron" id="account-header">
+      <div class="text-left" *ngIf="(wallet| async) as _wallet">
+        <h5>Balance</h5>
+        <p class="lead">
+          <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
+          <small class="text-uppercase"> {{ globalService.coinUnit }}</small>
+        </p>
+        <ul class="list-unstyled">
+          <li>
+            <strong>{{ (_wallet.amountUnconfirmed | coinNotation) || (0 | coinNotation) }}</strong>
+            <em> (unconfirmed)</em>
+          </li>
+        </ul>
       </div>
-      <!-- /col-->
     </div>
-    <!-- /JUMBOTRON-->
-    <div class="row">
+    <div style="padding-top: 150px">
       <div class="col-12" *ngIf="(transactionCount | async) > 0">
         <app-transactions title="Latest Transactions" [enableShowHistoryButton]="false">
         </app-transactions>
       </div>
-      <!--      <div class="col-4"-->
-      <!--           *ngIf="(transactionCount | async) > 0 && !globalService.getSidechainEnabled() && !walletService.ibdMode">-->
-      <!--        <app-staking [wallet]="(wallet | async)"></app-staking>-->
-      <!--      </div>-->
-
-      <!--      <ng-template #noTransactions>-->
-      <!--        <section class="col-12 text-center my-4">-->
-      <!--          <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">-->
-      <!--        </section>-->
-      <!--        <div class="col-12 text-center">-->
-      <!--          <p>Click the down arrow for a receive address.</p>-->
-      <!--        </div>-->
-      <!--      </ng-template>-->
     </div>
     <status-bar></status-bar>
   </section>
-  <!-- /CONTAINER-->
-</section>
-<!-- /GUI-->
