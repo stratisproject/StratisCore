@@ -3,7 +3,6 @@ import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { WalletInfo } from '@shared/models/wallet-info';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { ModalService } from '@shared/services/modal.service';
 import { WalletService } from '@shared/services/wallet.service';
@@ -19,7 +18,6 @@ export class ReceiveComponent implements OnInit {
   constructor(
     private walletService: WalletService,
     private globalService: GlobalService,
-    public activeModal: NgbActiveModal,
     private genericModalService: ModalService,
     private currentAccountService: CurrentAccountService) {}
 
