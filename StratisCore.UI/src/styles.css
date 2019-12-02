@@ -11677,11 +11677,11 @@ app-side-bar {
 #account-header {
   position: fixed;
   width: 100%;
-  background-color: rgba(250,251,252,0.98);
+  background-color: rgba(250, 251, 252, 0.98);
   z-index: 1;
   height: 140px;
   border-radius: 0;
-  -webkit-box-shadow: 10px 25px 2px -1px rgba(250,251,252,0.8);
+  -webkit-box-shadow: 10px 25px 2px -1px rgba(250, 251, 252, 0.8);
 }
 
 .lnr-transaction {
@@ -11695,6 +11695,24 @@ app-side-bar {
   background-color: rgba(255, 255, 255, 0.4);
   border-radius: 7px 0 0 7px;
 }
+.logout-button {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  border: 2px solid;
+  border-radius: 30px;
+  width: 40px;
+  height: 40px;
+  padding-left: 8px;
+  cursor: pointer;
+
+}
+.logout-button:hover
+{
+  background-color: #1a99a0;
+  transition-duration: 3s;
+}
+
 
 .side-bar-item-icon:before {
   font-family: 'Linearicons-Free';
