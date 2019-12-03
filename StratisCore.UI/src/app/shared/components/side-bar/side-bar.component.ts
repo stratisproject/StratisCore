@@ -14,7 +14,7 @@ export class SideBarComponent implements OnInit {
   @Input() sideBarItems: SideBarItem[];
 
   constructor(private router: Router,
-private modalService: NgbModal, private globalService: GlobalService, private currentAccountService: CurrentAccountService) 
+private modalService: NgbModal, private globalService: GlobalService, private currentAccountService: CurrentAccountService)
 {
 
     this.sideBarItems = [{
@@ -52,8 +52,7 @@ private modalService: NgbModal, private globalService: GlobalService, private cu
       displayText: 'Explorer',
       visible: of(true),
       classes: ['side-bar-item', 'side-bar-item-icon', 'side-bar-item-explorer'],
-      route: '/address-book',
-      disabled: true
+      route: '/wallet/explorer',
     }, {
       selected: false,
       displayText: 'Advanced',

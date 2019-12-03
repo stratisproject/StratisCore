@@ -13,9 +13,9 @@ export class RestApi {
   constructor(
     protected globalService: GlobalService,
     protected httpClient: HttpClient,
-    protected errorService: ErrorService
-  ) {
-    this.API_URL = `http://${globalService.getDaemonIP()}:${globalService.getApiPort()}/api`;
+    protected errorService: ErrorService,
+    apiUrl?: string) {
+    this.API_URL =  apiUrl || `http://${globalService.getDaemonIP()}:${globalService.getApiPort()}/api`;
   }
 
   protected getHttpOptions(

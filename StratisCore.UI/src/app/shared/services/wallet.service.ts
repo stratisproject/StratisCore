@@ -35,11 +35,21 @@ export class WalletService extends RestApi {
   private transactionReceivedSubject = new Subject<SignalREvent>();
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
+  private loadingSubject = new Subject<boolean>();
+  private newDataSubject = new Subject<boolean>();
   private currentWallet: WalletInfo;
-
+  private historyPageSize = 40;
   public accountsEnabled: boolean;
   public isSyncing: boolean;
   public ibdMode: boolean;
+
+  public get loading(): Observable<boolean> {
+    return this.loadingSubject.asObservable();
+  }
+
+  public get newDataFlag(): Observable<boolean> {
+    return this.newDataSubject.asObservable();
+  }
 
   constructor(
     globalService: GlobalService,
@@ -161,14 +171,12 @@ export class WalletService extends RestApi {
   }
 
   public paginateHistory(take?: number, prevOutputTxTime?: number, prevOutputIndex?: number): void {
-    let extra = {};
-    if (take) {
-      extra = Object.assign(extra, {
-        prevOutputTxTime: prevOutputTxTime,
-        prevOutputIndex: prevOutputIndex,
-        take: take || 40
-      });
-    }
+
+    let extra = Object.assign({}, {
+      prevOutputTxTime: prevOutputTxTime,
+      prevOutputIndex: prevOutputIndex,
+      take: take || this.historyPageSize
+    }) as { [key: string]: any };
 
     if (this.accountsEnabled) {
       extra = Object.assign(extra, {
@@ -176,12 +184,17 @@ export class WalletService extends RestApi {
       });
     }
 
-    this.get<WalletHistory>('wallet/history',
-      this.getWalletParams(this.currentWallet, extra)).pipe(map((response) => {
-        return response.history[this.currentWallet.account].transactionsHistory;
-      }),
-      catchError(err => this.handleHttpError(err))).toPromise().then(history => {
-      this.applyHistory(history)
+    this.loadingSubject.next(true);
+    this.get<WalletHistory>('wallet/history', this.getWalletParams(this.currentWallet, extra))
+      .pipe(map((response) => {
+          return response.history[this.currentWallet.account].transactionsHistory;
+        }),
+        catchError((err) => {
+          this.loadingSubject.next(false);
+          return this.handleHttpError(err);
+        })).toPromise().then(history => {
+      this.applyHistory(history);
+      this.loadingSubject.next(false);
     });
   }
 
@@ -275,7 +288,7 @@ export class WalletService extends RestApi {
     );
   }
 
-  private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: string }): HttpParams {
+  private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: any }): HttpParams {
     let params = new HttpParams()
       .set('walletName', walletInfo.walletName)
       .set('accountName', `account ${walletInfo.account || 0}`);

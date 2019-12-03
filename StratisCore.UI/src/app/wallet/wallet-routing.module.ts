@@ -16,29 +16,31 @@ import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { ReceiveComponent } from "./receive/receive.component";
 import { SendComponent } from "./send/send.component";
+import { BlockExplorerComponent } from "./block-explorer/block-explorer.component";
 
 const routes: Routes = [
   {
     path: 'wallet', component: WalletComponent, children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'send', component: SendComponent, canActivate: [AccountSelectedGuard] },
-      { path: 'receive', component: ReceiveComponent, canActivate: [AccountSelectedGuard] },
-      { path: 'history', component: HistoryComponent },
-      { path: 'staking', component: ColdStakingOverviewComponent },
+      {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+      {path: 'dashboard', component: DashboardComponent},
+      {path: 'send', component: SendComponent},
+      {path: 'receive', component: ReceiveComponent},
+      {path: 'history', component: HistoryComponent},
+      {path: 'staking', component: ColdStakingOverviewComponent},
       {
         path: 'advanced', component: AdvancedComponent,
         children: [
-          { path: '', redirectTo: 'about', pathMatch: 'full' },
-          { path: 'about', component: AboutComponent },
-          { path: 'extpubkey', component: ExtPubkeyComponent },
-          { path: 'generate-addresses', component: GenerateAddressesComponent },
-          { path: 'resync', component: ResyncComponent }
+          {path: '', redirectTo: 'about', pathMatch: 'full'},
+          {path: 'about', component: AboutComponent},
+          {path: 'extpubkey', component: ExtPubkeyComponent},
+          {path: 'generate-addresses', component: GenerateAddressesComponent},
+          {path: 'resync', component: ResyncComponent}
         ]
       },
-      { path: 'smart-contracts', component: SmartContractsComponent, canActivate: [AccountSelectedGuard] },
-      { path: 'tokens', component: TokensComponent, canActivate: [AccountSelectedGuard] },
-      { path: 'address-book', component: AddressBookComponent }
+      {path: 'smart-contracts', component: SmartContractsComponent, canActivate: [AccountSelectedGuard]},
+      {path: 'tokens', component: TokensComponent, canActivate: [AccountSelectedGuard]},
+      {path: 'address-book', component: AddressBookComponent},
+      {path: 'explorer', component: BlockExplorerComponent}
     ]
   },
 ];
@@ -48,4 +50,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 
-export class WalletRoutingModule { }
+export class WalletRoutingModule {
+}

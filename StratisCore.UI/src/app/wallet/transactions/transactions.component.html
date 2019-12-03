@@ -1,4 +1,5 @@
-<div *ngIf="(transactions | async) let _transactions;" infiniteScroll
+<div *ngIf="(transactions | async) let _transactions;"
+     infiniteScroll
      [infiniteScrollDistance]="4"
      [scrollWindow]="true"
      (scrolled)="onScroll()">
@@ -17,9 +18,29 @@
         <strong> {{ _transaction.transactionAmount + _transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
       </td>
       <td class="text-left">{{ _transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-      <td class="text-center"><span (click)="openTransactionDetailDialog(_transaction)" class="lnr-transaction lnr-menu-circle"></span>
+      <td class="text-center"><span (click)="openTransactionDetailDialog(_transaction)"
+                                    class="lnr-transaction lnr-menu-circle"></span>
       </td>
     </tr>
     </tbody>
   </table>
+  <div *ngIf="loading && _transactions.length === 0" class="page-load">
+  </div>
+
+  <div *ngIf="!loading && _transactions.length === 0">
+    <div class="col-12 text-center my-4">
+      <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">
+    </div>
+    <div class="col-12 text-center">
+      <p>You currently have no transactions</p>
+    </div>
+
+  </div>
 </div>
+
+
+
+
+
+
+
