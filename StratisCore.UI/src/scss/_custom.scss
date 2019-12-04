@@ -46,6 +46,7 @@ img {
   }
 }
 
+
 #GUI {
   #content {
     padding-top: $jumbotron-padding;
@@ -187,12 +188,6 @@ img {
         font-size: .9rem;
         font-weight: 400;
         color: $white;
-      }
-    }
-
-    .Addresses {
-      dl, dt, dd {
-        margin-bottom: 0 !important;
       }
     }
   }
@@ -457,18 +452,15 @@ img {
     }
   }
 
-
   // status box
   .status {
-    background: $white;
     width: auto;
     height: 36px;
-    border: 1px solid #DEE0EC;
-    border-radius: 80px;
     position: fixed;
-    bottom: 2%;
-    right: 2%;
+    bottom: 10px;
+    left: 1px;
     text-align: center;
+    color: white;
 
     .lnr {
       font-weight: bold;
@@ -483,34 +475,26 @@ img {
     }
 
     li {
-      font-size: .9em;
       position: relative;
       float: left;
       margin-right: 4px;
+    }
 
-      &.pending {
-        i {
-          font-size: .9em;
-          color: $yellow;
-        }
+    &.statusOK {
+      i {
+        color: white;
+        position: absolute;
       }
+    }
 
-      &.statusOK {
-        i {
-          color: $green;
-          font-size: .9em;
-          position: absolute;
-        }
-      }
-
-      small {
-        margin-left: 5px;
-        font-size: 80%;
-        font-weight: 600;
-      }
+    small {
+      margin-left: 7px;
+      font-weight: 600;
+      vertical-align: top;
     }
   }
 }
+
 
 /// MODALS
 .modal {
@@ -1627,47 +1611,11 @@ bs-daterangepicker-container {
   transition: 0s;
 }
 
-
 /// Contacts - Address Book
-
 .card-body {
   .contact-card {
     height: 200px;
   }
-}
-
-app-side-bar {
-  position: fixed;
-  height: 100vh;
-  float: left;
-  width: 250px;
-  background: rgba(21, 139, 207, 1) url("/assets/images/stratis/home-stratis-logo.svg") no-repeat top;
-  background-origin: content-box;
-  background-size: 50px;
-  padding: 25px;
-}
-
-.stratis-side-bar-container {
-  margin-top: 75px;
-  color: white;
-  font-weight: 400;
-}
-
-.side-bar-item {
-  padding-top: 5px;
-  padding-left: 20px;
-  margin-left: 30px;
-  height: 50px;
-  width: 200px;
-  text-transform: uppercase;
-  cursor: pointer;
-
-}
-
-.side-bar-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 7px 0 0 7px;
-  -webkit-transition: background-color 0.2s;
 }
 
 .content {
@@ -1783,61 +1731,89 @@ app-side-bar {
 app-wallet-selector {
   margin-bottom: 20px;
   color: white;
+
+  .btn {
+    background-color: transparent;
+    border: 1px solid white;
+    width: 220px;
+    height: 40px;
+    color: white;
+    margin-left: -25px;
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
+
+  .btn.dropdown-toggle:after {
+    float: right;
+    margin-top: 10px;
+  }
 }
 
-app-wallet-selector .btn {
-  background-color: transparent;
-  border: 1px solid white;
-  width: 220px;
-  height: 40px;
-  color: white;
-  margin-left: -25px;
-  font-size: 1em;
-  margin-bottom: 20px;
+/// Side Bar
+app-side-bar {
+  position: fixed;
+  height: 100vh;
+  float: left;
+  width: 250px;
+  background: rgba(21, 139, 207, 1) url("/assets/images/stratis/home-stratis-logo.svg") no-repeat top;
+  background-origin: content-box;
+  background-size: 50px;
+  padding: 25px;
+
+  .stratis-side-bar-container {
+    margin-top: 75px;
+    color: white;
+    font-weight: 400;
+
+    .side-bar-item {
+      padding-top: 5px;
+      padding-left: 20px;
+      margin-left: 30px;
+      height: 50px;
+      width: 200px;
+      text-transform: uppercase;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 7px 0 0 7px;
+        -webkit-transition: background-color 0.2s;
+      }
+    }
+
+    .side-bar-item-icon:before {
+      font-family: 'Linearicons-Free';
+      font-size: 1.5em;
+      vertical-align: sub;
+      margin-right: 20px;
+    }
+
+    .side-bar-item-account:before {
+      content: "\e800";
+    }
+
+    .side-bar-item-staking:before {
+      content: "\e80f";
+    }
+
+    .side-bar-item-send:before {
+      content: "\e883";
+    }
+
+    .side-bar-item-receive:before {
+      content: "\e884";
+    }
+
+    .side-bar-item-address:before {
+      content: "\e828";
+    }
+
+    .side-bar-item-explorer:before {
+      content: "\e88e";
+    }
+
+    .side-bar-item-advanced:before {
+      content: "\e810";
+    }
+  }
 }
-
-app-wallet-selector .btn.dropdown-toggle:after {
-  float: right;
-  margin-top: 10px;
-}
-
-
-
-
-.side-bar-item-icon:before {
-  font-family: 'Linearicons-Free';
-  font-size: 1.5em;
-  vertical-align: sub;
-  margin-right: 20px;
-}
-
-.side-bar-item-account:before {
-  content: "\e800";
-}
-
-.side-bar-item-staking:before {
-  content: "\e80f";
-}
-
-.side-bar-item-send:before {
-  content: "\e883";
-}
-
-.side-bar-item-receive:before {
-  content: "\e884";
-}
-
-.side-bar-item-address:before {
-  content: "\e828";
-}
-
-.side-bar-item-explorer:before {
-  content: "\e88e";
-}
-
-.side-bar-item-advanced:before {
-  content: "\e810";
-}
-
-
-
