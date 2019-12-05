@@ -4,7 +4,6 @@ import { GlobalService } from '@shared/services/global.service';
 import { WalletInfo } from '@shared/models/wallet-info';
 
 import { CurrentAccountService } from '@shared/services/current-account.service';
-import { ModalService } from '@shared/services/modal.service';
 import { WalletService } from '@shared/services/wallet.service';
 
 @Component({
@@ -18,7 +17,6 @@ export class ReceiveComponent implements OnInit {
   constructor(
     private walletService: WalletService,
     private globalService: GlobalService,
-    private genericModalService: ModalService,
     private currentAccountService: CurrentAccountService) {}
 
   public address: any = '';

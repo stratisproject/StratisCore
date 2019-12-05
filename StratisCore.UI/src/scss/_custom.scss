@@ -509,7 +509,7 @@ img {pointer-events: none !important;}
   }
 }
 
-.modal-body {
+.receive-component {
   .nav-tabs {border-bottom: 0 !important;}
 }
 
@@ -669,8 +669,8 @@ img {pointer-events: none !important;}
     }
 }
 
-// Modal Send
-.ModalSend {
+// Send Component
+.send-component {
   .tab-content {padding-bottom: 0 !important;}
   .nav-link {&.active {color: $white !important;}}
   #stratis-green-bg {
