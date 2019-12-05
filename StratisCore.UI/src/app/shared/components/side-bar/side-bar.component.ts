@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, of } from "rxjs";
 import { Router } from "@angular/router";
+import { GlobalService } from '@shared/services/global.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -10,7 +11,7 @@ import { Router } from "@angular/router";
 export class SideBarComponent implements OnInit {
   @Input() sideBarItems: SideBarItem[];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private globalService: GlobalService) {
     this.sideBarItems = [{
       selected: true,
       displayText: 'Account',
@@ -32,9 +33,17 @@ export class SideBarComponent implements OnInit {
     }, {
       selected: false,
       displayText: 'Staking',
-      visible: of(true),
+      visible: of(!this.globalService.getSidechainEnabled()),
+      disabled: this.globalService.getSidechainEnabled(),
       classes: ['side-bar-item', 'side-bar-item-icon', 'side-bar-item-staking'],
       route: '/wallet/staking'
+    }, {
+      selected: false,
+      displayText: 'Cold Staking',
+      visible: of(this.globalService.getTestnetEnabled() && !this.globalService.getSidechainEnabled()),
+      disabled: !this.globalService.getTestnetEnabled() && this.globalService.getSidechainEnabled(),
+      classes: ['side-bar-item', 'side-bar-item-icon', 'side-bar-item-staking'],
+      route: '/wallet/cold-staking'
     }, {
       selected: false,
       displayText: 'Contacts',
