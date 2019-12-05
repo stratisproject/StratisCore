@@ -66,7 +66,7 @@ export class AddNewAddressComponent {
   }
 
   public createClicked(): void {
-    const addressLabel = new AddressLabel(this.addressForm.get('label').value, this.addressForm.get('address').value);
+    const addressLabel = new AddressLabel(this.addressForm.get('label').value, this.addressForm.get('address').value, "");
     this.apiService.addAddressBookAddress(addressLabel)
       .subscribe(
         response => {

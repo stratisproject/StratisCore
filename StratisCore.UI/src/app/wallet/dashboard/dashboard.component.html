@@ -1,24 +1,23 @@
 <section id="GUI" class="light"><!-- CONTAINER -->
-    <div class="jumbotron" id="account-header">
-      <div class="text-left" *ngIf="(wallet| async) as _wallet">
-        <h5>Balance</h5>
-        <p class="lead">
-          <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
-          <small class="text-uppercase"> {{ globalService.coinUnit }}</small>
-        </p>
-        <ul class="list-unstyled">
-          <li>
-            <strong>{{ (_wallet.amountUnconfirmed | coinNotation) || (0 | coinNotation) }}</strong>
-            <em> (unconfirmed)</em>
-          </li>
-        </ul>
-      </div>
+  <div class="jumbotron" id="account-header">
+    <div class="text-left" *ngIf="(wallet| async) as _wallet">
+      <h5>Balance</h5>
+      <p class="lead">
+        <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
+        <small class="text-uppercase"> {{ globalService.coinUnit }}</small>
+      </p>
+      <ul class="list-unstyled">
+        <li>
+          <strong>{{ (_wallet.amountUnconfirmed | coinNotation) || (0 | coinNotation) }}</strong>
+          <em> (unconfirmed)</em>
+        </li>
+      </ul>
     </div>
-    <div style="padding-top: 150px">
-      <div class="col-12">
-        <app-transactions title="Latest Transactions">
-        </app-transactions>
-      </div>
+  </div>
+  <div style="padding-top: 150px">
+    <div class="col-12">
+      <app-transactions title="Latest Transactions">
+      </app-transactions>
     </div>
-    <status-bar></status-bar>
-  </section>
+  </div>
+</section>

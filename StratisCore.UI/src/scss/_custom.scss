@@ -262,6 +262,29 @@ img {
     }
   }
 
+  .contact {
+    height: 220px;
+
+    .contact-icon {
+      font-family: 'Linearicons-Free';
+      font-size: 1.5rem;
+      color: $primary;
+      border: 2px solid $primary;
+      font-weight: 900;
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+      text-align: center;
+      padding-top: 5px;
+      margin-left: -15px;
+    }
+
+    .tags {
+      margin-left: 5px;
+    }
+
+  }
+
   // no caret
   .dropdown-menu-nocaret {
     .dropdown-toggle::after {
@@ -1609,13 +1632,6 @@ bs-daterangepicker-container {
   color: #fff;
   opacity: 0.5;
   transition: 0s;
-}
-
-/// Contacts - Address Book
-.card-body {
-  .contact-card {
-    height: 200px;
-  }
 }
 
 .content {

@@ -1,14 +1,15 @@
 <div class="stratis-side-bar">
   <div class="stratis-side-bar-container">
+    <ng-content select="[side-bar-top]"></ng-content>
     <ng-container *ngFor="let sideBarItem of sideBarItems">
       <div *ngIf="sideBarItem.visible | async" (click)="onSelect(sideBarItem)"
            [ngClass]="getClasses(sideBarItem)">
         {{sideBarItem.displayText}}
       </div>
     </ng-container>
-
     <div class="side-bar-item-icon lnr-exit logout-button" (click)="logout()">
     </div>
+    <ng-content select="[side-bar-bottom]"></ng-content>
   </div>
 </div>
 

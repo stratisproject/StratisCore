@@ -8789,10 +8789,6 @@ img {
   color: #fff;
 }
 
-#GUI .jumbotron .Addresses dl, #GUI .jumbotron .Addresses dt, #GUI .jumbotron .Addresses dd {
-  margin-bottom: 0 !important;
-}
-
 #GUI #staking strong {
   font-weight: bold !important;
 }
@@ -8851,6 +8847,28 @@ img {
 #GUI .card .stake-type {
   padding: 1.125rem 1.25rem 0;
   background-color: #fff;
+}
+
+#GUI .contact {
+  height: 220px;
+}
+
+#GUI .contact .contact-icon {
+  font-family: 'Linearicons-Free';
+  font-size: 1.5rem;
+  color: #158BCF;
+  border: 2px solid #158BCF;
+  font-weight: 900;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  text-align: center;
+  padding-top: 5px;
+  margin-left: -15px;
+}
+
+#GUI .contact .tags {
+  margin-left: 5px;
 }
 
 #GUI .dropdown-menu-nocaret .dropdown-toggle::after {
@@ -9036,15 +9054,13 @@ img {
 }
 
 #GUI .status {
-  background: #fff;
   width: auto;
   height: 36px;
-  border: 1px solid #DEE0EC;
-  border-radius: 80px;
   position: fixed;
-  bottom: 2%;
-  right: 2%;
+  bottom: 10px;
+  left: 1px;
   text-align: center;
+  color: white;
 }
 
 #GUI .status .lnr {
@@ -9060,27 +9076,20 @@ img {
 }
 
 #GUI .status li {
-  font-size: .9em;
   position: relative;
   float: left;
   margin-right: 4px;
 }
 
-#GUI .status li.pending i {
-  font-size: .9em;
-  color: #ffc107;
-}
-
-#GUI .status li.statusOK i {
-  color: #28a745;
-  font-size: .9em;
+#GUI .status.statusOK i {
+  color: white;
   position: absolute;
 }
 
-#GUI .status li small {
-  margin-left: 5px;
-  font-size: 80%;
+#GUI .status small {
+  margin-left: 7px;
   font-weight: 600;
+  vertical-align: top;
 }
 
 .modal label {
@@ -10131,43 +10140,6 @@ bs-daterangepicker-container {
   transition: 0s;
 }
 
-.card-body .contact-card {
-  height: 200px;
-}
-
-app-side-bar {
-  position: fixed;
-  height: 100vh;
-  float: left;
-  width: 250px;
-  background: #158bcf url("/assets/images/stratis/home-stratis-logo.svg") no-repeat top;
-  background-origin: content-box;
-  background-size: 50px;
-  padding: 25px;
-}
-
-.stratis-side-bar-container {
-  margin-top: 75px;
-  color: white;
-  font-weight: 400;
-}
-
-.side-bar-item {
-  padding-top: 5px;
-  padding-left: 20px;
-  margin-left: 30px;
-  height: 50px;
-  width: 200px;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.side-bar-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 7px 0 0 7px;
-  -webkit-transition: background-color 0.2s;
-}
-
 .content {
   position: relative;
   margin-left: 250px;
@@ -10298,38 +10270,71 @@ app-wallet-selector .btn.dropdown-toggle:after {
   margin-top: 10px;
 }
 
-.side-bar-item-icon:before {
+app-side-bar {
+  position: fixed;
+  height: 100vh;
+  float: left;
+  width: 250px;
+  background: #158bcf url("/assets/images/stratis/home-stratis-logo.svg") no-repeat top;
+  background-origin: content-box;
+  background-size: 50px;
+  padding: 25px;
+}
+
+app-side-bar .stratis-side-bar-container {
+  margin-top: 75px;
+  color: white;
+  font-weight: 400;
+}
+
+app-side-bar .stratis-side-bar-container .side-bar-item {
+  padding-top: 5px;
+  padding-left: 20px;
+  margin-left: 30px;
+  height: 50px;
+  width: 200px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+app-side-bar .stratis-side-bar-container .side-bar-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 7px 0 0 7px;
+  -webkit-transition: background-color 0.2s;
+}
+
+app-side-bar .stratis-side-bar-container .side-bar-item-icon:before {
   font-family: 'Linearicons-Free';
   font-size: 1.5em;
   vertical-align: sub;
   margin-right: 20px;
 }
 
-.side-bar-item-account:before {
+app-side-bar .stratis-side-bar-container .side-bar-item-account:before {
   content: "\e800";
 }
 
-.side-bar-item-staking:before {
+app-side-bar .stratis-side-bar-container .side-bar-item-staking:before {
   content: "\e80f";
 }
 
-.side-bar-item-send:before {
+app-side-bar .stratis-side-bar-container .side-bar-item-send:before {
   content: "\e883";
 }
 
-.side-bar-item-receive:before {
+app-side-bar .stratis-side-bar-container .side-bar-item-receive:before {
   content: "\e884";
 }
 
-.side-bar-item-address:before {
+app-side-bar .stratis-side-bar-container .side-bar-item-address:before {
   content: "\e828";
 }
 
-.side-bar-item-explorer:before {
+app-side-bar .stratis-side-bar-container .side-bar-item-explorer:before {
   content: "\e88e";
 }
 
-.side-bar-item-advanced:before {
+app-side-bar .stratis-side-bar-container .side-bar-item-advanced:before {
   content: "\e810";
 }
 

@@ -6,6 +6,8 @@ import { SendComponent } from '../send/send.component';
 import { AddNewAddressComponent } from './modals/add-new-address/add-new-address.component';
 import { AddressLabel } from '@shared/models/address-label';
 import { BehaviorSubject } from 'rxjs';
+import { GlobalService } from "@shared/services/global.service";
+import { SnackbarService } from "ngx-snackbar";
 
 @Component({
   selector: 'app-address-book',
@@ -14,6 +16,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AddressBookComponent implements OnInit {
   constructor(
+    private globalService: GlobalService,
+    private snackbarService: SnackbarService,
     private apiService: ApiService,
     private clipboardService: ClipboardService,
     private modalService: NgbModal) {
@@ -31,13 +35,19 @@ export class AddressBookComponent implements OnInit {
       .then(
         response => {
           if (response.addresses[0]) {
-            this.addresses.next(response.addresses.map(address => new AddressLabel(address.label, address.address)));
+            this.addresses.next(response.addresses.map(address => new AddressLabel(address.label, address.address, "")));
           }
         });
   }
 
   public copyToClipboardClicked(address: AddressLabel): void {
     if (this.clipboardService.copyFromContent(address.address)) {
+      this.snackbarService.add({
+        msg: "Address Copied to Clipboard",
+        action: {
+          text: null
+        }
+      });
     }
   }
 
@@ -56,6 +66,11 @@ export class AddressBookComponent implements OnInit {
         }
       });
   }
+
+  public getQrCodeAddress(address: string): string {
+    return `${this.globalService.networkName}:${address}`
+  }
+
 
   public addNewAddressClicked(): void {
     this.modalService.open(AddNewAddressComponent, {backdrop: 'static'});
