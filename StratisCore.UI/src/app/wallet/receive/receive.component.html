@@ -23,8 +23,8 @@
 
         <div *ngIf="!accountsEnabled && showAll">
             <a class="link" (click)="showOneAddress()">← back to one address</a>
-            <ngb-tabset class="nav nav-tabs">
-                <ngb-tab title="Unused Addresses">
+            <ngb-tabset type="tabs" class="nav-fill">
+                <ngb-tab class="nav-link" title="Unused Addresses">
                     <ng-template ngbTabContent>
                         <div *ngFor="let unusedAddress of unusedAddresses | paginate: { itemsPerPage: 5, currentPage: pageNumberUnused, id: 'unusedAddressesPaginator' }">
                             <code class="d-inline-block">{{ unusedAddress }}</code>
@@ -36,7 +36,7 @@
                         <pagination-controls id="unusedAddressesPaginator" (pageChange)="pageNumberUnused = $event"></pagination-controls>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Used Addresses">
+                <ngb-tab class="nav-link" title="Used Addresses">
                     <ng-template ngbTabContent>
                         <div *ngFor="let usedAddress of usedAddresses | paginate: { itemsPerPage: 5, currentPage: pageNumberUsed, id: 'usedAddressesPaginator' }">
                             <code class="d-inline-block">{{ usedAddress }}</code>
@@ -48,7 +48,7 @@
                         <pagination-controls id="usedAddressesPaginator" (pageChange)="pageNumberUsed = $event"></pagination-controls>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Change Addresses">
+                <ngb-tab class="nav-link" title="Change Addresses">
                     <ng-template ngbTabContent>
                         <div *ngFor="let changeAddress of changeAddresses | paginate: { itemsPerPage: 5, currentPage: pageNumberChange, id: 'changeAddressesPaginator' }">
                             <code class="d-inline-block">{{ changeAddress }}</code>
