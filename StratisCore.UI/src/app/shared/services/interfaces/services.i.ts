@@ -17,12 +17,6 @@ export interface IApiService {
 
   getNodeStatusInterval(silent?: boolean): Observable<NodeStatus>;
 
-  // getAddressBookAddresses(): Observable<any>;
-
-  addAddressBookAddress(data: AddressLabel): Observable<any>;
-
-  removeAddressBookAddress(label: string): Observable<any>;
-
   /** Gets the extended public key from a certain wallet */
   getExtPubkey(data: WalletInfo): Observable<any>;
 

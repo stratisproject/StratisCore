@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-
-import { ApiService } from '@shared/services/api.service';
 import { ModalService } from '@shared/services/modal.service';
 import { AddressLabel } from '@shared/models/address-label';
+import { AddressBookService } from "@shared/services/address-book-service";
 
 @Component({
   selector: 'app-add-new-address',
@@ -14,7 +13,7 @@ import { AddressLabel } from '@shared/models/address-label';
 export class AddNewAddressComponent {
   constructor(
     private activeModel: NgbActiveModal,
-    private apiService: ApiService,
+    private addressBookService: AddressBookService,
     private genericModalService: ModalService,
     private fb: FormBuilder) {
     this.buildAddressForm();
@@ -67,9 +66,8 @@ export class AddNewAddressComponent {
 
   public createClicked(): void {
     const addressLabel = new AddressLabel(this.addressForm.get('label').value, this.addressForm.get('address').value, "");
-    this.apiService.addAddressBookAddress(addressLabel)
-      .subscribe(
-        response => {
+    this.addressBookService.addAddressBookAddress(addressLabel)
+      .then(response => {
           this.activeModel.close();
         }
       );
