@@ -44,13 +44,6 @@ private modalService: NgbModal, private globalService: GlobalService, private cu
       route: '/wallet/staking'
     }, {
       selected: false,
-      displayText: 'Cold Staking',
-      visible: of(this.globalService.getTestnetEnabled() && !this.globalService.getSidechainEnabled()),
-      disabled: !this.globalService.getTestnetEnabled() && this.globalService.getSidechainEnabled(),
-      classes: ['side-bar-item', 'side-bar-item-icon', 'side-bar-item-staking'],
-      route: '/wallet/cold-staking'
-    }, {
-      selected: false,
       displayText: 'Contacts',
       visible: of(true),
       classes: ['side-bar-item', 'side-bar-item-icon', 'side-bar-item-address'],
