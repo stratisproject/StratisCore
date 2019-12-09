@@ -106,6 +106,7 @@ export interface TransactionsHistoryItem {
   payments: any[];
   confirmedInBlock: number;
   timestamp: number;
+  txOutputIndex: number;
   blockIndex: number;
   fee: number;
 }

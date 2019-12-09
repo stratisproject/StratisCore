@@ -3,16 +3,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { interval, Observable } from 'rxjs';
 import { catchError, startWith, switchMap } from 'rxjs/operators';
 import { GlobalService } from './global.service';
-import { AddressLabel } from '../models/address-label';
 import { WalletCreation } from '../models/wallet-creation';
 import { WalletRecovery } from '../models/wallet-recovery';
 import { WalletInfo, WalletInfoRequest } from '../models/wallet-info';
 import { NodeStatus } from '../models/node-status';
-import { LocalExecutionResult } from '@shared/models/local-execution-result';
-import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 import { RestApi } from '@shared/services/rest-api';
 import { IApiService } from '@shared/services/interfaces/services.i';
-import { WalletHistory } from '@shared/services/interfaces/api.i';
 import { ErrorService } from '@shared/services/error-service';
 
 @Injectable({
@@ -40,25 +36,6 @@ export class ApiService extends RestApi implements IApiService {
       switchMap(() => this.get<NodeStatus>('node/status')),
       catchError(err => this.handleHttpError(err, silent)));
   }
-
-  public getAddressBookAddresses(): Observable<any> {
-    return this.get('addressBook').pipe(
-      catchError(err => this.handleHttpError(err)));
-  }
-
-  public addAddressBookAddress(data: AddressLabel): Observable<any> {
-    return this.post('addressBook/address', data).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  public removeAddressBookAddress(label: string): Observable<any> {
-    const params = new HttpParams().set('label', label);
-    return this.delete('addressBook/address', params).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
 
   /** Gets the extended public key from a certain wallet */
   public getExtPubkey(data: WalletInfo): Observable<any> {

@@ -2,12 +2,13 @@ import { TransactionsHistoryItem } from '@shared/services/interfaces/api.i';
 
 export class TransactionInfo {
   constructor(
-    transactionType: string,
-    transactionId: string,
-    transactionAmount: number,
-    transactionFee: number,
-    transactionConfirmedInBlock: number,
-    transactionTimestamp: number) {
+    public transactionType: string,
+    public transactionId: string,
+    public transactionAmount: number,
+    public transactionFee: number,
+    public txOutputIndex: number,
+    public transactionConfirmedInBlock: number,
+    public transactionTimestamp: number) {
     this.transactionType = transactionType;
     this.transactionId = transactionId;
     this.transactionAmount = transactionAmount;
@@ -16,13 +17,6 @@ export class TransactionInfo {
     this.transactionTimestamp = transactionTimestamp;
   }
 
-  public transactionType: string;
-  public transactionId: string;
-  public transactionAmount: number;
-  public transactionFee: number;
-  public transactionConfirmedInBlock?: number;
-  public transactionTimestamp: number;
-
   public static mapFromTransactionsHistoryItems(transactions: TransactionsHistoryItem[], maxTransactionCount?: number): TransactionInfo[] {
     const mapped = transactions.map(transaction => {
       return new TransactionInfo(
@@ -30,6 +24,7 @@ export class TransactionInfo {
         transaction.id,
         transaction.amount,
         transaction.fee || 0,
+        transaction.txOutputIndex,
         transaction.confirmedInBlock,
         transaction.timestamp);
     });
