@@ -10228,6 +10228,21 @@ bs-daterangepicker-container {
   animation: scaleout 1.5s infinite ease-in-out;
 }
 
+.status-tooltip {
+  color: white;
+  font-size: 0.8rem;
+  margin-left: 25px;
+}
+
+.status-tooltip .tooltip-inner {
+  background: #158bcf;
+  border: 1px solid white;
+}
+
+.status-tooltip.arrow::before {
+  border-top-color: #158bcf;
+}
+
 .notify-snack-bar {
   position: fixed;
   bottom: 0;

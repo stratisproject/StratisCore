@@ -1724,6 +1724,21 @@ bs-daterangepicker-container {
   animation: scaleout 1.5s infinite ease-in-out;
 }
 
+.status-tooltip {
+  color: white;
+  font-size: 0.8rem;
+
+  .tooltip-inner {
+    background: rgb(21, 139, 207);
+    border: 1px solid white;
+  }
+
+  margin-left: 25px;
+}
+
+.status-tooltip.arrow::before {
+  border-top-color: rgb(21, 139, 207);
+}
 
 .notify-snack-bar {
   position: fixed;
