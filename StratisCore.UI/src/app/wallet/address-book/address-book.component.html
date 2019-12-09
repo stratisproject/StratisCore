@@ -1,39 +1,77 @@
 <section id="GUI" class="light">
-    <section id="content" class="light col-10 mx-auto">
-        <div class="text-right">
-            <button class="btn btn-link mb-2 pr-0" style="display: inline-block" (click)="addNewAddressClicked()">+ Add New Address</button>
-        </div>
-        <section class="col-12">
-          <div class="row">
-            <ng-template #noAddresses>
-              <div class="col-12 text-center">
-                <p>Looks like you have no addresses in your address book yet.</p>
-              </div>
-            </ng-template>
+  <div class="jumbotron page-header">
+    <div class="text-left">
+      <h3>Contacts</h3>
+     <div class="page-header-right-content">
+       <button class="btn mb-2 pr-0" style="display: inline-block" (click)="addNewAddressClicked()">
+         Create New Contact
+       </button>
+     </div>
+    </div>
+  </div>
+  <section id="content" class="light col-12 mx-auto page-content">
+    <section class="col-12">
+      <div class="row">
+        <ng-template #noAddresses>
+          <div class="col-12 text-center">
+            <p>Looks like you have no addresses in your address book yet.</p>
           </div>
-          <div *ngIf="addresses; else noAddresses">
-            <div class="row" *ngFor="let addressRow of addresses | async">
-                <div class="card Addresses col-12 my-1">
-                    <div class="card-body">
-                        <dl class="d-flex align-items-center mb-0">
-                            <dt class="col-3 mb-0">{{addressRow.label}}</dt>
-                            <dd class="col-6 mb-0">
-                                <div class="myAddress d-inline">
-                                    <code class="d-inline-block">{{addressRow.address}}</code>
-                                    <button class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" title="Copy to Clipboard" (click)="copyToClipboardClicked(addressRow)" type="button">
-                                      <i class="lnr lnr-file-add"></i> copy
-                                    </button>
-                                </div>
-                            </dd>
-                            <dd class="col-3 mb-0 text-right">
-                                <button type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendClicked(addressRow)">Send</button>
-                                <button type="button" class="btn btn-lighter btn-sm ml-2" (click)="removeClicked(addressRow)"><i class="lnr lnr-trash"></i></button>
-                            </dd>
-                        </dl>
+        </ng-template>
+      </div>
+      <div *ngIf="addresses; else noAddresses">
+        <div *ngFor="let addressRow of addresses | async">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="card contact mb-5">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-2">
+                        <ngx-qrcode [qrc-value]="getQrCodeAddress(addressRow.address)" qrc-class="aclass"
+                                    qrc-errorCorrectionLevel="L"></ngx-qrcode>
+                      </div>
+                      <div class="col-8 mt-2">
+                        <h3 class="mt-1 ml-3"> {{addressRow.label}}</h3>
+                        <h4 class="mt-1 ml-3"> {{addressRow.address}}</h4>
+                        <p class="lead ml-3">{{addressRow.description}}</p>
+                        <div class="float-left ml-3">
+                          <p>
+                            <span class="badge badge-info tags">3 Sent</span>
+                            <span class="badge badge-info tags">0 Recieved</span>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-2 text-center">
+                        <div class="contact-icon lnr-user float-right"></div>
+                      </div>
+                      <div class="col-12 col-lg-4">
+                        <button class="btn btn-block btn-outline-success" (click)="copyToClipboardClicked(addressRow)">
+                          <span class="fa fa-plus-circle"></span> Copy Address
+                        </button>
+                      </div>
+                      <div class="col-12 col-lg-4">
+                        <button class="btn btn-outline-info btn-block" (click)="sendClicked(addressRow)"><span
+                          class="fa fa-user"></span> Send
+                        </button>
+                      </div>
+                      <div class="col-12 col-lg-4">
+                        <button type="button" class="btn btn-outline-primary btn-block"
+                                (click)="removeClicked(addressRow)"><span class="fa fa-gear"></span>
+                          Remove
+                        </button>
+                      </div>
+                      <!--/col-->
                     </div>
+                    <!--/row-->
+                  </div>
+                  <!--/card-block-->
                 </div>
+              </div>
             </div>
           </div>
-        </section>
+
+        </div>
+      </div>
     </section>
+  </section>
 </section>

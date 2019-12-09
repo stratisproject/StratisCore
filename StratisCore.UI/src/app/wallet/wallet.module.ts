@@ -27,9 +27,14 @@ import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { StakingComponent } from './staking/staking.component';
 import { WalletSelectorComponent } from './wallet-selector/wallet-selector.component';
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { SnackbarModule } from "ngx-snackbar";
+import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
 
 @NgModule({
   imports: [
+    SnackbarModule,
+    InfiniteScrollModule,
     SharedModule,
     WalletRoutingModule,
     ColdStakingModule,
@@ -57,7 +62,8 @@ import { WalletSelectorComponent } from './wallet-selector/wallet-selector.compo
     ResyncComponent,
     TransactionsComponent,
     StakingComponent,
-    WalletSelectorComponent
+    WalletSelectorComponent,
+    BlockExplorerComponent
   ],
   providers: [
     AccountSelectedGuard

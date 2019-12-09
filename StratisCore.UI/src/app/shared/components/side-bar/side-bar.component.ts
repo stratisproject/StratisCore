@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, of } from "rxjs";
 import { Router } from "@angular/router";
-import { GlobalService } from '@shared/services/global.service';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { GlobalService } from "@shared/services/global.service";
+import { CurrentAccountService } from "@shared/services/current-account.service";
 
 @Component({
   selector: 'app-side-bar',
@@ -11,7 +13,10 @@ import { GlobalService } from '@shared/services/global.service';
 export class SideBarComponent implements OnInit {
   @Input() sideBarItems: SideBarItem[];
 
-  constructor(private router: Router, private globalService: GlobalService) {
+  constructor(private router: Router,
+private modalService: NgbModal, private globalService: GlobalService, private currentAccountService: CurrentAccountService)
+{
+
     this.sideBarItems = [{
       selected: true,
       displayText: 'Account',
@@ -55,8 +60,7 @@ export class SideBarComponent implements OnInit {
       displayText: 'Explorer',
       visible: of(true),
       classes: ['side-bar-item', 'side-bar-item-icon', 'side-bar-item-explorer'],
-      route: '/address-book',
-      disabled: true
+      route: '/wallet/explorer',
     }, {
       selected: false,
       displayText: 'Advanced',
@@ -89,6 +93,10 @@ export class SideBarComponent implements OnInit {
       });
       this.router.navigateByUrl(sideBarOption.route);
     }
+  }
+
+  public logout() :void {
+
   }
 }
 

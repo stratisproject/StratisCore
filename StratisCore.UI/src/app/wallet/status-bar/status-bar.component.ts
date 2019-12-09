@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GlobalService } from '@shared/services/global.service';
-import { StakingService } from '@shared/services/staking-service';
 import { last, tap } from 'rxjs/operators';
 import { GeneralInfo } from '@shared/services/interfaces/api.i';
 import { NodeService } from '@shared/services/node-service';
@@ -18,9 +16,7 @@ export class StatusBarComponent implements OnInit {
   public connectedNodesTooltip = '';
 
   constructor(
-    private nodeService: NodeService,
-    private stakingService: StakingService,
-    private globalService: GlobalService) {
+    private nodeService: NodeService) {
   }
 
   public ngOnInit(): void {
