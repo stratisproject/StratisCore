@@ -1,13 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SendComponent } from '../send/send.component';
 import { AddNewAddressComponent } from './modals/add-new-address/add-new-address.component';
 import { AddressLabel } from '@shared/models/address-label';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { GlobalService } from "@shared/services/global.service";
 import { SnackbarService } from "ngx-snackbar";
 import { AddressBookService } from "@shared/services/address-book-service";
+import { ConfirmationModalComponent } from "@shared/components/confirmation-modal/confirmation-modal.component";
 
 @Component({
   selector: 'app-address-book',
@@ -36,7 +37,8 @@ export class AddressBookComponent implements OnInit {
   public copyToClipboardClicked(address: AddressLabel): void {
     if (this.clipboardService.copyFromContent(address.address)) {
       this.snackbarService.add({
-        msg: "Address Copied to Clipboard",
+        msg: `Address ${address.address} copied to clipboard`,
+        customClass: 'notify-snack-bar',
         action: {
           text: null
         }
@@ -50,8 +52,29 @@ export class AddressBookComponent implements OnInit {
   }
 
   public removeClicked(address: AddressLabel): void {
-    this.addressBookService.removeAddressBookAddress(address);
+    const modal = this.modalService.open(ConfirmationModalComponent, {
+      backdrop: 'static',
 
+    });
+
+    const instance = modal.componentInstance as ConfirmationModalComponent;
+    instance.title = 'Remove Contact';
+    instance.body = `Are you sure you want to remove the contact ${address.label}`;
+
+    modal.result.then(confirmed => {
+      if (confirmed) {
+        this.addressBookService.removeAddressBookAddress(address).then(() => {
+            this.snackbarService.add({
+              msg: `Contact ${address.label} was removed`,
+              customClass: 'notify-snack-bar',
+              action: {
+                text: null
+              }
+            })
+          }
+        );
+      }
+    });
   }
 
   public getQrCodeAddress(address: string): string {

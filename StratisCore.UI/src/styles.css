@@ -8729,6 +8729,13 @@ img {
   font-weight: 300;
 }
 
+#GUI .jumbotron h3 {
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #adb5bd;
+  font-size: 30px;
+}
+
 #GUI .jumbotron .lead {
   font-size: 3rem;
   margin-bottom: 0 !important;
@@ -10140,6 +10147,10 @@ bs-daterangepicker-container {
   transition: 0s;
 }
 
+.page-content {
+  padding-top: 100px !important;
+}
+
 .content {
   position: relative;
   margin-left: 250px;
@@ -10150,12 +10161,17 @@ bs-daterangepicker-container {
   width: 100%;
   background-color: rgba(250, 251, 252, 0.98);
   z-index: 1;
-  height: 140px;
-  -webkit-box-shadow: 10px 25px 2px -1px rgba(250, 251, 252, 0.8);
+  height: 80px;
+  -webkit-box-shadow: 10px 15px 2px -1px rgba(250, 251, 252, 0.8);
+}
+
+.page-header-right-content {
+  float: right;
+  margin-right: 250px;
 }
 
 .page-header:after {
-  padding-top: 150px;
+  padding-top: 110px;
 }
 
 #account-header {
@@ -10210,6 +10226,26 @@ bs-daterangepicker-container {
   background: rgba(21, 139, 207, 0.8) url("/assets/images/loading.svg") no-repeat center;
   -webkit-animation: scaleout 1.5s infinite ease-in-out;
   animation: scaleout 1.5s infinite ease-in-out;
+}
+
+.notify-snack-bar {
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+  height: 80px;
+  width: 100%;
+  font-size: 20px;
+  text-align: center;
+  padding-top: 20px;
+  padding-right: 300px;
+  color: white;
+  margin-left: 250px;
+  padding-left: 50px;
+  background: #158bcf;
+  opacity: 0.8;
+  transition: opacity .25s ease-in-out;
+  -moz-transition: opacity .25s ease-in-out;
+  -webkit-transition: opacity .25s ease-in-out;
 }
 
 .loading-snack-bar {

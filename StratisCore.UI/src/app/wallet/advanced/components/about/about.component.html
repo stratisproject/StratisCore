@@ -1,69 +1,75 @@
-<div class="card p-4" *ngIf="nodeStatusSubscription$ | async as node">
-  <div class="card-header">About</div>
-    <div class="card-body" style="min-height:200px;">
-
-      <div class="row">
-        <div class='col-4 blockLabel'>
-          Client name:
-        </div>
-        <div class='col blockText'>
-          <strong class="text-primary">{{ node.agent }}</strong>
-        </div>
-      </div>
-      <div class="row">
-        <div class='col-4 blockLabel'>
-          Wallet version:
-        </div>
-        <div class='col blockText'>
-          {{ applicationVersion }}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4 blockLabel">
-          Fullnode version:
-        </div>
-        <div class="col blockText">
-          {{ node.version }}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4 blockLabel">
-          Current network:
-        </div>
-        <div class="col blockText">
-          {{ node.network }}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4 blockLabel">
-          Protocol version:
-        </div>
-        <div class="col blockText">
-          {{ node.protocolVersion }}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4 blockLabel">
-          Current block height:
-        </div>
-        <div class="col blockText">
-          {{ node.blockStoreHeight }}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-4 blockLabel">
-          Wallet data directory:
-        </div>
-        <div class="col blockText">
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mt-3" *ngIf="nodeStatusSubscription$ | async as node">
+        <div class="card-header">About</div>
+        <div class="card-body">
+          <div class="row">
+            <div class='col-4 blockLabel'>
+              Client name:
+            </div>
+            <div class='col blockText'>
+              <strong class="text-primary">{{ node.agent }}</strong>
+            </div>
+          </div>
+          <div class="row">
+            <div class='col-4 blockLabel'>
+              Wallet version:
+            </div>
+            <div class='col blockText'>
+              {{ applicationVersion }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 blockLabel">
+              Fullnode version:
+            </div>
+            <div class="col blockText">
+              {{ node.version }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 blockLabel">
+              Current network:
+            </div>
+            <div class="col blockText">
+              {{ node.network }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 blockLabel">
+              Protocol version:
+            </div>
+            <div class="col blockText">
+              {{ node.protocolVersion }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 blockLabel">
+              Current block height:
+            </div>
+            <div class="col blockText">
+              {{ node.blockStoreHeight }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 blockLabel">
+              Wallet data directory:
+            </div>
+            <div class="col blockText">
           <span *ngIf="!isElectron; else directoryLink">
             <em>{{ node.dataDirectoryPath }}</em>
           </span>
-          <ng-template #directoryLink>
-            <a (click)="openWalletDirectory(node.dataDirectoryPath)" href="javascript:void(0)">
-              <em>{{ node.dataDirectoryPath }}</em>
-            </a>
-          </ng-template>
+              <ng-template #directoryLink>
+                <a (click)="openWalletDirectory(node.dataDirectoryPath)" href="javascript:void(0)">
+                  <em>{{ node.dataDirectoryPath }}</em>
+                </a>
+              </ng-template>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 </div>
+

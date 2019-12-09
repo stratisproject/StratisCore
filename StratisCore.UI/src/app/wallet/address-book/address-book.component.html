@@ -1,10 +1,15 @@
 <section id="GUI" class="light">
-  <section id="content" class="light col-12 mx-auto">
-    <div class="text-right">
-      <button class="btn btn-link mb-2 pr-0" style="display: inline-block" (click)="addNewAddressClicked()">
-        Create New Contact
-      </button>
+  <div class="jumbotron page-header">
+    <div class="text-left">
+      <h3>Contacts</h3>
+     <div class="page-header-right-content">
+       <button class="btn mb-2 pr-0" style="display: inline-block" (click)="addNewAddressClicked()">
+         Create New Contact
+       </button>
+     </div>
     </div>
+  </div>
+  <section id="content" class="light col-12 mx-auto page-content">
     <section class="col-12">
       <div class="row">
         <ng-template #noAddresses>

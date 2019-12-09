@@ -1,41 +1,55 @@
 <section id="GUI" class="light">
-  <!-- CONTAINER -->
-    <section id="content" class="light col-10 mx-auto">
-      <!-- CONTENT -->
-      <section class="col-12">
-        <div class="row">
-          <div class="col-3">
-            <!-- card -->
-            <div class="card">
-              <div class="card-body my-4 d-flex justify-content-center">
-                <!-- ul -->
-                <ul class="nav flex-column">
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['about']" routerLinkActive="active">About</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['extpubkey']" routerLinkActive="active">Extended Public Key</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['generate-addresses']" routerLinkActive="active">Generate Addresses</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['resync']" routerLinkActive="active">Rescan Wallet</a>
-                  </li>
-                </ul>
-                <!-- /ul -->
-              </div>
-            </div>
-            <!-- /card -->
-          </div>
-          <!-- /col -->
-          <div class="col-9">
-            <router-outlet></router-outlet>
-          </div>
-          <!-- /col -->
-        </div>
-        <!-- /row -->
-      </section>
-      <!-- /CONTENT -->
-    </section>
+  <div class="jumbotron page-header">
+    <div class="text-left">
+      <h3>Advanced Options</h3>
+      <div class="page-header-right-content">
+      </div>
+    </div>
+  </div>
+  <div class="page-content">
+    <app-about></app-about>
+    <app-ext-pubkey></app-ext-pubkey>
+    <app-generate-addresses></app-generate-addresses>
+    <app-resync></app-resync>
+  </div>
+
+  <!--  &lt;!&ndash; CONTAINER &ndash;&gt;-->
+  <!--    <section id="content" class="light col-10 mx-auto">-->
+  <!--      &lt;!&ndash; CONTENT &ndash;&gt;-->
+  <!--      <section class="col-12">-->
+  <!--        <div class="row">-->
+  <!--          <div class="col-3">-->
+  <!--            &lt;!&ndash; card &ndash;&gt;-->
+  <!--            <div class="card">-->
+  <!--              <div class="card-body my-4 d-flex justify-content-center">-->
+  <!--                &lt;!&ndash; ul &ndash;&gt;-->
+  <!--                <ul class="nav flex-column">-->
+  <!--                  <li class="nav-item">-->
+  <!--                    <a class="nav-link" [routerLink]="['about']" routerLinkActive="active">About</a>-->
+  <!--                  </li>-->
+  <!--                  <li class="nav-item">-->
+  <!--                    <a class="nav-link" [routerLink]="['extpubkey']" routerLinkActive="active">Extended Public Key</a>-->
+  <!--                  </li>-->
+  <!--                  <li class="nav-item">-->
+  <!--                    <a class="nav-link" [routerLink]="['generate-addresses']" routerLinkActive="active">Generate Addresses</a>-->
+  <!--                  </li>-->
+  <!--                  <li class="nav-item">-->
+  <!--                    <a class="nav-link" [routerLink]="['resync']" routerLinkActive="active">Rescan Wallet</a>-->
+  <!--                  </li>-->
+  <!--                </ul>-->
+  <!--                &lt;!&ndash; /ul &ndash;&gt;-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <!--            &lt;!&ndash; /card &ndash;&gt;-->
+  <!--          </div>-->
+  <!--          &lt;!&ndash; /col &ndash;&gt;-->
+  <!--          <div class="col-9">-->
+  <!--            <router-outlet></router-outlet>-->
+  <!--          </div>-->
+  <!--          &lt;!&ndash; /col &ndash;&gt;-->
+  <!--        </div>-->
+  <!--        &lt;!&ndash; /row &ndash;&gt;-->
+  <!--      </section>-->
+  <!--      &lt;!&ndash; /CONTENT &ndash;&gt;-->
+  <!--    </section>-->
 </section>
