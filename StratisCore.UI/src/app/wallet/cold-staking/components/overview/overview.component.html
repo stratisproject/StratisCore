@@ -28,7 +28,12 @@
                         (onGetFirstUnusedAddress)="onWalletGetFirstUnusedAddress($event)" (onWithdraw)="onWalletWithdraw($event)"></app-staking-wallet>
                 </div>
                 <div class="col-12 mt-4">
-                    <app-staking-history></app-staking-history>
+                    <div class="card">
+                        <div class="card-header">Staking history</div>
+                        <div class="card-body">
+                            <app-transactions title="Staking History" [stakingOnly]="true"></app-transactions>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

@@ -3,7 +3,6 @@ import { TransactionInfo } from '@shared/models/transaction-info';
 import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
-import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
@@ -22,15 +21,15 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   @Input() public enablePagination: boolean;
   @Input() public maxTransactionCount: number;
   @Input() public title: string;
+  @Input() public stakingOnly: boolean;
   @Output() public rowClicked: EventEmitter<TransactionInfo> = new EventEmitter();
   private last: TransactionInfo;
 
   public constructor(
     private globalService: GlobalService,
-    public walletService: WalletService,
-    private router: Router,
     private snackBarService: SnackbarService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    public walletService: WalletService) {
 
     window.addEventListener("scroll", () => this.detectLoading());
 
@@ -60,9 +59,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.transactions = this.walletService.walletHistory()
       .pipe(map((historyItems => {
-        return (null != historyItems && historyItems.length > 0)
-          ? TransactionInfo.mapFromTransactionsHistoryItems(historyItems, this.maxTransactionCount)
-          : [];
+        return ((null != historyItems && historyItems.length > 0))
+        ? this.stakingOnly 
+          ?  TransactionInfo.mapFromTransactionsHistoryItems(historyItems.filter(items => items.type === "staked"), this.maxTransactionCount)
+          : TransactionInfo.mapFromTransactionsHistoryItems(historyItems, this.maxTransactionCount)
+        : [];
+
       })), tap(items => {
         let history = items as TransactionInfo[];
         this.last = history && history.length > 0 ? history[history.length - 1] : <TransactionInfo>{};
