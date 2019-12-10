@@ -10,7 +10,6 @@ import { ExtPubkeyComponent } from './advanced/components/ext-pubkey/ext-pubkey.
 import { GenerateAddressesComponent } from './advanced/components/generate-addresses/generate-addresses.component';
 import { ResyncComponent } from './advanced/components/resync/resync.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { HistoryComponent } from './history/history.component';
 import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
 import { MenuComponent } from './menu/menu.component';
 import { ReceiveComponent } from './receive/receive.component';
@@ -31,7 +30,6 @@ import { SnackbarModule } from "ngx-snackbar";
 import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
 import { ColdStakingServiceBase, FakeColdStakingService } from './cold-staking/cold-staking.service';
 import { ColdStakingOverviewComponent } from './cold-staking/components/overview/overview.component';
-import { ColdStakingHistoryComponent } from './cold-staking/components/overview/history/history.component';
 import { ColdStakingWalletComponent } from './cold-staking/components/overview/wallet/wallet.component';
 import { ColdStakingCreateAddressComponent } from './cold-staking/components/modals/create-address/create-address.component';
 import { ColdStakingWithdrawComponent } from './cold-staking/components/modals/withdraw/withdraw.component';
@@ -57,7 +55,6 @@ import { ColdStakingCreateSuccessComponent } from './cold-staking/components/mod
     SendConfirmationComponent,
     TransactionDetailsComponent,
     LogoutConfirmationComponent,
-    HistoryComponent,
     StatusBarComponent,
     AdvancedComponent,
     AddressBookComponent,
@@ -71,7 +68,6 @@ import { ColdStakingCreateSuccessComponent } from './cold-staking/components/mod
     WalletSelectorComponent,
     BlockExplorerComponent,
     ColdStakingOverviewComponent,
-    ColdStakingHistoryComponent,
     ColdStakingWalletComponent,
     ColdStakingCreateAddressComponent,
     ColdStakingWithdrawComponent,
