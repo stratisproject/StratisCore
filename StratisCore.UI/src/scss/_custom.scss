@@ -1691,22 +1691,41 @@ bs-daterangepicker-container {
   border-radius: 7px 0 0 7px;
 }
 
-.logout-button {
+.floating-button {
   position: fixed;
-  top: 10px;
-  left: 10px;
   border: 2px solid;
   border-radius: 30px;
   width: 40px;
-  height: 40px;
   padding-left: 8px;
+  height: 40px;
   cursor: pointer;
-
+  color: rgba(21, 139, 207, 0.6);
+  z-index: 2;
+  font-size: 1.7em;
+  padding-top: 4px;
 }
 
-.logout-button:hover {
-  background-color: #1a99a0;
-  transition-duration: 3s;
+.logout-button {
+  @extend .floating-button;
+  top: 10px;
+  right: 15px;
+}
+
+.new-contact-button {
+  @extend .floating-button;
+  width: 50px;
+  height: 50px;
+  font-size: 1.9rem;
+  padding-top: 7px;
+  bottom: 15px;
+  right: calc(50% - 150px);
+  background-color: rgba(250, 251, 252, 0.96);
+}
+
+.floating-button:hover {
+  background-color: rgba(21, 139, 207, 1);
+  color: rgba(250, 251, 252, 0.8);
+  transition-duration: 0.25s;
 }
 
 .loading-snack-bar:before {

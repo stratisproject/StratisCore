@@ -27,11 +27,14 @@ import { CurrentAccountService } from '@shared/services/current-account.service'
 import { WalletLoad } from '@shared/models/wallet-load';
 import { WalletResync } from '@shared/models/wallet-rescan';
 import { AddressBalance } from "@shared/models/address-balance";
+import { SnackbarService } from "ngx-snackbar";
+import { NodeService } from "@shared/services/node-service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class WalletService extends RestApi {
+  private rescanInProgress: boolean;
   private transactionReceivedSubject = new Subject<SignalREvent>();
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
@@ -52,16 +55,17 @@ export class WalletService extends RestApi {
   }
 
   constructor(
+    private snackbarService: SnackbarService,
+    private currentAccountService: CurrentAccountService,
+    private nodeService : NodeService,
     globalService: GlobalService,
     http: HttpClient,
     errorService: ErrorService,
-    private currentAccountService: CurrentAccountService,
     signalRService: SignalRService) {
     super(globalService, http, errorService);
 
     globalService.currentWallet.subscribe(wallet => {
       this.currentWallet = wallet;
-
     });
 
     currentAccountService.currentAddress.subscribe((address) => {
@@ -78,12 +82,23 @@ export class WalletService extends RestApi {
         this.refreshWallet();
       });
 
+    nodeService.generalInfo().subscribe(generalInfo => {
+      if (generalInfo.percentSynced === 100 && this.rescanInProgress) {
+        this.rescanInProgress = false;
+        this.snackbarService.add({
+          msg: `Wallet rescan completed.`,
+          customClass: 'notify-snack-bar',
+          action: {
+            text: null
+          }
+        })
+      }
+    });
+
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(SignalREvents.WalletGeneralInfo,
       (message) => {
         // Update wallet history after chain is synced or IBD mode completed
-        const syncCompleted = (this.isSyncing && message.lastBlockSyncedHeight === message.chainTip)
-          || (this.ibdMode && message.isChainSynced);
-
+        const syncCompleted = (this.isSyncing && message.lastBlockSyncedHeight === message.chainTip);
         let historyRefreshed = false;
         this.isSyncing = message.lastBlockSyncedHeight !== message.chainTip;
         this.ibdMode = !message.isChainSynced;
@@ -134,7 +149,7 @@ export class WalletService extends RestApi {
   public rescanWallet(data: WalletResync): Observable<any> {
     return this.post('wallet/sync-from-date/', data).pipe(
       tap(() => {
-        this.isSyncing = true;
+        this.rescanInProgress = true;
         this.clearWalletHistory(data.date.getTime());
         this.paginateHistory()
       }),

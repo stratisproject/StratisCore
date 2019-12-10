@@ -27,12 +27,8 @@ export class StatusBarComponent implements OnInit {
           if (response.lastBlockSyncedHeight > response.chainTip) {
             response.chainTip = response.lastBlockSyncedHeight;
           }
-          // If ChainTip is behind wallet stop sync percent being greater than 100%.
-          let percentSyncedNumber = Math.min((response.lastBlockSyncedHeight / response.chainTip) * 100, 100);
-          if (percentSyncedNumber.toFixed(0) === '100' && response.lastBlockSyncedHeight !== response.chainTip) {
-            percentSyncedNumber = 99;
-          }
-          this.percentSynced = percentSyncedNumber.toFixed(0) + '%';
+
+          this.percentSynced = (response.percentSynced || 0).toFixed(0) + '%';
           const processedText = `Processed ${response.lastBlockSyncedHeight || '0'} out of ${response.chainTip} blocks.`;
 
           this.toolTip = `Synchronizing. ${processedText}`;
@@ -43,7 +39,7 @@ export class StatusBarComponent implements OnInit {
             this.connectedNodesTooltip = `${response.connectedNodes} connections`;
           }
 
-          if (percentSyncedNumber === 100) {
+          if (response.percentSynced === 100) {
             this.toolTip = `Up to date.  ${processedText}`;
           }
         }));

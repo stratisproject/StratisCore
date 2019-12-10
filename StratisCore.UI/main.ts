@@ -93,11 +93,11 @@ let mainWindow = null;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1150,
-    height: 650,
+    width: 1200,
+    height: 1000,
     frame: true,
-    minWidth: 1150,
-    minHeight: 650,
+    minWidth: 1200,
+    minHeight: 1000,
     title: applicationName,
     webPreferences: {
       nodeIntegration: true,
