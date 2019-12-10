@@ -1,33 +1,53 @@
 <!-- HOT STAKING -->
 <div class="card card-staking" *ngIf="hotWallet">
-
-    <div class="stake-type text-right">
-        <span class="badge badge-hot ml-auto">Hot Wallet <span data-placement="top" title="{{description}}" class="lnr lnr-question-circle ml-2"></span></span>
+    <div *ngIf="(wallet| async) as _wallet">
+        <div class="stake-type text-right">
+            <span class="badge badge-hot ml-auto">Hot Wallet <span data-placement="top" class="lnr lnr-question-circle ml-2"></span></span>
+        </div>
+    
+        <div class="card-header">Balance</div>
+        <div class="card-body">
+            <p class="lead">
+                <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
+                <small class="text-uppercase"> {{ globalService.coinUnit }}</small>
+            </p>
+        </div>
+    
+        <div class="card-header">Mature for staking</div>
+        <div class="card-body">
+            <p class="sub">{{ (_wallet.amountConfirmed - _wallet.awaitingMaturityIfStaking | coinNotation) || (0 | coinNotation) }} {{ globalService.coinUnit }}</p>
+        </div>
+        <div class="card-header">Staking status</div>
+        <div class="card-body">
+            <p class="sub">{{ (stakingService.stakingEnabled ? "Active" : "Inactive") }}</p>
+        </div>
+        <div class="card-body">
+            <div *ngIf="!stakingService.stakingEnabled && !stakingService.isStarting">
+                <form class="form-inline mb-3" [formGroup]="stakingForm">
+                    <div class="form-group">
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword"
+                                placeholder="Password">
+                        <button type="button" id="flipcard" class="btn btn-outline-primary ml-2"
+                                [disabled]="stakingService.isStarting || walletService.isSyncing || !stakingForm.valid" (click)="startStaking()">Unlock
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div *ngIf="stakingService.stakingEnabled">
+                <button type="button" class="btn btn-outline-light mb-3" [disabled]="stakingService.isStopping" (click)="stopStaking()">Stop Staking</button>
+            </div>
+            <!-- <button data-toggle="modal" type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="unusedAddressClicked()">Get
+                first unused address</button> -->
+        </div>
     </div>
-
-    <div class="card-header">Balance</div>
-    <div class="card-body">
-        <p class="lead">
-            <strong>{{balanceFormatted}}</strong><small class="text-uppercase">.00 STRAT</small>
-        </p>
-    </div>
-
-    <div class="card-header">Mature for staking</div>
-    <div class="card-body">
-        <p class="sub">{{amountFormatted}} STRAT</p>
-    </div>
-    <div class="card-footer">
-        <button data-toggle="modal" type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="unusedAddressClicked()">Get
-            first unused address</button>
-    </div>
-
 </div>
 
 <!-- COLD STAKING -->
 <div class="card card-staking" *ngIf="!hotWallet">
 
     <div class="stake-type text-right">
-        <span class="badge badge-cold ml-auto">Cold Wallet <span data-placement="top" title="{{description}}" class="lnr lnr-question-circle ml-2"></span></span>
+        <span class="badge badge-cold ml-auto">Cold Wallet <span data-placement="top" class="lnr lnr-question-circle ml-2"></span></span>
     </div>
 
     <div class="card-header">Balance</div>

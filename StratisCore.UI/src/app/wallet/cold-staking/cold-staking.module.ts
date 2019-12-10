@@ -13,10 +13,11 @@ import { ColdStakingCreateAddressComponent } from './components/modals/create-ad
 import { ColdStakingWithdrawComponent } from './components/modals/withdraw/withdraw.component';
 import { ColdStakingCreateComponent } from './components/modals/create/create.component';
 import { ColdStakingCreateSuccessComponent } from './components/modals/create-success/create-success.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
     imports: [
-        CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule
+        CommonModule, NgbModalModule, ClipboardModule, FormsModule, ReactiveFormsModule, SharedModule
     ],
     providers: [{ provide: ColdStakingServiceBase, useClass: FakeColdStakingService }],
 
