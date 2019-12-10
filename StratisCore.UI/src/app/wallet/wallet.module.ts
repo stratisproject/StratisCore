@@ -9,7 +9,6 @@ import { AboutComponent } from './advanced/components/about/about.component';
 import { ExtPubkeyComponent } from './advanced/components/ext-pubkey/ext-pubkey.component';
 import { GenerateAddressesComponent } from './advanced/components/generate-addresses/generate-addresses.component';
 import { ResyncComponent } from './advanced/components/resync/resync.component';
-import { ColdStakingModule } from './cold-staking/cold-staking.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HistoryComponent } from './history/history.component';
 import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
@@ -30,6 +29,14 @@ import { WalletSelectorComponent } from './wallet-selector/wallet-selector.compo
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { SnackbarModule } from "ngx-snackbar";
 import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
+import { ColdStakingServiceBase, FakeColdStakingService } from './cold-staking/cold-staking.service';
+import { ColdStakingOverviewComponent } from './cold-staking/components/overview/overview.component';
+import { ColdStakingHistoryComponent } from './cold-staking/components/overview/history/history.component';
+import { ColdStakingWalletComponent } from './cold-staking/components/overview/wallet/wallet.component';
+import { ColdStakingCreateAddressComponent } from './cold-staking/components/modals/create-address/create-address.component';
+import { ColdStakingWithdrawComponent } from './cold-staking/components/modals/withdraw/withdraw.component';
+import { ColdStakingCreateComponent } from './cold-staking/components/modals/create/create.component';
+import { ColdStakingCreateSuccessComponent } from './cold-staking/components/modals/create-success/create-success.component';
 
 @NgModule({
   imports: [
@@ -37,7 +44,6 @@ import { BlockExplorerComponent } from './block-explorer/block-explorer.componen
     InfiniteScrollModule,
     SharedModule,
     WalletRoutingModule,
-    ColdStakingModule,
     SmartContractsModule.forRoot(),
     TokensModule,
     BsDatepickerModule.forRoot()
@@ -63,17 +69,29 @@ import { BlockExplorerComponent } from './block-explorer/block-explorer.componen
     TransactionsComponent,
     StakingComponent,
     WalletSelectorComponent,
-    BlockExplorerComponent
+    BlockExplorerComponent,
+    ColdStakingOverviewComponent,
+    ColdStakingHistoryComponent,
+    ColdStakingWalletComponent,
+    ColdStakingCreateAddressComponent,
+    ColdStakingWithdrawComponent,
+    ColdStakingCreateComponent,
+    ColdStakingCreateSuccessComponent
   ],
   providers: [
-    AccountSelectedGuard
+    AccountSelectedGuard,
+    { provide: ColdStakingServiceBase, useClass: FakeColdStakingService },
   ],
   entryComponents: [
     SendComponent,
     SendConfirmationComponent,
     ReceiveComponent,
     TransactionDetailsComponent,
-    LogoutConfirmationComponent
+    LogoutConfirmationComponent,
+    ColdStakingCreateAddressComponent,
+    ColdStakingWithdrawComponent,
+    ColdStakingCreateComponent,
+    ColdStakingCreateSuccessComponent
   ]
 })
 
