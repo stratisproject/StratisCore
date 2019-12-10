@@ -4,63 +4,70 @@
             <h3>Receive</h3>
         </div>
     </div>
-    <section id="content" class="col-11 mx-auto page-content">
-        <div *ngIf="!showAll">
-            <div class="myAddress row">
-                <code class="d-inline-block">{{ address }}</code>
-                <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" ngbTooltip="Copy to clipboard"
-                    ngxClipboard [cbContent]="address" (click)="onCopiedClick()">
-                    <i class="lnr lnr-file-add"></i>
-                </button>
-            </div>
-            <div class="row">
-                <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
-            </div>
-            <div class="row">
-                <button *ngIf="!showAll" type="button" class="btn btn-link" (click)="showAllAddresses()">Show all addresses</button>
+    <section id="content" class="col-12 mx-auto page-content">
+        <div class="card mb-5">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-2">
+                  <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
+                </div>
+                <div class="col-8 mt-2">
+                  <h3 class="mt-1 ml-3">{{address}}</h3>
+                  <div class="mt1 ml-3">
+                    <button class="btn btn-block btn-outline-success" (click)="copyToClipboardClicked(address)">
+                        <span class="fa fa-plus-circle"></span> Copy Address
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
 
+        <button *ngIf="!accountsEnabled" type="button" class="btn btn-link" (click)="toggleAllAddresses()"> {{ showAddressesButtonText }}</button>
+
         <div *ngIf="!accountsEnabled && showAll">
-            <a class="link" (click)="showOneAddress()">← back to one address</a>
-            <ngb-tabset type="tabs" class="nav-fill">
-                <ngb-tab class="nav-link" title="Unused Addresses">
-                    <ng-template ngbTabContent>
-                        <div *ngFor="let unusedAddress of unusedAddresses | paginate: { itemsPerPage: 5, currentPage: pageNumberUnused, id: 'unusedAddressesPaginator' }">
-                            <code class="d-inline-block">{{ unusedAddress }}</code>
-                            <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
-                                ngxClipboard [cbContent]="unusedAddress" (click)="onCopiedClick()">
-                                <i class="lnr lnr-file-add"></i> copy
-                            </button>
-                        </div>
-                        <pagination-controls id="unusedAddressesPaginator" (pageChange)="pageNumberUnused = $event"></pagination-controls>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab class="nav-link" title="Used Addresses">
-                    <ng-template ngbTabContent>
-                        <div *ngFor="let usedAddress of usedAddresses | paginate: { itemsPerPage: 5, currentPage: pageNumberUsed, id: 'usedAddressesPaginator' }">
-                            <code class="d-inline-block">{{ usedAddress }}</code>
-                            <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
-                                ngxClipboard [cbContent]="usedAddress" (click)="onCopiedClick()">
-                                <i class="lnr lnr-file-add"></i> copy
-                            </button>
-                        </div>
-                        <pagination-controls id="usedAddressesPaginator" (pageChange)="pageNumberUsed = $event"></pagination-controls>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab class="nav-link" title="Change Addresses">
-                    <ng-template ngbTabContent>
-                        <div *ngFor="let changeAddress of changeAddresses | paginate: { itemsPerPage: 5, currentPage: pageNumberChange, id: 'changeAddressesPaginator' }">
-                            <code class="d-inline-block">{{ changeAddress }}</code>
-                            <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
-                                ngxClipboard [cbContent]="changeAddress" (click)="onCopiedClick()">
-                                <i class="lnr lnr-file-add"></i> copy
-                            </button>
-                        </div>
-                        <pagination-controls id="changeAddressesPaginator" (pageChange)="pageNumberChange = $event"></pagination-controls>
-                    </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
+            <div class="card mb-5">
+                <div class="card-body">
+                    <ngb-tabset type="tabs" class="nav-fill">
+                        <ngb-tab class="nav-link" title="Unused Addresses">
+                            <ng-template ngbTabContent>
+                                <div *ngFor="let unusedAddress of unusedAddresses | paginate: { itemsPerPage: 5, currentPage: pageNumberUnused, id: 'unusedAddressesPaginator' }">
+                                    <code class="d-inline-block">{{ unusedAddress }}</code>
+                                    <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
+                                        ngxClipboard [cbContent]="unusedAddress" (click)="copyToClipboardClicked(unusedAddress)">
+                                        <i class="lnr lnr-file-add"></i> copy
+                                    </button>
+                                </div>
+                                <pagination-controls id="unusedAddressesPaginator" (pageChange)="pageNumberUnused = $event"></pagination-controls>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab class="nav-link" title="Used Addresses">
+                            <ng-template ngbTabContent>
+                                <div *ngFor="let usedAddress of usedAddresses | paginate: { itemsPerPage: 5, currentPage: pageNumberUsed, id: 'usedAddressesPaginator' }">
+                                    <code class="d-inline-block">{{ usedAddress }}</code>
+                                    <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
+                                        ngxClipboard [cbContent]="usedAddress" (click)="copyToClipboardClicked(usedAddress)">
+                                        <i class="lnr lnr-file-add"></i> copy
+                                    </button>
+                                </div>
+                                <pagination-controls id="usedAddressesPaginator" (pageChange)="pageNumberUsed = $event"></pagination-controls>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab class="nav-link" title="Change Addresses">
+                            <ng-template ngbTabContent>
+                                <div *ngFor="let changeAddress of changeAddresses | paginate: { itemsPerPage: 5, currentPage: pageNumberChange, id: 'changeAddressesPaginator' }">
+                                    <code class="d-inline-block">{{ changeAddress }}</code>
+                                    <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
+                                        ngxClipboard [cbContent]="changeAddress" (click)="copyToClipboardClicked(changeAddress)">
+                                        <i class="lnr lnr-file-add"></i> copy
+                                    </button>
+                                </div>
+                                <pagination-controls id="changeAddressesPaginator" (pageChange)="pageNumberChange = $event"></pagination-controls>
+                            </ng-template>
+                        </ngb-tab>
+                    </ngb-tabset>
+                </div>
+            </div>
         </div>
 
         <div *ngIf="copied" class="alert alert-success alert-dismissible fade show mt-3 mb-0" role="alert">Your address has
