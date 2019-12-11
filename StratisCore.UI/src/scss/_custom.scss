@@ -1837,6 +1837,18 @@ app-wallet-selector {
   }
 }
 
+@-webkit-keyframes glow {
+  from {
+    color: rgb(49, 194, 54);
+    text-shadow: none;
+  }
+  to {
+    color: $success;
+    text-shadow: 3px 3px 3px, $success;
+  }
+
+}
+
 /// Side Bar
 app-side-bar {
   position: fixed;
@@ -1878,6 +1890,10 @@ app-side-bar {
 
     .side-bar-item-account:before {
       content: "\e800";
+    }
+
+    .side-bar-item-staking-active:before {
+      animation: glow 1.5s ease-in-out infinite alternate;
     }
 
     .side-bar-item-staking:before {

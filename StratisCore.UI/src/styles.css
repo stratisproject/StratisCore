@@ -10264,7 +10264,7 @@ bs-daterangepicker-container {
 .notify-snack-bar {
   position: fixed;
   bottom: 0;
-  z-index: 1;
+  z-index: 5;
   height: 80px;
   width: 100%;
   font-size: 20px;
@@ -10339,6 +10339,17 @@ app-wallet-selector .btn.dropdown-toggle:after {
   margin-top: 10px;
 }
 
+@-webkit-keyframes glow {
+  from {
+    color: #31c236;
+    text-shadow: none;
+  }
+  to {
+    color: #28a745;
+    text-shadow: 3px 3px 3px, #28a745;
+  }
+}
+
 app-side-bar {
   position: fixed;
   height: 100vh;
@@ -10381,6 +10392,10 @@ app-side-bar .stratis-side-bar-container .side-bar-item-icon:before {
 
 app-side-bar .stratis-side-bar-container .side-bar-item-account:before {
   content: "\e800";
+}
+
+app-side-bar .stratis-side-bar-container .side-bar-item-staking-active:before {
+  animation: glow 1.5s ease-in-out infinite alternate;
 }
 
 app-side-bar .stratis-side-bar-container .side-bar-item-staking:before {
