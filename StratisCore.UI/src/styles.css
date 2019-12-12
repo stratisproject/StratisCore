@@ -10196,21 +10196,39 @@ bs-daterangepicker-container {
   border-radius: 7px 0 0 7px;
 }
 
-.logout-button {
+.floating-button, .logout-button, .new-contact-button {
   position: fixed;
-  top: 10px;
-  left: 10px;
   border: 2px solid;
   border-radius: 30px;
   width: 40px;
-  height: 40px;
   padding-left: 8px;
+  height: 40px;
   cursor: pointer;
+  color: rgba(21, 139, 207, 0.6);
+  z-index: 2;
+  font-size: 1.7em;
+  padding-top: 4px;
 }
 
-.logout-button:hover {
-  background-color: #1a99a0;
-  transition-duration: 3s;
+.logout-button {
+  top: 10px;
+  right: 15px;
+}
+
+.new-contact-button {
+  width: 50px;
+  height: 50px;
+  font-size: 1.9rem;
+  padding-top: 7px;
+  bottom: 15px;
+  right: calc(50% - 150px);
+  background-color: rgba(250, 251, 252, 0.96);
+}
+
+.floating-button:hover, .logout-button:hover, .new-contact-button:hover {
+  background-color: #158bcf;
+  color: rgba(250, 251, 252, 0.8);
+  transition-duration: 0.25s;
 }
 
 .loading-snack-bar:before {
@@ -10246,7 +10264,7 @@ bs-daterangepicker-container {
 .notify-snack-bar {
   position: fixed;
   bottom: 0;
-  z-index: 1;
+  z-index: 5;
   height: 80px;
   width: 100%;
   font-size: 20px;
@@ -10321,6 +10339,17 @@ app-wallet-selector .btn.dropdown-toggle:after {
   margin-top: 10px;
 }
 
+@-webkit-keyframes glow {
+  from {
+    color: #31c236;
+    text-shadow: none;
+  }
+  to {
+    color: #28a745;
+    text-shadow: 3px 3px 3px, #28a745;
+  }
+}
+
 app-side-bar {
   position: fixed;
   height: 100vh;
@@ -10363,6 +10392,10 @@ app-side-bar .stratis-side-bar-container .side-bar-item-icon:before {
 
 app-side-bar .stratis-side-bar-container .side-bar-item-account:before {
   content: "\e800";
+}
+
+app-side-bar .stratis-side-bar-container .side-bar-item-staking-active:before {
+  animation: glow 1.5s ease-in-out infinite alternate;
 }
 
 app-side-bar .stratis-side-bar-container .side-bar-item-staking:before {
