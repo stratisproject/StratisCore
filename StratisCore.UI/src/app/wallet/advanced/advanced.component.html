@@ -1,41 +1,15 @@
 <section id="GUI" class="light">
-  <!-- CONTAINER -->
-    <section id="content" class="light col-10 mx-auto">
-      <!-- CONTENT -->
-      <section class="col-12">
-        <div class="row">
-          <div class="col-3">
-            <!-- card -->
-            <div class="card">
-              <div class="card-body my-4 d-flex justify-content-center">
-                <!-- ul -->
-                <ul class="nav flex-column">
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['about']" routerLinkActive="active">About</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['extpubkey']" routerLinkActive="active">Extended Public Key</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['generate-addresses']" routerLinkActive="active">Generate Addresses</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['resync']" routerLinkActive="active">Rescan Wallet</a>
-                  </li>
-                </ul>
-                <!-- /ul -->
-              </div>
-            </div>
-            <!-- /card -->
-          </div>
-          <!-- /col -->
-          <div class="col-9">
-            <router-outlet></router-outlet>
-          </div>
-          <!-- /col -->
-        </div>
-        <!-- /row -->
-      </section>
-      <!-- /CONTENT -->
-    </section>
+  <div class="jumbotron page-header">
+    <div class="text-left">
+      <h3>Advanced Options</h3>
+      <div class="page-header-right-content">
+      </div>
+    </div>
+  </div>
+  <div class="page-content">
+    <app-resync></app-resync>
+    <app-generate-addresses></app-generate-addresses>
+    <app-ext-pubkey></app-ext-pubkey>
+    <app-about></app-about>
+  </div>
 </section>

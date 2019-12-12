@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
-import { ModalService } from '@shared/services/modal.service';
 import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
 import { NumberToStringPipe } from '@shared/pipes/number-to-string.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -10,7 +9,7 @@ import { FeeEstimation } from '@shared/models/fee-estimation';
 import { Transaction } from '@shared/models/transaction';
 import { WalletInfoRequest } from '@shared/models/wallet-info';
 import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
 import { SendComponentFormResources } from './send-component-form-resources';

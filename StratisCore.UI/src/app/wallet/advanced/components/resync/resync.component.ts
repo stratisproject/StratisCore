@@ -6,10 +6,10 @@ import { Subscription } from 'rxjs';
 
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
-import { ModalService } from '@shared/services/modal.service';
 import { NodeService } from '@shared/services/node-service';
 import { WalletService } from '@shared/services/wallet.service';
 import { WalletResync } from "@shared/models/wallet-rescan";
+import { SnackbarService } from "ngx-snackbar";
 
 @Component({
   selector: 'app-resync',
@@ -20,10 +20,10 @@ export class ResyncComponent implements OnInit, OnDestroy {
 
   constructor(
     private globalService: GlobalService,
+    private snackbarService: SnackbarService,
     private apiService: ApiService,
     private walletService: WalletService,
     private nodeService: NodeService,
-    private genericModalService: ModalService,
     private fb: FormBuilder) {
   }
 
@@ -100,11 +100,17 @@ export class ResyncComponent implements OnInit, OnDestroy {
 
     this.walletService
       .rescanWallet(rescanData)
-      .subscribe(
-        response => {
-          this.genericModalService.openModal('Resyncing', 'Your wallet is now resyncing. The time remaining depends on the size and creation time of your wallet. The wallet dashboard shows your progress.');
-        }
-      );
+      .toPromise().then(
+      response => {
+        this.snackbarService.add({
+          msg: 'Your wallet is now re-syncing in the background, this may take a few minutes.',
+          customClass: 'notify-snack-bar',
+          action: {
+            text: null
+          }
+        });
+      }
+    );
   }
 
   private getGeneralWalletInfo() {
