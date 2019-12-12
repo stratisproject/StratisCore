@@ -82,10 +82,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private getWalletNames(): void {
-    const subscription = this.walletService.getWalletNames()
+    this.subscriptions.push(this.walletService.getWalletNames()
       .subscribe(
         response => {
-
           this.wallets = response.walletNames;
           if (this.wallets.length > 0) {
             this.hasWallet = true;
@@ -93,9 +92,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.hasWallet = false;
           }
         }
-      );
-
-    this.subscriptions.push(subscription);
+      ));
   }
 
   public onCreateClicked() {
