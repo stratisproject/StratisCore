@@ -66,6 +66,7 @@ export class WalletService extends RestApi {
 
     globalService.currentWallet.subscribe(wallet => {
       this.currentWallet = wallet;
+
     });
 
     currentAccountService.currentAddress.subscribe((address) => {
