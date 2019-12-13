@@ -6,6 +6,7 @@ import { WalletBalance } from '@shared/services/interfaces/api.i';
 import { WalletService } from '@shared/services/wallet.service';
 import { StakingService } from '@shared/services/staking-service';
 import { GlobalService } from '@shared/services/global.service';
+import { SnackbarService } from 'ngx-snackbar';
 
 @Component({
     selector: 'app-staking-wallet',
@@ -23,7 +24,7 @@ export class ColdStakingWalletComponent implements OnInit {
     amountFormatted = '';
     description = '';
 
-    constructor(private fb: FormBuilder, public walletService: WalletService, public stakingService: StakingService, public globalService: GlobalService) {}
+    constructor(private fb: FormBuilder, public walletService: WalletService, public stakingService: StakingService, public globalService: GlobalService, public snackbarService: SnackbarService) {}
 
     @Output() onGetFirstUnusedAddress = new EventEmitter<ColdStakingWalletComponent>();
     @Output() onWithdraw = new EventEmitter<ColdStakingWalletComponent>();
@@ -71,10 +72,26 @@ export class ColdStakingWalletComponent implements OnInit {
     
         this.stakingForm.patchValue({walletPassword: ''});
     
-        this.stakingService.startStaking(walletData);
+        if (this.stakingService.startStaking(walletData)) {
+            this.snackbarService.add({
+                msg: `You are now staking.`,
+                customClass: 'notify-snack-bar',
+                action: {
+                  text: null
+                }
+            });
+        }
       }
     
       public stopStaking(): void {
-        this.stakingService.stopStaking();
+        if (this.stakingService.stopStaking()) {
+            this.snackbarService.add({
+                msg: `Staking is now disabled.`,
+                customClass: 'notify-snack-bar',
+                action: {
+                  text: null
+                }
+            });
+        }
       }
 }
