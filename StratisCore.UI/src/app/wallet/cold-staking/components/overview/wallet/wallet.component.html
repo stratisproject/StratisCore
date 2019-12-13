@@ -44,8 +44,7 @@
 </div>
 
 <!-- COLD STAKING -->
-<div class="card card-staking" *ngIf="!hotWallet">
-
+<div class="card card-staking disabledcard" *ngIf="!hotWallet">
     <div class="stake-type text-right">
         <span class="badge badge-cold ml-auto">Cold Wallet <span data-placement="top" class="lnr lnr-question-circle ml-2"></span></span>
     </div>
@@ -53,21 +52,22 @@
     <div class="card-header">Balance</div>
     <div class="card-body">
         <p class="lead">
-            <strong>{{balanceFormatted}}</strong><small class="text-uppercase">.00 STRAT</small>
+            <strong>{{ 0 | coinNotation }}</strong>
         </p>
     </div>
-
+    <div class="card-header">
+        <h1 class="text-center soon-text">Coming soon</h1>
+    </div>
     <div class="card-header">Spendable</div>
     <div class="card-body">
-        <p class="sub">{{amountFormatted}} STRAT</p>
+        <p class="sub">{{ 0 | coinNotation}}</p>
     </div>
     <div class="card-footer">
         <div class="row justify-content-center">
-            <button data-toggle="modal" data-target="#modalWithdraw" type="button" class="btn btn-outline-light btn-lg col-4"
+            <button [disabled]="true" type="button" class="btn btn-outline-primary btn-lg col-4"
                 (click)="withdrawClicked()">Withdraw</button>
-            <button type="button" class="btn btn-outline-primary btn-lg col-7 ml-2" style="min-width:220px" (click)="unusedAddressClicked()">Get
+            <button [disabled]="true" type="button" class="btn btn-outline-primary btn-lg col-7 ml-2" (click)="unusedAddressClicked()">Get
                 first unused address</button>
         </div>
     </div>
-
 </div>

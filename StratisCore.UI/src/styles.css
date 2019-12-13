@@ -8846,6 +8846,42 @@ img {
   color: #4A90E2;
 }
 
+#GUI .disabledcard {
+  border: 0;
+  box-shadow: none !important;
+}
+
+#GUI .disabledcard {
+  background-color: #ccc !important;
+}
+
+#GUI .disabledcard:hover {
+  border: none !important;
+}
+
+#GUI .disabledcard .card-header {
+  background-color: #ccc !important;
+  color: white !important;
+}
+
+#GUI .disabledcard .card-body {
+  background-color: #ccc !important;
+  color: white !important;
+}
+
+#GUI .disabledcard .card-footer {
+  background-color: #ccc !important;
+  color: white !important;
+}
+
+#GUI .disabledcard .stake-type {
+  background-color: #ccc !important;
+}
+
+#GUI .disabledcard .soon-text {
+  color: #eee !important;
+}
+
 #GUI .card .card-header {
   text-transform: uppercase;
   font-size: 0.8125rem;
