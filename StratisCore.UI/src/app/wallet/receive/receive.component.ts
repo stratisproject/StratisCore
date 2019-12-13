@@ -3,8 +3,10 @@ import { GlobalService } from '@shared/services/global.service';
 import { WalletInfo } from '@shared/models/wallet-info';
 
 import { CurrentAccountService } from '@shared/services/current-account.service';
-import { ModalService } from '@shared/services/modal.service';
 import { WalletService } from '@shared/services/wallet.service';
+import { AddressLabel } from '@shared/models/address-label';
+import { ClipboardService } from 'ngx-clipboard';
+import { SnackbarService } from 'ngx-snackbar';
 
 @Component({
   selector: 'receive-component',
@@ -17,12 +19,12 @@ export class ReceiveComponent implements OnInit {
   constructor(
     private walletService: WalletService,
     private globalService: GlobalService,
-    private genericModalService: ModalService,
-    private currentAccountService: CurrentAccountService) {}
+    private currentAccountService: CurrentAccountService,
+    private clipboardService: ClipboardService,
+    private snackbarService: SnackbarService) {}
 
   public address: any = '';
   public qrString: any;
-  public copied = false;
   public showAll = false;
   public allAddresses: any;
   public usedAddresses: string[];
@@ -32,6 +34,7 @@ export class ReceiveComponent implements OnInit {
   public pageNumberUnused = 1;
   public pageNumberChange = 1;
   public sidechainEnabled: boolean;
+  public showAddressesButtonText: string = "Show all addresses";
 
   public ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
@@ -45,18 +48,24 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
-  public onCopiedClick(): void {
-    this.copied = true;
+  public copyToClipboardClicked(address): void {
+    if (this.clipboardService.copyFromContent(address)) {
+      this.snackbarService.add({
+        msg: `Address ${address} copied to clipboard`,
+        customClass: 'notify-snack-bar',
+        action: {
+          text: null
+        }
+      });
+    }
   }
 
-  public showAllAddresses(): void {
-    this.getAddresses();
-    this.showAll = true;
-  }
-
-  public showOneAddress(): void {
-    this.getUnusedReceiveAddresses();
-    this.showAll = false;
+  public toggleAllAddresses(): void {
+    this.showAll = !this.showAll;
+    if (this.showAll) {
+      this.getAddresses();
+    }
+    this.showAddressesButtonText = this.showAll ? "Hide all addresses" : "Show all addresses";
   }
 
   private getUnusedReceiveAddresses(): void {
