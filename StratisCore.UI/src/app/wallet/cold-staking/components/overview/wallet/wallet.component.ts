@@ -72,26 +72,34 @@ export class ColdStakingWalletComponent implements OnInit {
     
         this.stakingForm.patchValue({walletPassword: ''});
     
-        if (this.stakingService.startStaking(walletData)) {
-            this.snackbarService.add({
-                msg: `You are now staking.`,
-                customClass: 'notify-snack-bar',
-                action: {
-                  text: null
+        this.stakingService.startStaking(walletData).then(
+            stakingStarted => {
+                if (stakingStarted) {
+                    this.snackbarService.add({
+                        msg: `You are now staking.`,
+                        customClass: 'notify-snack-bar',
+                        action: {
+                          text: null
+                        }
+                    });
                 }
-            });
-        }
+            }
+        )
       }
     
       public stopStaking(): void {
-        if (this.stakingService.stopStaking()) {
-            this.snackbarService.add({
-                msg: `Staking is now disabled.`,
-                customClass: 'notify-snack-bar',
-                action: {
-                  text: null
+        this.stakingService.stopStaking().then(
+            stakingStopped => {
+                if (stakingStopped) {
+                    this.snackbarService.add({
+                        msg: `Staking is now disabled.`,
+                        customClass: 'notify-snack-bar',
+                        action: {
+                          text: null
+                        }
+                    });
                 }
-            });
-        }
+            }
+        )
       }
 }
