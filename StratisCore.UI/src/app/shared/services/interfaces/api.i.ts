@@ -148,5 +148,6 @@ export interface GeneralInfo {
   isChainSynced: boolean;
   connectedNodes: number;
   accountsBalances?: WalletBalance[];
+  percentSynced? : number;
 }
 
