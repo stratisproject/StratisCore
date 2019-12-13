@@ -31,7 +31,7 @@ import { SideBarComponent } from "@shared/components/side-bar/side-bar.component
     GenericModalComponent,
     LoadingModalComponent,
     ConfirmationModalComponent,
-    SideBarComponent
+    SideBarComponent,
   ],
   providers: [
     ApiService,

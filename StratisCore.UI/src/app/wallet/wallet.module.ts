@@ -35,6 +35,9 @@ import { ColdStakingCreateAddressComponent } from './cold-staking/components/mod
 import { ColdStakingWithdrawComponent } from './cold-staking/components/modals/withdraw/withdraw.component';
 import { ColdStakingCreateComponent } from './cold-staking/components/modals/create/create.component';
 import { ColdStakingCreateSuccessComponent } from './cold-staking/components/modals/create-success/create-success.component';
+import { SideBarItems } from "@shared/components/side-bar/side-bar-items";
+import { SimpleSideBarItem } from "@shared/components/side-bar/side-bar-item-base";
+import { StakingSidebarItem } from "./side-bar-items/staking-sidebar-item";
 
 @NgModule({
   imports: [
@@ -77,6 +80,7 @@ import { ColdStakingCreateSuccessComponent } from './cold-staking/components/mod
   providers: [
     AccountSelectedGuard,
     { provide: ColdStakingServiceBase, useClass: FakeColdStakingService },
+    StakingSidebarItem
   ],
   entryComponents: [
     SendComponent,
@@ -91,4 +95,29 @@ import { ColdStakingCreateSuccessComponent } from './cold-staking/components/mod
   ]
 })
 
-export class WalletModule { }
+export class WalletModule {
+  constructor(private sidebarItems: SideBarItems, stakingSidebarItem: StakingSidebarItem) {
+
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Account', '/wallet/dashboard', ['side-bar-item-account']));
+
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Send', '/wallet/send', ['side-bar-item-send']));
+
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Receive', '/wallet/receive', ['side-bar-item-receive']));
+
+    sidebarItems.registerSideBarItem(stakingSidebarItem);
+
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Contacts', '/wallet/address-book', ['side-bar-item-address']));
+
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Explorer', '/wallet/explorer', ['side-bar-item-explorer']));
+
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
+
+    sidebarItems.setSelected(0);
+  }
+}

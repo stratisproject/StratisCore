@@ -37,7 +37,7 @@ export class AddressBookComponent implements OnInit {
   public copyToClipboardClicked(address: AddressLabel): void {
     if (this.clipboardService.copyFromContent(address.address)) {
       this.snackbarService.add({
-        msg: `Address ${address.address} copied to clipboard`,
+        msg: `Address ${address.label} ${address.address} copied to clipboard`,
         customClass: 'notify-snack-bar',
         action: {
           text: null
