@@ -1,5 +1,5 @@
 <ng-container>
-  <div *ngIf="wallet?.hasBalance">
+  <div>
     <div class="card" *ngIf="!stakingService.stakingEnabled && !stakingService.isStarting">
       <div class="card-header">Staking</div>
       <div class="card-body">
@@ -10,7 +10,7 @@
             <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword"
                    placeholder="Password">
             <button type="button" id="flipcard" class="btn btn-outline-primary ml-2"
-                    [disabled]="stakingService.isStarting || !stakingForm.valid" (click)="startStaking()">Unlock
+                    [disabled]="stakingService.isStarting || walletService.isSyncing || !stakingForm.valid" (click)="startStaking()">Unlock
             </button>
           </div>
         </form>
@@ -49,5 +49,6 @@
         </button>
       </div>
     </div>
+    <div *ngIf="walletService.isSyncing && !stakingService.stakingEnabled" class="alert alert-warning text-center" role="alert">Your wallet needs to be completely synchronized with the network before you can start staking.</div>
   </div>
 </ng-container>
