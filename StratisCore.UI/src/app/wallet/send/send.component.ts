@@ -16,6 +16,7 @@ import { SendComponentFormResources } from './send-component-form-resources';
 import { FormHelper } from '@shared/forms/form-helper';
 import { TransactionResponse } from '@shared/models/transaction-response';
 import { CurrentAccountService } from '@shared/services/current-account.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 export interface FeeStatus {
@@ -33,6 +34,7 @@ export class SendComponent implements OnInit, OnDestroy {
   private last: FeeEstimation = null;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private walletService: WalletService,
     private globalService: GlobalService,
@@ -78,6 +80,11 @@ export class SendComponent implements OnInit, OnDestroy {
   private sendToSidechainFormErrors: any = {};
 
   public ngOnInit() {
+
+    if (this.activatedRoute.snapshot.params['address']) {
+      this.address = this.activatedRoute.snapshot.params['address'];
+    }
+
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
 

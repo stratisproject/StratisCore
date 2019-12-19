@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SendComponent } from '../send/send.component';
 import { AddNewAddressComponent } from './modals/add-new-address/add-new-address.component';
 import { AddressLabel } from '@shared/models/address-label';
 import { Observable } from 'rxjs';
-import { GlobalService } from "@shared/services/global.service";
-import { SnackbarService } from "ngx-snackbar";
-import { AddressBookService } from "@shared/services/address-book-service";
-import { ConfirmationModalComponent } from "@shared/components/confirmation-modal/confirmation-modal.component";
+import { GlobalService } from '@shared/services/global.service';
+import { SnackbarService } from 'ngx-snackbar';
+import { AddressBookService } from '@shared/services/address-book-service';
+import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-address-book',
@@ -17,6 +17,7 @@ import { ConfirmationModalComponent } from "@shared/components/confirmation-moda
 })
 export class AddressBookComponent implements OnInit {
   constructor(
+    private router: Router,
     private globalService: GlobalService,
     private snackbarService: SnackbarService,
     private addressBookService: AddressBookService,
@@ -47,14 +48,12 @@ export class AddressBookComponent implements OnInit {
   }
 
   public sendClicked(address: AddressLabel): void {
-    const modalRef = this.modalService.open(SendComponent, {backdrop: 'static'});
-    modalRef.componentInstance.address = address.address;
+    this.router.navigateByUrl(`wallet/send/${address.address}`);
   }
 
   public removeClicked(address: AddressLabel): void {
     const modal = this.modalService.open(ConfirmationModalComponent, {
       backdrop: 'static',
-
     });
 
     const instance = modal.componentInstance as ConfirmationModalComponent;
@@ -70,7 +69,7 @@ export class AddressBookComponent implements OnInit {
               action: {
                 text: null
               }
-            })
+            });
           }
         );
       }
@@ -78,7 +77,7 @@ export class AddressBookComponent implements OnInit {
   }
 
   public getQrCodeAddress(address: string): string {
-    return `${this.globalService.networkName}:${address}`
+    return `${this.globalService.networkName}:${address}`;
   }
 
   public addNewAddressClicked(): void {

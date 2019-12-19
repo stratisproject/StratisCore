@@ -23,6 +23,7 @@ const routes: Routes = [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {path: 'dashboard', component: DashboardComponent},
       {path: 'send', component: SendComponent},
+      {path: 'send/:address', component: SendComponent},
       {path: 'receive', component: ReceiveComponent},
       {path: 'staking', component: ColdStakingOverviewComponent},
       {
