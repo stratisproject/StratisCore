@@ -10375,6 +10375,13 @@ app-wallet-selector .btn.dropdown-toggle:after {
   margin-top: 10px;
 }
 
+.wallet-menu {
+  width: 220px;
+  background: rgba(21, 139, 207, 0.9);
+  color: white;
+  font-size: 1em;
+}
+
 @-webkit-keyframes glow {
   from {
     color: #31c236;
