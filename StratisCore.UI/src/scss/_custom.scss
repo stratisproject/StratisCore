@@ -256,6 +256,35 @@ img {
     }
   }
 
+  ///// DISABLED STAKING CARD
+  .disabledcard {
+    border:0; 
+    box-shadow:none !important;
+  }
+
+  .disabledcard {background-color: #ccc !important;}
+  .disabledcard:hover {border:none !important;}
+  .disabledcard .card-header {
+      background-color: #ccc !important;
+      color: white !important;
+  }
+  .disabledcard .card-body {
+      background-color: #ccc !important;
+      color: white !important;
+  }
+  .disabledcard .card-footer  {
+      background-color: #ccc !important;
+      color: white !important;
+  }
+
+  .disabledcard .stake-type {
+      background-color: #ccc !important;
+  }
+
+  .disabledcard .soon-text {
+      color: #eee !important;
+  }
+
   ///// CARDS
   .card {
     .card-header {
@@ -683,10 +712,8 @@ img {
   }
 }
 
-.modal-body {
-  .nav-tabs {
-    border-bottom: 0 !important;
-  }
+.receive-component {
+  .nav-tabs {border-bottom: 0 !important;}
 }
 
 ////// Smart Contracts
@@ -900,18 +927,10 @@ img {
   }
 }
 
-// Modal Send
-.ModalSend {
-  .tab-content {
-    padding-bottom: 0 !important;
-  }
-
-  .nav-link {
-    &.active {
-      color: $white !important;
-    }
-  }
-
+// Send Component
+.send-component {
+  .tab-content {padding-bottom: 0 !important;}
+  .nav-link {&.active {color: $white !important;}}
   #stratis-green-bg {
     &.nav-link {
       background-color: $white !important;

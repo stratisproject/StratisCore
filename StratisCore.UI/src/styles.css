@@ -8846,6 +8846,42 @@ img {
   color: #4A90E2;
 }
 
+#GUI .disabledcard {
+  border: 0;
+  box-shadow: none !important;
+}
+
+#GUI .disabledcard {
+  background-color: #ccc !important;
+}
+
+#GUI .disabledcard:hover {
+  border: none !important;
+}
+
+#GUI .disabledcard .card-header {
+  background-color: #ccc !important;
+  color: white !important;
+}
+
+#GUI .disabledcard .card-body {
+  background-color: #ccc !important;
+  color: white !important;
+}
+
+#GUI .disabledcard .card-footer {
+  background-color: #ccc !important;
+  color: white !important;
+}
+
+#GUI .disabledcard .stake-type {
+  background-color: #ccc !important;
+}
+
+#GUI .disabledcard .soon-text {
+  color: #eee !important;
+}
+
 #GUI .card .card-header {
   text-transform: uppercase;
   font-size: 0.8125rem;
@@ -9235,7 +9271,7 @@ img {
   box-shadow: 0 5px 20px 0 rgba(59, 176, 186, 0.4) !important;
 }
 
-.modal-body .nav-tabs {
+.receive-component .nav-tabs {
   border-bottom: 0 !important;
 }
 
@@ -9432,20 +9468,20 @@ img {
   text-decoration: none;
 }
 
-.ModalSend .tab-content {
+.send-component .tab-content {
   padding-bottom: 0 !important;
 }
 
-.ModalSend .nav-link.active {
+.send-component .nav-link.active {
   color: #fff !important;
 }
 
-.ModalSend #stratis-green-bg.nav-link {
+.send-component #stratis-green-bg.nav-link {
   background-color: #fff !important;
   color: #158BCF !important;
 }
 
-.ModalSend #stratis-green-bg.nav-link.active {
+.send-component #stratis-green-bg.nav-link.active {
   background-color: #3BB0BA !important;
   color: #fff !important;
 }

@@ -9,14 +9,13 @@ import { GenerateAddressesComponent } from './advanced/components/generate-addre
 import { ResyncComponent } from './advanced/components/resync/resync.component';
 import { ColdStakingOverviewComponent } from './cold-staking/components/overview/overview.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { HistoryComponent } from './history/history.component';
 import { SmartContractsComponent } from './smart-contracts/components/smart-contracts.component';
 import { TokensComponent } from './tokens/components/tokens.component';
 import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
-import { ReceiveComponent } from "./receive/receive.component";
-import { SendComponent } from "./send/send.component";
-import { BlockExplorerComponent } from "./block-explorer/block-explorer.component";
+import { ReceiveComponent } from './receive/receive.component';
+import { SendComponent } from './send/send.component';
+import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
 
 const routes: Routes = [
   {
@@ -25,7 +24,6 @@ const routes: Routes = [
       {path: 'dashboard', component: DashboardComponent},
       {path: 'send', component: SendComponent},
       {path: 'receive', component: ReceiveComponent},
-      {path: 'history', component: HistoryComponent},
       {path: 'staking', component: ColdStakingOverviewComponent},
       {
         path: 'advanced', component: AdvancedComponent,
