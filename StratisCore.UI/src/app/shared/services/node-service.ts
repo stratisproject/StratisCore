@@ -50,7 +50,7 @@ export class NodeService extends RestApi {
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(
       SignalREvents.WalletGeneralInfo, (message) => {
-        if (message.walletName === this.currentWallet.walletName) {
+        if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
           this.applyPercentSynced(message);
           this.generalInfoSubject.next(message);
         }
