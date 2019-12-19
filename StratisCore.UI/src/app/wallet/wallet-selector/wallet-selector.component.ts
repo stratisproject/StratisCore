@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from "@shared/services/global.service";
+import { WalletService } from "@shared/services/wallet.service";
+import { Observable } from "rxjs";
+import { filter, map } from "rxjs/operators";
 
 @Component({
   selector: 'app-wallet-selector',
@@ -8,27 +11,19 @@ import { GlobalService } from "@shared/services/global.service";
 })
 export class WalletSelectorComponent implements OnInit {
   public walletName: string = "Test";
-  accountsEnabled: boolean;
-  sidechainEnabled: boolean;
+  public walletNames: Observable<string[]>;
 
-  constructor(private globalService : GlobalService) { }
-
-  ngOnInit() {
+  constructor(
+    public globalService: GlobalService,
+    private walletService: WalletService) {
+    this.walletNames = walletService.getWalletNames()
+      .pipe(map(response => null != response ? response.walletNames : []));
   }
 
-  switchAddress() {
-
+  public ngOnInit(): void {
+    this.walletService.getWalletNames()
   }
 
-  openAddressBook() {
-
-  }
-
-  openAdvanced() {
-
-  }
-
-  logoutClicked() {
-
+  public switchWallet(walletName: string): void {
   }
 }
