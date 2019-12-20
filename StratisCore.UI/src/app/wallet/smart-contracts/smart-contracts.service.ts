@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api.service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { GlobalService } from "@shared/services/global.service";
-import { ErrorService } from "@shared/services/error-service";
-import { catchError, startWith, switchMap } from "rxjs/operators";
-import { TokenBalanceRequest } from "../tokens/models/token-balance-request";
-import { LocalExecutionResult } from "@shared/models/local-execution-result";
-import { SmartContractsServiceBase } from "./smart-contracts-service.base";
-import { WalletInfo } from "@shared/models/wallet-info";
-import { CurrentAccountService } from "@shared/services/current-account.service";
-import { WalletService } from "@shared/services/wallet.service";
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { GlobalService } from '@shared/services/global.service';
+import { ErrorService } from '@shared/services/error-service';
+import { catchError} from 'rxjs/operators';
+import { TokenBalanceRequest } from '../tokens/models/token-balance-request';
+import { LocalExecutionResult } from '@shared/models/local-execution-result';
+import { SmartContractsServiceBase } from './smart-contracts-service.base';
+import { WalletInfo } from '@shared/models/wallet-info';
+import { CurrentAccountService } from '@shared/services/current-account.service';
+import { WalletService } from '@shared/services/wallet.service';
 
 export class SmartContractsContractItem {
   constructor(
@@ -33,7 +33,7 @@ export class SmartContractsService extends ApiService implements SmartContractsS
   private historySubject = new BehaviorSubject<ContractTransactionItem[]>([]);
   private currentWallet: WalletInfo;
   private lastBalance: number = null;
-  private currentAddress : string;
+  private currentAddress: string;
   constructor(
     httpClient: HttpClient,
     globalService: GlobalService,
@@ -43,7 +43,7 @@ export class SmartContractsService extends ApiService implements SmartContractsS
     super(httpClient, globalService, errorService);
 
     globalService.currentWallet.subscribe((wallet) => {
-      this.currentWallet = wallet
+      this.currentWallet = wallet;
     });
 
     currentAccountService.currentAddress.subscribe(address => {
@@ -51,11 +51,11 @@ export class SmartContractsService extends ApiService implements SmartContractsS
     });
 
     walletService.wallet().subscribe(wallet => {
-      if (wallet && this.currentAddress && this.lastBalance != (wallet.amountConfirmed + wallet.amountUnconfirmed)) {
+      if (wallet && this.currentAddress && this.lastBalance !== (wallet.amountConfirmed + wallet.amountUnconfirmed)) {
         this.lastBalance = (wallet.amountConfirmed + wallet.amountUnconfirmed);
         this.GetHistoryFromApi(this.currentWallet.walletName, this.currentAddress);
       }
-    })
+    });
   }
 
   public GetReceipt(hash: string, silent: boolean = false): Observable<string> {
