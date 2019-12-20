@@ -4,9 +4,6 @@ import { Observable } from 'rxjs';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class RestApi {
   protected API_URL;
 

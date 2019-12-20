@@ -20,7 +20,7 @@ export class StakingComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public stakingService: StakingService,
-    private walletService: WalletService,
+    public walletService: WalletService,
     public globalService: GlobalService) {
       this.coinUnit = globalService.coinUnit;
   }
