@@ -35,8 +35,8 @@ import { ColdStakingCreateAddressComponent } from './cold-staking/components/mod
 import { ColdStakingWithdrawComponent } from './cold-staking/components/modals/withdraw/withdraw.component';
 import { ColdStakingCreateComponent } from './cold-staking/components/modals/create/create.component';
 import { ColdStakingCreateSuccessComponent } from './cold-staking/components/modals/create-success/create-success.component';
-import { SideBarItems } from '@shared/components/side-bar/side-bar-items';
-import { SimpleSideBarItem } from '@shared/components/side-bar/side-bar-item-base';
+import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
+import { SideBarItem, SimpleSideBarItem } from '@shared/components/side-bar/side-bar-item-base';
 import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
 
 @NgModule({
@@ -96,7 +96,7 @@ import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
 })
 
 export class WalletModule {
-  constructor(private sidebarItems: SideBarItems, stakingSidebarItem: StakingSidebarItem) {
+  constructor(private sidebarItems: SideBarItemsProvider, stakingSidebarItem: StakingSidebarItem) {
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Account', '/wallet/dashboard', ['side-bar-item-account']));
@@ -118,6 +118,8 @@ export class WalletModule {
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
 
-    sidebarItems.setSelected(0);
+    sidebarItems.setSelected({
+      route : '/wallet/dashboard'
+    } as SideBarItem);
   }
 }
