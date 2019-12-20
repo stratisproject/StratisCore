@@ -1,4 +1,6 @@
 import { TransactionsHistoryItem } from '@shared/services/interfaces/api.i';
+import { AddressLabel } from '@shared/models/address-label';
+import { AddressBookService } from '@shared/services/address-book-service';
 
 export class TransactionInfo {
   constructor(
@@ -8,17 +10,19 @@ export class TransactionInfo {
     public transactionFee: number,
     public txOutputIndex: number,
     public transactionConfirmedInBlock: number,
-    public transactionTimestamp: number) {
-    this.transactionType = transactionType;
-    this.transactionId = transactionId;
-    this.transactionAmount = transactionAmount;
-    this.transactionFee = transactionFee;
-    this.transactionConfirmedInBlock = transactionConfirmedInBlock;
-    this.transactionTimestamp = transactionTimestamp;
+    public transactionTimestamp: number,
+    public address?: string,
+    public contact?: AddressLabel) {
   }
 
-  public static mapFromTransactionsHistoryItems(transactions: TransactionsHistoryItem[], maxTransactionCount?: number): TransactionInfo[] {
+  public static mapFromTransactionsHistoryItems(
+    transactions: TransactionsHistoryItem[],
+    maxTransactionCount?: number,
+    addressBookService?: AddressBookService): TransactionInfo[] {
+
+
     const mapped = transactions.map(transaction => {
+      const contact = addressBookService ? addressBookService.findContactByAddress(transaction.toAddress) : null;
       return new TransactionInfo(
         transaction.type === 'send' ? 'sent' : transaction.type,
         transaction.id,
@@ -26,7 +30,7 @@ export class TransactionInfo {
         transaction.fee || 0,
         transaction.txOutputIndex,
         transaction.confirmedInBlock,
-        transaction.timestamp);
+        transaction.timestamp, transaction.toAddress, contact);
     });
 
     return maxTransactionCount ? mapped.slice(0, maxTransactionCount) : mapped;

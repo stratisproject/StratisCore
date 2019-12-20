@@ -13,9 +13,9 @@ import { SmartContractsComponent } from './smart-contracts/components/smart-cont
 import { TokensComponent } from './tokens/components/tokens.component';
 import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
-import { ReceiveComponent } from "./receive/receive.component";
-import { SendComponent } from "./send/send.component";
-import { BlockExplorerComponent } from "./block-explorer/block-explorer.component";
+import { ReceiveComponent } from './receive/receive.component';
+import { SendComponent } from './send/send.component';
+import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
 
 const routes: Routes = [
   {
@@ -23,6 +23,7 @@ const routes: Routes = [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {path: 'dashboard', component: DashboardComponent},
       {path: 'send', component: SendComponent},
+      {path: 'send/:address', component: SendComponent},
       {path: 'receive', component: ReceiveComponent},
       {path: 'staking', component: ColdStakingOverviewComponent},
       {

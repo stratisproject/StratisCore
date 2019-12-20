@@ -28,7 +28,7 @@ export class AboutComponent implements OnInit {
   }
 
   openWalletDirectory(directory: string): void {
-    if (!this.isElectron) return;
+    if (!this.isElectron) { return; }
 
     this.electron.shell.showItemInFolder(directory);
   }

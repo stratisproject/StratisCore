@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { StakingService } from "@shared/services/staking-service";
-import { SideBarItemBase } from "@shared/components/side-bar/side-bar-item-base";
+import { Injectable } from '@angular/core';
+import { StakingService } from '@shared/services/staking-service';
+import { SideBarItemBase } from '@shared/components/side-bar/side-bar-item-base';
 
 @Injectable()
 export class StakingSidebarItem extends SideBarItemBase {

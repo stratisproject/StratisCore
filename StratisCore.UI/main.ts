@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
@@ -92,12 +92,17 @@ let mainWindow = null;
 
 function createWindow() {
   // Create the browser window.
+  const height =  screen.getPrimaryDisplay().bounds.height - 100;
+  const width = Math.round(height * 1.1);
+
+  console.log(height);
+  console.log(width);
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 1000,
+    width: width,
+    height: height,
     frame: true,
-    minWidth: 1200,
-    minHeight: 1000,
+    minWidth: 825,
+    minHeight: 750,
     title: applicationName,
     webPreferences: {
       nodeIntegration: true,

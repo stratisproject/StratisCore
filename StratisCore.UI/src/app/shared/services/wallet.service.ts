@@ -9,12 +9,11 @@ import {
   WalletHistory, WalletNamesData
 } from '@shared/services/interfaces/api.i';
 import {
-  BlockConnectedSignalREvent,
   SignalREvent,
   SignalREvents,
   WalletInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
-import { catchError, map, flatMap, tap, debounceTime } from 'rxjs/operators';
+import { catchError, map, flatMap, tap } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
@@ -26,9 +25,9 @@ import { FeeEstimation } from '@shared/models/fee-estimation';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { WalletResync } from '@shared/models/wallet-rescan';
-import { AddressBalance } from "@shared/models/address-balance";
-import { SnackbarService } from "ngx-snackbar";
-import { NodeService } from "@shared/services/node-service";
+import { AddressBalance } from '@shared/models/address-balance';
+import { SnackbarService } from 'ngx-snackbar';
+import { NodeService } from '@shared/services/node-service';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +56,7 @@ export class WalletService extends RestApi {
   constructor(
     private snackbarService: SnackbarService,
     private currentAccountService: CurrentAccountService,
-    private nodeService : NodeService,
+    private nodeService: NodeService,
     globalService: GlobalService,
     http: HttpClient,
     errorService: ErrorService,
@@ -92,7 +91,7 @@ export class WalletService extends RestApi {
           action: {
             text: null
           }
-        })
+        });
       }
     });
 
@@ -152,7 +151,7 @@ export class WalletService extends RestApi {
       tap(() => {
         this.rescanInProgress = true;
         this.clearWalletHistory(data.date.getTime());
-        this.paginateHistory()
+        this.paginateHistory();
       }),
       catchError(err => this.handleHttpError(err))
     );
@@ -219,11 +218,14 @@ export class WalletService extends RestApi {
     const existingItems = subject.value;
     const newItems = [];
     history.forEach(item => {
-      if (existingItems.findIndex(existing => existing.id === item.id) === -1) {
+      const index = existingItems.findIndex(existing => existing.id === item.id);
+      if (index === -1) {
         newItems.push(item);
+      } else {
+        existingItems[index] = item;
       }
     });
-    let set = existingItems.concat(newItems);
+    const set = existingItems.concat(newItems);
     subject.next(set.sort((a, b) => b.timestamp - a.timestamp));
   }
 
@@ -342,7 +344,7 @@ export class WalletService extends RestApi {
     if (!historyRefreshed && (walletSubject.value
       && (walletSubject.value.amountConfirmed !== newBalance.amountConfirmed
         || walletSubject.value.amountUnconfirmed !== newBalance.amountUnconfirmed))) {
-      this.paginateHistory()
+      this.paginateHistory();
     }
 
     walletSubject.next(newBalance);
@@ -354,18 +356,6 @@ export class WalletService extends RestApi {
         this.updateWalletForCurrentAddress(wallet.balances[this.currentWallet.account]);
       });
   }
-
-  // private refreshWalletHistory(): void {
-  //   if (this.currentWallet) {
-  //     const walletHistorySubject = this.getWalletHistorySubject();
-  //     this.getWalletHistory(this.currentWallet).toPromise().then(
-  //       response => {
-  //         if (response.history[this.currentWallet.account]) {
-  //           walletHistorySubject.next(response.history[this.currentWallet.account].transactionsHistory);
-  //         }
-  //       });
-  //   }
-  // }
 
   private clearWalletHistory(fromDate: number): void {
     if (this.currentWallet) {
