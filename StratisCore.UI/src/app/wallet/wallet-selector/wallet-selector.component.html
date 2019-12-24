@@ -1,7 +1,6 @@
-<form class="form-inline col-5" style="max-width: none">
-  <div class="btn-group ml-auto">
-    <div ngbDropdown class="d-inline-block">
-      <button class="btn">{{(this.globalService.currentWallet | async).walletName}}</button>
+<form class="form">
+  <div ngbDropdown class="stratis-side-bar-wallet">
+    <button class="btn d-block">{{(this.globalService.currentWallet | async).walletName}}</button>
 <!--      <div ngbDropdownMenu class="dropdown-menu-right wallet-menu">-->
 <!--        <ng-container *ngFor="let _walletName of (this.walletNames | async)">-->
 <!--          <button class="dropdown-item d-flex align-items-center" type="button"-->
@@ -10,5 +9,4 @@
 <!--        </ng-container>-->
 <!--      </div>-->
     </div>
-  </div>
 </form>

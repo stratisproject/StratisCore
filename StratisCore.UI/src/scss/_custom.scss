@@ -6,6 +6,10 @@
 //
 //
 
+
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,400,700&display=swap');
+$sidebar-padding: 25px;
+
 // basics
 body {
   font-size: 1rem;
@@ -19,6 +23,7 @@ body {
   user-select: none;
   /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+  font-family: 'Nunito Sans', sans-serif;
 }
 
 button {
@@ -125,16 +130,13 @@ img {
   ///// JUMBOTRON
   .jumbotron {
     h5 {
-      text-transform: uppercase;
       font-size: $font-size-base;
-      font-weight: 300;
+      font-weight: 600;
     }
 
     h3 {
-      text-transform: uppercase;
       font-weight: 600;
-      color: $gray-500;
-      font-size: 30px;
+      letter-spacing: 1px;
     }
 
     .lead {
@@ -258,7 +260,7 @@ img {
 
   ///// DISABLED STAKING CARD
   .disabledcard {
-    border:0; 
+    border:0;
     box-shadow:none !important;
   }
 
@@ -513,13 +515,12 @@ img {
 
   // status box
   .status {
-    width: auto;
-    height: 36px;
-    position: fixed;
-    bottom: 10px;
-    left: 1px;
-    text-align: center;
-    color: white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: $sidebar-padding;
+    border-top: 1px solid rgba(white, 0.2);
 
     .lnr {
       font-weight: bold;
@@ -527,16 +528,8 @@ img {
     }
 
     ul {
-      transform: translateY(50%) translateX(0);
-      display: inline-block;
-      position: relative;
-      padding: 0 2em;
-    }
-
-    li {
-      position: relative;
-      float: left;
-      margin-right: 4px;
+      display: flex;
+      margin: 0;
     }
 
     &.statusOK {
@@ -1705,11 +1698,6 @@ bs-daterangepicker-container {
   cursor: pointer;
 }
 
-.side-bar-item.selected {
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 7px 0 0 7px;
-}
-
 .floating-button {
   position: fixed;
   border: 2px solid;
@@ -1836,23 +1824,38 @@ bs-daterangepicker-container {
 }
 
 app-wallet-selector {
-  margin-bottom: 20px;
+  display: block;
+  margin-bottom: 35px;
   color: white;
+
+
+  .stratis-side-bar-wallet {
+    padding: 0 $sidebar-padding;
+    width: 100%;
+  }
 
   .btn {
     background-color: transparent;
     border: 1px solid white;
-    width: 220px;
+    width: 100%;
     height: 40px;
     color: white;
-    margin-left: -25px;
     font-size: 1em;
-    margin-bottom: 20px;
+    text-align: left;
   }
 
   .btn.dropdown-toggle:after {
     float: right;
     margin-top: 10px;
+  }
+
+  .dropdown-item {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+
+    i {
+      margin-right: 5px;
+    }
   }
 }
 
@@ -1881,29 +1884,40 @@ app-side-bar {
   height: 100vh;
   float: left;
   width: 250px;
-  background: rgba(21, 139, 207, 1) url("/assets/images/stratis/home-stratis-logo.svg") no-repeat top;
-  background-origin: content-box;
-  background-size: 50px;
-  padding: 25px;
+  background: rgb(23,133,202);
+  background: linear-gradient(10deg, #0068a9 0%, #2297dc 100%);
+  padding: $sidebar-padding 0;
+
+  .stratis-side-bar-logo {
+    width: 80px;
+    display: block;
+    margin: 0 auto 30px;
+  }
 
   .stratis-side-bar-container {
-    margin-top: 75px;
     color: white;
     font-weight: 400;
 
     .side-bar-item {
-      padding-top: 5px;
-      padding-left: 20px;
-      margin-left: 30px;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
       height: 50px;
-      width: 200px;
+      padding: 0 $sidebar-padding;
+      display: flex;
+      align-items: center;
       text-transform: uppercase;
       cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
 
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 7px 0 0 7px;
-        -webkit-transition: background-color 0.2s;
+      &.selected {
+        background-color: rgba(0, 0, 0, 0.08);
+      }
+
+      &:hover,
+      &:hover.selected {
+        transition: none;
+        background-color: rgba(0, 0, 0, 0.04);
       }
     }
 
