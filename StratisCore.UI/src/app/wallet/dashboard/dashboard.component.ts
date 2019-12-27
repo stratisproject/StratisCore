@@ -4,13 +4,14 @@ import { WalletBalance } from '@shared/services/interfaces/api.i';
 import { WalletService } from '@shared/services/wallet.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'dashboard-component',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  animations: Animations.fadeIn
 })
-
 export class DashboardComponent implements OnInit {
 
   public wallet: Observable<WalletBalance>;

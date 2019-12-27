@@ -17,6 +17,7 @@ import { FormHelper } from '@shared/forms/form-helper';
 import { TransactionResponse } from '@shared/models/transaction-response';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { ActivatedRoute } from '@angular/router';
+import { Animations } from '@shared/animations/animations';
 
 
 export interface FeeStatus {
@@ -27,6 +28,7 @@ export interface FeeStatus {
   selector: 'send-component',
   templateUrl: './send.component.html',
   styleUrls: ['./send.component.css'],
+  animations: Animations.fadeIn
 })
 export class SendComponent implements OnInit, OnDestroy {
   private accountsEnabled: boolean;

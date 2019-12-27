@@ -9,11 +9,13 @@ import { SnackbarService } from 'ngx-snackbar';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
 import { Router } from '@angular/router';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'app-address-book',
   templateUrl: './address-book.component.html',
-  styleUrls: ['./address-book.component.css']
+  styleUrls: ['./address-book.component.css'],
+  animations : Animations.fadeIn
 })
 export class AddressBookComponent implements OnInit {
   constructor(

@@ -4,11 +4,13 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ModalService } from '@shared/services/modal.service';
 import { AddressLabel } from '@shared/models/address-label';
 import { AddressBookService } from "@shared/services/address-book-service";
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'app-add-new-address',
   templateUrl: './add-new-address.component.html',
-  styleUrls: ['./add-new-address.component.css']
+  styleUrls: ['./add-new-address.component.css'],
+  animations : Animations.fadeIn
 })
 export class AddNewAddressComponent {
   constructor(
