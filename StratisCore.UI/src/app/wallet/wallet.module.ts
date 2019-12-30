@@ -39,6 +39,7 @@ import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items
 import { SideBarItem, SimpleSideBarItem } from '@shared/components/side-bar/side-bar-item-base';
 import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
 import { AddressBookCardComponent } from './address-book-card/address-book-card.component';
+import { AddNodeComponent } from './advanced/components/add-node/add-node.component';
 
 @NgModule({
   imports: [
@@ -77,7 +78,8 @@ import { AddressBookCardComponent } from './address-book-card/address-book-card.
     ColdStakingWithdrawComponent,
     ColdStakingCreateComponent,
     ColdStakingCreateSuccessComponent,
-    AddressBookCardComponent
+    AddressBookCardComponent,
+    AddNodeComponent
   ],
   providers: [
     AccountSelectedGuard,

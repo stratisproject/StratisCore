@@ -77,6 +77,17 @@ export class NodeService extends RestApi {
     return this.generalInfoSubject.asObservable();
   }
 
+  public addNode(nodeIP: string): Observable<any> {
+    const params = new HttpParams()
+      .set('endpoint', nodeIP)
+      .set('command', 'add');
+
+    return this.get('connectionmanager/addnode', params).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+
   private updateGeneralInfoForCurrentWallet(): void {
     if (this.currentWallet) {
       const params = new HttpParams().set('Name', this.currentWallet.walletName);
