@@ -18,7 +18,7 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
   public mnemonicArray: string[];
   public sidechainEnabled: boolean;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.subscription = this.route.queryParams.subscribe(params => {
       this.newWallet = new WalletCreation(
@@ -32,20 +32,20 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
     this.showMnemonic();
   }
 
-  private showMnemonic() {
+  private showMnemonic(): void {
     this.mnemonic = this.newWallet.mnemonic;
     this.mnemonicArray = this.mnemonic.split(" ");
   }
 
-  public onContinueClicked() {
+  public onContinueClicked(): void {
     this.router.navigate(['/setup/create/confirm-mnemonic'], { queryParams : { name: this.newWallet.name, mnemonic: this.newWallet.mnemonic, password: this.newWallet.password, passphrase: this.newWallet.passphrase }});
   }
 
-  public onCancelClicked() {
+  public onCancelClicked(): void {
     this.router.navigate(['']);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }
