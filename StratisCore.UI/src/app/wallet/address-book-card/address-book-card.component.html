@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-2">
+              <ngx-qrcode [qrc-value]="getQrCodeAddress(address.address)" qrc-class="aclass"
+                          qrc-errorCorrectionLevel="L"></ngx-qrcode>
+            </div>
+            <div class="col-8 mt-2">
+              <h3 class="mt-1 ml-3"> {{address.label}}</h3>
+              <h4 class="mt-1 ml-3"> {{address.address}}</h4>
+              <p class="lead ml-3">{{address.description}}</p>
+              <div class="float-left ml-3">
+              </div>
+            </div>
+            <div class="col-2 text-center">
+            </div>
+            <ng-container *ngIf="showButtons">
+            <div class="col-12 col-lg-4">
+              <button class="btn btn-block btn-outline-success" (click)="copyToClipboardClicked(address)">
+                <span class="fa fa-plus-circle"></span> Copy Address
+              </button>
+            </div>
+            <div class="col-12 col-lg-4">
+              <button class="btn btn-outline-info btn-block" (click)="sendClicked.emit(address)"><span
+                class="fa fa-user"></span> Send
+              </button>
+            </div>
+            <div class="col-12 col-lg-4">
+              <button type="button" class="btn btn-outline-primary btn-block"
+                      (click)="removeClicked.emit(address)"><span class="fa fa-gear"></span>
+                Remove
+              </button>
+            </div>
+            </ng-container>
+            <!--/col-->
+          </div>
+          <!--/row-->
+        </div>
+        <!--/card-block-->
+      </div>
+    </div>
+  </div>
+</div>

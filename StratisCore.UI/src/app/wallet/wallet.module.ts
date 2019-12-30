@@ -38,6 +38,7 @@ import { ColdStakingCreateSuccessComponent } from './cold-staking/components/mod
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { SideBarItem, SimpleSideBarItem } from '@shared/components/side-bar/side-bar-item-base';
 import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
+import { AddressBookCardComponent } from './address-book-card/address-book-card.component';
 
 @NgModule({
   imports: [
@@ -75,7 +76,8 @@ import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
     ColdStakingCreateAddressComponent,
     ColdStakingWithdrawComponent,
     ColdStakingCreateComponent,
-    ColdStakingCreateSuccessComponent
+    ColdStakingCreateSuccessComponent,
+    AddressBookCardComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -112,8 +114,8 @@ export class WalletModule {
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Contacts', '/wallet/address-book', ['side-bar-item-address']));
 
-    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-      'Explorer', '/wallet/explorer', ['side-bar-item-explorer']));
+    // sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+    //   'Explorer', '/wallet/explorer', ['side-bar-item-explorer']));
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));

@@ -1,12 +1,5 @@
 <form class="form">
   <div ngbDropdown class="stratis-side-bar-wallet">
-    <button class="btn d-block">{{(this.globalService.currentWallet | async).walletName}}</button>
-<!--      <div ngbDropdownMenu class="dropdown-menu-right wallet-menu">-->
-<!--        <ng-container *ngFor="let _walletName of (this.walletNames | async)">-->
-<!--          <button class="dropdown-item d-flex align-items-center" type="button"-->
-<!--                  (click)="switchWallet(_walletName)"><i class=""></i>{{_walletName}}-->
-<!--          </button>-->
-<!--        </ng-container>-->
-<!--      </div>-->
-    </div>
+    {{(this.globalService.currentWallet | async).walletName}}
+  </div>
 </form>

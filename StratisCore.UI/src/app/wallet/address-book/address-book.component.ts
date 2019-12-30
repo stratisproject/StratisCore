@@ -37,18 +37,6 @@ export class AddressBookComponent implements OnInit {
     this.addresses = this.addressBookService.contacts;
   }
 
-  public copyToClipboardClicked(address: AddressLabel): void {
-    if (this.clipboardService.copyFromContent(address.address)) {
-      this.snackbarService.add({
-        msg: `Address ${address.label} ${address.address} copied to clipboard`,
-        customClass: 'notify-snack-bar',
-        action: {
-          text: null
-        }
-      });
-    }
-  }
-
   public sendClicked(address: AddressLabel): void {
     this.router.navigateByUrl(`wallet/send/${address.address}`);
   }
@@ -78,9 +66,7 @@ export class AddressBookComponent implements OnInit {
     });
   }
 
-  public getQrCodeAddress(address: string): string {
-    return `${this.globalService.networkName}:${address}`;
-  }
+
 
   public addNewAddressClicked(): void {
     this.modalService.open(AddNewAddressComponent, {backdrop: 'static'});

@@ -18,6 +18,8 @@ import { TransactionResponse } from '@shared/models/transaction-response';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { ActivatedRoute } from '@angular/router';
 import { Animations } from '@shared/animations/animations';
+import { AddressBookService } from '@shared/services/address-book-service';
+import { AddressLabel } from '@shared/models/address-label';
 
 
 export interface FeeStatus {
@@ -34,8 +36,9 @@ export class SendComponent implements OnInit, OnDestroy {
   private accountsEnabled: boolean;
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
   private last: FeeEstimation = null;
-
+  public contact : AddressLabel;
   constructor(
+    private addressBookService : AddressBookService,
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private walletService: WalletService,
@@ -85,6 +88,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
     if (this.activatedRoute.snapshot.params['address']) {
       this.address = this.activatedRoute.snapshot.params['address'];
+      this.getAddressBookContact();
     }
 
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
@@ -220,6 +224,11 @@ export class SendComponent implements OnInit, OnDestroy {
       isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
       isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null
     );
+  }
+
+  private getAddressBookContact()
+  {
+   this.contact = this.addressBookService.findContactByAddress(this.address);
   }
 
   private getWalletBalance() {
