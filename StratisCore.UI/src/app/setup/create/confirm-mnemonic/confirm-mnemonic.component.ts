@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { GlobalService } from '@shared/services/global.service';
   templateUrl: './confirm-mnemonic.component.html',
   styleUrls: ['./confirm-mnemonic.component.css']
 })
-export class ConfirmMnemonicComponent implements OnInit {
+export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
@@ -29,7 +29,8 @@ export class ConfirmMnemonicComponent implements OnInit {
 
   public secretWordIndexGenerator = new SecretWordIndexGenerator();
   private newWallet: WalletCreation;
-  private subscription: Subscription;
+  private mnemonicForm$: Subscription;
+  private queryParams$: Subscription;
   public sidechainEnabled: boolean;
   public mnemonicForm: FormGroup;
   public matchError = '';
@@ -64,7 +65,7 @@ export class ConfirmMnemonicComponent implements OnInit {
 
   ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
-    this.subscription = this.route.queryParams.subscribe(params => {
+    this.queryParams$ = this.route.queryParams.subscribe(params => {
       this.newWallet = new WalletCreation(
         params['name'],
         params['mnemonic'],
@@ -102,7 +103,7 @@ export class ConfirmMnemonicComponent implements OnInit {
       ]
     });
 
-    this.mnemonicForm.valueChanges
+    this.mnemonicForm$ = this.mnemonicForm.valueChanges
       .subscribe(() => this.onValueChanged());
 
     this.onValueChanged();
@@ -162,7 +163,8 @@ export class ConfirmMnemonicComponent implements OnInit {
 
   private createWallet(wallet: WalletCreation): void {
     this.apiService.createStratisWallet(wallet)
-      .subscribe(
+      .toPromise()
+      .then(
         () => {
           this.genericModalService.openModal(
             'Wallet Created', 'Your wallet has been created.<br>Keep your secret words, password and passphrase safe!');
@@ -172,5 +174,10 @@ export class ConfirmMnemonicComponent implements OnInit {
           this.isCreating = false;
         }
       );
+  }
+
+  ngOnDestroy(): void {
+    this.queryParams$.unsubscribe();
+    this.mnemonicForm$.unsubscribe();
   }
 }

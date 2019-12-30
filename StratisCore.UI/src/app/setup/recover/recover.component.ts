@@ -146,7 +146,8 @@ export class RecoverComponent implements OnInit, OnDestroy {
 
   private recoverWallet(recoverWallet: WalletRecovery): void {
     this.apiService.recoverStratisWallet(recoverWallet)
-      .subscribe(
+      .toPromise()
+      .then(
         () => {
           const body = "Your wallet has been recovered. \nYou will be redirected to the decryption page.";
           this.genericModalService.openModal("Wallet Recovered", body);
