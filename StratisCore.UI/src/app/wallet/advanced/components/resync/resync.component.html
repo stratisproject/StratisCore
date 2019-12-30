@@ -18,8 +18,8 @@
               <div *ngIf="formErrors.walletDate" class="text-danger mt-2">{{ formErrors.walletDate }}</div>
             </div>
           </form>
-          <div>
-            <button type="button" [disabled]="isSyncing || !rescanWalletForm.valid" class="btn btn-primary btn-block"
+          <div class="right">
+            <button type="button" [disabled]="isSyncing || !rescanWalletForm.valid" class="btn btn-primary btn-right-200"
                     (click)="onResyncClicked()">Rescan
             </button>
           </div>

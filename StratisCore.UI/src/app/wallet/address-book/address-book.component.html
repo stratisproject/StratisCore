@@ -1,7 +1,11 @@
-<section id="GUI" class="light">
+<section id="GUI" class="light" @fadeIn>
   <div class="jumbotron page-header">
     <div class="text-left">
       <h3>Contacts</h3>
+      <button type="button" class="btn btn-primary"
+              (click)="addNewAddressClicked()"><span class="fa fa-gear"></span>
+        Add Contact
+      </button>
       <div class="page-header-right-content">
       </div>
     </div>
@@ -16,57 +20,10 @@
     </div>
     <div *ngIf="addresses; else noAddresses">
       <div *ngFor="let addressRow of addresses | async">
-        <div class="container">
-          <div class="row">
-            <div class="col-12">
-              <div class="card contact mb-3">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-2">
-                      <ngx-qrcode [qrc-value]="getQrCodeAddress(addressRow.address)" qrc-class="aclass"
-                                  qrc-errorCorrectionLevel="L"></ngx-qrcode>
-                    </div>
-                    <div class="col-8 mt-2">
-                      <h3 class="mt-1 ml-3"> {{addressRow.label}}</h3>
-                      <h4 class="mt-1 ml-3"> {{addressRow.address}}</h4>
-                      <p class="lead ml-3">{{addressRow.description}}</p>
-                      <div class="float-left ml-3">
-                        <p>
-                          <span class="badge badge-info tags">3 Sent</span>
-                          <span class="badge badge-info tags">0 Recieved</span>
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col-2 text-center">
-                      <div class="contact-icon lnr-user float-right"></div>
-                    </div>
-                    <div class="col-12 col-lg-4">
-                      <button class="btn btn-block btn-outline-success" (click)="copyToClipboardClicked(addressRow)">
-                        <span class="fa fa-plus-circle"></span> Copy Address
-                      </button>
-                    </div>
-                    <div class="col-12 col-lg-4">
-                      <button class="btn btn-outline-info btn-block" (click)="sendClicked(addressRow)"><span
-                        class="fa fa-user"></span> Send
-                      </button>
-                    </div>
-                    <div class="col-12 col-lg-4">
-                      <button type="button" class="btn btn-outline-primary btn-block"
-                              (click)="removeClicked(addressRow)"><span class="fa fa-gear"></span>
-                        Remove
-                      </button>
-                    </div>
-                    <!--/col-->
-                  </div>
-                  <!--/row-->
-                </div>
-                <!--/card-block-->
-              </div>
-            </div>
-          </div>
-        </div>
+       <app-address-book-card [address]="addressRow"  [showButtons]="true" (removeClicked)="removeClicked($event)" (sendClicked)="sendClicked($event)">
+
+       </app-address-book-card>
       </div>
     </div>
   </section>
 </section>
-<div class="lnr lnr-file-add new-contact-button" (click)="addNewAddressClicked()"></div>

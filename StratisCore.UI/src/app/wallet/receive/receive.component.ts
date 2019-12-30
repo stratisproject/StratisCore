@@ -7,11 +7,13 @@ import { WalletService } from '@shared/services/wallet.service';
 import { AddressLabel } from '@shared/models/address-label';
 import { ClipboardService } from 'ngx-clipboard';
 import { SnackbarService } from 'ngx-snackbar';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'receive-component',
   templateUrl: './receive.component.html',
   styleUrls: ['./receive.component.css'],
+  animations: Animations.fadeIn
 })
 
 export class ReceiveComponent implements OnInit {

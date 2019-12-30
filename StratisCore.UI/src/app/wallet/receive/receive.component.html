@@ -1,4 +1,4 @@
-<section id="GUI" class="light">
+<section id="GUI" class="light" @fadeIn>
     <div class="jumbotron page-header">
         <div class="text-left">
             <h3>Receive</h3>
@@ -31,7 +31,7 @@
                     <ngb-tabset type="tabs" class="nav-fill">
                         <ngb-tab class="nav-link" title="Unused Addresses">
                             <ng-template ngbTabContent>
-                                <div *ngFor="let unusedAddress of unusedAddresses | paginate: { itemsPerPage: 20, currentPage: pageNumberUnused, id: 'unusedAddressesPaginator' }">
+                                <div *ngFor="let unusedAddress of unusedAddresses | paginate: { itemsPerPage: 12, currentPage: pageNumberUnused, id: 'unusedAddressesPaginator' }">
                                     <code class="d-inline-block">{{ unusedAddress }}</code>
                                     <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
                                         ngxClipboard [cbContent]="unusedAddress" (click)="copyToClipboardClicked(unusedAddress)">
@@ -43,7 +43,7 @@
                         </ngb-tab>
                         <ngb-tab class="nav-link" title="Used Addresses">
                             <ng-template ngbTabContent>
-                                <div *ngFor="let usedAddress of usedAddresses | paginate: { itemsPerPage: 20, currentPage: pageNumberUsed, id: 'usedAddressesPaginator' }">
+                                <div *ngFor="let usedAddress of usedAddresses | paginate: { itemsPerPage: 12, currentPage: pageNumberUsed, id: 'usedAddressesPaginator' }">
                                     <code class="d-inline-block">{{ usedAddress }}</code>
                                     <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
                                         ngxClipboard [cbContent]="usedAddress" (click)="copyToClipboardClicked(usedAddress)">
@@ -55,7 +55,7 @@
                         </ngb-tab>
                         <ngb-tab class="nav-link" title="Change Addresses">
                             <ng-template ngbTabContent>
-                                <div *ngFor="let changeAddress of changeAddresses | paginate: { itemsPerPage: 20, currentPage: pageNumberChange, id: 'changeAddressesPaginator' }">
+                                <div *ngFor="let changeAddress of changeAddresses | paginate: { itemsPerPage: 12, currentPage: pageNumberChange, id: 'changeAddressesPaginator' }">
                                     <code class="d-inline-block">{{ changeAddress }}</code>
                                     <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
                                         ngxClipboard [cbContent]="changeAddress" (click)="copyToClipboardClicked(changeAddress)">

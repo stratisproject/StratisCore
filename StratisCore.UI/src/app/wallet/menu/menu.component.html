@@ -29,21 +29,19 @@
       </a>
     </span>
 
-    <form class="form-inline col-5" style="max-width: none">
-      <div class="btn-group navbar-text ml-auto">
-        <div ngbDropdown class="d-inline-block">
-          <button class="btn btn-outline-light" ngbDropdownToggle>{{walletName}}</button>
-          <div ngbDropdownMenu class="dropdown-menu-right">
-              <button *ngIf="accountsEnabled" class="dropdown-item d-flex align-items-center" type="button"
-              (click)="switchAddress()"><i class="lnr lnr-users"></i>Switch Address</button>
-            <button *ngIf="!sidechainEnabled" class="dropdown-item d-flex align-items-center" type="button"
-              (click)="openAddressBook()"><i class="lnr lnr-book"></i>Address Book</button>
-            <button class="dropdown-item d-flex align-items-center" type="button" (click)="openAdvanced()"><i
-                class="lnr lnr-cog"></i>Advanced</button>
-            <div class="dropdown-divider"></div>
-            <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal"
-              (click)="logoutClicked()" data-target="#modalLogout"><i class="lnr lnr-exit"></i> Logout</button>
-          </div>
+    <form class="form-inline col-5 navbar-text">
+      <div ngbDropdown>
+        <button class="btn btn-outline-light" ngbDropdownToggle>{{walletName}}</button>
+        <div ngbDropdownMenu class="dropdown-menu-right">
+            <button *ngIf="accountsEnabled" class="dropdown-item d-flex align-items-center" type="button"
+            (click)="switchAddress()"><i class="lnr lnr-users"></i>Switch Address</button>
+          <button *ngIf="!sidechainEnabled" class="dropdown-item d-flex align-items-center" type="button"
+            (click)="openAddressBook()"><i class="lnr lnr-book"></i>Address Book</button>
+          <button class="dropdown-item d-flex align-items-center" type="button" (click)="openAdvanced()"><i
+              class="lnr lnr-cog"></i>Advanced</button>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item d-flex align-items-center" type="button" data-toggle="modal"
+            (click)="logoutClicked()" data-target="#modalLogout"><i class="lnr lnr-exit"></i> Logout</button>
         </div>
       </div>
     </form>

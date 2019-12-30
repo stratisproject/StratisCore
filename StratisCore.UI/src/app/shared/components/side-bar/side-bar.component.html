@@ -1,9 +1,15 @@
 <div class="stratis-side-bar">
   <div class="stratis-side-bar-container">
+    <img
+      class="stratis-side-bar-logo"
+      alt="Stratis logo"
+      src="/assets/images/stratis/home-stratis-logo.svg" />
     <ng-content select="[side-bar-top]"></ng-content>
     <ng-container *ngFor="let sideBarItem of sideBarItems">
-      <div *ngIf="sideBarItem.visible" (click)="onSelect(sideBarItem)"
-           [ngClass]="sideBarItem.getClasses()">
+      <div
+        *ngIf="sideBarItem.visible"
+        (click)="onSelect(sideBarItem)"
+        [ngClass]="sideBarItem.getClasses()">
         {{sideBarItem.displayText}}
       </div>
     </ng-container>

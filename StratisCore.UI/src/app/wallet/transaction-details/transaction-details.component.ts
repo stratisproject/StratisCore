@@ -5,11 +5,13 @@ import { GlobalService } from '@shared/services/global.service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { NodeService } from '@shared/services/node-service';
 import { tap } from 'rxjs/operators';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'transaction-details',
   templateUrl: './transaction-details.component.html',
-  styleUrls: ['./transaction-details.component.css']
+  styleUrls: ['./transaction-details.component.css'],
+  animations : Animations.fadeIn
 })
 export class TransactionDetailsComponent implements OnInit, OnDestroy {
 

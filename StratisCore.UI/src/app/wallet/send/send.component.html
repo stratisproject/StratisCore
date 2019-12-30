@@ -1,4 +1,4 @@
-<section id="GUI" class="light">
+<section id="GUI" class="light" @fadeIn>
   <div class="jumbotron page-header">
       <div class="text-left">
         <h3>Send</h3>
@@ -22,11 +22,16 @@
                       <div *ngIf="sendFormErrors.amount" class="invalid-feedback">{{ sendFormErrors.amount }}</div>
                     </div>
                     <!--<div class="form-group has-success">-->
+                    <app-address-book-card *ngIf="contact" [address]="contact" ></app-address-book-card>
                     <div class="form-group clearfix">
+
+
                       <label for="destinationAddress">Destination address</label>
                       <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.address" [class.is-valid]="!sendFormErrors.address && sendForm.get('address').valid" formControlName="address" id="destinationAddress" placeholder="Please enter the destination address here.">
                       <div *ngIf="sendFormErrors.address" class="invalid-feedback">{{ sendFormErrors.address }}</div>
                     </div>
+
+
                     <div class="form-group clearfix">
                         <ng-container *ngIf="status | async let _status">
                           <label>Transaction Fee</label>
@@ -75,7 +80,7 @@
                   </form>
                   <div>
                     <ng-container *ngIf="status | async let _status">
-                    <button *ngIf="!isSending" type="button" class="btn btn-primary btn-block" [disabled]="!sendForm.valid || isSending || !estimatedFee || _status.estimating" (click)="send()">Send</button>
+                    <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200" [disabled]="!sendForm.valid || isSending || !estimatedFee || _status.estimating" (click)="send()">Send</button>
                     <!-- SVG -->
                     <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
                       <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -167,7 +172,7 @@
                     <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
                   </form>
                   <div>
-                    <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-block" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee" (click)="send(true)">Send</button>
+                    <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-right-200" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee" (click)="send(true)">Send</button>
                     <!-- SVG -->
                     <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
                       <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -187,6 +192,6 @@
         </div>
       </div>
     </div>
-    
+
   </section>
 </section>
