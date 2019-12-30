@@ -4,14 +4,13 @@
     <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
     <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
   </div>
-  <!-- /col -->
   <div class="col-8 right-login d-flex align-content-center flex-wrap">
     <div class="col-8 mx-auto d-flex align-content-center flex-wrap">
       <div class="col-12 text-center">
         <h3 class="display-4 mb-4">Welcome</h3>
         <p class="lead my-4">
           If you would like to create a new wallet, please click <strong>Create</strong>.
-          If you have used the wallet before, please select <strong>Restore</strong> to recover your old wallet.
+          If you have used the wallet before, please select <strong>Restore</strong> to recover your wallet.
         </p>
       </div>
       <div class="modal-footer col-10 mx-auto">
@@ -20,10 +19,6 @@
         <button type="button" class="btn btn-primary col" (click)="onCreateClicked()" [class.btn-stratis-green]="sidechainEnabled">Create</button>
       </div>
     </div>
-    <!-- /form -->
   </div>
-  <!-- /col-8 -->
   </div>
-  <!-- /row -->
 </section>
-<!-- /GUI-->

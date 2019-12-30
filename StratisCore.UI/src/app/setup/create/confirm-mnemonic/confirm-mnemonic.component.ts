@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { GlobalService } from '@shared/services/global.service';
   templateUrl: './confirm-mnemonic.component.html',
   styleUrls: ['./confirm-mnemonic.component.css']
 })
-export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
+export class ConfirmMnemonicComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
@@ -62,7 +62,7 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
     }
   };
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.subscription = this.route.queryParams.subscribe(params => {
       this.newWallet = new WalletCreation(
@@ -103,12 +103,12 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
     });
 
     this.mnemonicForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      .subscribe(() => this.onValueChanged());
 
     this.onValueChanged();
   }
 
-  onValueChanged(data?: any) {
+  onValueChanged(): void {
     if (!this.mnemonicForm) {
       return;
     }
@@ -127,7 +127,7 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
     this.matchError = '';
   }
 
-  public onConfirmClicked() {
+  public onConfirmClicked(): void {
     this.checkMnemonic();
     if (this.checkMnemonic()) {
       this.isCreating = true;
@@ -135,7 +135,7 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onBackClicked() {
+  public onBackClicked(): void {
     this.router.navigate(['/setup/create/show-mnemonic'], {
       queryParams: {
         name: this.newWallet.name,
@@ -160,21 +160,17 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
     }
   }
 
-  private createWallet(wallet: WalletCreation) {
+  private createWallet(wallet: WalletCreation): void {
     this.apiService.createStratisWallet(wallet)
       .subscribe(
-        response => {
+        () => {
           this.genericModalService.openModal(
             'Wallet Created', 'Your wallet has been created.<br>Keep your secret words, password and passphrase safe!');
           this.router.navigate(['']);
         },
-        error => {
+        () => {
           this.isCreating = false;
         }
       );
-  }
-
-  public ngOnDestroy(): void {
-
   }
 }

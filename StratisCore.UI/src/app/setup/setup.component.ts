@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Location} from '@angular/common';
 import { Router } from '@angular/router';
 import { GlobalService } from '@shared/services/global.service';
 
@@ -13,19 +12,19 @@ export class SetupComponent implements OnInit {
 
   public sidechainEnabled: boolean;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
   }
 
-  public onCreateClicked() {
+  public onCreateClicked(): void {
     this.router.navigate(['setup/create']);
   }
 
-  public onRecoverClicked() {
+  public onRecoverClicked(): void {
     this.router.navigate(['setup/recover']);
   }
 
-  public onBackClicked() {
+  public onBackClicked(): void {
     this.router.navigate(['login']);
   }
 }
