@@ -22,7 +22,9 @@ export class TransactionInfo {
 
 
     const mapped = transactions.map(transaction => {
-      const contact = addressBookService ? addressBookService.findContactByAddress(transaction.toAddress) : null;
+      const contact = addressBookService ? transaction.payments
+        .map(payment => addressBookService.findContactByAddress(payment.destinationAddress)).find(p => p != null) : null;
+
       return new TransactionInfo(
         transaction.type === 'send' ? 'sent' : transaction.type,
         transaction.id,

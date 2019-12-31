@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { GlobalService } from '@shared/services/global.service';
 import { TransactionInfo } from '@shared/models/transaction-info';
@@ -7,15 +8,16 @@ import { tap } from 'rxjs/operators';
 import { Animations } from '@shared/animations/animations';
 
 @Component({
-  selector: 'transaction-details',
-  templateUrl: './transaction-details.component.html',
-  styleUrls: ['./transaction-details.component.css'],
-  // animations : Animations.fadeIn
+  selector: 'transaction-details-modal',
+  templateUrl: './transaction-details-modal.component.html',
+  styleUrls: ['./transaction-details-modal.component.css'],
+  animations : Animations.fadeIn
 })
-export class TransactionDetailsComponent implements OnInit, OnDestroy {
+export class TransactionDetailsModalComponent implements OnInit, OnDestroy {
+
   @Input() transaction: TransactionInfo;
 
-  constructor(private nodeService: NodeService, private globalService: GlobalService) {
+  constructor(private nodeService: NodeService, private globalService: GlobalService, public activeModal: NgbActiveModal) {
   }
 
   public copied = false;
@@ -39,10 +41,6 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     this.copied = true;
   }
 
-  public getSentToDetails(): string {
-   return this.transaction.contact ? `${this.transaction.contact.label} - (${this.transaction.contact.address})` : this.transaction.address
-  }
-
   private subscribeToGeneralWalletInfo() {
     this.generalWalletInfoSubscription = this.nodeService.generalInfo().pipe(tap(generalInfo => {
       this.lastBlockSyncedHeight = generalInfo.lastBlockSyncedHeight;
@@ -57,6 +55,4 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
       this.confirmations = 0;
     }
   }
-
-
 }

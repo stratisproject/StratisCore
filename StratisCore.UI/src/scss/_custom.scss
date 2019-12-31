@@ -6,8 +6,8 @@
 //
 //
 
-
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,400,700&display=swap');
+
 $sidebar-padding: 25px;
 
 // basics
@@ -260,31 +260,39 @@ img {
 
   ///// DISABLED STAKING CARD
   .disabledcard {
-    border:0;
-    box-shadow:none !important;
+    border: 0;
+    box-shadow: none !important;
   }
 
-  .disabledcard {background-color: #ccc !important;}
-  .disabledcard:hover {border:none !important;}
+  .disabledcard {
+    background-color: #ccc !important;
+  }
+
+  .disabledcard:hover {
+    border: none !important;
+  }
+
   .disabledcard .card-header {
-      background-color: #ccc !important;
-      color: white !important;
+    background-color: #ccc !important;
+    color: white !important;
   }
+
   .disabledcard .card-body {
-      background-color: #ccc !important;
-      color: white !important;
+    background-color: #ccc !important;
+    color: white !important;
   }
-  .disabledcard .card-footer  {
-      background-color: #ccc !important;
-      color: white !important;
+
+  .disabledcard .card-footer {
+    background-color: #ccc !important;
+    color: white !important;
   }
 
   .disabledcard .stake-type {
-      background-color: #ccc !important;
+    background-color: #ccc !important;
   }
 
   .disabledcard .soon-text {
-      color: #eee !important;
+    color: #eee !important;
   }
 
   ///// CARDS
@@ -672,8 +680,8 @@ img {
         color: $gray-500;
       }
     }
-    .right
-    {
+
+    .right {
       float: right;
     }
   }
@@ -710,7 +718,9 @@ img {
 }
 
 .receive-component {
-  .nav-tabs {border-bottom: 0 !important;}
+  .nav-tabs {
+    border-bottom: 0 !important;
+  }
 }
 
 ////// Smart Contracts
@@ -926,8 +936,16 @@ img {
 
 // Send Component
 .send-component {
-  .tab-content {padding-bottom: 0 !important;}
-  .nav-link {&.active {color: $white !important;}}
+  .tab-content {
+    padding-bottom: 0 !important;
+  }
+
+  .nav-link {
+    &.active {
+      color: $white !important;
+    }
+  }
+
   #stratis-green-bg {
     &.nav-link {
       background-color: $white !important;
@@ -1025,6 +1043,13 @@ img {
 
   .row {
     margin: 0 !important;
+  }
+}
+
+.qrsmall {
+  img {
+    width: 64px;
+    height: 64px;
   }
 }
 
@@ -1865,6 +1890,21 @@ app-wallet-selector {
   }
 }
 
+.collapse, .collapse.in {
+  display: block !important;
+  transition: all .25s ease-in-out;
+}
+
+.collapse {
+  opacity: 0;
+  height: 0;
+}
+
+.collapse.in {
+  opacity: 1;
+  height: 100%;
+}
+
 .wallet-menu {
   width: 220px;
   background: rgba(21, 139, 207, 0.9);
@@ -1890,7 +1930,7 @@ app-side-bar {
   height: 100vh;
   float: left;
   width: 250px;
-  background: rgb(23,133,202);
+  background: rgb(23, 133, 202);
   background: linear-gradient(10deg, #0068a9 0%, #2297dc 100%);
   padding: $sidebar-padding 0;
 
