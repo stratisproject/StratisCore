@@ -4,21 +4,22 @@ import { GlobalService } from '@shared/services/global.service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { NodeService } from '@shared/services/node-service';
 import { tap } from 'rxjs/operators';
-import { Animations } from '@shared/animations/animations';
+import { SnackbarService } from 'ngx-snackbar';
 
 @Component({
   selector: 'transaction-details',
   templateUrl: './transaction-details.component.html',
   styleUrls: ['./transaction-details.component.css'],
-  // animations : Animations.fadeIn
 })
 export class TransactionDetailsComponent implements OnInit, OnDestroy {
   @Input() transaction: TransactionInfo;
 
-  constructor(private nodeService: NodeService, private globalService: GlobalService) {
+  constructor(
+    private snackbarService: SnackbarService,
+    private nodeService: NodeService,
+    private globalService: GlobalService) {
   }
 
-  public copied = false;
   public coinUnit: string;
   public confirmations: number;
   private generalWalletInfoSubscription: Subscription;
@@ -35,12 +36,24 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onCopiedClick() {
-    this.copied = true;
+  public onCopiedClick(transactionId: string): void {
+    this.snackbarService.add({
+      msg: `Transaction Id ${transactionId.substr(0, 20)}... has been copied to your clipboard`,
+      customClass: 'notify-snack-bar',
+      action: {
+        text: null
+      }
+    });
   }
 
   public getSentToDetails(): string {
-   return this.transaction.contact ? `${this.transaction.contact.label} - (${this.transaction.contact.address})` : this.transaction.address
+    let addresses = null;
+    if (this.transaction.payments) {
+      addresses = this.transaction.payments.reduce((s, n) => {
+        return  `${n.destinationAddress} ${s}`
+      }, '');
+    }
+    return this.transaction.contact ? `${this.transaction.contact.label} - (${this.transaction.contact.address})` : addresses
   }
 
   private subscribeToGeneralWalletInfo() {
@@ -57,6 +70,4 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
       this.confirmations = 0;
     }
   }
-
-
 }

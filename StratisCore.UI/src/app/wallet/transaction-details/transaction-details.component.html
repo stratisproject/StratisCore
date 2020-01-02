@@ -50,14 +50,9 @@
   </ul>
   <ul class="list-inline row">
     <li class="list-inline-item col-12 blockLabel my-3">Transaction ID</li>
-    <li class="list-inline-item col-10 blockID"><code>{{ transaction.transactionId }}</code></li>
-    <button type="button" class="btn btn-outline-secondary col-1 btn-sm" placement="top"
-            ngbTooltip="Copy to clipboard" ngxClipboard [cbContent]="transaction.transactionId"
-            (click)="onCopiedClick()">
-      <i class="lnr lnr-file-add"></i>
+    <li class="list-inline-item col-8 blockID"><code>{{ transaction.transactionId }}</code></li>
+    <button type="button" class="btn btn-primary col-2 left" ngxClipboard [cbContent]="transaction.transactionId"
+            (click)="onCopiedClick(transaction.transactionId)">Copy to clipboard
     </button>
   </ul>
-  <div class="alert alert-success alert-dismissible fade show mt-3 col-12" *ngIf="copied">The transaction ID has been
-    copied to your clipboard.
-  </div>
 </div>

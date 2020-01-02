@@ -2,6 +2,11 @@ import { TransactionsHistoryItem } from '@shared/services/interfaces/api.i';
 import { AddressLabel } from '@shared/models/address-label';
 import { AddressBookService } from '@shared/services/address-book-service';
 
+export interface Payment {
+  destinationAddress: string;
+  amount: number;
+}
+
 export class TransactionInfo {
   constructor(
     public transactionType: string,
@@ -11,6 +16,7 @@ export class TransactionInfo {
     public txOutputIndex: number,
     public transactionConfirmedInBlock: number,
     public transactionTimestamp: number,
+    public payments?: Payment[],
     public address?: string,
     public contact?: AddressLabel) {
   }
@@ -32,7 +38,7 @@ export class TransactionInfo {
         transaction.fee || 0,
         transaction.txOutputIndex,
         transaction.confirmedInBlock,
-        transaction.timestamp, transaction.toAddress, contact);
+        transaction.timestamp, transaction.payments, transaction.toAddress, contact);
     });
 
     return maxTransactionCount ? mapped.slice(0, maxTransactionCount) : mapped;
