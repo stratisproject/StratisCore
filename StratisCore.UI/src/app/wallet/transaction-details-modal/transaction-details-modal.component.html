@@ -1,0 +1,19 @@
+<!-- MODAL TRANSACTION DETAILS -->
+<div @fadeIn>
+  <div class="modal-header">
+    <h5 class="modal-title">Transaction details</h5>
+    <!-- button close -->
+    <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
+      <i class="lnr lnr-cross-circle"></i>
+    </button>
+    <!-- /button close -->
+  </div>
+  <div class="modal-body details">
+    <transaction-details [transaction]="transaction"></transaction-details>
+  </div>
+  <div class="modal-footer details">
+    <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">OK</button>
+  </div>
+</div>
+
+<!-- /MODAL TRANSACTION DETAILS -->

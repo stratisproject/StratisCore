@@ -10,10 +10,10 @@ export class Animations {
         style({
           opacity: 0
         }),
-        animate(300)
+        animate(400)
       ]),
       transition(':leave',
-        animate(300, style({opacity: 0})))
+        animate(400, style({opacity: 0})))
     ])
   ]
 }
