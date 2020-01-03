@@ -36,9 +36,12 @@ export class SendComponent implements OnInit, OnDestroy {
   private accountsEnabled: boolean;
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
   private last: FeeEstimation = null;
-  public contact : AddressLabel;
+  public contact: AddressLabel;
+  private federationAddress: string;
+  public testnetEnabled: boolean;
+
   constructor(
-    private addressBookService : AddressBookService,
+    private addressBookService: AddressBookService,
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private walletService: WalletService,
@@ -75,6 +78,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public apiError: string;
   public firstTitle: string;
   public secondTitle: string;
+  public sendingTo: string;
 
   // The opReturnAmount is for compatibility with StratisX, opReturnAmount needs to be greater than 0 to pass the MemPool
   // Validation rules.
@@ -84,15 +88,34 @@ export class SendComponent implements OnInit, OnDestroy {
   private sendFormErrors: any = {};
   private sendToSidechainFormErrors: any = {};
 
-  public ngOnInit() {
+  public ngOnInit(): void {
 
     if (this.activatedRoute.snapshot.params['address']) {
       this.address = this.activatedRoute.snapshot.params['address'];
       this.getAddressBookContact();
     }
 
+    this.testnetEnabled = this.globalService.getTestnetEnabled();
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
+    if (this.sidechainEnabled) {
+      if (this.testnetEnabled) {
+        this.sendingTo = 'Stratis Testnet';
+        this.federationAddress = 'xH1GHWVNKwdebkgiFPtQtM4qb3vrvNX2Rg';
+      } else {
+        this.sendingTo = 'Stratis Mainnet';
+        this.federationAddress = 'cnYBwudqzHBtGVELyQNUGzviKV4Ym3yiEo';
+      }
+    } else {
+      if (this.testnetEnabled) {
+        this.sendingTo = 'Cirrus Test Sidechain';
+        this.federationAddress = '2N1wrNv5NDayLrKuph9YDVk8Fip8Wr8F8nX';
+      } else {
+        this.sendingTo = 'Cirrus Sidechain';
+        this.federationAddress = 'sg3WNvfWFxLJXXPYsvhGDdzpc9bT4uRQsN';
+      }
+    }
 
     if (this.sidechainEnabled) {
       this.firstTitle = 'Sidechain';
@@ -101,6 +124,8 @@ export class SendComponent implements OnInit, OnDestroy {
       this.firstTitle = 'Mainchain';
       this.secondTitle = 'Sidechain';
     }
+
+
     this.getWalletBalance();
     this.coinUnit = this.globalService.getCoinUnit();
     if (this.address) {
@@ -112,7 +137,7 @@ export class SendComponent implements OnInit, OnDestroy {
       : 'Please note that sending from the mainchain to a sidechain requires 500 confirmations.';
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
@@ -134,7 +159,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.apiError = '';
 
     const isValidForFeeEstimate = (isSideChain
-      ? form.get('destinationAddress').valid && form.get('federationAddress').valid
+      ? form.get('destinationAddress').valid //&& form.get('federationAddress').valid
       : form.get('address').valid) && form.get('amount').valid;
 
     if (isValidForFeeEstimate) {
@@ -165,7 +190,9 @@ export class SendComponent implements OnInit, OnDestroy {
     const transaction = new FeeEstimation(
       this.globalService.getWalletName(),
       'account 0',
-      form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
+      //form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
+      isSideChain ? this.federationAddress :
+        form.get('address').value.trim(),
       form.get('amount').value,
       form.get('fee').value,
       true
@@ -215,7 +242,8 @@ export class SendComponent implements OnInit, OnDestroy {
       this.globalService.getWalletName(),
       'account 0',
       form.get('password').value,
-      form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
+      isSideChain ? this.federationAddress :
+        form.get('address').value.trim(),
       form.get('amount').value,
       // TO DO: use coin notation
       (isSideChain ? this.estimatedSidechainFee : this.estimatedFee) / 100000000,
@@ -226,12 +254,12 @@ export class SendComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getAddressBookContact()
+  private getAddressBookContact(): void
   {
    this.contact = this.addressBookService.findContactByAddress(this.address);
   }
 
-  private getWalletBalance() {
+  private getWalletBalance(): void {
     this.subscriptions.push(this.walletService.wallet()
       .subscribe(
         response => {
@@ -241,10 +269,10 @@ export class SendComponent implements OnInit, OnDestroy {
       ));
   }
 
-  private openConfirmationModal(transactionResponse: TransactionResponse) {
+  private openConfirmationModal(transactionResponse: TransactionResponse): void {
     const component = this.modalService
       .open(SendConfirmationComponent, {backdrop: 'static'})
-      .componentInstance as SendConfirmationComponent;
+      .componentInstance;
 
     component.transaction = transactionResponse.transaction;
     component.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
