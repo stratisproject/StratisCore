@@ -24,17 +24,17 @@
           <strong> {{ _transaction.transactionAmount + _transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
         </td>
         <td class="text-left">{{ _transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-        <td class="text-center"><span (click)="expanded[i] = !expanded[i]"
+        <td class="text-center"><span (click)="toggleExpandItem(i)"
                                       class="lnr-transaction lnr-menu-circle"></span>
         </td>
       </tr>
       <tr style="border-top: none">
         <td colspan="5">
-          <ng-container *ngIf="expanded[i]">
-            <div @fadeIn>
+          <div [@collapseExpand]="state[i] || 'collapsed'">
+            <ng-container *ngIf="state[i]">
               <transaction-details [transaction]="_transaction"></transaction-details>
-            </div>
-          </ng-container>
+            </ng-container>
+          </div>
         </td>
       </tr>
     </ng-container>

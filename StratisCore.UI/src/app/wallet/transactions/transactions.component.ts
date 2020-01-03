@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { TransactionInfo } from '@shared/models/transaction-info';
-import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -14,13 +12,13 @@ import { Animations } from '@shared/animations/animations';
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.css'],
-  animations : Animations.fadeIn
+  animations: Animations.collapseExpand
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
   public transactions: Observable<TransactionInfo[]>;
   private subscriptions: Subscription[] = [];
   public loading = false;
-  public expanded: { [key: string]: boolean } = {};
+  public state: { [key: number]: string } = {};
   @Input() public enablePagination: boolean;
   @Input() public maxTransactionCount: number;
   @Input() public title: string;
@@ -31,7 +29,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public constructor(
     private globalService: GlobalService,
     private snackBarService: SnackbarService,
-   // private modalService: NgbModal,
+    // private modalService: NgbModal,
     private addressBookService: AddressBookService,
     public walletService: WalletService) {
 
@@ -76,15 +74,13 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public openTransactionDetailDialog(transaction: TransactionInfo): void {
-    this.rowClicked.emit(transaction);
-    // const modalRef = this.modalService.open(TransactionDetailsComponent, {backdrop: 'static', keyboard: false});
-    // modalRef.componentInstance.transaction = transaction;
-  }
-
   public onScroll() {
     this.walletService.paginateHistory(40, this.last.transactionTimestamp, this.last.txOutputIndex);
     console.log('scroll');
+  }
+
+  public toggleExpandItem(index: number): void {
+    this.state[index] = (this.state[index] || 'collapsed') === 'collapsed' ? 'expanded' : 'collapsed'
   }
 
   public ngOnDestroy() {
