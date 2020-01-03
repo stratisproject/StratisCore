@@ -64,7 +64,7 @@ export class AddNodeComponent implements OnInit {
     }
   }
 
-  public onAddNodeClicked() {
+  public onAddNodeClicked(): void {
     this.nodeService
       .addNode(this.addNodeForm.get('nodeIP').value)
       .toPromise().then(
