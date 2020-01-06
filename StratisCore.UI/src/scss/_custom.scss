@@ -210,6 +210,8 @@ img {
 
   //CARD
   .card-staking {
+    background: #FAFBFC !important;
+
     .lead {
       font-size: 1.8rem;
       margin-bottom: 0 !important;
@@ -232,14 +234,17 @@ img {
 
     .card-header {
       padding: 0 1.8rem;
+      background: #FAFBFC !important;
     }
 
     .card-body {
       padding: 0 1.8rem 1rem 1.8rem;
+      background: #FAFBFC !important;
     }
 
     .card-footer {
       padding: 0.75rem 1.8rem 1.5rem;
+      background: #FAFBFC !important;
     }
 
     //badges
@@ -293,6 +298,7 @@ img {
 
   .disabledcard .soon-text {
     color: #eee !important;
+    font-size: 2.5em;
   }
 
   ///// CARDS
@@ -304,7 +310,6 @@ img {
 
     .stake-type {
       padding: 1.125rem 1.25rem 0;
-      background-color: $white;
     }
   }
 
@@ -1720,6 +1725,17 @@ bs-daterangepicker-container {
   -webkit-box-shadow: 10px 25px 2px -1px rgba(250, 251, 252, 0.8);
 }
 
+#staking-header {
+  top: 0px;
+  position: fixed;
+  width: calc(100% - 250px) !important;
+  background-color: rgba(250, 251, 252, 0.98);
+  z-index: 1;
+  height: 400px;
+  border-radius: 0;
+  -webkit-box-shadow: 10px 25px 2px -1px rgba(250, 251, 252, 0.8);
+}
+
 .lnr-transaction {
   font-family: 'Linearicons-Free';
   font-size: 1.5em;
@@ -1743,7 +1759,7 @@ bs-daterangepicker-container {
 
 .logout-button {
   @extend .floating-button;
-  top: 10px;
+  top: 5px;
   right: 15px;
 }
 
@@ -1927,6 +1943,7 @@ app-wallet-selector {
 /// Side Bar
 app-side-bar {
   position: fixed;
+  top: 0;
   height: 100vh;
   float: left;
   width: 250px;
@@ -2005,5 +2022,22 @@ app-side-bar {
     .side-bar-item-advanced:before {
       content: "\e810";
     }
+  }
+}
+
+.send-form {
+  max-width: 800px;
+  margin-top: 35px;
+}
+
+.card-flat {
+  .card-header {
+    background: #FAFBFC !important;
+  }
+  .card-body {
+    background: #FAFBFC !important;
+  }
+  .card-footer {
+    background: #FAFBFC !important;
   }
 }

@@ -5,13 +5,12 @@ export class Animations {
     trigger('fadeIn', [
       transition(':enter', [
         style({
-          opacity: 0,
-          height: 0
+          opacity: 0
         }),
         animate(400)
       ]),
       transition(':leave',
-        animate(400, style({opacity: 0, height: 0})))
+        animate(400, style({opacity: 0})))
     ])
   ];
   public static expand = [
