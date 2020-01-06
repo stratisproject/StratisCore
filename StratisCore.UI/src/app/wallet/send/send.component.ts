@@ -20,6 +20,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Animations } from '@shared/animations/animations';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { AddressLabel } from '@shared/models/address-label';
+import { Network } from '@shared/models/network';
 
 
 export interface FeeStatus {
@@ -37,8 +38,8 @@ export class SendComponent implements OnInit, OnDestroy {
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
   private last: FeeEstimation = null;
   public contact: AddressLabel;
-  private federationAddress: string;
   public testnetEnabled: boolean;
+  public networks: Network[];
 
   constructor(
     private addressBookService: AddressBookService,
@@ -61,7 +62,6 @@ export class SendComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(500))
       .subscribe(data => this.validateForm(data, true)));
-
   }
 
   @Input() address: string;
@@ -101,19 +101,15 @@ export class SendComponent implements OnInit, OnDestroy {
 
     if (this.sidechainEnabled) {
       if (this.testnetEnabled) {
-        this.sendingTo = 'Stratis Testnet';
-        this.federationAddress = 'xH1GHWVNKwdebkgiFPtQtM4qb3vrvNX2Rg';
+        this.networks = SendComponentFormResources.cirrusTestNetworks;
       } else {
-        this.sendingTo = 'Stratis Mainnet';
-        this.federationAddress = 'cnYBwudqzHBtGVELyQNUGzviKV4Ym3yiEo';
+        this.networks = SendComponentFormResources.cirrusNetworks;
       }
     } else {
       if (this.testnetEnabled) {
-        this.sendingTo = 'Cirrus Test Sidechain';
-        this.federationAddress = '2N1wrNv5NDayLrKuph9YDVk8Fip8Wr8F8nX';
+        this.networks = SendComponentFormResources.stratisTestNetworks;
       } else {
-        this.sendingTo = 'Cirrus Sidechain';
-        this.federationAddress = 'sg3WNvfWFxLJXXPYsvhGDdzpc9bT4uRQsN';
+        this.networks = SendComponentFormResources.stratisNetworks;
       }
     }
 
@@ -156,10 +152,18 @@ export class SendComponent implements OnInit, OnDestroy {
         : SendComponentFormResources.sendValidationMessages
     );
 
+    if (isSideChain) {
+      if (form.get('networkSelect').value && form.get('networkSelect').value !== 'customNetwork') {
+        form.patchValue({'federationAddress': form.get('networkSelect').value})
+      } else if (form.get('networkSelect').value && form.get('networkSelect').value === 'customNetwork') {
+        form.patchValue({'federationAddress': ''})
+      }
+    }
+
     this.apiError = '';
 
     const isValidForFeeEstimate = (isSideChain
-      ? form.get('destinationAddress').valid //&& form.get('federationAddress').valid
+      ? form.get('destinationAddress').valid && form.get('federationAddress').valid
       : form.get('address').valid) && form.get('amount').valid;
 
     if (isValidForFeeEstimate) {
@@ -190,9 +194,7 @@ export class SendComponent implements OnInit, OnDestroy {
     const transaction = new FeeEstimation(
       this.globalService.getWalletName(),
       'account 0',
-      //form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
-      isSideChain ? this.federationAddress :
-        form.get('address').value.trim(),
+      form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
       form.get('amount').value,
       form.get('fee').value,
       true
@@ -242,8 +244,7 @@ export class SendComponent implements OnInit, OnDestroy {
       this.globalService.getWalletName(),
       'account 0',
       form.get('password').value,
-      isSideChain ? this.federationAddress :
-        form.get('address').value.trim(),
+      form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
       form.get('amount').value,
       // TO DO: use coin notation
       (isSideChain ? this.estimatedSidechainFee : this.estimatedFee) / 100000000,
