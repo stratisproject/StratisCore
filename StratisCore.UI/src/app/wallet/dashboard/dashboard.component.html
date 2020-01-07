@@ -6,27 +6,29 @@
         <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
         <small class="text-uppercase"> {{ globalService.coinUnit }}</small>
       </p>
-      <ul class="list-unstyled">
+      <ul class="list-unstyled mb-0">
         <li>
           <strong>{{ (_wallet.amountUnconfirmed | coinNotation) || (0 | coinNotation) }}</strong>
           <em> (unconfirmed)</em>
         </li>
       </ul>
     </div>
-    <h4>Latest Transactions</h4>
   </div>
   <div style="padding-top: 170px">
     <section id="content" class="col-12 mx-auto">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-12">
-            <app-transactions>
-            </app-transactions>
+      <h4 class="mb-3">
+        Latest Transactions
+      </h4>
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <app-transactions>
+              </app-transactions>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </section>
   </div>
 
