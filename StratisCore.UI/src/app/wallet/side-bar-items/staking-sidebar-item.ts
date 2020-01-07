@@ -12,9 +12,7 @@ export class StakingSidebarItem extends SideBarItemBase {
     if (this.visible) {
       this.subscriptions.push(stakingService.stakingInfo()
         .subscribe(stakingInfo => {
-          if (stakingInfo && stakingInfo.enabled) {
-            this.isStaking = true;
-          }
+          this.isStaking = stakingInfo && stakingInfo.enabled;
         }));
     }
   }
