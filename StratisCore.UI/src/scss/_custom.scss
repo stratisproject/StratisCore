@@ -1927,12 +1927,10 @@ app-wallet-selector {
 
 @-webkit-keyframes glow {
   from {
-    color: rgb(49, 194, 54);
-    text-shadow: none;
+    opacity: 0.4
   }
   to {
-    color: $success;
-    text-shadow: 3px 3px 3px, $success;
+    opacity: 0.9
   }
 
 }
