@@ -1,24 +1,24 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { TransactionInfo } from '@shared/models/transaction-info';
-import { TransactionDetailsComponent } from '../transaction-details/transaction-details.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { WalletService } from '@shared/services/wallet.service';
 import { SnackbarService } from 'ngx-snackbar';
 import { AddressBookService } from '@shared/services/address-book-service';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',
-  styleUrls: ['./transactions.component.css']
+  styleUrls: ['./transactions.component.css'],
+  animations: Animations.collapseExpand
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
   public transactions: Observable<TransactionInfo[]>;
   private subscriptions: Subscription[] = [];
   public loading = false;
-
+  public state: { [key: number]: string } = {};
   @Input() public enablePagination: boolean;
   @Input() public maxTransactionCount: number;
   @Input() public title: string;
@@ -29,7 +29,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public constructor(
     private globalService: GlobalService,
     private snackBarService: SnackbarService,
-    private modalService: NgbModal,
+    // private modalService: NgbModal,
     private addressBookService: AddressBookService,
     public walletService: WalletService) {
 
@@ -62,11 +62,11 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.transactions = this.walletService.walletHistory()
       .pipe(map((historyItems => {
         return ((null != historyItems && historyItems.length > 0))
-        ? this.stakingOnly
+          ? this.stakingOnly
             // tslint:disable-next-line:max-line-length
-          ?  TransactionInfo.mapFromTransactionsHistoryItems(historyItems.filter(items => items.type === 'staked'), this.maxTransactionCount, this.addressBookService)
-          : TransactionInfo.mapFromTransactionsHistoryItems(historyItems, this.maxTransactionCount, this.addressBookService)
-        : [];
+            ? TransactionInfo.mapFromTransactionsHistoryItems(historyItems.filter(items => items.type === 'staked'), this.maxTransactionCount, this.addressBookService)
+            : TransactionInfo.mapFromTransactionsHistoryItems(historyItems, this.maxTransactionCount, this.addressBookService)
+          : [];
 
       })), tap(items => {
         const history = items as TransactionInfo[];
@@ -74,15 +74,13 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public openTransactionDetailDialog(transaction: TransactionInfo): void {
-    this.rowClicked.emit(transaction);
-    const modalRef = this.modalService.open(TransactionDetailsComponent, {backdrop: 'static', keyboard: false});
-    modalRef.componentInstance.transaction = transaction;
-  }
-
   public onScroll() {
     this.walletService.paginateHistory(40, this.last.transactionTimestamp, this.last.txOutputIndex);
     console.log('scroll');
+  }
+
+  public toggleExpandItem(index: number): void {
+    this.state[index] = (this.state[index] || 'collapsed') === 'collapsed' ? 'expanded' : 'collapsed'
   }
 
   public ngOnDestroy() {

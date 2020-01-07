@@ -1,25 +1,26 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { GlobalService } from '@shared/services/global.service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { NodeService } from '@shared/services/node-service';
 import { tap } from 'rxjs/operators';
-import { SnackbarService } from 'ngx-snackbar';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
-  selector: 'transaction-details',
-  templateUrl: './transaction-details.component.html',
-  styleUrls: ['./transaction-details.component.css'],
+  selector: 'transaction-details-modal',
+  templateUrl: './transaction-details-modal.component.html',
+  styleUrls: ['./transaction-details-modal.component.css'],
+  animations : Animations.fadeIn
 })
-export class TransactionDetailsComponent implements OnInit, OnDestroy {
+export class TransactionDetailsModalComponent implements OnInit, OnDestroy {
+
   @Input() transaction: TransactionInfo;
 
-  constructor(
-    private snackbarService: SnackbarService,
-    private nodeService: NodeService,
-    private globalService: GlobalService) {
+  constructor(private nodeService: NodeService, private globalService: GlobalService, public activeModal: NgbActiveModal) {
   }
 
+  public copied = false;
   public coinUnit: string;
   public confirmations: number;
   private generalWalletInfoSubscription: Subscription;
@@ -36,24 +37,8 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onCopiedClick(transactionId: string): void {
-    this.snackbarService.add({
-      msg: `Transaction Id ${transactionId.substr(0, 20)}... has been copied to your clipboard`,
-      customClass: 'notify-snack-bar',
-      action: {
-        text: null
-      }
-    });
-  }
-
-  public getSentToDetails(): string {
-    let addresses = null;
-    if (this.transaction.payments) {
-      addresses = this.transaction.payments.reduce((s, n) => {
-        return  `${n.destinationAddress} ${s}`
-      }, '');
-    }
-    return this.transaction.contact ? `${this.transaction.contact.label} - (${this.transaction.contact.address})` : addresses
+  public onCopiedClick() {
+    this.copied = true;
   }
 
   private subscribeToGeneralWalletInfo() {

@@ -1,204 +1,272 @@
 <section id="GUI" class="light" @fadeIn>
   <div class="jumbotron page-header">
-      <div class="text-left">
-        <h3>Send</h3>
-      </div>
+    <div class="text-left">
+      <h3>Send</h3>
+    </div>
+    <div class="btn-group btn-group-toggle">
+      <button type="button" (click)="sideChain = !sideChain" class="btn btn-primary">
+        {{sideChain ? 'Send to Mainchain' : 'Send to Sidechain'}}
+      </button>
+    </div>
   </div>
   <section id="content" class="col-12 mx-auto page-content">
-    <div class="card mb-5">
+    <div class="card card-flat mb-5 send-card">
       <div class="card-body">
         <div class="form-group clearfix mb-0">
           <div>
-            <ngb-tabset type="tabs" class="nav-fill">
-              <ngb-tab class="nav-link text-white" title="{{ firstTitle }}">
-                <ng-template ngbTabContent>
-                  <form [formGroup]="sendForm">
-                    <!--<div class="form-group has-danger clearfix">-->
-                    <div class="form-group clearfix">
-                      <label class="float-left" for="amount">Amount</label>
-                      <label class="float-right" for="totalAmount">Spendable: {{ spendableBalance | coinNotation }} {{ coinUnit }}</label>
-                      <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
-                      <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.amount" [class.is-valid]="!sendFormErrors.amount && sendForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
-                      <div *ngIf="sendFormErrors.amount" class="invalid-feedback">{{ sendFormErrors.amount }}</div>
-                    </div>
-                    <!--<div class="form-group has-success">-->
-                    <app-address-book-card *ngIf="contact" [address]="contact" ></app-address-book-card>
-                    <div class="form-group clearfix">
-                      <label for="destinationAddress">Destination address</label>
-                      <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.address" [class.is-valid]="!sendFormErrors.address && sendForm.get('address').valid" formControlName="address" id="destinationAddress" placeholder="Please enter the destination address here.">
-                      <div *ngIf="sendFormErrors.address" class="invalid-feedback">{{ sendFormErrors.address }}</div>
-                    </div>
 
+            <ng-container *ngIf="!sideChain; else sideChainTemplate">
+              <div class="send-form">
+                <form [formGroup]="sendForm">
+                  <!--<div class="form-group has-danger clearfix">-->
+                  <div class="form-group clearfix">
+                    <label class="float-left" for="amount">Amount</label>
+                    <label class="float-right"
+                           for="totalAmount">Spendable: {{ spendableBalance | coinNotation }} {{ coinUnit }}</label>
+                    <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
+                    <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.amount"
+                           [class.is-valid]="!sendFormErrors.amount && sendForm.get('amount').valid"
+                           formControlName="amount" placeholder="0.00 {{ coinUnit }}">
+                    <div *ngIf="sendFormErrors.amount" class="invalid-feedback">{{ sendFormErrors.amount }}</div>
+                  </div>
+                  <!--<div class="form-group has-success">-->
 
-                    <div class="form-group clearfix">
-                        <ng-container *ngIf="status | async let _status">
-                          <label>Transaction Fee</label>
-                          <div *ngIf="!_status.estimating" style="height:35px">
-                            <small *ngIf="!estimatedFee" class="blockText text-danger">Please enter a valid amount and destination address to calculate the fee.</small>
-                            <label *ngIf="estimatedFee" class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
-                          </div>
-                          <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}" class="Loading LoadingSend">
-                            <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                              <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <g id="anim" fill-rule="nonzero">
-                                  <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
-                                  <path d="M77.935738,148.48817 L179.236786,205.174938 C179.304043,205.216974 179.389314,205.216974 179.45657,205.174938 L280.736,148.488771 C280.863907,148.408304 280.863907,148.222148 280.7366,148.141081 L179.437954,91.4453047 C179.370098,91.4020686 179.283025,91.4026691 179.215769,91.4465058 L77.933336,148.141681 C77.8072307,148.223349 77.8090322,148.408304 77.935738,148.48817 M175.474042,275.838986 L68.1457574,215.733562 C68.0502777,215.67171 68.0226546,215.544403 68.0839057,215.448923 L72.7257846,208.248307 C72.7870357,208.152827 72.9143421,208.125204 73.0098218,208.187055 L179.215769,267.655348 C179.283025,267.698584 179.370098,267.698584 179.437954,267.655348 L278.974728,211.93839 C281.418771,210.567445 282.646196,207.782918 282.646196,204.989383 L282.646196,189.862143 C282.646196,189.699407 282.467246,189.600925 282.329732,189.688598 L183.158664,245.214596 C180.42578,246.744674 178.264574,246.765092 175.500464,245.2188 L75.2064574,189.096503 C70.042142,185.817764 67.0252211,180.207275 67.0252211,174.089964 L67,147.658277 C67,143.83248 68.9804549,142.616464 71.877876,140.992707 L175.345535,83.0604983 C177.884456,81.6433141 180.792086,81.6433141 183.344219,83.0797143 L288.392998,141.892259 C290.557207,143.104071 291.693356,145.664011 291.693356,148.239563 C291.693356,150.671595 290.317006,153.39427 288.392998,154.47157 L183.122033,213.411421 C180.429383,214.916279 178.22434,214.916279 175.527487,213.409019 L76.2561346,157.829576 C76.1192201,157.743104 75.9408711,157.841586 75.9408711,158.003722 L75.9666927,174.089964 C75.9666927,177.107485 77.4871632,179.875197 80.0344918,181.492349 L179.21637,237.038764 C179.283625,237.082001 179.370098,237.082001 179.437354,237.038764 L280.530028,180.422855 C283.149417,178.754061 286.889943,178.675395 289.31537,180.830596 C290.864064,182.207547 291.693356,184.224632 291.693356,186.296363 L291.691555,204.920325 C291.67474,210.679137 288.392998,216.930962 283.770336,219.519725 L183.133442,275.861805 C180.394554,277.394887 178.268778,277.394887 175.474042,275.838986" id="Fill-1" fill="#FFFFFF"></path>
-                                </g>
-                              </g>
-                            </svg>
-                          </div>
-                        </ng-container>
-                      <!-- fee buttons -->
-                      <!-- <div class="col row">
-                        <div class="btn-group" ngbRadioGroup name="feeButtons" formControlName="fee">
-                          <label ngbButtonLabel class="btn btn-outline-danger">
-                            <input ngbButton type="radio" value="low"> Low/Slow
-                          </label>
-                          <label ngbButtonLabel class="btn btn-outline-warning">
-                            <input ngbButton type="radio" value="medium"> Medium
-                          </label>
-                          <label ngbButtonLabel class="btn btn-outline-success">
-                            <input ngbButton type="radio" value="high"> High/Fast
-                          </label>
-                        </div>
-                      </div> -->
-                      <!-- /fee buttons -->
-                    <!-- <div class="form-group clearfix">
-                      <small class="text-info" *ngIf="estimatedFee">
-                        <em>Transaction Fee: {{ estimatedFee | coinNotation }} {{ coinUnit }}</em>
-                      </small>
-                    </div> -->
-                    </div>
-                    <div class="form-group clearfix">
-                      <label for="walletPassword">Wallet Password</label>
-                      <input type="password" class="form-control" [class.is-invalid]="sendFormErrors.password" [class.is-valid]="!sendFormErrors.password && sendForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
-                      <div *ngIf="sendFormErrors.password" class="invalid-feedback">{{sendFormErrors.password}}</div>
-                    </div>
-                    <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
-                  </form>
-                  <div>
-                    <ng-container *ngIf="status | async let _status">
-                    <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200" [disabled]="!sendForm.valid || isSending || !estimatedFee || _status.estimating" (click)="send()">Send</button>
-                    <!-- SVG -->
-                    <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
-                      <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                          <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <g id="anim" fill-rule="nonzero">
-                              <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
-                              <path d="M77.935738,148.48817 L179.236786,205.174938 C179.304043,205.216974 179.389314,205.216974 179.45657,205.174938 L280.736,148.488771 C280.863907,148.408304 280.863907,148.222148 280.7366,148.141081 L179.437954,91.4453047 C179.370098,91.4020686 179.283025,91.4026691 179.215769,91.4465058 L77.933336,148.141681 C77.8072307,148.223349 77.8090322,148.408304 77.935738,148.48817 M175.474042,275.838986 L68.1457574,215.733562 C68.0502777,215.67171 68.0226546,215.544403 68.0839057,215.448923 L72.7257846,208.248307 C72.7870357,208.152827 72.9143421,208.125204 73.0098218,208.187055 L179.215769,267.655348 C179.283025,267.698584 179.370098,267.698584 179.437954,267.655348 L278.974728,211.93839 C281.418771,210.567445 282.646196,207.782918 282.646196,204.989383 L282.646196,189.862143 C282.646196,189.699407 282.467246,189.600925 282.329732,189.688598 L183.158664,245.214596 C180.42578,246.744674 178.264574,246.765092 175.500464,245.2188 L75.2064574,189.096503 C70.042142,185.817764 67.0252211,180.207275 67.0252211,174.089964 L67,147.658277 C67,143.83248 68.9804549,142.616464 71.877876,140.992707 L175.345535,83.0604983 C177.884456,81.6433141 180.792086,81.6433141 183.344219,83.0797143 L288.392998,141.892259 C290.557207,143.104071 291.693356,145.664011 291.693356,148.239563 C291.693356,150.671595 290.317006,153.39427 288.392998,154.47157 L183.122033,213.411421 C180.429383,214.916279 178.22434,214.916279 175.527487,213.409019 L76.2561346,157.829576 C76.1192201,157.743104 75.9408711,157.841586 75.9408711,158.003722 L75.9666927,174.089964 C75.9666927,177.107485 77.4871632,179.875197 80.0344918,181.492349 L179.21637,237.038764 C179.283625,237.082001 179.370098,237.082001 179.437354,237.038764 L280.530028,180.422855 C283.149417,178.754061 286.889943,178.675395 289.31537,180.830596 C290.864064,182.207547 291.693356,184.224632 291.693356,186.296363 L291.691555,204.920325 C291.67474,210.679137 288.392998,216.930962 283.770336,219.519725 L183.133442,275.861805 C180.394554,277.394887 178.268778,277.394887 175.474042,275.838986" id="Fill-1" fill="#FFFFFF"></path>
-                            </g>
-                          </g>
-                      </svg>
-                    </div>
+                  <div class="form-group clearfix">
+                    <label for="destinationAddress">Destination address</label>
+                    <ng-container *ngIf="contact; else inputAddress">
+                      <div> {{contact.label}} {{contact.address}}
+                        <button type="button" class="btn btn-primary" (click)="clearContact()">Clear Contact</button>
+                      </div>
                     </ng-container>
+
+                    <ng-template #inputAddress>
+                      <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.address"
+                             [class.is-valid]="!sendFormErrors.address && sendForm.get('address').valid"
+                             formControlName="address" id="destinationAddress"
+                             placeholder="Please enter the destination address here.">
+
+                    </ng-template>
+
+                    <div *ngIf="sendFormErrors.address" class="invalid-feedback">{{ sendFormErrors.address }}</div>
                   </div>
-                </ng-template>
-              </ngb-tab>
-              <ngb-tab id="stratis-green-bg" class="nav-link stratis-green" title="{{ secondTitle }}">
-                <ng-template ngbTabContent>
-                  <form [formGroup]="sendToSidechainForm">
-                    <!--<div class="form-group has-danger clearfix">-->
-                    <div class="form-group clearfix">
-                      <label class="float-left" for="amount">Amount</label>
-                      <label class="float-right" for="totalAmount">Available: {{ totalBalance | coinNotation }} {{ coinUnit }}</label>
-                      <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
-                      <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.amount" [class.is-valid]="!sendToSidechainFormErrors.amount && sendToSidechainForm.get('amount').valid" formControlName="amount" placeholder="0.00 {{ coinUnit }}">
-                      <div *ngIf="sendToSidechainFormErrors.amount" class="invalid-feedback">{{ sendToSidechainFormErrors.amount }}</div>
-                    </div>
-                    <!--<div class="form-group has-success">-->
-                    <div class="form-group clearfix">
-                      <label for="networkSelect">Select destination network</label>
-                      <select class="custom-select form-control" formControlName="networkSelect">
-                        <option value='' disabled selected>Select destination network...</option>
-                        <option *ngFor="let network of networks" [value]="network.federationAddress">{{ network.description }}</option>
-                        <option value="customNetwork">Custom...</option>
-                      </select>
-                      <div *ngIf="sendToSidechainFormErrors.networkSelect" class="invalid-feedback">{{ sendToSidechainFormErrors.networkSelect }}</div>
-                    </div>
-                      <div class="form-group clearfix" *ngIf="sendToSidechainForm.get('networkSelect').value === 'customNetwork'">
-                        <label for="federationAddress">{{ firstTitle }} federation address</label>
-                        <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.federationAddress" [class.is-valid]="!sendToSidechainFormErrors.federaionAddress && sendToSidechainForm.get('federationAddress').valid" formControlName="federationAddress" placeholder="Please enter the federation address here.">
-                        <div *ngIf="sendToSidechainFormErrors.federationAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.federationAddress }}</div>
+
+
+                  <div class="form-group clearfix">
+                    <ng-container *ngIf="status | async let _status">
+                      <label>Transaction Fee</label>
+                      <div *ngIf="!_status.estimating" style="height:35px">
+                        <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and
+                          destination address and make sure you select a destination network to calculate the fee.</small>
+                        <label *ngIf="estimatedSidechainFee"
+                               class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
                       </div>
-                    <!--<div class="form-group has-success">-->
-                    <div class="form-group clearfix">
-                      <label for="destinationAddress">{{ secondTitle }} destination address</label>
-                      <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.destinationAddress" [class.is-valid]="!sendToSidechainFormErrors.destinationAddress && sendToSidechainForm.get('destinationAddress').valid" formControlName="destinationAddress" id="destinationAddress" placeholder="Please enter the destination address here.">
-                      <div *ngIf="sendToSidechainFormErrors.destinationAddress" class="invalid-feedback">{{ sendToSidechainFormErrors.destinationAddress }}</div>
-                    </div>
-                    <div class="form-group clearfix">
-                      <ng-container *ngIf="status | async let _status">
-                        <label>Transaction Fee</label>
-                        <div *ngIf="!_status.estimating" style="height:35px">
-                          <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and destination address and make sure you have selected a destination network to calculate the fee.</small>
-                          <label *ngIf="estimatedSidechainFee" class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
-                        </div>
-                        <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}" class="Loading LoadingSend">
-                          <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                              <g id="anim" fill-rule="nonzero">
-                                <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
-                                <path d="M77.935738,148.48817 L179.236786,205.174938 C179.304043,205.216974 179.389314,205.216974 179.45657,205.174938 L280.736,148.488771 C280.863907,148.408304 280.863907,148.222148 280.7366,148.141081 L179.437954,91.4453047 C179.370098,91.4020686 179.283025,91.4026691 179.215769,91.4465058 L77.933336,148.141681 C77.8072307,148.223349 77.8090322,148.408304 77.935738,148.48817 M175.474042,275.838986 L68.1457574,215.733562 C68.0502777,215.67171 68.0226546,215.544403 68.0839057,215.448923 L72.7257846,208.248307 C72.7870357,208.152827 72.9143421,208.125204 73.0098218,208.187055 L179.215769,267.655348 C179.283025,267.698584 179.370098,267.698584 179.437954,267.655348 L278.974728,211.93839 C281.418771,210.567445 282.646196,207.782918 282.646196,204.989383 L282.646196,189.862143 C282.646196,189.699407 282.467246,189.600925 282.329732,189.688598 L183.158664,245.214596 C180.42578,246.744674 178.264574,246.765092 175.500464,245.2188 L75.2064574,189.096503 C70.042142,185.817764 67.0252211,180.207275 67.0252211,174.089964 L67,147.658277 C67,143.83248 68.9804549,142.616464 71.877876,140.992707 L175.345535,83.0604983 C177.884456,81.6433141 180.792086,81.6433141 183.344219,83.0797143 L288.392998,141.892259 C290.557207,143.104071 291.693356,145.664011 291.693356,148.239563 C291.693356,150.671595 290.317006,153.39427 288.392998,154.47157 L183.122033,213.411421 C180.429383,214.916279 178.22434,214.916279 175.527487,213.409019 L76.2561346,157.829576 C76.1192201,157.743104 75.9408711,157.841586 75.9408711,158.003722 L75.9666927,174.089964 C75.9666927,177.107485 77.4871632,179.875197 80.0344918,181.492349 L179.21637,237.038764 C179.283625,237.082001 179.370098,237.082001 179.437354,237.038764 L280.530028,180.422855 C283.149417,178.754061 286.889943,178.675395 289.31537,180.830596 C290.864064,182.207547 291.693356,184.224632 291.693356,186.296363 L291.691555,204.920325 C291.67474,210.679137 288.392998,216.930962 283.770336,219.519725 L183.133442,275.861805 C180.394554,277.394887 178.268778,277.394887 175.474042,275.838986" id="Fill-1" fill="#FFFFFF"></path>
-                              </g>
+                      <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}"
+                           class="Loading LoadingSend">
+                        <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1"
+                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                          <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="anim" fill-rule="nonzero">
+                              <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
+                              <path
+                                d="M77.935738,148.48817 L179.236786,205.174938 C179.304043,205.216974 179.389314,205.216974 179.45657,205.174938 L280.736,148.488771 C280.863907,148.408304 280.863907,148.222148 280.7366,148.141081 L179.437954,91.4453047 C179.370098,91.4020686 179.283025,91.4026691 179.215769,91.4465058 L77.933336,148.141681 C77.8072307,148.223349 77.8090322,148.408304 77.935738,148.48817 M175.474042,275.838986 L68.1457574,215.733562 C68.0502777,215.67171 68.0226546,215.544403 68.0839057,215.448923 L72.7257846,208.248307 C72.7870357,208.152827 72.9143421,208.125204 73.0098218,208.187055 L179.215769,267.655348 C179.283025,267.698584 179.370098,267.698584 179.437954,267.655348 L278.974728,211.93839 C281.418771,210.567445 282.646196,207.782918 282.646196,204.989383 L282.646196,189.862143 C282.646196,189.699407 282.467246,189.600925 282.329732,189.688598 L183.158664,245.214596 C180.42578,246.744674 178.264574,246.765092 175.500464,245.2188 L75.2064574,189.096503 C70.042142,185.817764 67.0252211,180.207275 67.0252211,174.089964 L67,147.658277 C67,143.83248 68.9804549,142.616464 71.877876,140.992707 L175.345535,83.0604983 C177.884456,81.6433141 180.792086,81.6433141 183.344219,83.0797143 L288.392998,141.892259 C290.557207,143.104071 291.693356,145.664011 291.693356,148.239563 C291.693356,150.671595 290.317006,153.39427 288.392998,154.47157 L183.122033,213.411421 C180.429383,214.916279 178.22434,214.916279 175.527487,213.409019 L76.2561346,157.829576 C76.1192201,157.743104 75.9408711,157.841586 75.9408711,158.003722 L75.9666927,174.089964 C75.9666927,177.107485 77.4871632,179.875197 80.0344918,181.492349 L179.21637,237.038764 C179.283625,237.082001 179.370098,237.082001 179.437354,237.038764 L280.530028,180.422855 C283.149417,178.754061 286.889943,178.675395 289.31537,180.830596 C290.864064,182.207547 291.693356,184.224632 291.693356,186.296363 L291.691555,204.920325 C291.67474,210.679137 288.392998,216.930962 283.770336,219.519725 L183.133442,275.861805 C180.394554,277.394887 178.268778,277.394887 175.474042,275.838986"
+                                id="Fill-1" fill="#FFFFFF"></path>
                             </g>
-                          </svg>
-                        </div>
-                      </ng-container>
-                      <!-- fee buttons -->
-                      <!-- <div class="col row">
-                        <div class="btn-group" ngbRadioGroup name="feeButtons" formControlName="fee">
-                          <label ngbButtonLabel class="btn btn-outline-danger">
-                            <input ngbButton type="radio" value="low"> Low/Slow
-                          </label>
-                          <label ngbButtonLabel class="btn btn-outline-warning">
-                            <input ngbButton type="radio" value="medium"> Medium
-                          </label>
-                          <label ngbButtonLabel class="btn btn-outline-success">
-                            <input ngbButton type="radio" value="high"> High/Fast
-                          </label>
-                        </div>
-                      </div> -->
-                      <!-- /fee buttons -->
+                          </g>
+                        </svg>
+                      </div>
+                    </ng-container>
+                    <!-- fee buttons -->
+                    <!-- <div class="col row">
+                      <div class="btn-group" ngbRadioGroup name="feeButtons" formControlName="fee">
+                        <label ngbButtonLabel class="btn btn-outline-danger">
+                          <input ngbButton type="radio" value="low"> Low/Slow
+                        </label>
+                        <label ngbButtonLabel class="btn btn-outline-warning">
+                          <input ngbButton type="radio" value="medium"> Medium
+                        </label>
+                        <label ngbButtonLabel class="btn btn-outline-success">
+                          <input ngbButton type="radio" value="high"> High/Fast
+                        </label>
+                      </div>
+                    </div> -->
+                    <!-- /fee buttons -->
                     <!-- <div class="form-group clearfix">
                       <small class="text-info" *ngIf="estimatedFee">
                         <em>Transaction Fee: {{ estimatedFee | coinNotation }} {{ coinUnit }}</em>
                       </small>
                     </div> -->
-                    </div>
-                    <div class="form-group clearfix">
-                      <div>
-                        <div class="alert alert-warning py-1">An additional amount of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.</div>
-                        <div class="alert alert-warning py-1">{{ confirmationText }}</div>
-                      </div>
-                    </div>
-                    <div class="form-group clearfix">
-                      <label for="walletPassword">Wallet Password</label>
-                      <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password" [class.is-valid]="!sendToSidechainFormErrors.password && sendToSidechainForm.get('password').valid" formControlName="password" id="walletPassword" placeholder="Please enter your wallet password." >
-                      <div *ngIf="sendToSidechainFormErrors.password" class="invalid-feedback">{{sendToSidechainFormErrors.password}}</div>
-                    </div>
-                    <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
-                  </form>
-                  <div>
-                    <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-right-200" [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee" (click)="send(true)">Send</button>
+                  </div>
+                  <div class="form-group clearfix">
+                    <label for="walletPassword">Wallet Password</label>
+                    <input type="password" class="form-control" [class.is-invalid]="sendFormErrors.password"
+                           [class.is-valid]="!sendFormErrors.password && sendForm.get('password').valid"
+                           formControlName="password" id="walletPassword"
+                           placeholder="Please enter your wallet password.">
+                    <div *ngIf="sendFormErrors.password" class="invalid-feedback">{{sendFormErrors.password}}</div>
+                  </div>
+                  <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
+                </form>
+                <div>
+                  <ng-container *ngIf="status | async let _status">
+                    <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200"
+                            [disabled]="!sendForm.valid || isSending || !estimatedFee || _status.estimating"
+                            (click)="send()">Send
+                    </button>
                     <!-- SVG -->
                     <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
-                      <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                      <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1"
+                           xmlns="http://www.w3.org/2000/svg"
+                           xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <g id="anim" fill-rule="nonzero">
+                            <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
+                            <path
+                              d="M77.935738,148.48817 L179.236786,205.174938 C179.304043,205.216974 179.389314,205.216974 179.45657,205.174938 L280.736,148.488771 C280.863907,148.408304 280.863907,148.222148 280.7366,148.141081 L179.437954,91.4453047 C179.370098,91.4020686 179.283025,91.4026691 179.215769,91.4465058 L77.933336,148.141681 C77.8072307,148.223349 77.8090322,148.408304 77.935738,148.48817 M175.474042,275.838986 L68.1457574,215.733562 C68.0502777,215.67171 68.0226546,215.544403 68.0839057,215.448923 L72.7257846,208.248307 C72.7870357,208.152827 72.9143421,208.125204 73.0098218,208.187055 L179.215769,267.655348 C179.283025,267.698584 179.370098,267.698584 179.437954,267.655348 L278.974728,211.93839 C281.418771,210.567445 282.646196,207.782918 282.646196,204.989383 L282.646196,189.862143 C282.646196,189.699407 282.467246,189.600925 282.329732,189.688598 L183.158664,245.214596 C180.42578,246.744674 178.264574,246.765092 175.500464,245.2188 L75.2064574,189.096503 C70.042142,185.817764 67.0252211,180.207275 67.0252211,174.089964 L67,147.658277 C67,143.83248 68.9804549,142.616464 71.877876,140.992707 L175.345535,83.0604983 C177.884456,81.6433141 180.792086,81.6433141 183.344219,83.0797143 L288.392998,141.892259 C290.557207,143.104071 291.693356,145.664011 291.693356,148.239563 C291.693356,150.671595 290.317006,153.39427 288.392998,154.47157 L183.122033,213.411421 C180.429383,214.916279 178.22434,214.916279 175.527487,213.409019 L76.2561346,157.829576 C76.1192201,157.743104 75.9408711,157.841586 75.9408711,158.003722 L75.9666927,174.089964 C75.9666927,177.107485 77.4871632,179.875197 80.0344918,181.492349 L179.21637,237.038764 C179.283625,237.082001 179.370098,237.082001 179.437354,237.038764 L280.530028,180.422855 C283.149417,178.754061 286.889943,178.675395 289.31537,180.830596 C290.864064,182.207547 291.693356,184.224632 291.693356,186.296363 L291.691555,204.920325 C291.67474,210.679137 288.392998,216.930962 283.770336,219.519725 L183.133442,275.861805 C180.394554,277.394887 178.268778,277.394887 175.474042,275.838986"
+                              id="Fill-1" fill="#FFFFFF"></path>
+                          </g>
+                        </g>
+                      </svg>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #sideChainTemplate>
+              <div class="send-form" @fadeIn>
+                <form [formGroup]="sendToSidechainForm">
+                  <!--<div class="form-group has-danger clearfix">-->
+                  <div class="form-group clearfix">
+                    <label class="float-left" for="amount">Amount</label>
+                    <label class="float-right"
+                           for="totalAmount">Available: {{ totalBalance | coinNotation }} {{ coinUnit }}</label>
+                    <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
+                    <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.amount"
+                           [class.is-valid]="!sendToSidechainFormErrors.amount && sendToSidechainForm.get('amount').valid"
+                           formControlName="amount" placeholder="0.00 {{ coinUnit }}">
+                    <div *ngIf="sendToSidechainFormErrors.amount"
+                         class="invalid-feedback">{{ sendToSidechainFormErrors.amount }}</div>
+                  </div>
+                  <!--<div class="form-group has-success">-->
+                  <div class="form-group clearfix">
+                    <label for="networkSelect">Select destination network</label>
+                    <select class="custom-select form-control" formControlName="networkSelect">
+                      <option value='' disabled selected>Select destination network...</option>
+                      <option *ngFor="let network of networks" [value]="network.federationAddress">{{ network.description }}</option>
+                      <option value="customNetwork">Custom...</option>
+                    </select>
+                    <div *ngIf="sendToSidechainFormErrors.networkSelect" class="invalid-feedback">{{ sendToSidechainFormErrors.networkSelect }}</div>
+                  </div>
+                  <div class="form-group clearfix" *ngIf="sendToSidechainForm.get('networkSelect').value === 'customNetwork'">
+                    <label for="federationAddress">{{ firstTitle }} federation address</label>
+                    <input type="text" class="form-control"
+                           [class.is-invalid]="sendToSidechainFormErrors.federationAddress"
+                           [class.is-valid]="!sendToSidechainFormErrors.federaionAddress && sendToSidechainForm.get('federationAddress').valid"
+                           formControlName="federationAddress" placeholder="Please enter the federation address here.">
+                    <div *ngIf="sendToSidechainFormErrors.federationAddress"
+                         class="invalid-feedback">{{ sendToSidechainFormErrors.federationAddress }}</div>
+                  </div>
+                  <!--<div class="form-group has-success">-->
+                  <div class="form-group clearfix">
+                    <label for="destinationAddress">{{ secondTitle }} destination address</label>
+                    <input type="text" class="form-control"
+                           [class.is-invalid]="sendToSidechainFormErrors.destinationAddress"
+                           [class.is-valid]="!sendToSidechainFormErrors.destinationAddress && sendToSidechainForm.get('destinationAddress').valid"
+                           formControlName="destinationAddress" id="destinationAddress"
+                           placeholder="Please enter the sidechain destination address here.">
+                    <div *ngIf="sendToSidechainFormErrors.destinationAddress"
+                         class="invalid-feedback">{{ sendToSidechainFormErrors.destinationAddress }}</div>
+                  </div>
+                  <div class="form-group clearfix">
+                    <ng-container *ngIf="status | async let _status">
+                      <label>Transaction Fee</label>
+                      <div *ngIf="!_status.estimating" style="height:35px">
+                        <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and
+                          destination address to calculate the fee.</small>
+                        <label *ngIf="estimatedSidechainFee"
+                               class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
+                      </div>
+                      <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}"
+                           class="Loading LoadingSend">
+                        <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1"
+                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                           <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                             <g id="anim" fill-rule="nonzero">
                               <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
-                              <path d="M77.935738,148.48817 L179.236786,205.174938 C179.304043,205.216974 179.389314,205.216974 179.45657,205.174938 L280.736,148.488771 C280.863907,148.408304 280.863907,148.222148 280.7366,148.141081 L179.437954,91.4453047 C179.370098,91.4020686 179.283025,91.4026691 179.215769,91.4465058 L77.933336,148.141681 C77.8072307,148.223349 77.8090322,148.408304 77.935738,148.48817 M175.474042,275.838986 L68.1457574,215.733562 C68.0502777,215.67171 68.0226546,215.544403 68.0839057,215.448923 L72.7257846,208.248307 C72.7870357,208.152827 72.9143421,208.125204 73.0098218,208.187055 L179.215769,267.655348 C179.283025,267.698584 179.370098,267.698584 179.437954,267.655348 L278.974728,211.93839 C281.418771,210.567445 282.646196,207.782918 282.646196,204.989383 L282.646196,189.862143 C282.646196,189.699407 282.467246,189.600925 282.329732,189.688598 L183.158664,245.214596 C180.42578,246.744674 178.264574,246.765092 175.500464,245.2188 L75.2064574,189.096503 C70.042142,185.817764 67.0252211,180.207275 67.0252211,174.089964 L67,147.658277 C67,143.83248 68.9804549,142.616464 71.877876,140.992707 L175.345535,83.0604983 C177.884456,81.6433141 180.792086,81.6433141 183.344219,83.0797143 L288.392998,141.892259 C290.557207,143.104071 291.693356,145.664011 291.693356,148.239563 C291.693356,150.671595 290.317006,153.39427 288.392998,154.47157 L183.122033,213.411421 C180.429383,214.916279 178.22434,214.916279 175.527487,213.409019 L76.2561346,157.829576 C76.1192201,157.743104 75.9408711,157.841586 75.9408711,158.003722 L75.9666927,174.089964 C75.9666927,177.107485 77.4871632,179.875197 80.0344918,181.492349 L179.21637,237.038764 C179.283625,237.082001 179.370098,237.082001 179.437354,237.038764 L280.530028,180.422855 C283.149417,178.754061 286.889943,178.675395 289.31537,180.830596 C290.864064,182.207547 291.693356,184.224632 291.693356,186.296363 L291.691555,204.920325 C291.67474,210.679137 288.392998,216.930962 283.770336,219.519725 L183.133442,275.861805 C180.394554,277.394887 178.268778,277.394887 175.474042,275.838986" id="Fill-1" fill="#FFFFFF"></path>
+                              <path
+                                d="M77.935738,148.48817 L179.236786,205.174938 C179.304043,205.216974 179.389314,205.216974 179.45657,205.174938 L280.736,148.488771 C280.863907,148.408304 280.863907,148.222148 280.7366,148.141081 L179.437954,91.4453047 C179.370098,91.4020686 179.283025,91.4026691 179.215769,91.4465058 L77.933336,148.141681 C77.8072307,148.223349 77.8090322,148.408304 77.935738,148.48817 M175.474042,275.838986 L68.1457574,215.733562 C68.0502777,215.67171 68.0226546,215.544403 68.0839057,215.448923 L72.7257846,208.248307 C72.7870357,208.152827 72.9143421,208.125204 73.0098218,208.187055 L179.215769,267.655348 C179.283025,267.698584 179.370098,267.698584 179.437954,267.655348 L278.974728,211.93839 C281.418771,210.567445 282.646196,207.782918 282.646196,204.989383 L282.646196,189.862143 C282.646196,189.699407 282.467246,189.600925 282.329732,189.688598 L183.158664,245.214596 C180.42578,246.744674 178.264574,246.765092 175.500464,245.2188 L75.2064574,189.096503 C70.042142,185.817764 67.0252211,180.207275 67.0252211,174.089964 L67,147.658277 C67,143.83248 68.9804549,142.616464 71.877876,140.992707 L175.345535,83.0604983 C177.884456,81.6433141 180.792086,81.6433141 183.344219,83.0797143 L288.392998,141.892259 C290.557207,143.104071 291.693356,145.664011 291.693356,148.239563 C291.693356,150.671595 290.317006,153.39427 288.392998,154.47157 L183.122033,213.411421 C180.429383,214.916279 178.22434,214.916279 175.527487,213.409019 L76.2561346,157.829576 C76.1192201,157.743104 75.9408711,157.841586 75.9408711,158.003722 L75.9666927,174.089964 C75.9666927,177.107485 77.4871632,179.875197 80.0344918,181.492349 L179.21637,237.038764 C179.283625,237.082001 179.370098,237.082001 179.437354,237.038764 L280.530028,180.422855 C283.149417,178.754061 286.889943,178.675395 289.31537,180.830596 C290.864064,182.207547 291.693356,184.224632 291.693356,186.296363 L291.691555,204.920325 C291.67474,210.679137 288.392998,216.930962 283.770336,219.519725 L183.133442,275.861805 C180.394554,277.394887 178.268778,277.394887 175.474042,275.838986"
+                                id="Fill-1" fill="#FFFFFF"></path>
                             </g>
                           </g>
-                      </svg>
+                        </svg>
+                      </div>
+                    </ng-container>
+                    <!-- fee buttons -->
+                    <!-- <div class="col row">
+                      <div class="btn-group" ngbRadioGroup name="feeButtons" formControlName="fee">
+                        <label ngbButtonLabel class="btn btn-outline-danger">
+                          <input ngbButton type="radio" value="low"> Low/Slow
+                        </label>
+                        <label ngbButtonLabel class="btn btn-outline-warning">
+                          <input ngbButton type="radio" value="medium"> Medium
+                        </label>
+                        <label ngbButtonLabel class="btn btn-outline-success">
+                          <input ngbButton type="radio" value="high"> High/Fast
+                        </label>
+                      </div>
+                    </div> -->
+                    <!-- /fee buttons -->
+                    <!-- <div class="form-group clearfix">
+                      <small class="text-info" *ngIf="estimatedFee">
+                        <em>Transaction Fee: {{ estimatedFee | coinNotation }} {{ coinUnit }}</em>
+                      </small>
+                    </div> -->
+                  </div>
+                  <div class="form-group clearfix">
+                    <div>
+                      <div class="alert alert-warning py-1">An additional amount
+                        of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.
+                      </div>
+                      <div class="alert alert-warning py-1">{{ confirmationText }}</div>
                     </div>
                   </div>
-                </ng-template>
-              </ngb-tab>
-            </ngb-tabset>
+                  <div class="form-group clearfix">
+                    <label for="walletPassword">Wallet Password</label>
+                    <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password"
+                           [class.is-valid]="!sendToSidechainFormErrors.password && sendToSidechainForm.get('password').valid"
+                           formControlName="password" id="walletPassword"
+                           placeholder="Please enter your wallet password.">
+                    <div *ngIf="sendToSidechainFormErrors.password"
+                         class="invalid-feedback">{{sendToSidechainFormErrors.password}}</div>
+                  </div>
+                  <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
+                </form>
+                <div>
+                  <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-right-200"
+                          [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee"
+                          (click)="send(true)">Send
+                  </button>
+                  <!-- SVG -->
+                  <div *ngIf="isSending" class="Loading LoadingSend col-2 mx-auto">
+                    <svg width="30px" height="30px" viewBox="0 0 359 359" version="1.1"
+                         xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+                      <g id="SvgAnim" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="anim" fill-rule="nonzero">
+                          <circle id="Oval" fill="#1794C8" cx="179.5" cy="179.5" r="179.5"></circle>
+                          <path
+                            d="M77.935738,148.48817 L179.236786,205.174938 C179.304043,205.216974 179.389314,205.216974 179.45657,205.174938 L280.736,148.488771 C280.863907,148.408304 280.863907,148.222148 280.7366,148.141081 L179.437954,91.4453047 C179.370098,91.4020686 179.283025,91.4026691 179.215769,91.4465058 L77.933336,148.141681 C77.8072307,148.223349 77.8090322,148.408304 77.935738,148.48817 M175.474042,275.838986 L68.1457574,215.733562 C68.0502777,215.67171 68.0226546,215.544403 68.0839057,215.448923 L72.7257846,208.248307 C72.7870357,208.152827 72.9143421,208.125204 73.0098218,208.187055 L179.215769,267.655348 C179.283025,267.698584 179.370098,267.698584 179.437954,267.655348 L278.974728,211.93839 C281.418771,210.567445 282.646196,207.782918 282.646196,204.989383 L282.646196,189.862143 C282.646196,189.699407 282.467246,189.600925 282.329732,189.688598 L183.158664,245.214596 C180.42578,246.744674 178.264574,246.765092 175.500464,245.2188 L75.2064574,189.096503 C70.042142,185.817764 67.0252211,180.207275 67.0252211,174.089964 L67,147.658277 C67,143.83248 68.9804549,142.616464 71.877876,140.992707 L175.345535,83.0604983 C177.884456,81.6433141 180.792086,81.6433141 183.344219,83.0797143 L288.392998,141.892259 C290.557207,143.104071 291.693356,145.664011 291.693356,148.239563 C291.693356,150.671595 290.317006,153.39427 288.392998,154.47157 L183.122033,213.411421 C180.429383,214.916279 178.22434,214.916279 175.527487,213.409019 L76.2561346,157.829576 C76.1192201,157.743104 75.9408711,157.841586 75.9408711,158.003722 L75.9666927,174.089964 C75.9666927,177.107485 77.4871632,179.875197 80.0344918,181.492349 L179.21637,237.038764 C179.283625,237.082001 179.370098,237.082001 179.437354,237.038764 L280.530028,180.422855 C283.149417,178.754061 286.889943,178.675395 289.31537,180.830596 C290.864064,182.207547 291.693356,184.224632 291.693356,186.296363 L291.691555,204.920325 C291.67474,210.679137 288.392998,216.930962 283.770336,219.519725 L183.133442,275.861805 C180.394554,277.394887 178.268778,277.394887 175.474042,275.838986"
+                            id="Fill-1" fill="#FFFFFF"></path>
+                        </g>
+                      </g>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
           </div>
         </div>
       </div>
     </div>
-
   </section>
 </section>
