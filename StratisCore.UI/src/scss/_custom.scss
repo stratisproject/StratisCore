@@ -8,8 +8,6 @@
 
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,400,700&display=swap');
 
-$sidebar-padding: 25px;
-
 // basics
 body {
   font-size: 1rem;
@@ -881,7 +879,7 @@ img {
 ////// LOGIN
 .left-login {
   height: 100vh;
-  background: $primary;
+  background: $sidebar-gradient;
   min-height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
@@ -1947,8 +1945,8 @@ app-side-bar {
   height: 100vh;
   float: left;
   width: 250px;
-  background: rgb(23, 133, 202);
-  background: linear-gradient(10deg, #0068a9 0%, #2297dc 100%);
+  background: rgb(23,133,202);
+  background: $sidebar-gradient;
   padding: $sidebar-padding 0;
 
   .stratis-side-bar-logo {
