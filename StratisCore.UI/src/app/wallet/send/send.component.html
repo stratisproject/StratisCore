@@ -55,10 +55,10 @@
                     <ng-container *ngIf="status | async let _status">
                       <label>Transaction Fee</label>
                       <div *ngIf="!_status.estimating" style="height:35px">
-                        <small *ngIf="!estimatedFee" class="blockText text-danger">Please enter a valid amount and
-                          destination address to calculate the fee.</small>
-                        <label *ngIf="estimatedFee"
-                               class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+                        <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and
+                          destination address and make sure you select a destination network to calculate the fee.</small>
+                        <label *ngIf="estimatedSidechainFee"
+                               class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
                       </div>
                       <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}"
                            class="Loading LoadingSend">
@@ -149,6 +149,15 @@
                   </div>
                   <!--<div class="form-group has-success">-->
                   <div class="form-group clearfix">
+                    <label for="networkSelect">Select destination network</label>
+                    <select class="custom-select form-control" formControlName="networkSelect">
+                      <option value='' disabled selected>Select destination network...</option>
+                      <option *ngFor="let network of networks" [value]="network.federationAddress">{{ network.description }}</option>
+                      <option value="customNetwork">Custom...</option>
+                    </select>
+                    <div *ngIf="sendToSidechainFormErrors.networkSelect" class="invalid-feedback">{{ sendToSidechainFormErrors.networkSelect }}</div>
+                  </div>
+                  <div class="form-group clearfix" *ngIf="sendToSidechainForm.get('networkSelect').value === 'customNetwork'">
                     <label for="federationAddress">{{ firstTitle }} federation address</label>
                     <input type="text" class="form-control"
                            [class.is-invalid]="sendToSidechainFormErrors.federationAddress"
@@ -172,10 +181,10 @@
                     <ng-container *ngIf="status | async let _status">
                       <label>Transaction Fee</label>
                       <div *ngIf="!_status.estimating" style="height:35px">
-                        <small *ngIf="!estimatedFee" class="blockText text-danger">Please enter a valid amount and
+                        <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and
                           destination address to calculate the fee.</small>
-                        <label *ngIf="estimatedFee"
-                               class="blockText text-danger">{{ estimatedFee | coinNotation }} {{ coinUnit }}</label>
+                        <label *ngIf="estimatedSidechainFee"
+                               class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
                       </div>
                       <div *ngIf="_status.estimating" [ngClass]="{'invisible': !_status.estimating}"
                            class="Loading LoadingSend">

@@ -20,6 +20,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Animations } from '@shared/animations/animations';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { AddressLabel } from '@shared/models/address-label';
+import { Network } from '@shared/models/network';
 
 
 export interface FeeStatus {
@@ -37,11 +38,12 @@ export class SendComponent implements OnInit, OnDestroy {
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
   public sideChain : boolean;
   private last: FeeEstimation = null;
-  public contact : AddressLabel;
-
+  public contact: AddressLabel;
+  public testnetEnabled: boolean;
+  public networks: Network[];
 
   constructor(
-    private addressBookService : AddressBookService,
+    private addressBookService: AddressBookService,
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private walletService: WalletService,
@@ -61,7 +63,6 @@ export class SendComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(500))
       .subscribe(data => this.validateForm(data, true)));
-
   }
 
   @Input() address: string;
@@ -78,6 +79,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public apiError: string;
   public firstTitle: string;
   public secondTitle: string;
+  public sendingTo: string;
 
   // The opReturnAmount is for compatibility with StratisX, opReturnAmount needs to be greater than 0 to pass the MemPool
   // Validation rules.
@@ -87,15 +89,30 @@ export class SendComponent implements OnInit, OnDestroy {
   private sendFormErrors: any = {};
   private sendToSidechainFormErrors: any = {};
 
-  public ngOnInit() {
+  public ngOnInit(): void {
 
     if (this.activatedRoute.snapshot.params['address']) {
       this.address = this.activatedRoute.snapshot.params['address'];
       this.getAddressBookContact();
     }
 
+    this.testnetEnabled = this.globalService.getTestnetEnabled();
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
+    if (this.sidechainEnabled) {
+      if (this.testnetEnabled) {
+        this.networks = SendComponentFormResources.cirrusTestNetworks;
+      } else {
+        this.networks = SendComponentFormResources.cirrusNetworks;
+      }
+    } else {
+      if (this.testnetEnabled) {
+        this.networks = SendComponentFormResources.stratisTestNetworks;
+      } else {
+        this.networks = SendComponentFormResources.stratisNetworks;
+      }
+    }
 
     if (this.sidechainEnabled) {
       this.firstTitle = 'Sidechain';
@@ -104,6 +121,8 @@ export class SendComponent implements OnInit, OnDestroy {
       this.firstTitle = 'Mainchain';
       this.secondTitle = 'Sidechain';
     }
+
+
     this.getWalletBalance();
     this.coinUnit = this.globalService.getCoinUnit();
     if (this.address) {
@@ -115,7 +134,7 @@ export class SendComponent implements OnInit, OnDestroy {
       : 'Please note that sending from the mainchain to a sidechain requires 500 confirmations.';
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
@@ -133,6 +152,14 @@ export class SendComponent implements OnInit, OnDestroy {
         ? SendComponentFormResources.sendToSidechainValidationMessages
         : SendComponentFormResources.sendValidationMessages
     );
+
+    if (isSideChain) {
+      if (form.get('networkSelect').value && form.get('networkSelect').value !== 'customNetwork') {
+        form.patchValue({'federationAddress': form.get('networkSelect').value})
+      } else if (form.get('networkSelect').value && form.get('networkSelect').value === 'customNetwork') {
+        form.patchValue({'federationAddress': ''})
+      }
+    }
 
     this.apiError = '';
 
@@ -229,12 +256,12 @@ export class SendComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getAddressBookContact()
+  private getAddressBookContact(): void
   {
    this.contact = this.addressBookService.findContactByAddress(this.address);
   }
 
-  private getWalletBalance() {
+  private getWalletBalance(): void {
     this.subscriptions.push(this.walletService.wallet()
       .subscribe(
         response => {
@@ -244,10 +271,10 @@ export class SendComponent implements OnInit, OnDestroy {
       ));
   }
 
-  private openConfirmationModal(transactionResponse: TransactionResponse) {
+  private openConfirmationModal(transactionResponse: TransactionResponse): void {
     const component = this.modalService
       .open(SendConfirmationComponent, {backdrop: 'static'})
-      .componentInstance as SendConfirmationComponent;
+      .componentInstance;
 
     component.transaction = transactionResponse.transaction;
     component.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
