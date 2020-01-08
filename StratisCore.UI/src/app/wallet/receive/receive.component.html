@@ -5,7 +5,7 @@
         </div>
     </div>
     <section id="content" class="col-12 mx-auto page-content">
-        <div class="card mb-5">
+        <div class="card card-flat mb-5">
             <div class="card-body">
               <div class="row">
                 <div class="col-2">
@@ -14,7 +14,7 @@
                 <div class="col-8 mt-2">
                   <h3 class="mt-1 ml-3">{{address}}</h3>
                   <div class="mt1 ml-3">
-                    <button class="btn btn-block btn-outline-success" (click)="copyToClipboardClicked(address)">
+                    <button class="btn btn-block btn-primary" (click)="copyToClipboardClicked(address)">
                         <span class="fa fa-plus-circle"></span> Copy Address
                     </button>
                   </div>
@@ -26,7 +26,7 @@
         <button *ngIf="!accountsEnabled" type="button" class="btn btn-link" (click)="toggleAllAddresses()"> {{ showAddressesButtonText }}</button>
 
         <div *ngIf="!accountsEnabled && showAll">
-            <div class="card mb-5">
+            <div class="card card-flat mb-5">
                 <div class="card-body">
                     <ngb-tabset type="tabs" class="nav-fill">
                         <ngb-tab class="nav-link" title="Unused Addresses">
