@@ -878,6 +878,38 @@ img {
 }
 
 ////// LOGIN
+#login {
+  height: 100vh;
+  background: $sidebar-gradient;
+  color: white;
+
+  .login {
+    &-form {
+      width: 340px;
+    }
+
+    &-logo {
+      width: 150px;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .custom-select {
+    width: 100%;
+  }
+
+  .btn-outline-light {
+    color: white;
+    border-color: white;
+
+    &:hover {
+      background-color: white;
+      color: $gray-600;
+    }
+  }
+}
+
+
 .left-login {
   height: 100vh;
   background: $sidebar-gradient;
