@@ -133,13 +133,17 @@ img {
     }
 
     h3 {
-      font-weight: 600;
       letter-spacing: 1px;
+      font-weight: 200;
+      text-transform: uppercase;
+      font-size: 1rem;
+      margin-bottom: 0;
     }
 
     .lead {
       font-size: 3rem;
       margin-bottom: 0 !important;
+      line-height: 1.2;
 
       strong {
         font-weight: 500;
@@ -525,6 +529,7 @@ img {
     }
   }
 
+
   // status box
   .status {
     position: absolute;
@@ -878,6 +883,38 @@ img {
 }
 
 ////// LOGIN
+#login {
+  height: 100vh;
+  background: $sidebar-gradient;
+  color: white;
+
+  .login {
+    &-form {
+      width: 340px;
+    }
+
+    &-logo {
+      width: 150px;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .custom-select {
+    width: 100%;
+  }
+
+  .btn-outline-light {
+    color: white;
+    border-color: white;
+
+    &:hover {
+      background-color: white;
+      color: $gray-600;
+    }
+  }
+}
+
+
 .left-login {
   height: 100vh;
   background: $sidebar-gradient;
@@ -1702,9 +1739,6 @@ bs-daterangepicker-container {
   background: $header-gradient;
   z-index: 1;
   height: 100px;
-  h3 {
-    margin-left: 15px;
-  }
 }
 
 .page-header-right-content {
@@ -1722,9 +1756,6 @@ bs-daterangepicker-container {
   background: $header-gradient;
   z-index: 1;
   border-radius: 0;
-  h3 {
-    margin-left: 15px;
-  }
 }
 
 #staking-header {
@@ -1736,6 +1767,7 @@ bs-daterangepicker-container {
   z-index: 1;
   height: 400px;
   border-radius: 0;
+
   h3 {
     margin-left: 15px;
   }
@@ -1994,12 +2026,27 @@ app-side-bar {
       margin-right: 20px;
     }
 
+    .side-bar-item-account-new {
+      animation: glow 1.5s ease-in-out infinite alternate;
+      margin-left: -30px;
+      margin-right: 13px;
+      height: 15px;
+      width: 15px;
+      margin-top: -10px;
+      border: 2px solid;
+      border-radius: 50%;
+      display: inline-block;
+      border-color: #28a745;
+      background-color: #28a745 !important;
+    }
+
     .side-bar-item-account:before {
       content: "\e800";
     }
 
     .side-bar-item-staking-active:before {
       animation: glow 1.5s ease-in-out infinite alternate;
+
     }
 
     .side-bar-item-staking:before {
@@ -2026,6 +2073,7 @@ app-side-bar {
       content: "\e810";
     }
   }
+
 }
 
 .send-form {

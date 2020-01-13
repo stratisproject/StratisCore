@@ -24,7 +24,6 @@
         </div>
 
         <button *ngIf="!accountsEnabled" type="button" class="btn btn-link" (click)="toggleAllAddresses()"> {{ showAddressesButtonText }}</button>
-
         <div *ngIf="!accountsEnabled && showAll">
             <div class="card card-flat mb-5">
                 <div class="card-body">

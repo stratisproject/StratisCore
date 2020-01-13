@@ -10,11 +10,13 @@ import { PasswordValidationDirective } from '@shared/directives/password-validat
 import { WalletCreation } from '@shared/models/wallet-creation';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'create-component',
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.css'],
+  animations : Animations.fadeIn
 })
 
 export class CreateComponent implements OnInit, OnDestroy {

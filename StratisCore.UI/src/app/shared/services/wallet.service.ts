@@ -38,7 +38,7 @@ export class WalletService extends RestApi {
   private walletUpdatedSubjects: { [walletName: string]: BehaviorSubject<WalletBalance> } = {};
   private walletHistorySubjects: { [walletName: string]: BehaviorSubject<TransactionsHistoryItem[]> } = {};
   private loadingSubject = new Subject<boolean>();
-  private newDataSubject = new Subject<boolean>();
+  private walletActivitySubject = new Subject<boolean>();
   private currentWallet: WalletInfo;
   private historyPageSize = 40;
   public accountsEnabled: boolean;
@@ -49,8 +49,12 @@ export class WalletService extends RestApi {
     return this.loadingSubject.asObservable();
   }
 
-  public get newDataFlag(): Observable<boolean> {
-    return this.newDataSubject.asObservable();
+  public get walletActivityFlag(): Observable<boolean> {
+    return this.walletActivitySubject.asObservable();
+  }
+
+  public clearWalletActivityFlag(): void {
+    this.walletActivitySubject.next(false);
   }
 
   constructor(
@@ -337,6 +341,7 @@ export class WalletService extends RestApi {
         newBalance.setCurrentAccountAddress(this.currentAccountService.address);
         this.clearWalletHistory(0);
         this.paginateHistory();
+        this.walletActivitySubject.next(true);
         historyRefreshed = true;
       }
     }
@@ -344,6 +349,7 @@ export class WalletService extends RestApi {
     if (!historyRefreshed && (walletSubject.value
       && (walletSubject.value.amountConfirmed !== newBalance.amountConfirmed
         || walletSubject.value.amountUnconfirmed !== newBalance.amountUnconfirmed))) {
+      this.walletActivitySubject.next(true);
       this.paginateHistory();
     }
 

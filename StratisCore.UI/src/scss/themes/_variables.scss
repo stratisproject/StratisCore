@@ -1,11 +1,14 @@
+$stratis-green:  #3BB0BA !default;
 $sidebar-padding: 25px;
 $sidebar-gradient: linear-gradient(10deg, #0068a9 0%, #2297dc 100%);
 
 $header-gradient: linear-gradient(360deg, rgba(250, 250, 250, 0.8) 0%, rgb(250, 250, 250) 30%, rgb(240, 240, 240) 100%);
 
 $blue: #0B81CC;
+$dark: #212529;
 $input-btn-padding-y: .55rem;
 $btn-border-radius: 1.4rem;
+$btn-transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, color .15s ease-in-out;
 
 $input-btn-padding-y-lg: .7rem;
 $btn-border-radius-lg: 1.4rem;

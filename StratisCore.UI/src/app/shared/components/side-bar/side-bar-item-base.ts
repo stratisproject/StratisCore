@@ -1,6 +1,7 @@
 import { Subscription } from "rxjs";
 
 export abstract class SideBarItemBase implements SideBarItem {
+
   protected subscriptions: Subscription[] = [];
   private classes = ['side-bar-item', 'side-bar-item-icon'];
 
@@ -34,9 +35,15 @@ export abstract class SideBarItemBase implements SideBarItem {
 
   protected abstract getStatusClasses(): string[];
 
+  public getIndicatorClasses(): string[] {
+    return [];
+  }
+
   order: number;
   selected: boolean;
   visible: boolean;
+  disabled?: boolean;
+  iconClass?: any;
 }
 
 export class SimpleSideBarItem extends SideBarItemBase {
@@ -57,7 +64,10 @@ export interface SideBarItem {
   visible: boolean;
 
   getClasses(): any;
+  getIndicatorClasses(): string[];
 
   route: string;
   order: number;
+
+
 }
