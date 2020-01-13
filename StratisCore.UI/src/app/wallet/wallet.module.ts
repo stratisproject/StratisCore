@@ -41,6 +41,7 @@ import { StakingSidebarItem } from './side-bar-items/staking-sidebar-item';
 import { AddressBookCardComponent } from './address-book-card/address-book-card.component';
 import { AddNodeComponent } from './advanced/components/add-node/add-node.component';
 import { TransactionDetailsModalComponent } from './transaction-details-modal/transaction-details-modal.component';
+import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 
 @NgModule({
   imports: [
@@ -86,6 +87,7 @@ import { TransactionDetailsModalComponent } from './transaction-details-modal/tr
   providers: [
     AccountSelectedGuard,
     { provide: ColdStakingServiceBase, useClass: FakeColdStakingService },
+    AccountSidebarItem,
     StakingSidebarItem
   ],
   entryComponents: [
@@ -102,10 +104,11 @@ import { TransactionDetailsModalComponent } from './transaction-details-modal/tr
 })
 
 export class WalletModule {
-  constructor(private sidebarItems: SideBarItemsProvider, stakingSidebarItem: StakingSidebarItem) {
+  constructor(private sidebarItems: SideBarItemsProvider,
+              accountSidebarItem : AccountSidebarItem,
+              stakingSidebarItem: StakingSidebarItem) {
 
-    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-      'Account', '/wallet/dashboard', ['side-bar-item-account']));
+    sidebarItems.registerSideBarItem(accountSidebarItem);
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Send', '/wallet/send', ['side-bar-item-send']));

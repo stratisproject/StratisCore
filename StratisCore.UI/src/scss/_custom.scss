@@ -1702,6 +1702,7 @@ bs-daterangepicker-container {
   background: $header-gradient;
   z-index: 1;
   height: 100px;
+
   h3 {
     margin-left: 15px;
   }
@@ -1722,6 +1723,7 @@ bs-daterangepicker-container {
   background: $header-gradient;
   z-index: 1;
   border-radius: 0;
+
   h3 {
     margin-left: 15px;
   }
@@ -1736,6 +1738,7 @@ bs-daterangepicker-container {
   z-index: 1;
   height: 400px;
   border-radius: 0;
+
   h3 {
     margin-left: 15px;
   }
@@ -1992,6 +1995,10 @@ app-side-bar {
       font-size: 1.5em;
       vertical-align: sub;
       margin-right: 20px;
+    }
+
+    .side-bar-item-account-new:before {
+      animation: glow 1.5s ease-in-out infinite alternate;
     }
 
     .side-bar-item-account:before {
