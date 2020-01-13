@@ -133,13 +133,17 @@ img {
     }
 
     h3 {
-      font-weight: 600;
       letter-spacing: 1px;
+      font-weight: 200;
+      text-transform: uppercase;
+      font-size: 1rem;
+      margin-bottom: 0;
     }
 
     .lead {
       font-size: 3rem;
       margin-bottom: 0 !important;
+      line-height: 1.2;
 
       strong {
         font-weight: 500;
@@ -878,6 +882,38 @@ img {
 }
 
 ////// LOGIN
+#login {
+  height: 100vh;
+  background: $sidebar-gradient;
+  color: white;
+
+  .login {
+    &-form {
+      width: 340px;
+    }
+
+    &-logo {
+      width: 150px;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .custom-select {
+    width: 100%;
+  }
+
+  .btn-outline-light {
+    color: white;
+    border-color: white;
+
+    &:hover {
+      background-color: white;
+      color: $gray-600;
+    }
+  }
+}
+
+
 .left-login {
   height: 100vh;
   background: $sidebar-gradient;
@@ -1687,7 +1723,7 @@ bs-daterangepicker-container {
 }
 
 .page-content {
-  padding-top: 100px !important;
+  padding-top: 60px !important;
 }
 
 
