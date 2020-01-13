@@ -1723,7 +1723,7 @@ bs-daterangepicker-container {
 }
 
 .page-content {
-  padding-top: 60px !important;
+  padding-top: 100px !important;
 }
 
 
@@ -1738,10 +1738,6 @@ bs-daterangepicker-container {
   background: $header-gradient;
   z-index: 1;
   height: 100px;
-
-  h3 {
-    margin-left: 15px;
-  }
 }
 
 .page-header-right-content {
@@ -1759,10 +1755,6 @@ bs-daterangepicker-container {
   background: $header-gradient;
   z-index: 1;
   border-radius: 0;
-
-  h3 {
-    margin-left: 15px;
-  }
 }
 
 #staking-header {
