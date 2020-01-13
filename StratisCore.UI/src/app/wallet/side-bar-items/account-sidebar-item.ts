@@ -11,10 +11,10 @@ export class AccountSidebarItem extends SideBarItemBase {
   constructor(private walletService: WalletService) {
     super('Account', 'wallet/dashboard', ['side-bar-item-account']);
 
-    if (!this.visible) {
+    if (this.visible) {
       this.subscriptions.push(walletService.walletActivityFlag
         .subscribe(newBalance => {
-          this.balanceChanged = !this.selected && newBalance
+          this.balanceChanged = (!this.selected) && newBalance;
         }));
     }
   }
@@ -34,7 +34,11 @@ export class AccountSidebarItem extends SideBarItemBase {
     this.balanceChanged = false;
   }
 
+  public getIndicatorClasses(): string[] {
+    return this.balanceChanged ? ['side-bar-item-account-new'] : [];
+  }
+
   protected getStatusClasses(): string[] {
-    return this.balanceChanged ? ['bubble', 'bg-warning', 'side-bar-item-account-new'] : [];
+    return [];
   }
 }

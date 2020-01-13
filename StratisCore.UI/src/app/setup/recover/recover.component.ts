@@ -11,11 +11,13 @@ import { WalletRecovery } from '@shared/models/wallet-recovery';
 
 import { PasswordValidationDirective } from '@shared/directives/password-validation.directive';
 import { Subscription } from 'rxjs';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'app-recover',
   templateUrl: './recover.component.html',
-  styleUrls: ['./recover.component.css']
+  styleUrls: ['./recover.component.css'],
+  animations : Animations.fadeIn
 })
 export class RecoverComponent implements OnInit, OnDestroy {
 

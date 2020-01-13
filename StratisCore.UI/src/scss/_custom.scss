@@ -529,6 +529,7 @@ img {
     }
   }
 
+
   // status box
   .status {
     position: absolute;
@@ -2025,8 +2026,18 @@ app-side-bar {
       margin-right: 20px;
     }
 
-    .side-bar-item-account-new:before {
+    .side-bar-item-account-new {
       animation: glow 1.5s ease-in-out infinite alternate;
+      margin-left: -30px;
+      margin-right: 13px;
+      height: 15px;
+      width: 15px;
+      margin-top: -10px;
+      border: 2px solid;
+      border-radius: 50%;
+      display: inline-block;
+      border-color: #28a745;
+      background-color: #28a745 !important;
     }
 
     .side-bar-item-account:before {
@@ -2035,6 +2046,7 @@ app-side-bar {
 
     .side-bar-item-staking-active:before {
       animation: glow 1.5s ease-in-out infinite alternate;
+
     }
 
     .side-bar-item-staking:before {
@@ -2061,6 +2073,7 @@ app-side-bar {
       content: "\e810";
     }
   }
+
 }
 
 .send-form {
