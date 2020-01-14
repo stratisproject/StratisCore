@@ -44,8 +44,8 @@ export class Animations {
         height: '*',
         overflow: 'hidden'
       })),
-      transition('* => expanded', animate('500ms ease-out')),
-      transition('expanded => collapsed', animate('500ms ease-in'))
+      transition('* => expanded', animate('200ms ease-out')),
+      transition('expanded => collapsed', animate('150ms ease-in'))
     ])
   ]
 }
