@@ -5,6 +5,9 @@ import { TransactionInfo } from '@shared/models/transaction-info';
 import { NodeService } from '@shared/services/node-service';
 import { tap } from 'rxjs/operators';
 import { SnackbarService } from 'ngx-snackbar';
+import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AddressBookService } from '@shared/services/address-book-service';
 
 @Component({
   selector: 'transaction-details',
@@ -16,8 +19,10 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private snackbarService: SnackbarService,
+    private addressBookService : AddressBookService,
     private nodeService: NodeService,
-    private globalService: GlobalService) {
+    private globalService: GlobalService,
+    private modalService: NgbModal) {
   }
 
   public coinUnit: string;
@@ -50,7 +55,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     let addresses = null;
     if (this.transaction.payments) {
       addresses = this.transaction.payments.reduce((s, n) => {
-        return  `${n.destinationAddress} ${s}`
+        return `${n.destinationAddress} ${s}`
       }, '');
     }
     return this.transaction.contact ? `${this.transaction.contact.label} - (${this.transaction.contact.address})` : addresses
@@ -69,5 +74,11 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     } else {
       this.confirmations = 0;
     }
+  }
+
+  public createNewContact(address: string): void {
+    const addressLabel = this.modalService.open(AddNewAddressComponent,
+      {backdrop: 'static'}).componentInstance as AddNewAddressComponent;
+    addressLabel.addressForm.controls.address.setValue(address.split(' ')[0]);
   }
 }

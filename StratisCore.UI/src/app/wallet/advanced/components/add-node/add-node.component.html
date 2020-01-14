@@ -12,7 +12,7 @@
           <form class="col-4" [formGroup]="addNodeForm">
             <div class="form-group col-12">
               <label class="text-left">Node IP</label>
-              <input type="text" class="form-control" id="nodeIP" name="nodeIP" formControlName="nodeIP" placeholder="Add node IP" />
+              <input type="text" class="form-control" id="nodeIP" name="nodeIP" formControlName="nodeIP" placeholder="IP Address" />
               <div *ngIf="formErrors.nodeIP" class="text-danger mt-2">{{ formErrors.nodeIP }}</div>
             </div>
           </form>

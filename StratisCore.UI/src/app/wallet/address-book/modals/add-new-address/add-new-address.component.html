@@ -13,7 +13,7 @@
       <div class="form-group">
         <input type="text" class="form-control" [class.is-invalid]="formErrors.label"
                [class.is-valid]="!formErrors.label && addressForm.get('label').valid" formControlName="label"
-               placeholder="Insert label">
+               placeholder="Insert label" autofocus>
         <div *ngIf="formErrors.label" class="invalid-feedback">{{ formErrors.label }}</div>
       </div>
       <small id="passwordHelpBlock" class="form-text text-muted">

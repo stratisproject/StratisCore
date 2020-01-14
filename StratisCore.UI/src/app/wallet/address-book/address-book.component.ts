@@ -49,19 +49,11 @@ export class AddressBookComponent implements OnInit {
     const instance = modal.componentInstance as ConfirmationModalComponent;
     instance.title = 'Remove Contact';
     instance.body = `Are you sure you want to remove the contact ${address.label}`;
+    instance.confirmSnackBarMessage = `Contact ${address.label} has been removed.`;
 
     modal.result.then(confirmed => {
       if (confirmed) {
-        this.addressBookService.removeAddressBookAddress(address).then(() => {
-            this.snackbarService.add({
-              msg: `Contact ${address.label} was removed`,
-              customClass: 'notify-snack-bar',
-              action: {
-                text: null
-              }
-            });
-          }
-        );
+        this.addressBookService.removeAddressBookAddress(address);
       }
     });
   }
@@ -69,6 +61,6 @@ export class AddressBookComponent implements OnInit {
 
 
   public addNewAddressClicked(): void {
-    this.modalService.open(AddNewAddressComponent, {backdrop: 'static'});
+    const addressLabel =  this.modalService.open(AddNewAddressComponent, {backdrop: 'static'});
   }
 }

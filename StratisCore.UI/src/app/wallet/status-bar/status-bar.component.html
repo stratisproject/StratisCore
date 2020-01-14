@@ -1,7 +1,17 @@
+<div *ngIf="(walletInfo | async) as _walletInfo">
+  <div class="status-balance">
+    <div>
+      {{ (_walletInfo.amountConfirmed | coinNotation) || (0 | coinNotation) }} {{ globalService.coinUnit }}
+    </div>
+    <div class="clearfix">
+      <small>{{ (_walletInfo.amountUnconfirmed | coinNotation) || (0 | coinNotation) }} (unconfirmed)</small>
+    </div>
+  </div>
+</div>
 <div
   class="status"
   *ngIf="(generalInfo | async) as _generalInfo">
-  <ul class="display-flex p-0">
+  <ul class="display-flex p-0 ml-3">
     <li
       class="d-flex align-items-center mr-5"
       placement="top"

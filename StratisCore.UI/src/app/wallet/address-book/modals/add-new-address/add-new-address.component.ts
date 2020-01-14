@@ -5,6 +5,7 @@ import { ModalService } from '@shared/services/modal.service';
 import { AddressLabel } from '@shared/models/address-label';
 import { AddressBookService } from "@shared/services/address-book-service";
 import { Animations } from '@shared/animations/animations';
+import { SnackbarService } from 'ngx-snackbar';
 
 @Component({
   selector: 'app-add-new-address',
@@ -15,6 +16,7 @@ import { Animations } from '@shared/animations/animations';
 export class AddNewAddressComponent {
   constructor(
     private activeModel: NgbActiveModal,
+    private snackbarService : SnackbarService,
     private addressBookService: AddressBookService,
     private genericModalService: ModalService,
     private fb: FormBuilder) {
@@ -71,6 +73,16 @@ export class AddNewAddressComponent {
     this.addressBookService.addAddressBookAddress(addressLabel)
       .then(response => {
           this.activeModel.close();
+        setTimeout(() => {
+          this.snackbarService.add({
+            msg: `Contact ${addressLabel.label} has been created.`,
+            customClass: 'notify-snack-bar',
+            action: {
+              text: null
+            }
+          });
+        },500);
+
         }
       );
   }
