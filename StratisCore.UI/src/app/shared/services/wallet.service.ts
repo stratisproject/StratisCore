@@ -341,7 +341,9 @@ export class WalletService extends RestApi {
         newBalance.setCurrentAccountAddress(this.currentAccountService.address);
         this.clearWalletHistory(0);
         this.paginateHistory();
-        this.walletActivitySubject.next(true);
+        if (!this.rescanInProgress && !this.isSyncing) {
+          this.walletActivitySubject.next(true);
+        }
         historyRefreshed = true;
       }
     }
@@ -349,7 +351,9 @@ export class WalletService extends RestApi {
     if (!historyRefreshed && (walletSubject.value
       && (walletSubject.value.amountConfirmed !== newBalance.amountConfirmed
         || walletSubject.value.amountUnconfirmed !== newBalance.amountUnconfirmed))) {
-      this.walletActivitySubject.next(true);
+      if (!this.rescanInProgress && !this.isSyncing) {
+        this.walletActivitySubject.next(true);
+      }
       this.paginateHistory();
     }
 
