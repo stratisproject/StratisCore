@@ -8,12 +8,12 @@
         <div class="card card-flat mb-5">
             <div class="card-body">
               <div class="row">
-                <div class="col-2">
+                <div class="col-sm-6 col-md-3 col-lg-2">
                   <ngx-qrcode [qrc-value]="qrString" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
                 </div>
                 <div class="col-8 mt-2">
                   <h3 class="mt-1 ml-3">{{address}}</h3>
-                  <div class="mt1 ml-3">
+                  <div class="mt1" style="width: 500px">
                     <button class="btn btn-block btn-primary" (click)="copyToClipboardClicked(address)">
                         <span class="fa fa-plus-circle"></span> Copy Address
                     </button>

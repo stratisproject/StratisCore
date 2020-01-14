@@ -1,7 +1,7 @@
-<div class="lnr lnr-exit logout-button" (click)="logout()"></div>
 <app-side-bar>
   <app-wallet-selector side-bar-top></app-wallet-selector>
   <div id="GUI" side-bar-bottom>
+    <div class="lnr lnr-exit logout-button" (click)="logout()"></div>
     <status-bar></status-bar>
   </div>
 </app-side-bar>
@@ -11,5 +11,5 @@
 <ngx-snackbar
   [position]="'bottom-center'"
   [max]="1"
-  [timeout]="3000">
+  [timeout]="5000">
 </ngx-snackbar>

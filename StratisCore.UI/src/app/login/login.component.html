@@ -44,7 +44,7 @@
           [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid">
         <div
           *ngIf="formErrors.password"
-          class="invalid-feedback">
+          class="invalid-feedback text-white">
           {{ formErrors.password }}
         </div>
       </div>
@@ -64,7 +64,7 @@
         <button
           [disabled]="isDecrypting"
           type="button"
-          class="btn btn-block btn-link text-dark"
+          class="btn btn-block btn-link text-white"
           (click)="onCreateClicked()">
           Create or restore a wallet
         </button>

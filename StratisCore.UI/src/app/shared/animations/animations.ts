@@ -32,6 +32,19 @@ export class Animations {
     ])
   ];
 
+  public static statusBar = [
+    trigger('highlight', [
+      transition(':enter', [
+        style({
+          opacity: 0
+        }),
+        animate(400)
+      ]),
+      transition(':leave',
+        animate(400, style({opacity: 0})))
+    ])
+  ];
+
   public static collapseExpand = [
     trigger('collapseExpand', [
       state('collapsed', style({
