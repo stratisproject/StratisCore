@@ -1853,7 +1853,7 @@ bs-daterangepicker-container {
 .status-balance {
   position: absolute;
   bottom: 70px;
-  left: 5px;
+  left: 10px;
   right: 0;
   font-size: 1em;
   letter-spacing: 0.5px;
@@ -1885,7 +1885,7 @@ bs-daterangepicker-container {
     opacity: 0.9;
   }
   85% {
-    opacity: 0.95;
+    opacity: 0.9;
     height: 72px;
   }
   100% {
@@ -1907,8 +1907,7 @@ bs-daterangepicker-container {
   color: white;
   margin-left: 250px;
   padding-left: 50px;
-  background: rgb(21, 139, 207);
-  opacity: 0.8;
+  background: #0068a9;
   animation: notify-animation 3s forwards;
 }
 
