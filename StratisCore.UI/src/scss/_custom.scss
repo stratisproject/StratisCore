@@ -1782,7 +1782,6 @@ bs-daterangepicker-container {
 
 .floating-button {
   position: fixed;
-
   border-radius: 30px;
   width: 40px;
   padding-left: 8px;
@@ -1797,8 +1796,8 @@ bs-daterangepicker-container {
 
 .logout-button {
   @extend .floating-button;
-  bottom: 78px;
-  left: 200px;
+  top: 5px;
+  left: 5px;
 }
 
 .floating-button:hover {

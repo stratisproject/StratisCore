@@ -19,6 +19,7 @@ import { SignalRService } from '@shared/services/signalr-service';
 import { WalletService } from '@shared/services/wallet.service';
 import { StakingService } from '@shared/services/staking-service';
 import { SideBarComponent } from "@shared/components/side-bar/side-bar.component";
+import { TaskBarComponent } from './components/task-bar/task-bar.component';
 
 @NgModule({
   imports: [CommonModule],
@@ -32,6 +33,7 @@ import { SideBarComponent } from "@shared/components/side-bar/side-bar.component
     LoadingModalComponent,
     ConfirmationModalComponent,
     SideBarComponent,
+    TaskBarComponent,
   ],
   providers: [
     ApiService,

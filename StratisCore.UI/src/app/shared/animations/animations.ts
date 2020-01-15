@@ -1,4 +1,4 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 
 export class Animations {
   public static fadeIn = [
@@ -42,6 +42,23 @@ export class Animations {
       ]),
       transition(':leave',
         animate(400, style({opacity: 0})))
+    ])
+  ];
+
+  public static openClose = [
+    trigger('open', [
+      state('closed', style({
+        opacity: 0,
+        width: 0,
+        overflow: 'hidden'
+      })),
+      state('open', style({
+        opacity: 1,
+        width: '400px',
+        overflow: 'hidden'
+      })),
+      transition('* => open', animate('200ms ease-out')),
+      transition('open => closed', animate('150ms ease-in'))
     ])
   ];
 
