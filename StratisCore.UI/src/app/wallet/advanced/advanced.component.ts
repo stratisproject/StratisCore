@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Animations } from '@shared/animations/animations';
+import { TaskBarService } from '@shared/services/task-bar-service';
+import { AboutComponent } from './components/about/about.component';
 
 
 @Component({
@@ -10,6 +12,9 @@ import { Animations } from '@shared/animations/animations';
 })
 
 export class AdvancedComponent implements OnInit, OnDestroy {
+  constructor(private taskBarService: TaskBarService) {
+  }
+
   ngOnInit(): void {
   }
 

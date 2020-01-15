@@ -46,18 +46,18 @@ export class Animations {
   ];
 
   public static openClose = [
-    trigger('open', [
+    trigger('openClose', [
       state('closed', style({
         opacity: 0,
-        width: 0,
+        width: '0px',
         overflow: 'hidden'
       })),
       state('open', style({
-        opacity: 1,
-        width: '400px',
+        opacity: 0.95,
+        width: '*',
         overflow: 'hidden'
       })),
-      transition('* => open', animate('200ms ease-out')),
+      transition('closed => open', animate('300ms ease-out')),
       transition('open => closed', animate('150ms ease-in'))
     ])
   ];

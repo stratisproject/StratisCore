@@ -695,27 +695,27 @@ img {
     }
   }
 
-  // Checkmark
-  #checkmark {
-    stroke: $green !important;
-    stroke-dashoffset: 745.74853515625;
-    stroke-dasharray: 745.74853515625;
-    animation: dash 4s ease-out forwards;
-  }
-
-  @keyframes dash {
-    0% {
-      stroke-dashoffset: 745.74853515625;
-    }
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
   //tab-pane content
   .tab-pane-line {
     padding: .5em;
     border-bottom: 1px dotted #ccc;
   }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 745.74853515625;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+#checkmark {
+  stroke: $green !important;
+  stroke-dashoffset: 745.74853515625;
+  stroke-dasharray: 745.74853515625;
+  animation: dash 4s ease-out forwards;
 }
 
 // for cross-chain modal look
@@ -2149,6 +2149,26 @@ app-side-bar {
     }
   }
 }
+
+app-task-bar{
+  .stratis-task-bar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+   // width: 600px;
+    z-index: 5;
+    background-color: white;
+    box-shadow: -3px 0px 5px 0px rgba(240,240,240,0.75);
+  }
+  .stratis-task-bar-container
+  {
+    //width: 100%;
+    padding: 20px;
+  }
+
+}
+
 
 ::-webkit-scrollbar {
   display: none;

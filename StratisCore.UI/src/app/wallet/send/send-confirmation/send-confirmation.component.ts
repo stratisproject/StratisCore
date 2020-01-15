@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
@@ -15,8 +15,8 @@ export class SendConfirmationComponent implements OnInit {
   @Input() sidechainEnabled: boolean;
   @Input() opReturnAmount: number;
   @Input() hasOpReturn: boolean;
-
-  constructor(private globalService: GlobalService, public activeModal: NgbActiveModal) {
+  @Output() closeClicked : EventEmitter<boolean> = new EventEmitter<boolean>();
+  constructor(private globalService: GlobalService) {
   }
 
   public showDetails = false;
