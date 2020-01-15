@@ -15,7 +15,7 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'create-component',
   templateUrl: './create.component.html',
-  styleUrls: ['./create.component.css'],
+  styleUrls: ['./create.component.scss'],
   animations : Animations.fadeIn
 })
 

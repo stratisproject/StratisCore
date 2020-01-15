@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { WalletBalance, StakingInfo } from '@shared/services/interfaces/api.i';
+import { WalletBalance } from '@shared/services/interfaces/api.i';
 import { WalletService } from '@shared/services/wallet.service';
 import { StakingService } from '@shared/services/staking-service';
 import { GlobalService } from '@shared/services/global.service';
@@ -11,7 +11,7 @@ import { SnackbarService } from 'ngx-snackbar';
 @Component({
     selector: 'app-staking-wallet',
     templateUrl: './wallet.component.html',
-    styleUrls: ['./wallet.component.css']
+    styleUrls: ['./wallet.component.scss']
 })
 export class ColdStakingWalletComponent implements OnInit {
 
@@ -51,13 +51,13 @@ export class ColdStakingWalletComponent implements OnInit {
         this.amountFormatted = this._amount.toLocaleString();
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.wallet = this.walletService.wallet();
         this.buildStakingForm();
     }
 
-    unusedAddressClicked = () => this.onGetFirstUnusedAddress.emit(this);
-    withdrawClicked = () => this.onWithdraw.emit(this);
+    unusedAddressClicked = (): void => this.onGetFirstUnusedAddress.emit(this);
+    withdrawClicked = (): void => this.onWithdraw.emit(this);
 
     private buildStakingForm(): void {
         this.stakingForm = this.fb.group({
@@ -70,9 +70,9 @@ export class ColdStakingWalletComponent implements OnInit {
           name: this.globalService.getWalletName(),
           password: this.stakingForm.get('walletPassword').value
         };
-    
+
         this.stakingForm.patchValue({walletPassword: ''});
-    
+
         this.stakingService.startStaking(walletData).then(
             stakingStarted => {
                 if (stakingStarted) {
@@ -87,7 +87,7 @@ export class ColdStakingWalletComponent implements OnInit {
             }
         )
       }
-    
+
       public stopStaking(): void {
         this.stakingService.stopStaking().then(
             stakingStopped => {

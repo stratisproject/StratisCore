@@ -5,14 +5,14 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'app-advanced',
   templateUrl: './advanced.component.html',
-  styleUrls: ['./advanced.component.css'],
+  styleUrls: ['./advanced.component.scss'],
   animations: Animations.fadeIn
 })
 
 export class AdvancedComponent implements OnInit, OnDestroy {
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
   }
 }

@@ -3,7 +3,7 @@ import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angu
 @Component({
   selector: 'app-progress',
   templateUrl: './progress.component.html',
-  styleUrls: ['./progress.component.css']
+  styleUrls: ['./progress.component.scss']
 })
 export class ProgressComponent implements OnInit, OnDestroy {
 
@@ -15,13 +15,13 @@ export class ProgressComponent implements OnInit, OnDestroy {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
   }
 
-  closeClicked() {
+  closeClicked(): void {
     this.close.emit();
   }
 }

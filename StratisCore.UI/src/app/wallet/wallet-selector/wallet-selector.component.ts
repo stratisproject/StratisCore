@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalService } from "@shared/services/global.service";
 import { WalletService } from "@shared/services/wallet.service";
 import { Observable } from "rxjs";
-import { filter, map } from "rxjs/operators";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: 'app-wallet-selector',
   templateUrl: './wallet-selector.component.html',
-  styleUrls: ['./wallet-selector.component.css']
+  styleUrls: ['./wallet-selector.component.scss']
 })
 export class WalletSelectorComponent implements OnInit {
-  public walletName: string = "Test";
+  public walletName = "Test";
   public walletNames: Observable<string[]>;
 
   constructor(

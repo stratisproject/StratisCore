@@ -8,7 +8,7 @@ import { GlobalService } from '@shared/services/global.service';
 @Component({
     selector: 'app-create-address',
     templateUrl: './create-address.component.html',
-    styleUrls: ['./create-address.component.css']
+    styleUrls: ['./create-address.component.scss']
 })
 export class ColdStakingCreateAddressComponent implements OnInit {
 
@@ -18,15 +18,15 @@ export class ColdStakingCreateAddressComponent implements OnInit {
     address = '';
     addressCopied = false;
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.stakingService.GetAddress(this.globalService.getWalletName()).subscribe(x => this.address = x);
     }
 
-    closeClicked() {
+    closeClicked(): void {
         this.activeModal.close();
     }
 
-    copyClicked() {
+    copyClicked(): void {
         if (this.address) {
             this.addressCopied = this.clipboardService.copyFromContent(this.address);
         }

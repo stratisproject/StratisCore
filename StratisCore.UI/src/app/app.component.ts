@@ -9,12 +9,10 @@ import { ApiService } from '@shared/services/api.service';
 import { ElectronService } from 'ngx-electron';
 import { GlobalService } from '@shared/services/global.service';
 
-import { NodeStatus } from '@shared/models/node-status';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
 })
 
 export class AppComponent implements OnInit, OnDestroy {
@@ -31,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
   loading = true;
   loadingFailed = false;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.walletFeatureNamespace = this.sidechainEnabled
       ? 'Stratis.Bitcoin.Features.SmartContracts.Wallet.SmartContractWalletFeature'
@@ -41,13 +39,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.tryStart();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.statusIntervalSubscription.unsubscribe();
   }
 
   // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
-  private tryStart() {
+  private tryStart(): void {
     let retry = 0;
     const stream$ = this.apiService.getNodeStatus(true).pipe(
       retryWhen(errors =>
@@ -63,7 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
     );
 
     this.subscription = stream$.subscribe(
-      (data: NodeStatus) => {
+      () => {
         this.apiConnected = true;
         this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
           .subscribe(
@@ -78,7 +76,7 @@ export class AppComponent implements OnInit, OnDestroy {
               }
             }
           );
-      }, (error: any) => {
+      }, () => {
         console.log('Failed to start wallet');
         this.loading = false;
         this.loadingFailed = true;
@@ -86,7 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  private setTitle() {
+  private setTitle(): void {
     const applicationName = this.sidechainEnabled ? 'Cirrus Core' : 'Stratis Core';
     const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
     const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
@@ -94,7 +92,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.titleService.setTitle(title);
   }
 
-  public openSupport() {
+  public openSupport(): void {
     this.electronService.shell.openExternal('https://github.com/stratisproject/StratisCore/');
   }
 }

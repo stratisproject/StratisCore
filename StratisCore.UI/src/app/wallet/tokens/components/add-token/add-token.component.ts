@@ -14,7 +14,7 @@ import { TokensService } from '../../services/tokens.service';
 @Component({
   selector: 'app-add-token',
   templateUrl: './add-token.component.html',
-  styleUrls: ['./add-token.component.css']
+  styleUrls: ['./add-token.component.scss']
 })
 @Mixin([Disposable])
 export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
@@ -38,22 +38,22 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
     this.registerControls();
   }
 
-  get customTokenSelected() {
+  get customTokenSelected(): boolean {
     return !!this.addTokenForm && !!this.addTokenForm.get('token').value && this.addTokenForm.get('token').value.toLowerCase() === 'custom';
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.dispose();
   }
 
-  closeClicked() {
+  closeClicked(): void {
     this.activeModal.close();
   }
 
-  onSubmit() {
+  onSubmit(): void {
 
     const ticker = this.customTokenSelected ? this.ticker.value + '' : this.tokens.find(t => t.address === this.token.value).ticker;
     const address = this.customTokenSelected ? this.address.value + '' : this.tokens.find(t => t.address === this.token.value).address;
@@ -106,11 +106,11 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
       });
   }
 
-  showApiError(error: string) {
+  showApiError(error: string): void {
     this.genericModalService.openModal('Error', error);
   }
 
-  private registerControls() {
+  private registerControls(): void {
     const customTokenDetailsValidator = control => !control.value && this.customTokenSelected ? { required: true } : null;
 
     this.token = new FormControl(0, [Validators.required]);

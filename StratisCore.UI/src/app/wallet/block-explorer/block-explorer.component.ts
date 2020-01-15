@@ -7,14 +7,14 @@ import { SnackbarService } from "ngx-snackbar";
 @Component({
   selector: 'app-block-explorer',
   templateUrl: './block-explorer.component.html',
-  styleUrls: ['./block-explorer.component.css']
+  styleUrls: ['./block-explorer.component.scss']
 })
 export class BlockExplorerComponent implements OnInit, OnDestroy{
   public loading: boolean;
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private snackBarService : SnackbarService,
+    private snackBarService: SnackbarService,
     public globalService: GlobalService,
     public blockExplorerService: BlockExplorerService) {
 
@@ -43,19 +43,19 @@ export class BlockExplorerComponent implements OnInit, OnDestroy{
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  openTransactionDetailDialog(_transaction: any) {
+  openTransactionDetailDialog(_transaction: any): void {
 
   }
 
-  public onScroll() {
+  public onScroll(): void {
    // this.walletService.paginateHistory(40, this.last.transactionTimestamp, this.last.txOutputIndex);
     //console.log("scroll");
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     window.removeEventListener("scroll", () => this.detectLoading());
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }

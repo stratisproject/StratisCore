@@ -5,7 +5,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-generic-modal',
   templateUrl: './generic-modal.component.html',
-  styleUrls: ['./generic-modal.component.css']
+  styleUrls: ['./generic-modal.component.scss']
 })
 export class GenericModalComponent implements OnInit {
 
@@ -14,6 +14,6 @@ export class GenericModalComponent implements OnInit {
 
   constructor(public activeModal: NgbActiveModal) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 }

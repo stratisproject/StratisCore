@@ -10,7 +10,7 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'transaction-details-modal',
   templateUrl: './transaction-details-modal.component.html',
-  styleUrls: ['./transaction-details-modal.component.css'],
+  styleUrls: ['./transaction-details-modal.component.scss'],
   animations : Animations.fadeIn
 })
 export class TransactionDetailsModalComponent implements OnInit, OnDestroy {
@@ -26,29 +26,29 @@ export class TransactionDetailsModalComponent implements OnInit, OnDestroy {
   private generalWalletInfoSubscription: Subscription;
   private lastBlockSyncedHeight: number;
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.coinUnit = this.globalService.getCoinUnit();
     this.subscribeToGeneralWalletInfo();
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
     }
   }
 
-  public onCopiedClick() {
+  public onCopiedClick(): void {
     this.copied = true;
   }
 
-  private subscribeToGeneralWalletInfo() {
+  private subscribeToGeneralWalletInfo(): void {
     this.generalWalletInfoSubscription = this.nodeService.generalInfo().pipe(tap(generalInfo => {
       this.lastBlockSyncedHeight = generalInfo.lastBlockSyncedHeight;
       this.calculateConfirmations();
     })).subscribe();
   }
 
-  private calculateConfirmations() {
+  private calculateConfirmations(): void {
     if (this.transaction.transactionConfirmedInBlock) {
       this.confirmations = this.lastBlockSyncedHeight - Number(this.transaction.transactionConfirmedInBlock) + 1;
     } else {

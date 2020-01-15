@@ -14,7 +14,7 @@ import { SnackbarService } from "ngx-snackbar";
 @Component({
   selector: 'app-resync',
   templateUrl: './resync.component.html',
-  styleUrls: ['./resync.component.css']
+  styleUrls: ['./resync.component.scss']
 })
 export class ResyncComponent implements OnInit, OnDestroy {
 
@@ -49,14 +49,14 @@ export class ResyncComponent implements OnInit, OnDestroy {
     }
   };
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.walletName = this.globalService.getWalletName();
     this.startSubscriptions();
     this.buildRescanWalletForm();
     this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.cancelSubscriptions();
   }
 
@@ -71,7 +71,7 @@ export class ResyncComponent implements OnInit, OnDestroy {
     this.onValueChanged();
   }
 
-  onValueChanged(data?: any) {
+  onValueChanged(data?: any): void {
     if (!this.rescanWalletForm) {
       return;
     }
@@ -88,7 +88,7 @@ export class ResyncComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onResyncClicked() {
+  public onResyncClicked(): void {
     const rescanDate = new Date(this.rescanWalletForm.get('walletDate').value);
     rescanDate.setDate(rescanDate.getDate() - 1);
 
@@ -101,7 +101,7 @@ export class ResyncComponent implements OnInit, OnDestroy {
     this.walletService
       .rescanWallet(rescanData)
       .toPromise().then(
-      response => {
+      () => {
         this.snackbarService.add({
           msg: 'Your wallet is now re-syncing in the background, this may take a few minutes.',
           customClass: 'notify-snack-bar',
@@ -113,7 +113,7 @@ export class ResyncComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getGeneralWalletInfo() {
+  private getGeneralWalletInfo(): void {
     this.generalWalletInfoSubscription = this.nodeService.generalInfo()
       .subscribe(
         response => {
@@ -128,20 +128,20 @@ export class ResyncComponent implements OnInit, OnDestroy {
             this.isSyncing = true;
           }
         },
-        error => {
+        () => {
           this.cancelSubscriptions();
         }
       )
     ;
   }
 
-  private cancelSubscriptions() {
+  private cancelSubscriptions(): void {
     if (this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
     }
   }
 
-  private startSubscriptions() {
+  private startSubscriptions(): void {
     this.getGeneralWalletInfo();
   }
 

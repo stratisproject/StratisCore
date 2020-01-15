@@ -14,14 +14,14 @@ export class AddressBookCardComponent implements OnInit {
   @Output() removeClicked: EventEmitter<AddressLabel> = new EventEmitter<AddressLabel>();
   @Output() sendClicked: EventEmitter<AddressLabel> = new EventEmitter<AddressLabel>();
   @Input() address: AddressLabel;
-  @Input() showButtons : boolean;
+  @Input() showButtons: boolean;
   constructor(
     private globalService: GlobalService,
     private clipboardService: ClipboardService,
     private snackbarService: SnackbarService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   public copyToClipboardClicked(address: AddressLabel): void {
