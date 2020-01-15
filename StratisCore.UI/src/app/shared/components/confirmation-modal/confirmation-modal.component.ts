@@ -6,7 +6,7 @@ import { SnackbarService } from 'ngx-snackbar';
 @Component({
   selector: 'app-confirmation-modal',
   templateUrl: './confirmation-modal.component.html',
-  styleUrls: ['./confirmation-modal.component.css'],
+  styleUrls: ['./confirmation-modal.component.scss'],
   animations: Animations.fadeIn
 })
 export class ConfirmationModalComponent implements OnInit {

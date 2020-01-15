@@ -11,7 +11,7 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',
-  styleUrls: ['./transactions.component.css'],
+  styleUrls: ['./transactions.component.scss'],
   animations: Animations.collapseExpand
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
@@ -69,12 +69,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
           : [];
 
       })), tap(items => {
-        const history = items as TransactionInfo[];
-        this.last = history && history.length > 0 ? history[history.length - 1] : <TransactionInfo>{};
+        const history = items;
+        this.last = history && history.length > 0 ? history[history.length - 1] : {} as TransactionInfo;
       }));
   }
 
-  public onScroll() {
+  public onScroll(): void {
     this.walletService.paginateHistory(40, this.last.transactionTimestamp, this.last.txOutputIndex);
     console.log('scroll');
   }
@@ -83,7 +83,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.state[index] = (this.state[index] || 'collapsed') === 'collapsed' ? 'expanded' : 'collapsed'
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     window.removeEventListener('scroll', () => this.detectLoading());
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }

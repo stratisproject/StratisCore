@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-side-bar',
   templateUrl: './side-bar.component.html',
-  styleUrls: ['./side-bar.component.css']
+  styleUrls: ['./side-bar.component.scss']
 })
 export class SideBarComponent implements OnInit, OnDestroy {
   @Input() sideBarItems: SideBarItem[];
@@ -21,7 +21,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.subscriptions.push(this.activatedRoute.url.subscribe(route => {
+    this.subscriptions.push(this.activatedRoute.url.subscribe(() => {
       const url = this.router.url;
       const match = this.sidebarItemsProvider.findByRoute(url);
       if (match) {
@@ -30,7 +30,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public onSelect(sideBarOption: SideBarItem, suppressNavigate: boolean = false): void {
+  public onSelect(sideBarOption: SideBarItem, suppressNavigate = false): void {
     if (!sideBarOption.disabled) {
       this.sidebarItemsProvider.setSelected(sideBarOption);
       if (!suppressNavigate) {

@@ -4,7 +4,6 @@ import { WalletInfo } from '@shared/models/wallet-info';
 
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { WalletService } from '@shared/services/wallet.service';
-import { AddressLabel } from '@shared/models/address-label';
 import { ClipboardService } from 'ngx-clipboard';
 import { SnackbarService } from 'ngx-snackbar';
 import { Animations } from '@shared/animations/animations';
@@ -12,7 +11,7 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'receive-component',
   templateUrl: './receive.component.html',
-  styleUrls: ['./receive.component.css'],
+  styleUrls: ['./receive.component.scss'],
   animations: Animations.fadeIn
 })
 
@@ -36,7 +35,7 @@ export class ReceiveComponent implements OnInit {
   public pageNumberUnused = 1;
   public pageNumberChange = 1;
   public sidechainEnabled: boolean;
-  public showAddressesButtonText: string = "Show all addresses";
+  public showAddressesButtonText = "Show all addresses";
 
   public ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
@@ -82,17 +81,17 @@ export class ReceiveComponent implements OnInit {
       );
   }
 
-  private getAccountAddress() {
+  private getAccountAddress(): void {
     this.address = this.currentAccountService.address;
     this.setQrString(this.address);
   }
 
-  private setQrString(address: string) {
+  private setQrString(address: string): void {
     // TODO: fix this later to use the actual sidechain name instead of 'cirrus'
     this.qrString = `${this.globalService.networkName}:${address}`;
   }
 
-  private getAddresses() {
+  private getAddresses(): void {
     const walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.walletService.getAllAddressesForWallet(walletInfo)
       .toPromise()

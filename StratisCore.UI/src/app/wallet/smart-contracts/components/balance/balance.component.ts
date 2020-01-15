@@ -8,6 +8,6 @@ import { Component, Input } from '@angular/core';
 })
 
 export class ScBalanceComponent {
-    @Input() balance: number = 0;
+    @Input() balance = 0;
     @Input() coinUnit: string;
  }

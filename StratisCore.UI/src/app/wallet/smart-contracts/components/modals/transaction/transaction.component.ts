@@ -13,7 +13,7 @@ export class Parameter {
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
-  styleUrls: ['./transaction.component.css']
+  styleUrls: ['./transaction.component.scss']
 })
 export class TransactionComponent implements OnInit {
   @Input() mode: Mode;
@@ -79,16 +79,16 @@ export class TransactionComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.registerControls();
     this.walletName = this.globalService.getWalletName();
   }
 
-  closeClicked() {
+  closeClicked(): void {
     this.activeModal.close();
   }
 
-  addParameterClicked() {
+  addParameterClicked(): void {
     this.parameters.push(this.createParameter());
   }
 
@@ -101,11 +101,11 @@ export class TransactionComponent implements OnInit {
     });
   }
 
-  removeParameterClicked(index: number) {
+  removeParameterClicked(index: number): void {
     this.parameters.removeAt(index);
   }
 
-  onSubmit() {
+  onSubmit(): void {
     // Hack the parameters into a format the API expects
     const result = this.createModel();
 
@@ -162,7 +162,7 @@ export class TransactionComponent implements OnInit {
     };
   }
 
-  private registerControls() {
+  private registerControls(): void {
     const amountValidator = control => Number(control.value) > this.balance ? { amountError: true } : null;
     const gasPriceTooLowValidator = control => Number(control.value) < this.gasPriceMinimum ? { gasPriceTooLowError: true } : null;
     const gasPriceTooHighValidator = control => Number(control.value) > this.gasPriceMaximum ? { gasPriceTooHighError: true } : null;

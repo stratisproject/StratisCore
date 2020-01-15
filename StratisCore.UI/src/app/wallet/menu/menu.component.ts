@@ -8,7 +8,7 @@ import { CurrentAccountService } from '@shared/services/current-account.service'
 @Component({
     selector: 'app-menu',
     templateUrl: './menu.component.html',
-    styleUrls: ['./menu.component.css'],
+    styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
   accountsEnabled: boolean;
@@ -20,26 +20,26 @@ export class MenuComponent implements OnInit {
   public sidechainEnabled: boolean;
   public walletName: string;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.testnet = this.globalService.getTestnetEnabled();
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
   }
 
-  openAddressBook() {
+  openAddressBook(): void {
     this.router.navigate(['/wallet/address-book']);
   }
 
-  openAdvanced() {
+  openAdvanced(): void {
     this.router.navigate(['/wallet/advanced']);
   }
 
-  switchAddress() {
+  switchAddress(): void {
     this.currentAccountService.clearAddress();
     this.router.navigate(['/address-selection']);
   }
 
-  logoutClicked() {
+  logoutClicked(): void {
       this.modalService.open(LogoutConfirmationComponent, { backdrop: "static" });
   }
 }

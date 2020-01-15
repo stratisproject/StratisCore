@@ -5,7 +5,7 @@ import { LogoutConfirmationComponent } from "./logout-confirmation/logout-confir
 @Component({
   selector: 'wallet-component',
   templateUrl: './wallet.component.html',
-  styleUrls: ['./wallet.component.css'],
+  styleUrls: ['./wallet.component.scss'],
 })
 export class WalletComponent {
   constructor(private modalService: NgbModal) {

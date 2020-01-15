@@ -14,7 +14,7 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'app-address-book',
   templateUrl: './address-book.component.html',
-  styleUrls: ['./address-book.component.css'],
+  styleUrls: ['./address-book.component.scss'],
   animations : Animations.fadeIn
 })
 export class AddressBookComponent implements OnInit {
@@ -46,7 +46,7 @@ export class AddressBookComponent implements OnInit {
       backdrop: 'static',
     });
 
-    const instance = modal.componentInstance as ConfirmationModalComponent;
+    const instance = modal.componentInstance;
     instance.title = 'Remove Contact';
     instance.body = `Are you sure you want to remove the contact ${address.label}`;
     instance.confirmSnackBarMessage = `Contact ${address.label} has been removed.`;

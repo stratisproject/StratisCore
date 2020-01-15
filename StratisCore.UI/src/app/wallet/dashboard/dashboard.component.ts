@@ -9,7 +9,7 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'dashboard-component',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  styleUrls: ['./dashboard.component.scss'],
   animations: Animations.fadeIn
 })
 export class DashboardComponent implements OnInit {
@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
     public globalService: GlobalService) {
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.wallet = this.walletService.wallet();
     this.transactionCount = this.walletService.walletHistory().pipe(map(items => items ? items.length : 0));
   }

@@ -8,7 +8,7 @@ import { GlobalService } from '@shared/services/global.service';
 @Component({
   selector: 'app-show-mnemonic',
   templateUrl: './show-mnemonic.component.html',
-  styleUrls: ['./show-mnemonic.component.css']
+  styleUrls: ['./show-mnemonic.component.scss']
 })
 export class ShowMnemonicComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private router: Router, private globalService: GlobalService) { }

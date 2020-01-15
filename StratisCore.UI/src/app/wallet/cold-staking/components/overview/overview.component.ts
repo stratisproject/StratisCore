@@ -12,7 +12,7 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'app-staking-scene',
   templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css'],
+  styleUrls: ['./overview.component.scss'],
   animations: Animations.fadeIn
 })
 export class ColdStakingOverviewComponent implements OnInit {
@@ -22,19 +22,19 @@ export class ColdStakingOverviewComponent implements OnInit {
 
   stakingInfo: ColdStakingInfo;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.stakingService.GetInfo(this.globalService.getWalletName()).subscribe(x => this.stakingInfo = x);
   }
 
-  onWalletGetFirstUnusedAddress(walletComponent) {
+  onWalletGetFirstUnusedAddress(walletComponent): void {
     this.modalService.open(ColdStakingCreateAddressComponent);
   }
 
-  onWalletWithdraw(walletComponent) {
+  onWalletWithdraw(walletComponent): void {
     this.modalService.open(ColdStakingWithdrawComponent);
   }
 
-  onSetup() {
+  onSetup(): void {
     this.modalService.open(ColdStakingCreateComponent);
   }
 }

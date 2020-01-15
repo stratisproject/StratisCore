@@ -13,7 +13,7 @@ import { AddressBalance } from '@shared/models/address-balance';
 @Component({
   selector: 'app-address-selection',
   templateUrl: './address-selection.component.html',
-  styleUrls: ['./address-selection.component.css']
+  styleUrls: ['./address-selection.component.scss']
 })
 export class AddressSelectionComponent implements OnInit, OnDestroy {
 
@@ -39,7 +39,7 @@ export class AddressSelectionComponent implements OnInit, OnDestroy {
       .pipe(
         catchError(error => {
           Log.error(error);
-          return of(<AddressBalance>{addresses: []});
+          return of({addresses: []} as AddressBalance);
         }),
         takeUntil(this.unsubscribe))
       .subscribe(addressBalance => {
@@ -54,30 +54,30 @@ export class AddressSelectionComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }
 
-  getAddress() {
+  getAddress(): string {
     return this.currentAccountService.address;
   }
 
-  addressChanged(address: string) {
+  addressChanged(address: string): void {
     this.addressChangedSubject.next(address);
   }
 
-  next() {
+  next(): void {
     if (this.selectedAddress) {
       this.currentAccountService.address = this.selectedAddress;
       this.router.navigate(['wallet/dashboard']);
     }
   }
 
-  clipboardAddressClicked() {
+  clipboardAddressClicked(): void {
     if (this.selectedAddress && this.clipboardService.copyFromContent(this.selectedAddress)) {
       Log.info(`Copied ${this.selectedAddress} to clipboard`);
     }

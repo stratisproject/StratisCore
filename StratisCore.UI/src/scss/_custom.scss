@@ -1832,6 +1832,10 @@ bs-daterangepicker-container {
     border: 1px solid white;
   }
 
+  .arrow::before {
+    border: none;
+  }
+
   margin-left: 30px;
 }
 

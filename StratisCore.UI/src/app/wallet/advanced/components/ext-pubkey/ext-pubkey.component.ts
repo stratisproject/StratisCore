@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
-import { ModalService } from '@shared/services/modal.service';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { SnackbarService } from "ngx-snackbar";
 
 @Component({
   selector: 'app-ext-pubkey',
   templateUrl: './ext-pubkey.component.html',
-  styleUrls: ['./ext-pubkey.component.css']
+  styleUrls: ['./ext-pubkey.component.scss']
 })
 export class ExtPubkeyComponent implements OnInit {
   constructor(
@@ -16,14 +15,14 @@ export class ExtPubkeyComponent implements OnInit {
   }
 
   public extPubKey: string;
-  public copied: boolean = false;
+  public copied = false;
 
-  ngOnInit() {
-    let walletInfo = new WalletInfo(this.globalService.getWalletName());
+  ngOnInit(): void {
+    const walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.getExtPubKey(walletInfo);
   }
 
-  private getExtPubKey(walletInfo: WalletInfo) {
+  private getExtPubKey(walletInfo: WalletInfo): void {
     this.apiService.getExtPubkey(walletInfo)
       .toPromise().then(
       response => {
@@ -32,7 +31,7 @@ export class ExtPubkeyComponent implements OnInit {
     );
   }
 
-  public onCopiedClick() {
+  public onCopiedClick(): void {
     this.copied = true;
     this.snackbarService.add({
       msg: 'The Extended Public Key has been copied to your clipboard.',
