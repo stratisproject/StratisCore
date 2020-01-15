@@ -13,6 +13,7 @@ import { ElectronService } from 'ngx-electron';
 export class AboutComponent implements OnInit {
   nodeStatusSubscription$: Observable<NodeStatus>;
   applicationVersion: string;
+  gitCommit: string;
   isElectron: boolean;
 
   constructor(
@@ -24,6 +25,7 @@ export class AboutComponent implements OnInit {
   ngOnInit(): void {
     this.isElectron = this.electron.isElectronApp;
     this.applicationVersion = this.globalService.getApplicationVersion();
+    this.gitCommit = this.globalService.getGitCommit();
     this.nodeStatusSubscription$ = this.apiService.getNodeStatusInterval();
   }
 

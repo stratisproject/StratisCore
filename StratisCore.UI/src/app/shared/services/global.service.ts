@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { VERSION } from '../../../environments/version';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class GlobalService {
   constructor(private electronService: ElectronService) {
     this.setApplicationVersion();
+    this.setGitCommit();
     this.setSidechainEnabled();
     this.setTestnetEnabled();
     this.setApiPort();
@@ -16,6 +18,7 @@ export class GlobalService {
   }
 
   private applicationVersion = '2.0.0';
+  private gitCommit = "";
   private testnet = false;
   private sidechain = false;
   private mainApiPort = 37221;
@@ -27,6 +30,7 @@ export class GlobalService {
   private currentWalletName: string;
   private network: string;
   private daemonIP: string;
+  private version = VERSION;
 
   public coinUnit: string;
 
@@ -40,6 +44,14 @@ export class GlobalService {
     if (this.electronService.isElectronApp) {
       this.applicationVersion = this.electronService.remote.app.getVersion();
     }
+  }
+
+  public getGitCommit() {
+    return this.gitCommit;
+  }
+
+  public setGitCommit() {
+    this.gitCommit = this.version.hash;
   }
 
   public getTestnetEnabled() {

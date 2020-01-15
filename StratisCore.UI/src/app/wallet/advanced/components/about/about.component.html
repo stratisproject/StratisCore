@@ -17,7 +17,7 @@
               Wallet version:
             </div>
             <div class='col blockText'>
-              {{ applicationVersion }}
+              {{ applicationVersion }}<small *ngIf="gitCommit">-{{ gitCommit }}</small>
             </div>
           </div>
           <div class="row">
