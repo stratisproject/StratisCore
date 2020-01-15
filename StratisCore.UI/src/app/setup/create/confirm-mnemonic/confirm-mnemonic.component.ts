@@ -13,7 +13,7 @@ import { GlobalService } from '@shared/services/global.service';
 @Component({
   selector: 'app-confirm-mnemonic',
   templateUrl: './confirm-mnemonic.component.html',
-  styleUrls: ['./confirm-mnemonic.component.css']
+  styleUrls: ['./confirm-mnemonic.component.scss']
 })
 export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
 

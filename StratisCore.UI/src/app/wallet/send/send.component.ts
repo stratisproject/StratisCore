@@ -30,13 +30,13 @@ export interface FeeStatus {
 @Component({
   selector: 'send-component',
   templateUrl: './send.component.html',
-  styleUrls: ['./send.component.css'],
+  styleUrls: ['./send.component.scss'],
   animations: Animations.fadeIn
 })
 export class SendComponent implements OnInit, OnDestroy {
   private accountsEnabled: boolean;
   public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
-  public sideChain : boolean;
+  public sideChain: boolean;
   private last: FeeEstimation = null;
   public contact: AddressLabel;
   public testnetEnabled: boolean;
@@ -283,7 +283,7 @@ export class SendComponent implements OnInit, OnDestroy {
     component.hasOpReturn = transactionResponse.isSideChain;
   }
 
-  public clearContact() : void{
+  public clearContact(): void{
     this.contact = null;
     this.sendForm.controls.address.setValue('');
   }

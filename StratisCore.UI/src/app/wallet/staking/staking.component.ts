@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-staking',
   templateUrl: './staking.component.html',
-  styleUrls: ['./staking.component.css']
+  styleUrls: ['./staking.component.scss']
 })
 export class StakingComponent implements OnInit {
   @Input() public wallet: WalletBalance;
@@ -25,7 +25,7 @@ export class StakingComponent implements OnInit {
       this.coinUnit = globalService.coinUnit;
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.buildStakingForm();
     this.stakingInfo = this.stakingService.stakingInfo();
   }

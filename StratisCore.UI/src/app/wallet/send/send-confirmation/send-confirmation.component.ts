@@ -6,7 +6,7 @@ import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
 @Component({
   selector: 'app-send-confirmation',
   templateUrl: './send-confirmation.component.html',
-  styleUrls: ['./send-confirmation.component.css']
+  styleUrls: ['./send-confirmation.component.scss']
 })
 export class SendConfirmationComponent implements OnInit {
 
@@ -22,7 +22,7 @@ export class SendConfirmationComponent implements OnInit {
   public showDetails = false;
   public coinUnit: string;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.coinUnit = this.globalService.getCoinUnit();
     this.transactionFee = new CoinNotationPipe().transform(this.transactionFee);
     if (this.hasOpReturn) {
@@ -33,7 +33,7 @@ export class SendConfirmationComponent implements OnInit {
     }
   }
 
-  toggleDetails() {
+  toggleDetails(): void {
     this.showDetails = !this.showDetails;
   }
 }

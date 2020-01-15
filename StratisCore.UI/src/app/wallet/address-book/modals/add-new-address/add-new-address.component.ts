@@ -10,13 +10,13 @@ import { SnackbarService } from 'ngx-snackbar';
 @Component({
   selector: 'app-add-new-address',
   templateUrl: './add-new-address.component.html',
-  styleUrls: ['./add-new-address.component.css'],
+  styleUrls: ['./add-new-address.component.scss'],
   animations : Animations.fadeIn
 })
 export class AddNewAddressComponent {
   constructor(
     private activeModel: NgbActiveModal,
-    private snackbarService : SnackbarService,
+    private snackbarService: SnackbarService,
     private addressBookService: AddressBookService,
     private genericModalService: ModalService,
     private fb: FormBuilder) {
@@ -71,7 +71,7 @@ export class AddNewAddressComponent {
   public createClicked(): void {
     const addressLabel = new AddressLabel(this.addressForm.get('label').value, this.addressForm.get('address').value, "");
     this.addressBookService.addAddressBookAddress(addressLabel)
-      .then(response => {
+      .then(() => {
           this.activeModel.close();
         setTimeout(() => {
           this.snackbarService.add({

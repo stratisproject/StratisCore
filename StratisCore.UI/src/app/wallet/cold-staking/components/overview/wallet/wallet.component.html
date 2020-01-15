@@ -29,7 +29,7 @@
               <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword"
                      placeholder="Password">
               <button type="button" id="flipcard" class="btn btn-outline-primary ml-2"
-                      [disabled]="stakingService.isStarting || walletService.isSyncing || !stakingForm.valid"
+                      [disabled]="!stakingForm.valid || stakingService.isStarting || walletService.isSyncing || walletService.ibdMode"
                       (click)="startStaking()">Unlock
               </button>
             </div>

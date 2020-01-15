@@ -6,7 +6,7 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'setup-component',
   templateUrl: './setup.component.html',
-  styleUrls: ['./setup.component.css'],
+  styleUrls: ['./setup.component.scss'],
   animations : Animations.fadeIn
 })
 export class SetupComponent implements OnInit {

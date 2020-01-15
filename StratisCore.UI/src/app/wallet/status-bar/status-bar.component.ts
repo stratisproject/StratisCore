@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { last, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { GeneralInfo, WalletBalance } from '@shared/services/interfaces/api.i';
 import { NodeService } from '@shared/services/node-service';
 import { WalletService } from '@shared/services/wallet.service';
-import { WalletInfo } from '@shared/models/wallet-info';
 import { GlobalService } from '@shared/services/global.service';
 
 @Component({
   selector: 'status-bar',
   templateUrl: './status-bar.component.html',
-  styleUrls: ['./status-bar.component.css']
+  styleUrls: ['./status-bar.component.scss']
 })
 export class StatusBarComponent implements OnInit {
   public generalInfo: Observable<GeneralInfo>;
-  public walletInfo : Observable<WalletBalance>;
+  public walletInfo: Observable<WalletBalance>;
   public percentSynced: string;
   public toolTip = '';
   public connectedNodesTooltip = '';
 
   constructor(
-    private globalService : GlobalService,
-    private walletService : WalletService,
+    private globalService: GlobalService,
+    private walletService: WalletService,
     private nodeService: NodeService) {
   }
 

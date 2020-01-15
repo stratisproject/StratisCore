@@ -7,19 +7,17 @@ import { tap } from 'rxjs/operators';
 import { SnackbarService } from 'ngx-snackbar';
 import { AddNewAddressComponent } from '../address-book/modals/add-new-address/add-new-address.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddressBookService } from '@shared/services/address-book-service';
 
 @Component({
   selector: 'transaction-details',
   templateUrl: './transaction-details.component.html',
-  styleUrls: ['./transaction-details.component.css'],
+  styleUrls: ['./transaction-details.component.scss'],
 })
 export class TransactionDetailsComponent implements OnInit, OnDestroy {
   @Input() transaction: TransactionInfo;
 
   constructor(
     private snackbarService: SnackbarService,
-    private addressBookService : AddressBookService,
     private nodeService: NodeService,
     private globalService: GlobalService,
     private modalService: NgbModal) {
@@ -30,12 +28,12 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
   private generalWalletInfoSubscription: Subscription;
   private lastBlockSyncedHeight: number;
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.coinUnit = this.globalService.getCoinUnit();
     this.subscribeToGeneralWalletInfo();
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
     }
@@ -61,14 +59,14 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
     return this.transaction.contact ? `${this.transaction.contact.label} - (${this.transaction.contact.address})` : addresses
   }
 
-  private subscribeToGeneralWalletInfo() {
+  private subscribeToGeneralWalletInfo(): void {
     this.generalWalletInfoSubscription = this.nodeService.generalInfo().pipe(tap(generalInfo => {
       this.lastBlockSyncedHeight = generalInfo.lastBlockSyncedHeight;
       this.calculateConfirmations();
     })).subscribe();
   }
 
-  private calculateConfirmations() {
+  private calculateConfirmations(): void {
     if (this.transaction.transactionConfirmedInBlock) {
       this.confirmations = this.lastBlockSyncedHeight - Number(this.transaction.transactionConfirmedInBlock) + 1;
     } else {
@@ -78,7 +76,7 @@ export class TransactionDetailsComponent implements OnInit, OnDestroy {
 
   public createNewContact(address: string): void {
     const addressLabel = this.modalService.open(AddNewAddressComponent,
-      {backdrop: 'static'}).componentInstance as AddNewAddressComponent;
+      {backdrop: 'static'}).componentInstance;
     addressLabel.addressForm.controls.address.setValue(address.split(' ')[0]);
   }
 }

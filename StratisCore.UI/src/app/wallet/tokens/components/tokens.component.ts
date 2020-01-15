@@ -25,7 +25,7 @@ import { SmartContractsServiceBase } from "../../smart-contracts/smart-contracts
 @Component({
   selector: 'app-tokens',
   templateUrl: './tokens.component.html',
-  styleUrls: ['./tokens.component.css']
+  styleUrls: ['./tokens.component.scss']
 })
 @Mixin([Disposable])
 export class TokensComponent implements OnInit, OnDestroy, Disposable {
@@ -43,7 +43,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   private pollingInterval = 5 * 1000; // polling milliseconds
   maxTimeout = 1.5 * 60 * 1000; // wait for about 1.5 minutes
   tokens: SavedToken[] = [];
-  tokenLoading: { [address: string]: string; } = {};
+  tokenLoading: { [address: string]: string} = {};
 
   constructor(
     private tokenService: TokensService,
@@ -118,7 +118,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     }));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Clear all the balances to start with
     const tokens = this.tokenService.GetSavedTokens();
     tokens.forEach(t => t.balance = null);
@@ -128,29 +128,29 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     this.tokenBalanceRefreshRequested$.next(this.tokens);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.dispose();
   }
 
-  showApiError(error: string) {
+  showApiError(error: string): void {
     this.genericModalService.openModal('Error', error);
   }
 
-  clipboardAddressClicked() {
+  clipboardAddressClicked(): void {
     if (this.selectedAddress && this.clipboardService.copyFromContent(this.selectedAddress)) {
       Log.info(`Copied ${this.selectedAddress} to clipboard`);
     }
   }
 
-  copyTokenAddress(address: string) {
+  copyTokenAddress(address: string): void {
     if (this.clipboardService.copyFromContent(address)) {
       Log.info(`Copied ${this.selectedAddress} to clipboard`);
     }
   }
 
-  addToken() {
+  addToken(): void {
     const modal = this.modalService.open(AddTokenComponent, {backdrop: 'static', keyboard: false});
-    (<AddTokenComponent>modal.componentInstance).tokens = this.availableTokens;
+    (modal.componentInstance).tokens = this.availableTokens;
     modal.result.then(value => {
       if (value) {
 
@@ -162,9 +162,9 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     });
   }
 
-  issueToken() {
+  issueToken(): void {
     const modal = this.modalService.open(TransactionComponent, {backdrop: 'static', keyboard: false});
-    const transactionComponent = modal.componentInstance as TransactionComponent;
+    const transactionComponent = modal.componentInstance;
 
     transactionComponent.mode = Mode.IssueToken;
     transactionComponent.selectedSenderAddress = this.selectedAddress;
@@ -177,7 +177,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
       // start monitoring token progress
       const progressModal = this.modalService.open(ProgressComponent, {backdrop: 'static', keyboard: false});
-      const progressComponent = progressModal.componentInstance as ProgressComponent;
+      const progressComponent = progressModal.componentInstance;
       progressComponent.loading = true;
       progressComponent.title = 'Waiting for Confirmation';
       progressComponent.message = 'Your token creation transaction has been broadcast and is waiting to be mined. This window will close once the transaction receives one confirmation.';
@@ -185,7 +185,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
       const receiptQuery = this.smartContractsService.GetReceiptSilent(value.transactionHash)
         .pipe(
-          catchError(error => {
+          catchError(() => {
             // Receipt API returns a 400 if the receipt is not found.
             Log.log(`Receipt not found yet`);
             return of(undefined);
@@ -225,13 +225,13 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     });
   }
 
-  showError(error: string) {
+  showError(error: string): void {
     this.genericModalService.openModal('Error', error);
   }
 
-  delete(item: SavedToken) {
+  delete(item: SavedToken): void {
     const modal = this.modalService.open(ConfirmationModalComponent, {backdrop: 'static', keyboard: false});
-    (<ConfirmationModalComponent>modal.componentInstance).body = `Are you sure you want to remove "${item.ticker}" token`;
+    (modal.componentInstance).body = `Are you sure you want to remove "${item.ticker}" token`;
     modal.result.then(value => {
       if (!value) {
         return;
@@ -246,10 +246,10 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     });
   }
 
-  send(item: SavedToken) {
+  send(item: SavedToken): void {
 
     const modal = this.modalService.open(SendTokenComponent, {backdrop: 'static', keyboard: false});
-    const sendTokenComponent = modal.componentInstance as SendTokenComponent;
+    const sendTokenComponent = modal.componentInstance;
 
     sendTokenComponent.walletName = this.walletName;
     sendTokenComponent.selectedSenderAddress = this.selectedAddress;
@@ -264,7 +264,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
       // start monitoring token progress
       const progressModal = this.modalService.open(ProgressComponent, {backdrop: 'static', keyboard: false});
-      const progressComponent = progressModal.componentInstance as ProgressComponent;
+      const progressComponent = progressModal.componentInstance;
 
       progressComponent.loading = true;
       progressComponent.close.subscribe(() => progressModal.close());
@@ -275,7 +275,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
 
       const receiptQuery = this.smartContractsService.GetReceiptSilent(value.callResponse.transactionId)
         .pipe(
-          catchError(error => {
+          catchError(() => {
             // Receipt API returns a 400 if the receipt is not found.
             Log.log(`Receipt not found yet`);
             return of(undefined);
@@ -322,7 +322,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     });
   }
 
-  private updateTokenCollection(token: SavedToken) {
+  private updateTokenCollection(token: SavedToken): void {
     if (!token) { return; }
 
     const existingTokenIndex = this.tokens.map(t => t.address).indexOf(token.address);

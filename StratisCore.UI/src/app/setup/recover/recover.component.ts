@@ -16,7 +16,7 @@ import { Animations } from '@shared/animations/animations';
 @Component({
   selector: 'app-recover',
   templateUrl: './recover.component.html',
-  styleUrls: ['./recover.component.css'],
+  styleUrls: ['./recover.component.scss'],
   animations : Animations.fadeIn
 })
 export class RecoverComponent implements OnInit, OnDestroy {

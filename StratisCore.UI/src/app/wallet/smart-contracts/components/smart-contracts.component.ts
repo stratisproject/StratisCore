@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject, of, Subscription } from 'rxjs';
-import { catchError, take } from 'rxjs/operators';
+import { of, Subscription } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -15,7 +15,7 @@ import { SmartContractsServiceBase } from "../smart-contracts-service.base";
 @Component({
   selector: 'app-smart-contracts',
   templateUrl: './smart-contracts.component.html',
-  styleUrls: ['./smart-contracts.component.css']
+  styleUrls: ['./smart-contracts.component.scss']
 })
 export class SmartContractsComponent implements OnInit, OnDestroy {
 
@@ -48,41 +48,41 @@ export class SmartContractsComponent implements OnInit, OnDestroy {
       })).subscribe(history => this.history = history));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  showApiError(error: string) {
+  showApiError(error: string): void {
     this.genericModalService.openModal('Error', error);
   }
 
-  clipboardAddressClicked() {
+  clipboardAddressClicked(): void {
     if (this.selectedAddress && this.clipboardService.copyFromContent(this.selectedAddress)) {
       console.log(`Copied ${this.selectedAddress} to clipboard`);
     }
   }
 
-  callTransactionClicked() {
+  callTransactionClicked(): void {
     this.showModal(Mode.Call);
   }
 
-  createNewTransactionClicked() {
+  createNewTransactionClicked(): void {
     this.showModal(Mode.Create);
   }
 
-  showModal(mode: Mode) {
+  showModal(mode: Mode): void {
     const modal = this.modalService.open(TransactionComponent, {backdrop: 'static', keyboard: false});
-    const transactionComponent = modal.componentInstance as TransactionComponent;
+    const transactionComponent = modal.componentInstance;
     transactionComponent.mode = mode;
     transactionComponent.selectedSenderAddress = this.selectedAddress;
     transactionComponent.balance = this.balance;
     transactionComponent.coinUnit = this.coinUnit;
   }
 
-  txHashClicked(contract: ContractTransactionItem) {
+  txHashClicked(contract: ContractTransactionItem): void {
     console.log('txhash clicked');
     this.smartContractsService
       .GetReceipt(contract.hash)
