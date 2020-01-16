@@ -24,9 +24,10 @@
                     <label class="float-right"
                            for="totalAmount">Spendable: {{ spendableBalance | coinNotation }} {{ coinUnit }}</label>
                     <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
-                    <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.amount"
+                    <input type="number" class="form-control" [class.is-invalid]="sendFormErrors.amount"
                            [class.is-valid]="!sendFormErrors.amount && sendForm.get('amount').valid"
                            formControlName="amount" placeholder="0.00 {{ coinUnit }}">
+
                     <div *ngIf="sendFormErrors.amount" class="invalid-feedback">{{ sendFormErrors.amount }}</div>
                   </div>
                   <!--<div class="form-group has-success">-->
@@ -44,7 +45,6 @@
                              [class.is-valid]="!sendFormErrors.address && sendForm.get('address').valid"
                              formControlName="address" id="destinationAddress"
                              placeholder="Please enter the destination address here.">
-
                     </ng-template>
 
                     <div *ngIf="sendFormErrors.address" class="invalid-feedback">{{ sendFormErrors.address }}</div>

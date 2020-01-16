@@ -21,6 +21,7 @@ import { Animations } from '@shared/animations/animations';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { AddressLabel } from '@shared/models/address-label';
 import { Network } from '@shared/models/network';
+import { TaskBarService } from '@shared/services/task-bar-service';
 
 
 export interface FeeStatus {
@@ -49,6 +50,7 @@ export class SendComponent implements OnInit, OnDestroy {
     private walletService: WalletService,
     private globalService: GlobalService,
     private modalService: NgbModal,
+    private taskBarService: TaskBarService,
     private currentAccountService: CurrentAccountService,
     private fb: FormBuilder) {
 
@@ -256,9 +258,8 @@ export class SendComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getAddressBookContact(): void
-  {
-   this.contact = this.addressBookService.findContactByAddress(this.address);
+  private getAddressBookContact(): void {
+    this.contact = this.addressBookService.findContactByAddress(this.address);
   }
 
   private getWalletBalance(): void {
@@ -272,18 +273,19 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   private openConfirmationModal(transactionResponse: TransactionResponse): void {
-    const component = this.modalService
-      .open(SendConfirmationComponent, {backdrop: 'static'})
-      .componentInstance;
+    const taskBarRef = this.taskBarService
+      .open(SendConfirmationComponent, {
+        transaction: transactionResponse.transaction,
+        transactionFee: this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee,
+        sidechainEnabled: this.sidechainEnabled,
+        opReturnAmount: this.opReturnAmount,
+        hasOpReturn: transactionResponse.isSideChain
+      }, {taskBarWidth: '550px'});
 
-    component.transaction = transactionResponse.transaction;
-    component.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
-    component.sidechainEnabled = this.sidechainEnabled;
-    component.opReturnAmount = this.opReturnAmount;
-    component.hasOpReturn = transactionResponse.isSideChain;
+    taskBarRef.close(taskBarRef.instance.closeClicked);
   }
 
-  public clearContact(): void{
+  public clearContact(): void {
     this.contact = null;
     this.sendForm.controls.address.setValue('');
   }

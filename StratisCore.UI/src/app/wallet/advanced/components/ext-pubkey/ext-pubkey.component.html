@@ -1,16 +1,17 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="card mt-3">
-        <div class="card-header">Extended Public Key</div>
-        <div class="card-body">
-          <p class="text-right mb-0">
-            <button type="button" class="btn btn-link pr-0" ngxClipboard [cbContent]="extPubKey" (click)="onCopiedClick()">Copy to clipboard</button>
-          </p>
-          <p class="code-block-base w-100" *ngIf="extPubKey">{{ extPubKey }}</p>
-          <p *ngIf="!extPubKey">Something went wrong while getting your Extended Public Key.</p>
-        </div>
-      </div>
+<div class="row">
+  <div class="col-2 blockLabel">
+    Extended Public Key
+    <button *ngIf="extPubKey" type="button" class="btn btn-link" ngxClipboard [cbContent]="extPubKey"
+            (click)="onCopiedClick()">
+      Copy to clipboard
+    </button>
+  </div>
+  <div class="col-7">
+    <div class="code-block-base blockText" style="padding-right: 50px" *ngIf="extPubKey">{{ extPubKey }}
     </div>
   </div>
+  <div class="col-12">
+    <p *ngIf="!extPubKey">Something went wrong while getting your Extended Public Key.</p>
+  </div>
 </div>
+

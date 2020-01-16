@@ -96,6 +96,8 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
     ReceiveComponent,
     TransactionDetailsComponent,
     LogoutConfirmationComponent,
+    AddNodeComponent,
+    ResyncComponent,
     ColdStakingCreateAddressComponent,
     ColdStakingWithdrawComponent,
     ColdStakingCreateComponent,

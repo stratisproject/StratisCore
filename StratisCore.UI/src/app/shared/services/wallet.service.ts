@@ -190,7 +190,6 @@ export class WalletService extends RestApi {
   }
 
   public paginateHistory(take?: number, prevOutputTxTime?: number, prevOutputIndex?: number): void {
-
     let extra = Object.assign({}, {
       prevOutputTxTime: prevOutputTxTime,
       prevOutputIndex: prevOutputIndex,
@@ -204,6 +203,7 @@ export class WalletService extends RestApi {
     }
 
     this.loadingSubject.next(true);
+
     this.get<WalletHistory>('wallet/history', this.getWalletParams(this.currentWallet, extra))
       .pipe(map((response) => {
           return response.history[this.currentWallet.account].transactionsHistory;

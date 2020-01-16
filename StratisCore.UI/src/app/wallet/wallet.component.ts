@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { LogoutConfirmationComponent } from "./logout-confirmation/logout-confirmation.component";
+import { TaskBarService } from '@shared/services/task-bar-service';
 
 @Component({
   selector: 'wallet-component',
@@ -8,7 +9,9 @@ import { LogoutConfirmationComponent } from "./logout-confirmation/logout-confir
   styleUrls: ['./wallet.component.scss'],
 })
 export class WalletComponent {
-  constructor(private modalService: NgbModal) {
+  constructor(
+    private taskBarService : TaskBarService,
+    private modalService: NgbModal) {
   }
 
   public logout(): void {

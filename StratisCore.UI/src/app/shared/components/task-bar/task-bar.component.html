@@ -1,0 +1,7 @@
+<div class="stratis-task-bar" [@openClose]="opened?'open':'closed'" *ngIf="options | async; let _options"
+     [ngStyle]="{width : _options.taskBarWidth || '600px'}">
+  <div class="stratis-task-bar-container" [ngStyle]="{width : _options.taskBarWidth || '600px'}">
+    <button class="btn btn-primary" *ngIf="_options.showCloseButton" (click)="close()">Close</button>
+    <div taskBarItemHost></div>
+  </div>
+</div>

@@ -1,5 +1,4 @@
 <!-- MODAL VALIDATION -->
-<div class="modal-body">
   <div class="text-center mb-5">
     <svg height="80px" width="80px" version="1.1" id="checkmark" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
        viewBox="0 0 98.5 98.5" enable-background="new 0 0 98.5 98.5" xml:space="preserve">
@@ -47,8 +46,4 @@
       </ul>
     </div>
   </div>
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-primary btn-block" (click)="activeModal.close('Close click')">Close</button>
-</div>
-<!-- /MODAL VALIDATION -->
+  <button type="button" class="mt-4 btn btn-primary btn-block" (click)="closeClicked.emit(true)">Close</button>
