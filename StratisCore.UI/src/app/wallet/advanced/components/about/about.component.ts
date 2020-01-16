@@ -13,6 +13,7 @@ import { ElectronService } from 'ngx-electron';
 export class AboutComponent implements OnInit {
   nodeStatusSubscription$: Observable<NodeStatus>;
   applicationVersion: string;
+  applicationVersionFull: string;
   gitCommit: string;
   isElectron: boolean;
 
@@ -27,6 +28,7 @@ export class AboutComponent implements OnInit {
     this.applicationVersion = this.globalService.getApplicationVersion();
     this.gitCommit = this.globalService.getGitCommit();
     this.nodeStatusSubscription$ = this.apiService.getNodeStatusInterval();
+    this.applicationVersionFull = this.gitCommit ? `${this.applicationVersion}-${this.gitCommit}` : `${this.applicationVersion}`;
   }
 
   openWalletDirectory(directory: string): void {
