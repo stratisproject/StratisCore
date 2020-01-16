@@ -282,7 +282,7 @@ export class SendComponent implements OnInit, OnDestroy {
         hasOpReturn: transactionResponse.isSideChain
       }, {taskBarWidth: '550px'});
 
-    taskBarRef.closeOn(taskBarRef.instance.closeClicked);
+    taskBarRef.close(taskBarRef.instance.closeClicked);
   }
 
   public clearContact(): void {

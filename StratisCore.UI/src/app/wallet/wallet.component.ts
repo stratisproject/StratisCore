@@ -19,8 +19,4 @@ export class WalletComponent {
       backdrop: 'static',
     });
   }
-
-  public bodyClicked(): void {
-    this.taskBarService.close();
-  }
 }

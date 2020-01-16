@@ -860,26 +860,24 @@ img {
 }
 
 .code-block-base {
-  padding: 1rem;
-  border-radius: $border-radius-lg;
-  background-color: rgba($gray-500, .05);
-  color: rgba($gray-700, .8);
+  //padding: 1rem;
+ // border-radius: $border-radius-lg;
+ // background-color: rgba($gray-500, .05);
+ // color: rgba($gray-700, .8);
   overflow-wrap: break-word;
-  display: inline-block;
-  margin: .5rem 0 0;
+  //display: inline-block;
+ // margin: .5rem 0 0;
 }
 
 ////// ADVANCED PAGE
-.card-body {
-  .blockLabel {
-    font-weight: 600;
-  }
+.blockLabel {
+  font-weight: 300;
+}
 
-  .blockText {
-    font-weight: 500;
-    color: $gray-600;
-    user-select: auto !important;
-  }
+.blockText {
+  font-weight: 500;
+ // color: $gray-600;
+  user-select: auto !important;
 }
 
 ////// LOGIN

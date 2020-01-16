@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
 import { SideBarItem } from '@shared/components/side-bar/side-bar-item-base';
 import { Subscription } from 'rxjs';
+import { TaskBarService } from '@shared/services/task-bar-service';
 
 @Component({
   selector: 'app-side-bar',
@@ -14,6 +15,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
+    private taskBarService: TaskBarService,
     private activatedRoute: ActivatedRoute,
     private sidebarItemsProvider: SideBarItemsProvider,
     private router: Router) {
@@ -31,6 +33,10 @@ export class SideBarComponent implements OnInit, OnDestroy {
   }
 
   public onSelect(sideBarOption: SideBarItem, suppressNavigate = false): void {
+    if (this.taskBarService.isOpen) {
+      this.taskBarService.close();
+    }
+
     if (!sideBarOption.disabled) {
       this.sidebarItemsProvider.setSelected(sideBarOption);
       if (!suppressNavigate) {

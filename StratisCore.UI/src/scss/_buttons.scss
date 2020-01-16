@@ -77,6 +77,8 @@ fieldset[disabled] a.btn {
   font-weight: $font-weight-normal;
   color: $link-color;
   background-color: transparent;
+  padding-top: 0 ;
+  padding-left: 0;
 
   @include hover {
     color: $link-hover-color;
