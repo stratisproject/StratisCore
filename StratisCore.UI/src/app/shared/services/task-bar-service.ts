@@ -41,7 +41,6 @@ export class TaskBarService {
     if (!closedByTaskBar) {
       this.taskBar.close();
     }
-
     this.taskBarOpen = false;
     this.clearReferences();
   }

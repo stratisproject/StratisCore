@@ -34,7 +34,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
 
   public onSelect(sideBarOption: SideBarItem, suppressNavigate = false): void {
     if (this.taskBarService.isOpen) {
-      this.taskBarService.close(true);
+      this.taskBarService.close();
     }
 
     if (!sideBarOption.disabled) {
