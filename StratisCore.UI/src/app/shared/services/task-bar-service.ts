@@ -7,19 +7,29 @@ import { ITaskBar, TaskBarOptions, TaskBarRef, TaskBarReference } from '@shared/
 export class TaskBarService {
   private taskBar: ITaskBar;
   private taskBarOpen = false;
-  private references: TaskBarReference<any>[] = [];
+  private reference: TaskBarReference<any> = null;
 
   public get isOpen(): boolean {
     return this.taskBarOpen;
   }
 
   public open<T>(component: Type<T>, data?: any, taskBarOptions?: TaskBarOptions): TaskBarRef<T> {
-    if (!this.taskBar.opened) {
+    if (this.taskBarOpen) {
+      if (!(this.reference.instance instanceof component)) {
+        this.close(false);
+        setTimeout(() => this.openInternal(component, data, taskBarOptions), 550);
+      }
+      return;
+    }
+    this.openInternal(component, data, taskBarOptions)
+  }
+
+  private openInternal<T>(component: Type<T>, data?: any, taskBarOptions?: TaskBarOptions): TaskBarRef<T> {
+    if (!this.taskBarOpen) {
       const instance = this.taskBar.open(component, data, taskBarOptions);
-      const ref = new TaskBarReference(this.taskBar, instance);
-      this.references.push(ref);
+      this.reference = new TaskBarReference(this.taskBar, instance);
       this.taskBarOpen = true;
-      return ref;
+      return this.reference;
     }
   }
 
@@ -27,15 +37,19 @@ export class TaskBarService {
     this.taskBar = taskBar;
   }
 
-  public close(): void {
-    if (this.taskBar.opened) {
-      this.taskBarOpen = false;
+  public close(closedByTaskBar?: boolean): void {
+    if (!closedByTaskBar) {
       this.taskBar.close();
     }
+
+    this.taskBarOpen = false;
+    this.clearReferences();
   }
 
   public clearReferences(): void {
-    this.references.forEach(ref => ref.dispose());
-    this.references = [];
+    if (this.reference) {
+      this.reference.dispose();
+      this.reference = null;
+    }
   }
 }

@@ -5,6 +5,7 @@ import { AboutComponent } from './components/about/about.component';
 import { SendConfirmationComponent } from '../send/send-confirmation/send-confirmation.component';
 import { ResyncComponent } from './components/resync/resync.component';
 import { AddNodeComponent } from './components/add-node/add-node.component';
+import { GenerateAddressesComponent } from './components/generate-addresses/generate-addresses.component';
 
 
 @Component({
@@ -42,5 +43,13 @@ export class AdvancedComponent implements OnInit, OnDestroy {
         taskBarWidth: '550px'
       });
 
+  }
+
+  generateAddresses() {
+    const taskBarRef = this.taskBarService
+      .open(GenerateAddressesComponent, {}, {
+        showCloseButton: true,
+        taskBarWidth: '700px'
+      });
   }
 }

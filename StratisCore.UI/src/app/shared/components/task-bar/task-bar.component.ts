@@ -104,6 +104,7 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
 
   public close(): void {
     this.opened = false;
+    this.taskBarService.close(true);
     setTimeout(() => {
       this.host.viewContainerRef.clear();
     }, 500)
