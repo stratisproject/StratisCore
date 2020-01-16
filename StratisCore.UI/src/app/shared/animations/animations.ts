@@ -53,7 +53,7 @@ export class Animations {
         overflow: 'hidden'
       })),
       state('open', style({
-        opacity: 0.95,
+        opacity: 0.99,
         width: '*',
         overflow: 'hidden'
       })),

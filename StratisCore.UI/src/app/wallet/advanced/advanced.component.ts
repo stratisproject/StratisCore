@@ -29,7 +29,7 @@ export class AdvancedComponent implements OnInit, OnDestroy {
     const taskBarRef = this.taskBarService
       .open(ResyncComponent, {}, {
         showCloseButton: true,
-        taskBarWidth: '550px'
+        taskBarWidth: '800px'
       });
 
     //taskBarRef.close(taskBarRef.instance);
@@ -40,7 +40,7 @@ export class AdvancedComponent implements OnInit, OnDestroy {
     const taskBarRef = this.taskBarService
       .open(AddNodeComponent, {}, {
         showCloseButton: true,
-        taskBarWidth: '550px'
+        taskBarWidth: '800px'
       });
 
   }
@@ -49,7 +49,7 @@ export class AdvancedComponent implements OnInit, OnDestroy {
     const taskBarRef = this.taskBarService
       .open(GenerateAddressesComponent, {}, {
         showCloseButton: true,
-        taskBarWidth: '700px'
+        taskBarWidth: '800px'
       });
   }
 }
