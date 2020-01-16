@@ -23,7 +23,7 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "postinstall": "node git-version.js && electron-builder install-app-deps",
+    "postinstall": "node ./src/environments/git-version.js && electron-builder install-app-deps",
     "ng": "ng",
     "ng:serve": "ng serve",
     "ng:serve:web": "ng serve -c web -o",
