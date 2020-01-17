@@ -708,6 +708,7 @@ img {
 
 .contact-card {
   background: $contact-card-background !important;
+
   .card-body {
     background: none !important;
   }
@@ -2165,6 +2166,28 @@ app-side-bar {
 }
 
 app-task-bar {
+  .close-button {
+    margin-top: -10px;
+    margin-left: -10px;
+    font-size: 1.8em;
+    float: left;
+    opacity: 0.5;
+    transition-duration: 300ms;
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+      color: $primary;
+    }
+  }
+
+  .title {
+    margin-left: 30px;
+    font-weight: 300;
+    font-size: 1em;
+    text-transform: uppercase;
+    margin-top: -7px;
+  }
+
   .stratis-task-bar {
     position: fixed;
     right: 0;

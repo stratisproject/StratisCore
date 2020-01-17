@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
@@ -8,8 +8,8 @@ import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { NodeService } from '@shared/services/node-service';
 import { WalletService } from '@shared/services/wallet.service';
-import { WalletResync } from "@shared/models/wallet-rescan";
-import { SnackbarService } from "ngx-snackbar";
+import { WalletResync } from '@shared/models/wallet-rescan';
+import { SnackbarService } from 'ngx-snackbar';
 
 @Component({
   selector: 'app-resync',
@@ -17,7 +17,7 @@ import { SnackbarService } from "ngx-snackbar";
   styleUrls: ['./resync.component.scss']
 })
 export class ResyncComponent implements OnInit, OnDestroy {
-
+  @Output() rescanStarted = new EventEmitter<boolean>();
   constructor(
     private globalService: GlobalService,
     private snackbarService: SnackbarService,
@@ -102,6 +102,7 @@ export class ResyncComponent implements OnInit, OnDestroy {
       .rescanWallet(rescanData)
       .toPromise().then(
       () => {
+        this.rescanStarted.emit(true);
         this.snackbarService.add({
           msg: 'Your wallet is now re-syncing in the background, this may take a few minutes.',
           customClass: 'notify-snack-bar',

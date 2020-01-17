@@ -180,7 +180,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       const progressComponent = progressModal.componentInstance;
       progressComponent.loading = true;
       progressComponent.title = 'Waiting for Confirmation';
-      progressComponent.message = 'Your token creation transaction has been broadcast and is waiting to be mined. This window will close once the transaction receives one confirmation.';
+      progressComponent.message = 'Your token creation transaction has been broadcast and is waiting to be mined. This window will closeWhen once the transaction receives one confirmation.';
       progressComponent.close.subscribe(() => progressModal.close());
 
       const receiptQuery = this.smartContractsService.GetReceiptSilent(value.transactionHash)
@@ -270,7 +270,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       progressComponent.close.subscribe(() => progressModal.close());
       progressComponent.title = 'Waiting For Confirmation';
       // tslint:disable-next-line:max-line-length
-      progressComponent.message = 'Your token transfer transaction has been broadcast and is waiting to be mined. This window will close once the transaction receives one confirmation.';
+      progressComponent.message = 'Your token transfer transaction has been broadcast and is waiting to be mined. This window will closeWhen once the transaction receives one confirmation.';
       progressComponent.summary = `Send ${value.amount} ${item.name} to ${value.recipientAddress}`;
 
       const receiptQuery = this.smartContractsService.GetReceiptSilent(value.callResponse.transactionId)

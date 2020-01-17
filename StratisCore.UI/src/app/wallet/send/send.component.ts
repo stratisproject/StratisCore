@@ -273,16 +273,15 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   private openConfirmationModal(transactionResponse: TransactionResponse): void {
-    const taskBarRef = this.taskBarService
-      .open(SendConfirmationComponent, {
-        transaction: transactionResponse.transaction,
-        transactionFee: this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee,
-        sidechainEnabled: this.sidechainEnabled,
-        opReturnAmount: this.opReturnAmount,
-        hasOpReturn: transactionResponse.isSideChain
-      }, {taskBarWidth: '550px'});
-
-    taskBarRef.close(taskBarRef.instance.closeClicked);
+    this.taskBarService.open(SendConfirmationComponent, {
+      transaction: transactionResponse.transaction,
+      transactionFee: this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee,
+      sidechainEnabled: this.sidechainEnabled,
+      opReturnAmount: this.opReturnAmount,
+      hasOpReturn: transactionResponse.isSideChain
+    }, {taskBarWidth: '550px'}).then(ref => {
+      ref.closeWhen(ref.instance.closeClicked);
+    });
   }
 
   public clearContact(): void {
