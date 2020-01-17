@@ -16,10 +16,15 @@
     @include hover {
       z-index: 2;
     }
+
     &:focus,
     &:active,
     &.active {
       z-index: 2;
+    }
+
+    &:hover {
+      cursor: pointer;
     }
   }
 
@@ -56,6 +61,7 @@
     @include border-right-radius(0);
   }
 }
+
 // Need .dropdown-toggle since :last-child doesn't apply given a .dropdown-menu
 // immediately after it
 .btn-group > .btn:last-child:not(:first-child),
@@ -89,8 +95,13 @@
 //
 // Remix the default button sizing classes into new ones for easier manipulation.
 
-.btn-group-sm > .btn { @extend .btn-sm; }
-.btn-group-lg > .btn { @extend .btn-lg; }
+.btn-group-sm > .btn {
+  @extend .btn-sm;
+}
+
+.btn-group-lg > .btn {
+  @extend .btn-lg;
+}
 
 
 //
@@ -200,7 +211,7 @@
     input[type="radio"],
     input[type="checkbox"] {
       position: absolute;
-      clip: rect(0,0,0,0);
+      clip: rect(0, 0, 0, 0);
       pointer-events: none;
     }
   }

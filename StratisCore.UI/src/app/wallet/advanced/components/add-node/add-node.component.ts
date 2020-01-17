@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackbarService } from 'ngx-snackbar';
 import { NodeService } from '@shared/services/node-service';
@@ -9,7 +9,7 @@ import { NodeService } from '@shared/services/node-service';
   styleUrls: ['./add-node.component.scss']
 })
 export class AddNodeComponent implements OnInit {
-
+  @Output() nodeAdded = new EventEmitter<boolean>();
   constructor(
     private nodeService: NodeService,
     private snackbarService: SnackbarService,
@@ -69,6 +69,7 @@ export class AddNodeComponent implements OnInit {
       .addNode(this.addNodeForm.get('nodeIP').value)
       .toPromise().then(
         () => {
+          this.nodeAdded.emit(true);
           this.snackbarService.add({
             msg: 'Node succesfully added.',
             customClass: 'notify-snack-bar',

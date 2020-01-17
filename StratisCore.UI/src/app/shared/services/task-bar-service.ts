@@ -1,5 +1,49 @@
 import { Injectable, Type } from '@angular/core';
-import { ITaskBar, TaskBarOptions, TaskBarRef, TaskBarReference } from '@shared/components/task-bar/task-bar.component';
+import { Observable, Subscription } from 'rxjs';
+
+export interface TaskBarOptions {
+  showCloseButton?: boolean;
+  taskBarWidth?: any;
+  title?: string;
+}
+
+export interface ITaskBar {
+  opened: boolean;
+
+  open<T>(component: Type<T>, data: any, taskBarOptions: TaskBarOptions): T
+
+  close(): void;
+}
+
+export interface TaskBarRef<T> {
+  instance: T
+
+  closeWhen(close?: Observable<boolean>): void;
+}
+
+export class TaskBarReference<T> implements TaskBarRef<T> {
+  private subscription: Subscription;
+
+  constructor(private taskBar: ITaskBar, public instance: T) {
+  }
+
+  public closeWhen(observable?: Observable<boolean>): void {
+    if (observable) {
+      this.subscription = observable.subscribe(response => {
+        if (response === true) {
+          this.taskBar.close();
+          this.subscription.unsubscribe();
+        }
+      });
+    }
+  }
+
+  public dispose(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +57,18 @@ export class TaskBarService {
     return this.taskBarOpen;
   }
 
-  public open<T>(component: Type<T>, data?: any, taskBarOptions?: TaskBarOptions): TaskBarRef<T> {
-    if (this.taskBarOpen) {
-      if (!(this.reference.instance instanceof component)) {
-        this.close(false);
-        setTimeout(() => this.openInternal(component, data, taskBarOptions), 550);
+  public open<T>(component: Type<T>, data?: any, taskBarOptions?: TaskBarOptions): Promise<TaskBarRef<T>> {
+    return new Promise(((resolve, reject) => {
+      if (this.taskBarOpen) {
+        if (!(this.reference.instance instanceof component)) {
+          this.close(false);
+          setTimeout(() =>
+            resolve(this.openInternal(component, data, taskBarOptions)), 550);
+        }
+        reject(new Error('Task bar is already open'));
       }
-      return;
-    }
-    this.openInternal(component, data, taskBarOptions)
+      resolve(this.openInternal(component, data, taskBarOptions));
+    }));
   }
 
   private openInternal<T>(component: Type<T>, data?: any, taskBarOptions?: TaskBarOptions): TaskBarRef<T> {
@@ -42,10 +89,10 @@ export class TaskBarService {
       this.taskBar.close();
     }
     this.taskBarOpen = false;
-    this.clearReferences();
+    this.clearReference();
   }
 
-  public clearReferences(): void {
+  public clearReference(): void {
     if (this.reference) {
       this.reference.dispose();
       this.reference = null;

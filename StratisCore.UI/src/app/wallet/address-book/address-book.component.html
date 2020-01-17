@@ -1,12 +1,13 @@
 <section id="GUI" class="light" @fadeIn>
   <div class="jumbotron page-header">
-    <div class="text-left">
-      <h3>Contacts</h3>
-      <button type="button" class="btn btn-primary mt-3"
-              (click)="addNewAddressClicked()"><span class="fa fa-gear"></span>
-        Add Contact
-      </button>
-      <div class="page-header-right-content">
+    <div class="d-flex justify-content-between">
+      <div>
+        <h3>Contacts</h3>
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary"
+                (click)="addNewAddressClicked()">Add Contact
+        </button>
       </div>
     </div>
   </div>
@@ -20,9 +21,10 @@
     </div>
     <div *ngIf="addresses; else noAddresses">
       <div *ngFor="let addressRow of addresses | async">
-       <app-address-book-card [address]="addressRow"  [showButtons]="true" (removeClicked)="removeClicked($event)" (sendClicked)="sendClicked($event)">
+        <app-address-book-card [address]="addressRow" [showButtons]="true" (removeClicked)="removeClicked($event)"
+                               (sendClicked)="sendClicked($event)">
 
-       </app-address-book-card>
+        </app-address-book-card>
       </div>
     </div>
   </section>

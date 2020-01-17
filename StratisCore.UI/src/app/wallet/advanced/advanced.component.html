@@ -4,41 +4,32 @@
       <h3>Advanced Options</h3>
     </div>
     <app-about></app-about>
-    <app-ext-pubkey></app-ext-pubkey>
-    <div class="text-left mt-3 mb-3">
-      <h3>Tools</h3>
+    <div class="text-left mt-5 mb-3">
+      <h3>Advanced Tools</h3>
     </div>
     <div class="row">
-      <div class="col-2 blockLabel">
+      <div class="col-3 blockLabel">
         Wallet Rescan
       </div>
-      <div class="col-7 blockText">
-        To rebuild your wallet from the blockchain,
-        <a [routerLink]="" (click)="openRescan()">Click here</a>.
+      <div class="col-9 blockText mb-3">
+        Rebuild your wallet from the blockchain.
+        <a [routerLink]="" (click)="openRescan()">Rescan now</a>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-2 blockLabel">
+      <div class="col-3 blockLabel">
         Add Nodes
       </div>
-      <div class="col-7 blockText">
-        You can <a [routerLink]="" (click)="addNode()">add a node</a>,
-        by IP Address. This is useful if you are having trouble connecting to the nextwork.
+      <div class="col-9 blockText mb-3">
+        You can add a node by IP Address. This is useful if you are having trouble connecting to the nextwork.
+        <a [routerLink]="" (click)="addNode()">Add a node</a>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-2 blockLabel">
+      <div class="col-3 blockLabel">
         Generate Addresses
       </div>
-      <div class="col-7 blockText">
-        To create more addresses click <a [routerLink]="" (click)="generateAddresses()">generate addresses</a>, you can
-        use these addresses to receive funds.
+      <div class="col-9 blockText mb-3">
+        Use this tool to create more addresses that you can use these addresses to receive funds.
+        <a [routerLink]="" (click)="generateAddresses()">Generate addresses</a>
       </div>
     </div>
-  </div>
-  <div style="padding-top: 200px">
-    <!--    <app-add-node></app-add-node>-->
-    <!--    <app-resync></app-resync>-->
-    <!--    <app-generate-addresses></app-generate-addresses>-->
+    <app-ext-pubkey></app-ext-pubkey>
   </div>
 </section>
