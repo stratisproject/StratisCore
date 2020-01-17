@@ -12,7 +12,7 @@ export interface ITaskBar {
 
   open<T>(component: Type<T>, data: any, taskBarOptions: TaskBarOptions): T
 
-  close(): void;
+  close(): Promise<any>;
 }
 
 export interface TaskBarRef<T> {
@@ -61,13 +61,16 @@ export class TaskBarService {
     return new Promise(((resolve, reject) => {
       if (this.taskBarOpen) {
         if (!(this.reference.instance instanceof component)) {
-          this.close(false);
-          setTimeout(() =>
-            resolve(this.openInternal(component, data, taskBarOptions)), 550);
+          this.close().then(() => {
+            resolve(this.openInternal(component, data, taskBarOptions));
+          });
+          return;
         }
         reject(new Error('Task bar is already open'));
+        return;
       }
       resolve(this.openInternal(component, data, taskBarOptions));
+      return;
     }));
   }
 
@@ -84,12 +87,14 @@ export class TaskBarService {
     this.taskBar = taskBar;
   }
 
-  public close(closedByTaskBar?: boolean): void {
-    if (!closedByTaskBar) {
-      this.taskBar.close();
-    }
+  public markAsClosed(): void {
     this.taskBarOpen = false;
     this.clearReference();
+  }
+
+  public close(): Promise<any> {
+    this.markAsClosed();
+    return this.taskBar.close();
   }
 
   public clearReference(): void {
