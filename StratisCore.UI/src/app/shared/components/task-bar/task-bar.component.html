@@ -1,4 +1,6 @@
-<div class="stratis-task-bar" [@openClose]="opened?'open':'closed'" *ngIf="options | async; let _options"
+<div class="stratis-task-bar" *ngIf="options | async; let _options"
+     [@openClose]="opened?'open':'closed'"
+     (@openClose.done)="animationComplete($event)"
      [ngStyle]="{width : _options.taskBarWidth || '600px'}">
   <div class="stratis-task-bar-container" [ngStyle]="{width : _options.taskBarWidth || '600px'}">
     <div class="lnr lnr-cross-circle close-button" *ngIf="_options.showCloseButton" (click)="close()"></div>

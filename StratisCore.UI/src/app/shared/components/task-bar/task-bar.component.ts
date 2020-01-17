@@ -1,6 +1,6 @@
 import {
   Component,
-  ComponentFactoryResolver,
+  ComponentFactoryResolver, EventEmitter,
   Input, OnDestroy,
   OnInit, Type,
   ViewChild
@@ -20,6 +20,7 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
   @Input() opened: boolean;
   @ViewChild(TaskBarItemHostDirective, {static: false}) host: TaskBarItemHostDirective;
   public options: BehaviorSubject<TaskBarOptions> = new BehaviorSubject<TaskBarOptions>({});
+  private closedComplete = new EventEmitter<Boolean>();
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -29,7 +30,6 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
 
   public open<T>(component: Type<T>, data?: any, taskBarOptions?: TaskBarOptions): T {
     this.options.next(taskBarOptions || {});
-
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
     const viewContainerRef = this.host.viewContainerRef;
     viewContainerRef.clear();
@@ -50,13 +50,22 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
     return null;
   }
 
-  public close(): void {
-    this.opened = false;
-    this.taskBarService.close(true);
-    setTimeout(() => {
-      this.host.viewContainerRef.clear();
-    }, 500)
+  public animationComplete($event: any): void {
+    if ($event.toState === 'closed') {
+      this.closedComplete.emit(true);
+    }
+  }
 
+  public close(): Promise<any> {
+   this.opened = false;
+    return new Promise<any>(resolve => {
+      const sub = this.closedComplete.subscribe(closed => {
+        this.host.viewContainerRef.clear();
+        this.taskBarService.markAsClosed();
+        sub.unsubscribe();
+        resolve();
+      });
+    });
   }
 
   public ngOnInit(): void {
