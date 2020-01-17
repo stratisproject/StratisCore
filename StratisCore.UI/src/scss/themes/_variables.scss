@@ -1,4 +1,5 @@
-$stratis-green:  #3BB0BA !default;
+$stratis-green:  #3BB0BA;
+$sidebar-width: 250px;
 $sidebar-padding: 25px;
 $sidebar-gradient: linear-gradient(10deg, #0068a9 0%, #2297dc 100%);
 
@@ -12,3 +13,7 @@ $btn-transition: background-color .15s ease-in-out, border-color .15s ease-in-ou
 
 $input-btn-padding-y-lg: .7rem;
 $btn-border-radius-lg: 1.4rem;
+$input-border-color: transparent;
+$input-bg: #ecf2f9;
+$custom-select-bg: #ecf2f9;
+$input-disabled-bg: #f3ecec;
