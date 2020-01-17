@@ -1,27 +1,22 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="card mt-3">
-        <div class="card-body">
-          <div class="alert alert-info" role="alert">
-            <p class="m-0">
-              If you're having issues connecting to the network you can use this form to add node IP addresses manually.
-            </p>
-          </div>
-          <form class="col-4" [formGroup]="addNodeForm">
-            <div class="form-group col-12">
-              <label class="text-left">Node IP</label>
-              <input type="text" class="form-control" id="nodeIP" name="nodeIP" formControlName="nodeIP" placeholder="IP Address" />
-              <div *ngIf="formErrors.nodeIP" class="text-danger mt-2">{{ formErrors.nodeIP }}</div>
-            </div>
-          </form>
-          <div class="right">
-            <button type="button" [disabled]="!addNodeForm.valid" class="btn btn-primary btn-right-200"
-                    (click)="onAddNodeClicked()">Add Node
-            </button>
-          </div>
-        </div>
+<div class="row">
+  <div class="col-12">
+    <div class="alert alert-info" role="alert">
+      <p class="m-0">
+        If you're having issues connecting to the network you can use this form to add node IP addresses manually.
+      </p>
+    </div>
+    <form class="col-12" [formGroup]="addNodeForm">
+      <div class="form-group col-12">
+        <label class="text-left">Node IP</label>
+        <input type="text" class="form-control" id="nodeIP" name="nodeIP" formControlName="nodeIP"
+               placeholder="IP Address"/>
+        <div *ngIf="formErrors.nodeIP" class="text-danger mt-2">{{ formErrors.nodeIP }}</div>
       </div>
+    </form>
+    <div class="right">
+      <button type="button" [disabled]="!addNodeForm.valid" class="btn btn-primary btn-right-200"
+              (click)="onAddNodeClicked()">Add Node
+      </button>
     </div>
   </div>
 </div>

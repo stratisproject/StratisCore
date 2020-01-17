@@ -2173,6 +2173,7 @@ app-task-bar {
     float: left;
     opacity: 0.5;
     transition-duration: 300ms;
+
     &:hover {
       opacity: 1;
       cursor: pointer;
@@ -2208,6 +2209,10 @@ app-task-bar {
 
 .ml-10 {
   margin-left: 10px;
+}
+
+.mb-50 {
+  margin-bottom: 50px;
 }
 
 
