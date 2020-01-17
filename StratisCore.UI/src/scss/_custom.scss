@@ -693,10 +693,6 @@ img {
         color: $gray-500;
       }
     }
-
-    .right {
-      float: right;
-    }
   }
 
   //tab-pane content
@@ -704,6 +700,10 @@ img {
     padding: .5em;
     border-bottom: 1px dotted #ccc;
   }
+}
+
+.right {
+  float: right;
 }
 
 @keyframes dash {
@@ -864,13 +864,7 @@ img {
 }
 
 .code-block-base {
-  //padding: 1rem;
- // border-radius: $border-radius-lg;
- // background-color: rgba($gray-500, .05);
- // color: rgba($gray-700, .8);
   overflow-wrap: break-word;
-  //display: inline-block;
- // margin: .5rem 0 0;
 }
 
 ////// ADVANCED PAGE
@@ -879,9 +873,14 @@ img {
 }
 
 .blockText {
-  font-weight: 500;
- // color: $gray-600;
+  font-weight: 400;
   user-select: auto !important;
+  overflow-wrap: break-word;
+}
+
+.blockTextSmall {
+  @extend .blockText;
+  font-size: 0.9em;
 }
 
 ////// LOGIN
@@ -2154,23 +2153,27 @@ app-side-bar {
   }
 }
 
-app-task-bar{
+app-task-bar {
   .stratis-task-bar {
     position: fixed;
     right: 0;
     top: 0;
     height: 100vh;
-   // width: 600px;
+    // width: 600px;
     z-index: 5;
     background-color: white;
-    box-shadow: -3px 0px 5px 0px rgba(240,240,240,0.75);
+    box-shadow: -3px 0px 5px 0px rgba(240, 240, 240, 0.75);
   }
-  .stratis-task-bar-container
-  {
+
+  .stratis-task-bar-container {
     //width: 100%;
     padding: 20px;
   }
 
+}
+
+.ml-10 {
+  margin-left: 10px;
 }
 
 

@@ -11,7 +11,8 @@
       </div>
       <div class="clearfix mt-2">
         <button *ngIf="!transaction.contact" type="button" class="btn btn-primary col-3 left"
-                (click)="createNewContact(getSentToDetails())">Create new contact</button>
+                (click)="createNewContact(getSentToDetails())">Create new contact
+        </button>
       </div>
     </li>
   </ul>
@@ -55,10 +56,14 @@
     </li>
   </ul>
   <ul class="list-inline row">
-    <li class="list-inline-item col-12 blockLabel my-3">Transaction ID</li>
-    <li class="list-inline-item col-8 blockID"><code>{{ transaction.transactionId }}</code></li>
-    <button type="button" class="btn btn-primary col-2 left" ngxClipboard [cbContent]="transaction.transactionId"
-            (click)="onCopiedClick(transaction.transactionId)">Copy to clipboard
-    </button>
+    <li class="list-inline-item col blockLabel">Transaction ID</li>
+    <li class="list-inline-item col-8 blockTextSmall">{{ transaction.transactionId }}</li>
+  </ul>
+  <ul class="list-inline row">
+    <li class="list-inline-item col-12 right">
+      <button type="button" class="btn btn-primary right" ngxClipboard [cbContent]="transaction.transactionId"
+              (click)="onCopiedClick(transaction.transactionId)">Copy to clipboard
+      </button>
+    </li>
   </ul>
 </div>
