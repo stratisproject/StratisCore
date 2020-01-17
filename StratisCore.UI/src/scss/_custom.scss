@@ -706,6 +706,17 @@ img {
   float: right;
 }
 
+.contact-card {
+  background: $contact-card-background !important;
+  .card-body {
+    background: none !important;
+  }
+
+  .contact-button {
+    width: 150px !important;
+  }
+}
+
 @keyframes dash {
   0% {
     stroke-dashoffset: 745.74853515625;
