@@ -1,14 +1,37 @@
 <section id="GUI" class="light" @fadeIn>
   <div class="jumbotron page-header">
-    <div class="text-left">
-      <h3>Send</h3>
-    </div>
-    <div class="btn-group btn-group-toggle">
-      <button type="button" (click)="sideChain = !sideChain" class="btn btn-primary mt-3">
-        {{sideChain ? 'Send to Mainchain' : 'Send to Sidechain'}}
-      </button>
+    <div class="d-flex justify-content-between">
+      <div>
+        <h3>Send</h3>
+        <span class="text-small font-weight-light">{{ spendableBalance | coinNotation }} {{ coinUnit }} available</span>
+      </div>
+      <div
+        class="btn-group btn-group-toggle"
+        data-toggle="buttons">
+        <label
+          [ngClass]="{'active' : !sideChain}"
+          class="btn btn-outline-primary">
+          <input
+            type="radio"
+            name="options"
+            autocomplete="off"
+            (click)="sideChain = false">
+            Mainchain
+        </label>
+        <label
+          [ngClass]="{'active' : sideChain}"
+          class="btn btn-outline-primary">
+          <input
+            type="radio"
+            name="options"
+            autocomplete="off"
+            (click)="sideChain = true">
+            Sidechain
+        </label>
+      </div>
     </div>
   </div>
+
   <section id="content" class="col-12 mx-auto page-content">
     <div class="card card-flat mb-5 send-card">
       <div class="card-body">
@@ -20,9 +43,7 @@
                 <form [formGroup]="sendForm">
                   <!--<div class="form-group has-danger clearfix">-->
                   <div class="form-group clearfix">
-                    <label class="float-left" for="amount">Amount</label>
-                    <label class="float-right"
-                           for="totalAmount">Spendable: {{ spendableBalance | coinNotation }} {{ coinUnit }}</label>
+                    <label for="amount">Amount</label>
                     <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
                     <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.amount"
                            [class.is-valid]="!sendFormErrors.amount && sendForm.get('amount').valid"
@@ -137,9 +158,7 @@
                 <form [formGroup]="sendToSidechainForm">
                   <!--<div class="form-group has-danger clearfix">-->
                   <div class="form-group clearfix">
-                    <label class="float-left" for="amount">Amount</label>
-                    <label class="float-right"
-                           for="totalAmount">Available: {{ totalBalance | coinNotation }} {{ coinUnit }}</label>
+                    <label for="amount">Amount</label>
                     <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
                     <input type="text" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.amount"
                            [class.is-valid]="!sendToSidechainFormErrors.amount && sendToSidechainForm.get('amount').valid"

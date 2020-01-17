@@ -346,6 +346,10 @@ img {
     }
   }
 
+  .btn-group.btn-group-toggle .btn.active {
+    box-shadow: none;
+  }
+
   // Toggle
   #switch {
     width: 68px;
@@ -1734,12 +1738,13 @@ bs-daterangepicker-container {
 
 .content {
   position: relative;
-  margin-left: 250px;
+  margin-left: $sidebar-width;
 }
 
 .page-header {
   position: fixed;
-  width: 100%;
+  left: $sidebar-width;
+  right: 0;
   background: $header-gradient;
   z-index: 1;
   height: 100px;
@@ -1763,9 +1768,10 @@ bs-daterangepicker-container {
 }
 
 #staking-header {
-  top: 0px;
   position: fixed;
-  width: calc(100% - 250px) !important;
+  top: 0;
+  right: 0;
+  left: $sidebar-width;
   background: $header-gradient;
   border: 0;
   z-index: 1;
@@ -1909,7 +1915,7 @@ bs-daterangepicker-container {
   padding-top: 20px;
   padding-right: 300px;
   color: white;
-  margin-left: 250px;
+  margin-left: $sidebar-width;
   padding-left: 50px;
   background: #0068a9;
   animation: notify-animation 3s forwards;
@@ -1923,7 +1929,7 @@ bs-daterangepicker-container {
   width: 100%;
   font-size: 20px;
   color: white;
-  margin-left: 250px;
+  margin-left: $sidebar-width;
   padding-left: 50px;
   background: rgba(255, 255, 255, 0.8)
 }
@@ -1945,8 +1951,8 @@ bs-daterangepicker-container {
 .page-load {
   position: fixed;
   top: 0;
-  left: 250px;
-  width: calc(100% - 250px);
+  left: $sidebar-width;
+  right: 0;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.7);
   z-index: 100;
@@ -2029,7 +2035,7 @@ app-side-bar {
   top: 0;
   height: 100vh;
   float: left;
-  width: 250px;
+  width: $sidebar-width;
   background: rgb(23, 133, 202);
   background: $sidebar-gradient;
   padding: $sidebar-padding 0;
