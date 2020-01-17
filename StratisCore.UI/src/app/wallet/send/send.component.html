@@ -39,7 +39,7 @@
           <div>
 
             <ng-container *ngIf="!sideChain; else sideChainTemplate">
-              <div class="send-form">
+              <div class="send-form" @fadeIn>
                 <form [formGroup]="sendForm">
                   <!--<div class="form-group has-danger clearfix">-->
                   <div class="form-group clearfix">

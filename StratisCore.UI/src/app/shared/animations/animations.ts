@@ -9,10 +9,31 @@ export class Animations {
         }),
         animate(400)
       ]),
-      transition(':leave',
-        animate(400, style({opacity: 0})))
+      transition(':leave', [
+        style({
+          display: 'none'
+        })
+      ]),
     ])
   ];
+
+  public static fadeInOut = [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({
+          opacity: 0
+        }),
+        animate(400)
+      ]),
+      transition(':leave',
+        animate(
+          400,
+          style({ opacity: 0 })
+        )
+      )
+    ])
+  ];
+
   public static expand = [
     trigger('state', [
       state(
