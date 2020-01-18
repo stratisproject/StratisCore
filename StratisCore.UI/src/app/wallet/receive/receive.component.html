@@ -30,9 +30,10 @@
             <ngb-tab class="nav-link" title="Unused Addresses">
               <ng-template ngbTabContent>
                 <div
-                  *ngFor="let unusedAddress of unusedAddresses | paginate: { itemsPerPage: 12, currentPage: pageNumberUnused, id: 'unusedAddressesPaginator' }">
+                  *ngFor="let unusedAddress of unusedAddresses | paginate: { itemsPerPage: 12, currentPage: pageNumberUnused, id: 'unusedAddressesPaginator' }"
+                  class="d-flex justify-content-between align-items-center">
                   <code class="d-inline-block">{{ unusedAddress }}</code>
-                  <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
+                  <button type="button" class="btn btn-outline-secondary d-inline-block btn-sm"
                           ngxClipboard [cbContent]="unusedAddress" (click)="copyToClipboardClicked(unusedAddress)">
                     <i class="lnr lnr-file-add"></i> copy
                   </button>
@@ -44,9 +45,10 @@
             <ngb-tab class="nav-link" title="Used Addresses">
               <ng-template ngbTabContent>
                 <div
-                  *ngFor="let usedAddress of usedAddresses | paginate: { itemsPerPage: 12, currentPage: pageNumberUsed, id: 'usedAddressesPaginator' }">
+                  *ngFor="let usedAddress of usedAddresses | paginate: { itemsPerPage: 12, currentPage: pageNumberUsed, id: 'usedAddressesPaginator' }"
+                  class="d-flex justify-content-between align-items-center">
                   <code class="d-inline-block">{{ usedAddress }}</code>
-                  <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
+                  <button type="button" class="btn btn-outline-secondary d-inline-block btn-sm"
                           ngxClipboard [cbContent]="usedAddress" (click)="copyToClipboardClicked(usedAddress)">
                     <i class="lnr lnr-file-add"></i> copy
                   </button>
@@ -58,9 +60,10 @@
             <ngb-tab class="nav-link" title="Change Addresses">
               <ng-template ngbTabContent>
                 <div
-                  *ngFor="let changeAddress of changeAddresses | paginate: { itemsPerPage: 12, currentPage: pageNumberChange, id: 'changeAddressesPaginator' }">
+                  *ngFor="let changeAddress of changeAddresses | paginate: { itemsPerPage: 12, currentPage: pageNumberChange, id: 'changeAddressesPaginator' }"
+                  class="d-flex justify-content-between align-items-center">
                   <code class="d-inline-block">{{ changeAddress }}</code>
-                  <button type="button" class="btn btn-outline-secondary d-inline-block float-right btn-sm"
+                  <button type="button" class="btn btn-outline-secondary d-inline-block btn-sm"
                           ngxClipboard [cbContent]="changeAddress" (click)="copyToClipboardClicked(changeAddress)">
                     <i class="lnr lnr-file-add"></i> copy
                   </button>
