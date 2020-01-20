@@ -50,6 +50,7 @@ export class TransactionComponent implements OnInit {
   contractCode: FormControl;
   password: FormControl;
   totalSupply: FormControl;
+  decimals: FormControl;
   tokenName: FormControl;
   tokenSymbol: FormControl;
   coinUnit: string;
@@ -118,7 +119,7 @@ export class TransactionComponent implements OnInit {
       .toPromise()
       .then(transactionHash => {
         this.loading = false;
-        this.activeModal.close({ symbol: this.tokenSymbol.value.toUpperCase(), name: this.tokenName.value, transactionHash });
+        this.activeModal.close({ symbol: this.tokenSymbol.value.toUpperCase(), name: this.tokenName.value, transactionHash, decimals: this.decimals.value });
       },
         error => {
           this.loading = false;
@@ -137,13 +138,15 @@ export class TransactionComponent implements OnInit {
   private createModel() {
 
     if (this.mode === Mode.IssueToken) {
+      let totalSupply = this.totalSupply.value * 10 ** this.decimals.value;
+
       return {
         amount: this.amount.value,
         feeAmount: this.feeAmount.value,
         gasPrice: this.gasPrice.value,
         gasLimit: this.gasLimit.value,
         parameters: [
-          `7#${this.totalSupply.value}`,
+          `7#${totalSupply}`,
           `4#${this.tokenName.value}`,
           `4#${this.tokenSymbol.value.toUpperCase()}`
         ],
@@ -204,6 +207,7 @@ export class TransactionComponent implements OnInit {
     this.parameters = new FormArray([]);
     this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
     this.totalSupply = new FormControl(21 * 1000 * 1000, [Validators.min(1), Validators.required]);
+    this.decimals = new FormControl(0, [Validators.min(0), Validators.max(8), Validators.required]);
     this.tokenName = new FormControl('My token', [Validators.required]);
     this.tokenSymbol = new FormControl('MTK', [Validators.required]);
 
@@ -239,7 +243,8 @@ export class TransactionComponent implements OnInit {
         password: this.password,
         totalSupply: this.totalSupply,
         tokenName: this.tokenName,
-        tokenSymbol: this.tokenSymbol
+        tokenSymbol: this.tokenSymbol,
+        decimals: this.decimals
       });
     }
   }

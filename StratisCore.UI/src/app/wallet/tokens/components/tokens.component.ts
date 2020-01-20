@@ -221,7 +221,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         .subscribe(
           receipt => {
             const newTokenAddress = receipt['newContractAddress'];
-            const token = new SavedToken(value.symbol, newTokenAddress, 0, value.name);
+            const token = new SavedToken(value.symbol, newTokenAddress, 0, value.name, value.decimals);
             this.tokenService.AddToken(token);
             progressModal.close('ok');
             this.tokens.push(token);

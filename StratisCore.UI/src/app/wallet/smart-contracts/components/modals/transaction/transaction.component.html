@@ -110,7 +110,7 @@
               <p *ngIf="tokenSymbol.errors.required">Token symbol is required</p>
             </div>
           </div>
-          <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right" title="Total coin supply">
+          <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right" title="Total coin supply. If decimals is provided, this value will be scaled.">
             <label for="totalSupply">Total Supply</label>
             <input formControlName="totalSupply" id="totalSupply" type="number" class="form-control"
               placeholder="Total Supply"
@@ -118,6 +118,17 @@
             <div *ngIf="totalSupply.errors" class="invalid-feedback">
               <p *ngIf="totalSupply.errors.required">Total supply is required</p>
               <p *ngIf="totalSupply.errors.min">Total supply cannot be negative or zero</p>
+            </div>
+          </div>
+          <div class="form-group col-6 clearfix" data-toggle="tooltip" data-placement="right" title="The number of decimal places your token has after the 0 eg. 0.12345 has 5 decimal places">
+            <label for="totalSupply">Decimal Places</label>
+            <input formControlName="decimals" id="decimals" type="number" class="form-control"
+              placeholder="Decimals"
+              [class.is-invalid]="decimals.invalid && (decimals.dirty || decimals.touched)" min="0">
+            <div *ngIf="decimals.errors" class="invalid-feedback">
+              <p *ngIf="decimals.errors.required">Decimal places is required</p>
+              <p *ngIf="decimals.errors.min">Decimal places cannot be negative or zero</p>
+              <p *ngIf="decimals.errors.max">Decimal places must be 8 or less</p>
             </div>
           </div>
         </div>
