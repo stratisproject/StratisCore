@@ -5,6 +5,9 @@ import { GlobalService } from '@shared/services/global.service';
 
 import { SmartContractsServiceBase } from '../../../smart-contracts.service';
 
+// Approximate ulong.MaxValue
+const ULONG_MAXVALUE = 1.84e19;
+
 export enum Mode { Call, Create, IssueToken }
 export class Parameter {
   constructor(public type: number, public value: string) { }
@@ -93,8 +96,36 @@ export class TransactionComponent implements OnInit {
     this.parameters.push(this.createParameter());
   }
 
+  maxSupplyValidator(fg: FormGroup)  {
+    const error = { maxSupplyTooLargeError: true };
+    const totalSupply = fg.get('totalSupply');
+    const decimals = fg.get('decimals');
+
+    let result =  Number(totalSupply.value) * 10 ** Number(decimals.value) > ULONG_MAXVALUE;
+
+    if (result) {
+      totalSupply.setErrors(error)
+      decimals.setErrors(error);
+    }
+    else {
+      if (totalSupply.hasError('maxSupplyTooLargeError')) {
+        delete totalSupply.errors['maxSupplyTooLargeError'];
+        totalSupply.updateValueAndValidity();
+      }
+
+      if (decimals.hasError('maxSupplyTooLargeError')) {
+        delete decimals.errors['maxSupplyTooLargeError'];
+        decimals.updateValueAndValidity();
+      }
+    }
+
+    return result ? error : null;
+  };
+
+
   createParameter(): FormGroup {
     const defaultType = this.parameterTypes.length ? this.parameterTypes[0].type : 1;
+
 
     return this.formBuilder.group({
       type: defaultType,
@@ -209,8 +240,9 @@ export class TransactionComponent implements OnInit {
     this.contractCode = new FormControl(contractCode, [Validators.required, Validators.nullValidator, Validators.pattern('[0-9a-fA-F]*'), oddValidator]);
     this.parameters = new FormArray([]);
     this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
-    this.totalSupply = new FormControl(21 * 1000 * 1000, [Validators.min(1), Validators.required]);
     this.decimals = new FormControl(0, [Validators.min(0), Validators.max(8), Validators.required]);
+
+    this.totalSupply = new FormControl(21 * 1000 * 1000, [Validators.min(1), Validators.max(ULONG_MAXVALUE), integerValidator, Validators.required]);
     this.tokenName = new FormControl('My token', [Validators.required]);
     this.tokenSymbol = new FormControl('MTK', [Validators.required]);
 
@@ -249,6 +281,8 @@ export class TransactionComponent implements OnInit {
         tokenSymbol: this.tokenSymbol,
         decimals: this.decimals
       });
+
+      this.transactionForm.setValidators(this.maxSupplyValidator);
     }
   }
 }
