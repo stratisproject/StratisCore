@@ -138,7 +138,10 @@ export class TransactionComponent implements OnInit {
   private createModel() {
 
     if (this.mode === Mode.IssueToken) {
-      let totalSupply = this.totalSupply.value * 10 ** this.decimals.value;
+      // TotalSupply is represented as a string to ensure large numbers
+      // don't fall victim to JavaScript's rounding. Therefore we need to scale
+      // by the decimal amount using this strategy.
+      let totalSupply = this.totalSupply.value + "0".repeat(this.decimals.value);
 
       return {
         amount: this.amount.value,
