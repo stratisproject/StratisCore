@@ -240,7 +240,7 @@ export class TransactionComponent implements OnInit {
     this.contractCode = new FormControl(contractCode, [Validators.required, Validators.nullValidator, Validators.pattern('[0-9a-fA-F]*'), oddValidator]);
     this.parameters = new FormArray([]);
     this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
-    this.decimals = new FormControl(0, [Validators.min(0), Validators.max(8), Validators.required]);
+    this.decimals = new FormControl(0, [Validators.min(0), Validators.max(8), integerValidator, Validators.required]);
 
     this.totalSupply = new FormControl(21 * 1000 * 1000, [Validators.min(1), Validators.max(ULONG_MAXVALUE), integerValidator, Validators.required]);
     this.tokenName = new FormControl('My token', [Validators.required]);

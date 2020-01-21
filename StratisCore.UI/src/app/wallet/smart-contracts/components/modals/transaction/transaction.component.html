@@ -130,6 +130,7 @@
               <p *ngIf="decimals.errors.required">Decimal places is required</p>
               <p *ngIf="decimals.errors.min">Decimal places cannot be negative or zero</p>
               <p *ngIf="decimals.errors.max">Decimal places must be 8 or less</p>
+              <p *ngIf="decimals.errors.pattern">Decimal places must be an integer</p>
             </div>
           </div>
         </div>
