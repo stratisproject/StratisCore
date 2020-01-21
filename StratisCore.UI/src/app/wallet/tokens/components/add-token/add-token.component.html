@@ -57,6 +57,7 @@
           <p *ngIf="decimals.errors['required']">Number of decimals is required</p>
           <p *ngIf="decimals.errors['min']">Number of decimals must be 0 or more</p>
           <p *ngIf="decimals.errors['max']">Number of decimals must be 8 or less</p>
+          <p *ngIf="decimals.errors.pattern">Decimal places must be an integer</p>
         </div>
       </div>
       <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
