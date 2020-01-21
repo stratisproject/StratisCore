@@ -29,9 +29,9 @@ export class TokensService {
 
   GetSavedTokens(): SavedToken[] {
     // Must map to the class here, just casting using getItem will not create the right object instance.
-    const savedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens)
-      .map(t => new SavedToken(t.ticker, t.address, null, t.name, t.decimals));
-    return savedTokens ? [...this.defaultTokens, ...savedTokens] : this.defaultTokens;
+    const savedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
+    var result = !!savedTokens ? [...this.defaultTokens, ...savedTokens] : [...this.defaultTokens];
+    return result.map(t => new SavedToken(t.ticker, t.address, null, t.name, t.decimals));
   }
 
   GetAvailableTokens(): Token[] {
