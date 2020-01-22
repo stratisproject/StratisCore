@@ -58,7 +58,7 @@ export class RestApi {
     return this.httpClient[method](`${this.API_URL}/${path}`, body, this.getHttpOptions('application/json', contentType || 'application/json', params)) as Observable<TResult>;
   }
 
-  protected handleHttpError(error: HttpErrorResponse, silent?: boolean) {
+  protected handleHttpError(error: HttpErrorResponse, silent?: boolean): Observable<any> {
     return this.errorService.handleHttpError(error, silent);
   }
 }
