@@ -39,7 +39,6 @@
           placeholder="Enter your password."
           id="Password"
           formControlName="password"
-          (keyup.enter)="onEnter()"
           [class.is-invalid]="formErrors.password"
           [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid">
         <div
@@ -56,7 +55,8 @@
         class="btn btn-block btn-lg btn-outline-light"
         [class.btn-stratis-green]="sidechainEnabled"
         [disabled]="!openWalletForm.valid || isDecrypting"
-        (click)="onDecryptClicked()">
+        (click)="onDecryptClicked()"
+        autofocus>
         Decrypt
       </button>
 

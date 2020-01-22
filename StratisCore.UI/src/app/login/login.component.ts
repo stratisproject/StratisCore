@@ -99,12 +99,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.router.navigate(['setup']);
   }
 
-  public onEnter(): void {
-    if (this.openWalletForm.valid) {
-      this.onDecryptClicked();
-    }
-  }
-
   public onDecryptClicked(): void {
     this.isDecrypting = true;
     this.globalService.setWalletName(this.openWalletForm.get('selectWallet').value);
