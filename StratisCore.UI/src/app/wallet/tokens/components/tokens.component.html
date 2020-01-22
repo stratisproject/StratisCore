@@ -71,7 +71,7 @@
                 <td class="text-center col-1" scope="col"><span class="badge badge-info">{{item.ticker}}</span></td>
                 <td class="text-left col-2" scope="col">{{ item.name }}</td>
                 <td class="text-left col-2" scope="col">
-                  {{ item.balance === null && tokenLoading[item.address] === 'loading' ? 'Loading...' : item.balance }}
+                  {{ !item.hasBalance() && tokenLoading[item.address] === 'loading' ? 'Loading...' : item.balance }}
                 </td>
                 <td class="text-left col-5" scope="col">
                   {{ item.address }}

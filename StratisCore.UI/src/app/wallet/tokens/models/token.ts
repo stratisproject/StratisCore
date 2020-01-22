@@ -17,19 +17,27 @@ export class Token {
 export class SavedToken extends Token {
   constructor(ticker: string, address: string, balance: string, name: string, decimals: number = 0) {
     super(ticker, address, name, decimals);
-    this.balance = balance;
+    this.setBalance(balance);
   }
 
   get balance(): string {
-    if (!this.decimals) {
-      return this._balance.toFixed(); 
+    if (!this._balance) {
+      return ""+0;
     }
 
-    return this._balance.dividedBy(10**this.decimals).toFixed();
+    return this._balance.toFixed();
   }
 
-  set balance(value: string){
-    this._balance = new BigNumber(value);
+  setBalance(balance: string) {
+    this._balance = new BigNumber(balance).dividedBy(10**this.decimals);
+  }
+
+  clearBalance() {
+    this._balance = null;
+  }
+
+  hasBalance() {
+    return this._balance !== null;
   }
 
   private _balance: BigNumber;
