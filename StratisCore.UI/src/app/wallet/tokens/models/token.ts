@@ -41,10 +41,4 @@ export class SavedToken extends Token {
 
     return new BigNumber(amount).multipliedBy(10**this.decimals);
   }
-
-  // Numbers less than 1e-6 will be formatted by javascript using scientific notation.
-  // Use this to get them into a readable format.
-  get formattedBalance(): string {
-    return (this.balance || "0")
-  }
 }
