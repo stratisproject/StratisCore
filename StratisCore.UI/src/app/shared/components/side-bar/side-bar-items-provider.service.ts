@@ -18,7 +18,7 @@ export class SideBarItemsProvider {
     return this.sideBarItems.find(item => route.startsWith(item.route));
   }
 
-  public registerSideBarItem(sidebarItem: SideBarItem) {
+  public registerSideBarItem(sidebarItem: SideBarItem): void {
     if (!sidebarItem.order) {
       sidebarItem.order = this.sideBarItems.length;
     }
@@ -26,7 +26,6 @@ export class SideBarItemsProvider {
   }
 
   public setSelected(sideBarItem: SideBarItem): void {
-    this.sideBarItems.forEach((item, idx) => item.selected = item.route === sideBarItem.route);
+    this.sideBarItems.forEach((item) => item.selected = item.route === sideBarItem.route);
   }
-
 }

@@ -1,7 +1,7 @@
 import { FormGroup } from '@angular/forms';
 
 export class FormHelper {
-  public static ValidateForm(form: FormGroup, errorObject: any, errorResources: any) {
+  public static ValidateForm(form: FormGroup, errorObject: any, errorResources: any): void {
     if (form.dirty) {
       Object.keys(form.controls).forEach(field => {
         errorObject[field] = '';

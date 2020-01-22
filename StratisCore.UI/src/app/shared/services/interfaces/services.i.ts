@@ -1,11 +1,8 @@
 import { Observable } from 'rxjs';
 import { NodeStatus } from '@shared/models/node-status';
-import { AddressLabel } from '@shared/models/address-label';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { WalletCreation } from '@shared/models/wallet-creation';
 import { WalletRecovery } from '@shared/models/wallet-recovery';
-import { LocalExecutionResult } from '@shared/models/local-execution-result';
-import { TokenBalanceRequest } from '../../../wallet/tokens/models/token-balance-request';
 
 export interface ISignalRService {
   connect(hubName: string): void;

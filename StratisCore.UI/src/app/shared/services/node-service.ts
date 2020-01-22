@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
@@ -110,7 +110,7 @@ export class NodeService extends RestApi {
     message.percentSynced = percentSynced;
   }
 
-  private patchAndUpdateGeneralInfo(patch: any) {
+  private patchAndUpdateGeneralInfo(patch: any): void {
     const updatedGeneralInfo = {} as GeneralInfo;
 
     Object.assign(updatedGeneralInfo, this.generalInfoSubject.value);

@@ -5,53 +5,53 @@ import { AppConfig } from 'src/environments/environment';
 export class Log {
   public static Logger: Log = new Log();
 
-  static log(...args: any[]) {
+  static log(...args: any[]): void {
     Log.Logger.log(...args);
   }
 
-  static warn(...args: any[]) {
+  static warn(...args: any[]): void {
     Log.Logger.warn(...args);
   }
 
-  static info(...args: any[]) {
+  static info(...args: any[]): void {
     Log.Logger.info(...args);
   }
 
-  static debug(...args: any[]) {
+  static debug(...args: any[]): void {
     Log.Logger.debug(...args);
   }
 
-  static error(error: Error) {
+  static error(error: Error): void {
     Log.Logger.error(error);
   }
 
   constructor() { }
 
-  log(...args: any[]) {
+  log(...args: any[]): void {
     this.consoleLog('log', ...args);
   }
 
-  warn(...args: any[]) {
+  warn(...args: any[]): void {
     this.consoleLog('warn', ...args);
   }
 
-  info(...args: any[]) {
+  info(...args: any[]): void {
     this.consoleLog('info', ...args);
   }
 
-  debug(...args: any[]) {
+  debug(...args: any[]): void {
     this.consoleLog('debug', ...args);
   }
 
-  error(...args: any[]) {
+  error(...args: any[]): void {
     this.consoleLog('error', ...args);
   }
 
-  private get logToConsole() {
+  private get logToConsole(): boolean {
     return AppConfig.environment === 'LOCAL' && !!console;
   }
 
-  private consoleLog(level: string, ...args: any[]) {
+  private consoleLog(level: string, ...args: any[]): void {
     if (this.logToConsole) {
       this.getLogFunction(level)(
         this.getLogPrefix(),

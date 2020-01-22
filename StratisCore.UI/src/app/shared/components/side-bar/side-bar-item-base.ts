@@ -13,7 +13,7 @@ export abstract class SideBarItemBase implements SideBarItem {
   }
 
   public getClasses(): any {
-    let classObject: any = {};
+    const classObject: any = {};
 
     this.classes.forEach(c => {
       classObject[c] = true;

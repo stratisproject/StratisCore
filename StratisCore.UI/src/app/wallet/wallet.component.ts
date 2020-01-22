@@ -10,12 +10,12 @@ import { TaskBarService } from '@shared/services/task-bar-service';
 })
 export class WalletComponent {
   constructor(
-    private taskBarService : TaskBarService,
+    private taskBarService: TaskBarService,
     private modalService: NgbModal) {
   }
 
   public logout(): void {
-    const modal = this.modalService.open(LogoutConfirmationComponent, {
+    this.modalService.open(LogoutConfirmationComponent, {
       backdrop: 'static',
     });
   }

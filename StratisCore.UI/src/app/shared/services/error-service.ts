@@ -21,6 +21,7 @@ export class ErrorService {
       }
     } else if (error.status >= 400) {
       if (!error.error.errors[0].message) {
+        // No modal
       } else {
         this.modalService.openModal(null, error.error.errors[0].message);
       }

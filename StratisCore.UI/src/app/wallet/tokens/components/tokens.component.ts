@@ -92,7 +92,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
       .subscribe();
   }
 
-  private updateTokenBalances(tokens: SavedToken[]) {
+  private updateTokenBalances(tokens: SavedToken[]): any {
     const tokensWithAddresses = tokens.filter(token => !!token.address);
     tokensWithAddresses.forEach(token => this.tokenLoading[token.address] = 'loading');
     return forkJoin(tokensWithAddresses.map(token => {
@@ -298,7 +298,6 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         )
         .subscribe(
           receipt => {
-
             if (!!receipt.error) {
               this.showError(receipt.error);
               Log.error(new Error(receipt.error));

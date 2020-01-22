@@ -3,7 +3,6 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GlobalService } from '@shared/services/global.service';
 import { ApiService } from '@shared/services/api.service';
-import { ModalService } from '@shared/services/modal.service';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { Subscription } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
@@ -34,7 +33,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private globalService: GlobalService,
     private apiService: ApiService,
     private walletService: WalletService,
-    private genericModalService: ModalService,
     private router: Router,
     private fb: FormBuilder) {
 
@@ -59,12 +57,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(this.openWalletForm.valueChanges
-      .subscribe(data => this.onValueChanged(data)));
+      .subscribe(() => this.onValueChanged()));
 
     this.onValueChanged();
   }
 
-  private onValueChanged(data?: any): void {
+  private onValueChanged(): void {
     if (!this.openWalletForm) {
       return;
     }
@@ -95,14 +93,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       ));
   }
 
-  public onCreateClicked() {
+  public onCreateClicked(): void {
+    this.openWalletForm.patchValue({password: "", selectWallet: ""});
     this.router.navigate(['setup']);
-  }
-
-  public onEnter(): void {
-    if (this.openWalletForm.valid) {
-      this.onDecryptClicked();
-    }
   }
 
   public onDecryptClicked(): void {
@@ -118,12 +111,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   private loadWallet(walletLoad: WalletLoad): void {
     this.walletService.loadStratisWallet(walletLoad)
       .subscribe(
-        response => {
+        () => {
           this.sidechainEnabled
             ? this.router.navigate(['address-selection'])
             : this.router.navigate(['wallet/dashboard']);
         },
-        error => {
+        () => {
+          this.openWalletForm.patchValue({password: "", selectWallet: ""});
           this.isDecrypting = false;
         }
       )

@@ -27,14 +27,14 @@ export class StorageService {
 
     try {
       const item = JSON.parse(serialisedItemData);
-      return <T>item;
+      return item as T;
     } catch (e) {
       Log.error(e);
       return undefined;
     }
   }
 
-  setItem<T>(key: string, value: T) {
+  setItem<T>(key: string, value: T): void {
     if (!value) {
       localStorage.setItem(key, null);
       return;
@@ -43,11 +43,11 @@ export class StorageService {
     localStorage.setItem(key, JSON.stringify(value));
   }
 
-  removeItem(key: string) {
+  removeItem(key: string): void {
     localStorage.removeItem(key);
   }
 
-  setText(key: string, value: string) {
+  setText(key: string, value: string): void {
     if (!!value) {
       localStorage.setItem(key, null);
       return;
@@ -56,7 +56,7 @@ export class StorageService {
     localStorage.setItem(key, value);
   }
 
-  setNumber(key: string, value: number) {
+  setNumber(key: string, value: number): void {
     if (!!value) {
       localStorage.setItem(key, null);
       return;

@@ -8,7 +8,7 @@ import { GenericModalComponent } from '../components/generic-modal/generic-modal
 export class ModalService {
   constructor(private modalService: NgbModal) {}
 
-  public openModal(title, body) {
+  public openModal(title, body): void {
     const modalRef = this.modalService.open(GenericModalComponent, { backdrop: 'static', keyboard: false });
     if (title) {
       modalRef.componentInstance.title = title;

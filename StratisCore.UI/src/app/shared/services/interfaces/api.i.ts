@@ -1,5 +1,4 @@
 import { Log } from "../../../wallet/tokens/services/logger.service";
-import { add } from "ngx-bootstrap/chronos";
 
 export interface WalletNamesData {
   walletNames: Array<string>;
@@ -41,8 +40,16 @@ export class WalletBalance {
     return this._useAddress ? this.currentAddress.amountConfirmed : this._amountConfirmed;
   }
 
+  public set amountConfirmed(value: number) {
+    this._amountConfirmed = value;
+  }
+
   public get amountUnconfirmed(): number {
     return this._useAddress ? this.currentAddress.amountUnconfirmed : this._amountUnconfirmed;
+  }
+
+  public set amountUnconfirmed(value: number) {
+    this._amountUnconfirmed = value;
   }
 
   public get spendableAmount(): number {
@@ -50,14 +57,6 @@ export class WalletBalance {
       return this.currentAddress.amountConfirmed - this.currentAddress.amountUnconfirmed;
     }
     return this._spendableAmount;
-  }
-
-  public set amountConfirmed(value: number) {
-    this._amountConfirmed = value;
-  }
-
-  public set amountUnconfirmed(value: number) {
-    this._amountUnconfirmed = value;
   }
 
   public set spendableAmount(value: number) {
@@ -89,7 +88,7 @@ export class WalletBalance {
     return (this.amountConfirmed + this.amountUnconfirmed) > 0;
   }
 
-  public get awaitingMaturityIfStaking() {
+  public get awaitingMaturityIfStaking(): number {
     return (this.amountUnconfirmed + this.amountConfirmed) - this.spendableAmount;
   }
 }

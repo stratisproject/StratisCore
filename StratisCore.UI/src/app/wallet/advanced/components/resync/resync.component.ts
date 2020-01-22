@@ -66,12 +66,12 @@ export class ResyncComponent implements OnInit, OnDestroy {
     });
 
     this.rescanWalletForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      .subscribe(() => this.onValueChanged());
 
     this.onValueChanged();
   }
 
-  onValueChanged(data?: any): void {
+  onValueChanged(): void {
     if (!this.rescanWalletForm) {
       return;
     }
