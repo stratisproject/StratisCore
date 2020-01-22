@@ -22,7 +22,7 @@ export class SavedToken extends Token {
 
   get balance(): string {
     if (!this.decimals) {
-      return this._balance.toString(); 
+      return this._balance.toFixed(); 
     }
 
     return this._balance.dividedBy(10**this.decimals).toFixed();
