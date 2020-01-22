@@ -284,7 +284,7 @@ export class ApiService extends RestApi implements IApiService {
 
   // Returns local call data as raw text so we can parse it correctly later
   public localCallRaw(localCall: TokenBalanceRequest): Observable<string> {
-    return this.httpClient.post<string>(`${this.API_URL}/smartcontracts/local-call`, localCall, {
+    return this.httpClient.post(`${this.API_URL}/smartcontracts/local-call`, localCall, {
       ...this.getHttpOptions('application/json', 'application/json'),
       responseType: 'text'
     }).pipe(
