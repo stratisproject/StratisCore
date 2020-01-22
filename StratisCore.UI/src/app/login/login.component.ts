@@ -3,7 +3,6 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GlobalService } from '@shared/services/global.service';
 import { ApiService } from '@shared/services/api.service';
-import { ModalService } from '@shared/services/modal.service';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { Subscription } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
@@ -34,7 +33,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private globalService: GlobalService,
     private apiService: ApiService,
     private walletService: WalletService,
-    private genericModalService: ModalService,
     private router: Router,
     private fb: FormBuilder) {
 
@@ -96,6 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public onCreateClicked(): void {
+    this.openWalletForm.patchValue({password: "", selectWallet: ""});
     this.router.navigate(['setup']);
   }
 
@@ -118,6 +117,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             : this.router.navigate(['wallet/dashboard']);
         },
         () => {
+          this.openWalletForm.patchValue({password: "", selectWallet: ""});
           this.isDecrypting = false;
         }
       )
