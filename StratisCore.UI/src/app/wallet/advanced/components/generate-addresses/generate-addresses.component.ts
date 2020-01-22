@@ -42,12 +42,12 @@ export class GenerateAddressesComponent implements OnInit {
     });
 
     this.generateAddressesForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      .subscribe(() => this.onValueChanged());
 
     this.onValueChanged();
   }
 
-  onValueChanged(data?: any): void {
+  onValueChanged(): void {
     if (!this.generateAddressesForm) { return; }
     const form = this.generateAddressesForm;
     for (const field in this.formErrors) {

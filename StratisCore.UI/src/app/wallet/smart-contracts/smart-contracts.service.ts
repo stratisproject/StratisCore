@@ -58,7 +58,7 @@ export class SmartContractsService extends ApiService implements SmartContractsS
     });
   }
 
-  public GetReceipt(hash: string, silent: boolean = false): Observable<string> {
+  public GetReceipt(hash: string, silent = false): Observable<string> {
     const params = new HttpParams().set('txHash', hash);
     return this.get<string>('smartcontracts/receipt', params).pipe(
       catchError(err => this.handleHttpError(err, silent))

@@ -134,7 +134,7 @@ export class TransactionComponent implements OnInit {
         });
   }
 
-  private createModel() {
+  private createModel(): any {
 
     if (this.mode === Mode.IssueToken) {
       return {

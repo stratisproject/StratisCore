@@ -84,7 +84,7 @@ export class TokensService {
       .pipe(
         map(response => {
           // Temporary workaround for non-camel-cased API response
-          const anyResponse = (<any>response);
+          const anyResponse = response as any;
           const result = new LocalExecutionResult();
           result.gasConsumed = anyResponse.hasOwnProperty('GasConsumed') ? anyResponse.GasConsumed : anyResponse.gasConsumed;
           result.return = anyResponse.hasOwnProperty('Return') ? anyResponse.Return : anyResponse.return;

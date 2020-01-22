@@ -24,7 +24,7 @@ export class BlockExplorerService extends RestApi {
     return this.blockSubject.asObservable();
   }
 
-  private paginateBlocks(start: number = 0, blockCount: number = 40): void {
+  private paginateBlocks(start = 0, blockCount = 40): void {
     this.loading.next(true);
      this.get<BlockItem[]>(`v1/blocks/top?start=${start}&top=${blockCount}`).toPromise().then(result => {
       this.blockSubject.next(result);

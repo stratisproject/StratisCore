@@ -48,10 +48,10 @@ export class AddNewAddressComponent {
     });
 
     this.addressForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      .subscribe(() => this.onValueChanged());
   }
 
-  public onValueChanged(data?: any): void {
+  public onValueChanged(): void {
     if (!this.addressForm) {
       return;
     }

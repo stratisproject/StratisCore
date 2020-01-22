@@ -8,7 +8,7 @@ import {
 import { Animations } from '@shared/animations/animations';
 import { ITaskBar, TaskBarOptions, TaskBarService } from '@shared/services/task-bar-service';
 import { TaskBarItemHostDirective } from '@shared/components/task-bar/task-bar-item-host-directive';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-task-bar',
@@ -20,7 +20,7 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
   @Input() opened: boolean;
   @ViewChild(TaskBarItemHostDirective, {static: false}) host: TaskBarItemHostDirective;
   public options: BehaviorSubject<TaskBarOptions> = new BehaviorSubject<TaskBarOptions>({});
-  private closedComplete = new EventEmitter<Boolean>();
+  private closedComplete = new EventEmitter<boolean>();
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -42,7 +42,7 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
         })
       }
       this.opened = true;
-      return componentRef.instance as T;
+      return componentRef.instance;
 
     } catch (e) {
       console.log(e);
@@ -59,7 +59,7 @@ export class TaskBarComponent implements ITaskBar, OnInit, OnDestroy {
   public close(): Promise<any> {
    this.opened = false;
     return new Promise<any>(resolve => {
-      const sub = this.closedComplete.subscribe(closed => {
+      const sub = this.closedComplete.subscribe(() => {
         this.host.viewContainerRef.clear();
         this.taskBarService.markAsClosed();
         sub.unsubscribe();

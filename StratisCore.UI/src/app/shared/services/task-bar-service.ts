@@ -10,13 +10,13 @@ export interface TaskBarOptions {
 export interface ITaskBar {
   opened: boolean;
 
-  open<T>(component: Type<T>, data: any, taskBarOptions: TaskBarOptions): T
+  open<T>(component: Type<T>, data: any, taskBarOptions: TaskBarOptions): T;
 
   close(): Promise<any>;
 }
 
 export interface TaskBarRef<T> {
-  instance: T
+  instance: T;
 
   closeWhen(close?: Observable<boolean>): void;
 }

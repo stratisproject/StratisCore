@@ -21,7 +21,7 @@ export class StakingService extends RestApi {
   public stakingEnabled = new BehaviorSubject<boolean>(false);
   public isStopping: boolean;
   public isStarting: boolean;
-  public canStake : boolean;
+  public canStake: boolean;
 
   constructor(
     http: HttpClient,

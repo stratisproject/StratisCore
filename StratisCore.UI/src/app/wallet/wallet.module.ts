@@ -107,7 +107,7 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 
 export class WalletModule {
   constructor(private sidebarItems: SideBarItemsProvider,
-              accountSidebarItem : AccountSidebarItem,
+              accountSidebarItem: AccountSidebarItem,
               stakingSidebarItem: StakingSidebarItem) {
 
     sidebarItems.registerSideBarItem(accountSidebarItem);
