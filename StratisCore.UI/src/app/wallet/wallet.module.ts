@@ -11,7 +11,6 @@ import { GenerateAddressesComponent } from './advanced/components/generate-addre
 import { ResyncComponent } from './advanced/components/resync/resync.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
-import { MenuComponent } from './menu/menu.component';
 import { ReceiveComponent } from './receive/receive.component';
 import { SendConfirmationComponent } from './send/send-confirmation/send-confirmation.component';
 import { SendComponent } from './send/send.component';
@@ -23,7 +22,6 @@ import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { TransactionsComponent } from './transactions/transactions.component';
-import { StakingComponent } from './staking/staking.component';
 import { WalletSelectorComponent } from './wallet-selector/wallet-selector.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { SnackbarModule } from 'ngx-snackbar';
@@ -55,7 +53,6 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
   ],
   declarations: [
     WalletComponent,
-    MenuComponent,
     DashboardComponent,
     SendComponent,
     ReceiveComponent,
@@ -71,7 +68,6 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
     GenerateAddressesComponent,
     ResyncComponent,
     TransactionsComponent,
-    StakingComponent,
     WalletSelectorComponent,
     BlockExplorerComponent,
     ColdStakingOverviewComponent,
