@@ -15,13 +15,14 @@ The StratisBitcoinFullNode daemon is hosted in another repository. All informati
 
 # Building and running the user interface
 
-## Install NodeJS
+## Install prerequisites
 
-Download and install the latest Long Term Support (LTS) version of NodeJS at: https://nodejs.org/. 
+Download and install the latest version of Git [here](https://git-scm.com/).  
+Download and install the latest Long Term Support (LTS) version of NodeJS [here](https://nodejs.org/). 
 
 ## Getting Started
 
-Clone this repository locally:
+Clone the repository locally:
 
 ``` bash
 git clone https://www.github.com/stratisproject/StratisCore
