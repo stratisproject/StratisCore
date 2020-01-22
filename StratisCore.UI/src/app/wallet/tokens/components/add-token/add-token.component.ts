@@ -96,7 +96,7 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
           return;
         }
 
-        const savedToken = new SavedToken(ticker, address, 0, name, decimals);
+        const savedToken = new SavedToken(ticker, address, "0", name, decimals);
         const result = this.tokenService.AddToken(savedToken);
 
         if (result.failure) {
