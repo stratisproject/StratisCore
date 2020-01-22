@@ -298,7 +298,6 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         )
         .subscribe(
           receipt => {
-
             if (!!receipt.error) {
               this.showError(receipt.error);
               Log.error(new Error(receipt.error));

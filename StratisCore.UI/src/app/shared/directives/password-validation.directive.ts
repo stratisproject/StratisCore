@@ -7,7 +7,7 @@ import { AbstractControl } from '@angular/forms';
 export class PasswordValidationDirective {
   constructor() { }
 
-  static MatchPassword(AC: AbstractControl): void {
+  static MatchPassword(AC: AbstractControl): any {
     const password = AC.get('walletPassword').value;
     const confirmPassword = AC.get('walletPasswordConfirmation').value;
 
@@ -19,7 +19,7 @@ export class PasswordValidationDirective {
     }
   }
 
-  static MatchPassphrase(AC: AbstractControl): void {
+  static MatchPassphrase(AC: AbstractControl): any {
     const passphrase = AC.get('walletPassphrase').value;
     const confirmPassphrase = AC.get('walletPassphraseConfirmation').value;
 
