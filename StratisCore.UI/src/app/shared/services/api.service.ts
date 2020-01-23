@@ -282,6 +282,16 @@ export class ApiService extends RestApi implements IApiService {
     );
   }
 
+  // Returns local call data as raw text so we can parse it correctly later
+  public localCallRaw(localCall: TokenBalanceRequest): Observable<string> {
+    return this.httpClient.post(`${this.API_URL}/smartcontracts/local-call`, localCall, {
+      ...this.getHttpOptions('application/json', 'application/json'),
+      responseType: 'text'
+    }).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
   private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: string }): HttpParams {
     let params = new HttpParams()
       .set('walletName', walletInfo.walletName)

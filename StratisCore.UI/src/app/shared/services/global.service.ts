@@ -15,7 +15,7 @@ export class GlobalService {
     this.setDaemonIP();
   }
 
-  private applicationVersion = '1.3.0';
+  private applicationVersion = '1.3.2';
   private testnet = false;
   private sidechain = false;
   private mainApiPort = 37221;

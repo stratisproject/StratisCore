@@ -5,6 +5,9 @@ import { GlobalService } from '@shared/services/global.service';
 
 import { SmartContractsServiceBase } from '../../../smart-contracts.service';
 
+// Approximate ulong.MaxValue
+const ULONG_MAXVALUE = 1.84e19;
+
 export enum Mode { Call, Create, IssueToken }
 export class Parameter {
   constructor(public type: number, public value: string) { }
@@ -50,6 +53,7 @@ export class TransactionComponent implements OnInit {
   contractCode: FormControl;
   password: FormControl;
   totalSupply: FormControl;
+  decimals: FormControl;
   tokenName: FormControl;
   tokenSymbol: FormControl;
   coinUnit: string;
@@ -92,8 +96,36 @@ export class TransactionComponent implements OnInit {
     this.parameters.push(this.createParameter());
   }
 
+  maxSupplyValidator(fg: FormGroup)  {
+    const error = { maxSupplyTooLargeError: true };
+    const totalSupply = fg.get('totalSupply');
+    const decimals = fg.get('decimals');
+
+    let result =  Number(totalSupply.value) * 10 ** Number(decimals.value) > ULONG_MAXVALUE;
+
+    if (result) {
+      totalSupply.setErrors(error)
+      decimals.setErrors(error);
+    }
+    else {
+      if (totalSupply.hasError('maxSupplyTooLargeError')) {
+        delete totalSupply.errors['maxSupplyTooLargeError'];
+        totalSupply.updateValueAndValidity();
+      }
+
+      if (decimals.hasError('maxSupplyTooLargeError')) {
+        delete decimals.errors['maxSupplyTooLargeError'];
+        decimals.updateValueAndValidity();
+      }
+    }
+
+    return result ? error : null;
+  };
+
+
   createParameter(): FormGroup {
     const defaultType = this.parameterTypes.length ? this.parameterTypes[0].type : 1;
+
 
     return this.formBuilder.group({
       type: defaultType,
@@ -118,7 +150,7 @@ export class TransactionComponent implements OnInit {
       .toPromise()
       .then(transactionHash => {
         this.loading = false;
-        this.activeModal.close({ symbol: this.tokenSymbol.value.toUpperCase(), name: this.tokenName.value, transactionHash });
+        this.activeModal.close({ symbol: this.tokenSymbol.value.toUpperCase(), name: this.tokenName.value, transactionHash, decimals: this.decimals.value });
       },
         error => {
           this.loading = false;
@@ -137,13 +169,18 @@ export class TransactionComponent implements OnInit {
   private createModel() {
 
     if (this.mode === Mode.IssueToken) {
+      // TotalSupply is represented as a string to ensure large numbers
+      // don't fall victim to JavaScript's rounding. Therefore we need to scale
+      // by the decimal amount using this strategy.
+      let totalSupply = this.totalSupply.value + "0".repeat(this.decimals.value);
+
       return {
         amount: this.amount.value,
         feeAmount: this.feeAmount.value,
         gasPrice: this.gasPrice.value,
         gasLimit: this.gasLimit.value,
         parameters: [
-          `7#${this.totalSupply.value}`,
+          `7#${totalSupply}`,
           `4#${this.tokenName.value}`,
           `4#${this.tokenSymbol.value.toUpperCase()}`
         ],
@@ -203,7 +240,9 @@ export class TransactionComponent implements OnInit {
     this.contractCode = new FormControl(contractCode, [Validators.required, Validators.nullValidator, Validators.pattern('[0-9a-fA-F]*'), oddValidator]);
     this.parameters = new FormArray([]);
     this.password = new FormControl('', [Validators.required, Validators.nullValidator]);
-    this.totalSupply = new FormControl(21 * 1000 * 1000, [Validators.min(1), Validators.required]);
+    this.decimals = new FormControl(0, [Validators.min(0), Validators.max(8), integerValidator, Validators.required]);
+
+    this.totalSupply = new FormControl(21 * 1000 * 1000, [Validators.min(1), Validators.max(ULONG_MAXVALUE), integerValidator, Validators.required]);
     this.tokenName = new FormControl('My token', [Validators.required]);
     this.tokenSymbol = new FormControl('MTK', [Validators.required]);
 
@@ -239,8 +278,11 @@ export class TransactionComponent implements OnInit {
         password: this.password,
         totalSupply: this.totalSupply,
         tokenName: this.tokenName,
-        tokenSymbol: this.tokenSymbol
+        tokenSymbol: this.tokenSymbol,
+        decimals: this.decimals
       });
+
+      this.transactionForm.setValidators(this.maxSupplyValidator);
     }
   }
 }

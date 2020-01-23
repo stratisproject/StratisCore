@@ -3,7 +3,8 @@ import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { ApiService } from '@shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import JSONBigNumber from 'json-bignumber';
+import BigNumber from 'bignumber.js';
 import { LocalCallRequest } from '../models/LocalCallRequest';
 import { Result, ResultStatus } from '../models/result';
 import { SavedToken, Token } from '../models/token';
@@ -28,8 +29,10 @@ export class TokensService {
    }
 
   GetSavedTokens(): SavedToken[] {
+    // Must map to the class here, just casting using getItem will not create the right object instance.
     const savedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
-    return savedTokens ? [...this.defaultTokens, ...savedTokens] : this.defaultTokens;
+    var result = !!savedTokens ? [...this.defaultTokens, ...savedTokens] : [...this.defaultTokens];
+    return result.map(t => new SavedToken(t.ticker, t.address, null, t.name, t.decimals));
   }
 
   GetAvailableTokens(): Token[] {
@@ -67,8 +70,19 @@ export class TokensService {
   }
 
   GetTokenBalance(request: TokenBalanceRequest): Observable<number> {
-    return this.LocalCall(request).pipe(
-      map(localExecutionresult => localExecutionresult.return ? localExecutionresult.return : 0)
+    return this.apiService.localCallRaw(request).pipe(
+      map(rawText => {
+        return JSONBigNumber.parse(rawText, function (key, value) {
+          if (key == "return") {
+            if(BigNumber.isBigNumber(value)) {
+              return value.toFixed();
+            }
+          } else {
+            return value;
+          }
+        });
+      }),
+      map(localExecutionresult => localExecutionresult.return ? localExecutionresult.return : "0")
     );
   }
 
