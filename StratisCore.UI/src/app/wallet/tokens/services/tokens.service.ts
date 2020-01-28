@@ -26,20 +26,22 @@ export class TokensService {
       this.UpdateTokens(oldTokens);
       this.storage.removeItem('savedTokens');
     }
-   }
+  }
 
   GetSavedTokens(): SavedToken[] {
     // Must map to the class here, just casting using getItem will not create the right object instance.
     const savedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
-    var result = !!savedTokens ? [...this.defaultTokens, ...savedTokens] : [...this.defaultTokens];
+    const result = !!savedTokens ? [...this.defaultTokens, ...savedTokens] : [...this.defaultTokens];
     return result.map(t => new SavedToken(t.ticker, t.address, null, t.name, t.decimals));
   }
 
   GetAvailableTokens(): Token[] {
-    return [
-      new Token('CG1', 'CXa9fNVXPfYL9rdqiR22NoAc9kZUfBAUCu', 'Cirrus Giveaway'),
-      ...this.defaultTokens
-    ];
+    const tokens = [];
+    tokens.push(new Token('CG1', 'CXa9fNVXPfYL9rdqiR22NoAc9kZUfBAUCu', 'Cirrus Giveaway'));
+    if (!this.globalService.getTestnetEnabled()) {
+      tokens.push(new Token('MEDI', 'CUwkBGkXrQpMnZeWW2SpAv1Vu9zPvjWNFS', 'Mediconnect'));
+    }
+    return tokens;
   }
 
   UpdateTokens(tokens: SavedToken[]): Result<SavedToken[]> {
@@ -48,11 +50,15 @@ export class TokensService {
   }
 
   AddToken(token: SavedToken): Result<SavedToken> {
-    if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
+    if (!token) {
+      return new Result(ResultStatus.Error, 'Invalid token');
+    }
     const tokens = this.GetSavedTokens();
 
     const index = tokens.map(t => t.address).indexOf(token.address);
-    if (index >= 0) { return new Result(ResultStatus.Error, 'Specified token is already saved'); }
+    if (index >= 0) {
+      return new Result(ResultStatus.Error, 'Specified token is already saved');
+    }
 
     tokens.push(token);
     this.storage.setItem(this.savedTokens, tokens);
@@ -60,10 +66,14 @@ export class TokensService {
   }
 
   RemoveToken(token: SavedToken): Result<SavedToken> {
-    if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
+    if (!token) {
+      return new Result(ResultStatus.Error, 'Invalid token');
+    }
     const tokens = this.GetSavedTokens();
     const index = tokens.map(t => t.address).indexOf(token.address);
-    if (index < 0) { return new Result(ResultStatus.Error, 'Specified token was not found'); }
+    if (index < 0) {
+      return new Result(ResultStatus.Error, 'Specified token was not found');
+    }
     tokens.splice(index, 1);
     this.storage.setItem(this.savedTokens, tokens);
     return Result.ok(token);
@@ -73,8 +83,8 @@ export class TokensService {
     return this.apiService.localCallRaw(request).pipe(
       map(rawText => {
         return JSONBigNumber.parse(rawText, function (key, value) {
-          if (key == "return") {
-            if(BigNumber.isBigNumber(value)) {
+          if (key === 'return') {
+            if (BigNumber.isBigNumber(value)) {
               return value.toFixed();
             }
           } else {
@@ -82,7 +92,7 @@ export class TokensService {
           }
         });
       }),
-      map(localExecutionresult => localExecutionresult.return ? localExecutionresult.return : "0")
+      map(localExecutionresult => localExecutionresult.return ? localExecutionresult.return : '0')
     );
   }
 
