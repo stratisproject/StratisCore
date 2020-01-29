@@ -10121,6 +10121,10 @@ bs-daterangepicker-container {
   transition: 0s;
 }
 
+.no-background {
+  background: none !important;
+}
+
 @font-face {
   font-family: 'Linearicons-Free';
   src: url("./assets/fonts/Linearicons-Free.eot?w118d");

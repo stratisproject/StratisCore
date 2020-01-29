@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '@shared/services/modal.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { finalize, take, takeUntil } from 'rxjs/operators';
 
 import { Disposable } from '../../models/disposable';
@@ -18,7 +18,7 @@ import { TokensService } from '../../services/tokens.service';
 })
 @Mixin([Disposable])
 export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
-
+  private subscriptions: Subscription[] = [];
   @Input() tokens: Token[] = [];
   addTokenForm: FormGroup;
   balance = 0;
@@ -37,6 +37,17 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
     private activeModal: NgbActiveModal,
     private genericModalService: ModalService) {
     this.registerControls();
+    this.subscriptions.push(this.token.valueChanges.subscribe(value => {
+      if (value) {
+        const token = this.tokens.find(t => t.address === this.token.value);
+        if (token) {
+          this.ticker.setValue(token.ticker);
+          this.address.setValue(token.address);
+          this.name.setValue(token.name);
+          this.decimals.setValue(token.decimals);
+        }
+      }
+    }));
   }
 
   get customTokenSelected() {
@@ -46,7 +57,8 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
   ngOnInit() {
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
     this.dispose();
   }
 
@@ -55,24 +67,15 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
   }
 
   onSubmit() {
-
-    const ticker = this.customTokenSelected ? this.ticker.value + '' : this.tokens.find(t => t.address === this.token.value).ticker;
-    const address = this.customTokenSelected ? this.address.value + '' : this.tokens.find(t => t.address === this.token.value).address;
-    const name = this.customTokenSelected ? this.name.value + '' : this.tokens.find(t => t.address === this.token.value).name;
-    const decimals = this.customTokenSelected ? this.decimals.value : this.tokens.find(t => t.address === this.token.value.decimals);
-
     // Check that this token isn't already in the list
-    const addedTokens = this.tokenService.GetSavedTokens().find(token => token.address === address);
-
+    const addedTokens = this.tokenService.GetSavedTokens().find(token => token.address === this.address.value);
     if (addedTokens) {
-      this.showApiError(`Token ${ticker} is already added`);
-
+      this.showApiError(`Token ${this.ticker.value} is already added`);
       return;
     }
 
     // Sender doesn't matter here, just reuse an easily available address
-    const tickerCall = new LocalCallRequest(address, address, 'Symbol');
-
+    const tickerCall = new LocalCallRequest(this.address.value, this.address.value, 'Symbol');
     this.loading = true;
 
     // Add the token if valid token contract exists
@@ -91,12 +94,12 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
           return;
         }
 
-        if (typeof (methodCallResult) === 'string' && methodCallResult !== ticker) {
-          this.showApiError(`Token contract symbol ${methodCallResult} does not match given symbol ${ticker}.`);
+        if (typeof (methodCallResult) === 'string' && methodCallResult !== this.ticker.value) {
+          this.showApiError(`Token contract symbol ${methodCallResult} does not match given symbol ${this.ticker.value}.`);
           return;
         }
 
-        const savedToken = new SavedToken(ticker, address, "0", name, decimals);
+        const savedToken = new SavedToken(this.ticker.value, this.address.value, '0', name, this.decimals.value);
         const result = this.tokenService.AddToken(savedToken);
 
         if (result.failure) {
@@ -113,14 +116,13 @@ export class AddTokenComponent implements OnInit, OnDestroy, Disposable {
   }
 
   private registerControls() {
-    const customTokenDetailsValidator = control => !control.value && this.customTokenSelected ? { required: true } : null;
     const integerValidator = Validators.pattern('^[0-9][0-9]*$');
 
     this.token = new FormControl(0, [Validators.required]);
-    this.address = new FormControl('', [customTokenDetailsValidator]);
-    this.ticker = new FormControl('', [customTokenDetailsValidator]);
-    this.name = new FormControl('', [customTokenDetailsValidator]);
-    this.decimals = new FormControl(0, [Validators.required, Validators.min(0), integerValidator, Validators.max(8)]);
+    this.address = new FormControl('', [Validators.required]);
+    this.ticker = new FormControl('', [Validators.required]);
+    this.name = new FormControl('', [Validators.required]);
+    this.decimals = new FormControl(0, [Validators.min(0), integerValidator, Validators.max(8)]);
 
     this.addTokenForm = new FormGroup({
       token: this.token,
