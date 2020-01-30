@@ -37,7 +37,6 @@ export class TokensService {
 
   GetAvailableTokens(): Token[] {
     const tokens = [];
-    tokens.push(new Token('CG1', 'CXa9fNVXPfYL9rdqiR22NoAc9kZUfBAUCu', 'Cirrus Giveaway'));
     if (!this.globalService.getTestnetEnabled()) {
       tokens.push(new Token('MEDI', 'CUwkBGkXrQpMnZeWW2SpAv1Vu9zPvjWNFS', 'Mediconnect'));
     }
