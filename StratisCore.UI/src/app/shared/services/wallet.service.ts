@@ -233,6 +233,12 @@ export class WalletService extends RestApi {
     subject.next(set.sort((a, b) => b.timestamp - a.timestamp));
   }
 
+  public broadcastTransaction(transactionHex: string): Observable<string> {
+    return this.post('wallet/send-transaction', new TransactionSending(transactionHex)).pipe(
+        catchError(err => this.handleHttpError(err))
+      );
+  }
+
   public sendTransaction(transaction: Transaction): Promise<TransactionResponse> {
     return this.buildAndSendTransaction(transaction).toPromise();
   }
