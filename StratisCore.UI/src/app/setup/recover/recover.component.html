@@ -47,7 +47,7 @@
           <div *ngIf="formErrors.walletPassphraseConfirmation" class="invalid-feedback">{{ formErrors.walletPassphraseConfirmation }}</div>
         </div>
         <div class="modal-footer col-12">
-          <button *ngIf="!isRecovering" type="button" class="btn btn-outline-light" (click)="onBackClicked()">Cancel</button>
+          <button *ngIf="!isRecovering" type="button" class="btn btn-outline-secondary" (click)="onBackClicked()">Cancel</button>
           <button *ngIf="!isRecovering" type="button" class="btn btn-primary btn-block" [class.btn-stratis-green]="sidechainEnabled" [disabled]="!recoverWalletForm.valid || isRecovering" (click)="onRecoverClicked()">Restore</button>
           <!-- SVG -->
           <div *ngIf="isRecovering" class="Loading">

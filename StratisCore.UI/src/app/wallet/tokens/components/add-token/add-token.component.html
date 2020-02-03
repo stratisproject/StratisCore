@@ -51,7 +51,7 @@
       <div *ngIf="apiError" class="text-danger">{{ apiError }}</div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
+      <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
       <button type="submit" data-toggle="modal" data-target="#" class="btn btn-stratis-green btn-block"
         data-dismiss="modal" [disabled]="!addTokenForm.valid || addTokenForm.pristine" ngbAutofocus>Add Token</button>
     </div>
