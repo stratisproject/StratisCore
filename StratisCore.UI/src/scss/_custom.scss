@@ -681,12 +681,14 @@ img {
     &.closemodal {
       z-index: 5;
       padding: 0;
+      border: none;
 
       &:hover {
         cursor: pointer;
       }
 
       i {
+        display: block;
         font-size: 2rem;
         color: $gray-500;
       }
