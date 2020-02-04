@@ -117,7 +117,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             : this.router.navigate(['wallet/dashboard']);
         },
         () => {
-          this.openWalletForm.patchValue({password: "", selectWallet: ""});
+          this.openWalletForm.patchValue({password: ""});
           this.isDecrypting = false;
         }
       )
