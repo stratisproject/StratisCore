@@ -6,6 +6,8 @@ import { ApiService } from '@shared/services/api.service';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { Subscription } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
+import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
+import { AccountSidebarItem } from '../wallet/side-bar-items/account-sidebar-item';
 
 
 @Component({
@@ -34,7 +36,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private walletService: WalletService,
     private router: Router,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private sidebarItems: SideBarItemsProvider,
+    private accountSidebarItem: AccountSidebarItem,) {
 
     this.buildDecryptForm();
   }
@@ -115,6 +119,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.sidechainEnabled
             ? this.router.navigate(['address-selection'])
             : this.router.navigate(['wallet/dashboard']);
+            this.sidebarItems.setSelected(this.accountSidebarItem)
         },
         () => {
           this.openWalletForm.patchValue({password: ""});
