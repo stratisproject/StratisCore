@@ -27,9 +27,15 @@
         </div>
         <div class="modal-footer col-12">
           <button type="button" class="btn btn-outline-light" (click)="onCancelClicked()">Cancel</button>
+          <button class="btn btn-primary" (click)="copyToClipboard()">Copy</button>
           <button type="button" class="btn btn-primary btn-block" (click)="onContinueClicked()" [class.btn-stratis-green]="sidechainEnabled">Continue</button>
         </div>
       </div>
     </div>
   </div>
+  <ngx-snackbar
+    [position]="'bottom-center'"
+    [max]="1"
+    [timeout]="5000">
+  </ngx-snackbar>
 </section>
