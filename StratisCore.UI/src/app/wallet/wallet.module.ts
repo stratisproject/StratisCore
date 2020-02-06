@@ -40,6 +40,7 @@ import { AddressBookCardComponent } from './address-book-card/address-book-card.
 import { AddNodeComponent } from './advanced/components/add-node/add-node.component';
 import { TransactionDetailsModalComponent } from './transaction-details-modal/transaction-details-modal.component';
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
+import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
     ColdStakingCreateSuccessComponent,
     AddressBookCardComponent,
     AddNodeComponent,
-    TransactionDetailsModalComponent
+    TransactionDetailsModalComponent,
+    BroadcastTransactionComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -97,7 +99,8 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
     ColdStakingCreateAddressComponent,
     ColdStakingWithdrawComponent,
     ColdStakingCreateComponent,
-    ColdStakingCreateSuccessComponent
+    ColdStakingCreateSuccessComponent,
+    BroadcastTransactionComponent
   ]
 })
 

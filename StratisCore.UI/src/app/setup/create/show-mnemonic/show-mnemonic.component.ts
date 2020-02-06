@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 
 import { WalletCreation } from '@shared/models/wallet-creation';
 import { GlobalService } from '@shared/services/global.service';
+import { ClipboardService } from 'ngx-clipboard';
+import { SnackbarService } from 'ngx-snackbar';
 
 @Component({
   selector: 'app-show-mnemonic',
@@ -11,7 +13,7 @@ import { GlobalService } from '@shared/services/global.service';
   styleUrls: ['./show-mnemonic.component.scss']
 })
 export class ShowMnemonicComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute, private router: Router, private globalService: GlobalService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private globalService: GlobalService, private clipboardService: ClipboardService, private snackbarService: SnackbarService) { }
   private mnemonic: string;
   private subscription: Subscription;
   private newWallet: WalletCreation;
@@ -35,6 +37,17 @@ export class ShowMnemonicComponent implements OnInit, OnDestroy {
   private showMnemonic(): void {
     this.mnemonic = this.newWallet.mnemonic;
     this.mnemonicArray = this.mnemonic.split(" ");
+  }
+
+  public copyToClipboard(): void {
+    this.clipboardService.copyFromContent(this.mnemonic);
+    this.snackbarService.add({
+      msg: `Secret words have been copied to your clipboard.`,
+      customClass: 'notify-snack-bar',
+      action: {
+        text: null
+      }
+    });
   }
 
   public onContinueClicked(): void {
