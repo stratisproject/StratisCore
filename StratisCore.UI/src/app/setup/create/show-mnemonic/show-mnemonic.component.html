@@ -4,10 +4,11 @@
       <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
       <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
     </div>
-    <div class="col-8 right-login d-flex align-content-center flex-wrap">
-      <div class="col-7 mx-auto d-flex align-content-center flex-wrap">
-        <div class="col-12 text-center">
-          <h3 class="display-4 mb-4">Secret Words</h3>
+    <div class="col-8 right-login d-flex align-content-center flex-wrap createWallet">
+      <div class="col-10 mx-auto d-flex align-content-center flex-wrap">
+        <div class="col-12 max-auto">
+          <button type="button" class="btn btn-outline-secondary float-left" (click)="onCancelClicked()">Cancel</button>
+          <h3 class="display-4 mb-4 text-center">Secret Words</h3>
         </div>
         <div class="col-12 mnemonics">
           <div class="alert alert-warning" role="alert">
@@ -22,12 +23,14 @@
               <li *ngFor="let word of mnemonicArray; let i=index" class="list-inline-item">
                 <span class="badge-info badge">{{ i + 1 }}. {{ word }}</span>
               </li>
+              <li>
+                <button type="button" class="btn btn-outline-primary btn-right-100" (click)="copyToClipboard()">Copy</button>
+              </li>
             </ul>
+
           </div>
         </div>
         <div class="modal-footer col-12">
-          <button type="button" class="btn btn-primary" (click)="copyToClipboard()">Copy</button>
-          <button type="button" class="btn btn-outline-secondary" (click)="onCancelClicked()">Cancel</button>
           <button type="button" class="btn btn-primary btn-block" (click)="onContinueClicked()" [class.btn-stratis-green]="sidechainEnabled">Continue</button>
         </div>
       </div>
