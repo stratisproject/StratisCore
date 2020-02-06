@@ -52,7 +52,7 @@
     <div *ngIf="hasWallet">
       <button
         type="submit"
-        class="btn btn-block btn-lg btn-outline-light"
+        class="btn btn-block btn-outline-light"
         [class.btn-stratis-green]="sidechainEnabled"
         [disabled]="!openWalletForm.valid || isDecrypting"
         (click)="onDecryptClicked()"
