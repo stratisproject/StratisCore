@@ -7,9 +7,9 @@
     <!-- /col -->
     <div class="col-8 right-login d-flex align-content-center flex-wrap createWallet">
       <form class="col-10 mx-auto d-flex align-content-center flex-wrap" [formGroup]="recoverWalletForm">
-        <div class="col-12 text-center">
+        <div class="col-12 mx-auto">
           <button *ngIf="!isRecovering" type="button" class="btn btn-outline-secondary float-left" (click)="onBackClicked()">Cancel</button>
-          <h3 class="display-4 mb-4">Restore a wallet</h3>
+          <h3 class="display-4 mb-4 text-center">Restore a wallet</h3>
         </div>
         <div class="form-group col-12">
           <label class="text-left" for="walletName">Name</label>
