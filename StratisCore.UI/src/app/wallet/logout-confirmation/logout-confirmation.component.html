@@ -3,7 +3,7 @@
   <div class="modal-header">
     <h5 class="modal-title">Logout</h5>
     <!-- button closeWhen -->
-    <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
+    <button type="button" class="btn close closemodal ml-auto" (click)="activeModal.close('Close click')">
       <i class="lnr lnr-cross-circle"></i>
     </button>
     <!-- /button closeWhen -->
@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="modal-footer row">
-        <button type="button" class="btn btn-outline-light col" data-dismiss="modal" aria-label="Close"
+        <button type="button" class="btn btn-outline-secondary col" data-dismiss="modal" aria-label="Close"
                 (click)="activeModal.close('Close click')">Cancel
         </button>
         <button type="button" class="btn btn-primary ml-2 col" [class.btn-stratis-green]="sidechainEnabled"

@@ -1,7 +1,7 @@
 <div @fadeIn>
   <div class="modal-header">
     <h5 class="modal-title">New Contact</h5>
-    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close"
+    <button type="button" class="btn close closemodal ml-auto" data-dismiss="modal" aria-label="Close"
             (click)="closeClicked()">
       <i class="lnr lnr-cross-circle"></i>
     </button>
@@ -33,7 +33,7 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-light" (click)="closeClicked()">Cancel</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="closeClicked()">Cancel</button>
     <button type="button" class="btn btn-primary btn-block" [disabled]="!addressForm.valid" (click)="createClicked()">
       Create
     </button>

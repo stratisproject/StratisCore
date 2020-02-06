@@ -6,8 +6,6 @@
 //
 //
 
-@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,400,700&display=swap');
-
 // basics
 body {
   font-size: 1rem;
@@ -679,12 +677,14 @@ img {
     &.closemodal {
       z-index: 5;
       padding: 0;
+      border: none;
 
       &:hover {
         cursor: pointer;
       }
 
       i {
+        display: block;
         font-size: 2rem;
         color: $gray-500;
       }
