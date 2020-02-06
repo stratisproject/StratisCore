@@ -45,7 +45,7 @@
                   <div class="form-group clearfix">
                     <label for="amount">Amount</label>
                     <!-- <span class="float-right btn-link" (click)="getMaxBalance()">max</span> -->
-                    <input type="number" class="form-control" [class.is-invalid]="sendFormErrors.amount"
+                    <input type="text" class="form-control" [class.is-invalid]="sendFormErrors.amount"
                            [class.is-valid]="!sendFormErrors.amount && sendForm.get('amount').valid"
                            formControlName="amount" placeholder="0.00 {{ coinUnit }}">
 
