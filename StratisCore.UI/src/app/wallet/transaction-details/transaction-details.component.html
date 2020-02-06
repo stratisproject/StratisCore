@@ -10,7 +10,7 @@
         {{getSentToDetails()}}
       </div>
       <div class="clearfix mt-2">
-        <button *ngIf="!transaction.contact" type="button" class="btn btn-primary col-3 left"
+        <button *ngIf="!transaction.contact" type="button" class="btn btn-primary left"
                 (click)="createNewContact(getSentToDetails())">Create new contact
         </button>
       </div>
