@@ -39,8 +39,7 @@
           placeholder="Enter your password."
           id="Password"
           formControlName="password"
-          [class.is-invalid]="formErrors.password"
-          [class.is-valid]="!formErrors.password && openWalletForm.get('password').valid">
+          [class.is-invalid]="formErrors.password">
         <div
           *ngIf="formErrors.password"
           class="invalid-feedback text-white">
