@@ -224,8 +224,8 @@ function createWindow(): void {
     width: width,
     height: height,
     frame: true,
-    minWidth: 825,
-    minHeight: 750,
+    minWidth: 900,
+    minHeight: 800,
     title: applicationName,
     webPreferences: {
       nodeIntegration: true,
