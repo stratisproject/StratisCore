@@ -166,6 +166,7 @@ export class ConfirmMnemonicComponent implements OnInit, OnDestroy {
       .toPromise()
       .then(
         () => {
+          this.isCreating = false;
           this.genericModalService.openModal(
             'Wallet Created', 'Your wallet has been created.<br>Keep your secret words, password and passphrase safe!');
           this.router.navigate(['']);
