@@ -44,13 +44,14 @@
   </div>
 
   <div *ngIf="!loading && _transactions.length === 0">
-    <div class="col-12 text-center my-4">
-      <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">
+    <div class="d-flex align-items-center">
+      <div class="row mx-auto">
+        <div class="col-12 text-center my-4">
+          <img src="./assets/images/notransactions.svg" alt="Go to the receive page to get a receive address.">
+          <p>You currently have no transactions</p>
+        </div>
+      </div>
     </div>
-    <div class="col-12 text-center">
-      <p>You currently have no transactions</p>
-    </div>
-
   </div>
 </div>
 

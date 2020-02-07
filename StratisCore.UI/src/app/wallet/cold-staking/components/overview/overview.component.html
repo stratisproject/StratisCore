@@ -1,31 +1,33 @@
 <section id="GUI" class="light" @fadeIn>
-  <div class="jumbotron" id="staking-header">
-    <div class="text-left">
-      <h3>Staking</h3>
-    </div>
-    <section class="col-12 mt-3">
-      <div class="row">
-        <div class="col-6">
-          <app-staking-wallet [hotWallet]="true" [balance]="stakingInfo.hotWalletBalance"
-                              [amount]="stakingInfo.hotWalletAmount"
-                              (onGetFirstUnusedAddress)="onWalletGetFirstUnusedAddress($event)"></app-staking-wallet>
-        </div>
-        <div class="col-6">
-          <app-staking-wallet [hotWallet]="false" [balance]="stakingInfo.coldWalletBalance"
-                              [amount]="stakingInfo.coldWalletAmount"
-                              (onGetFirstUnusedAddress)="onWalletGetFirstUnusedAddress($event)"
-                              (onWithdraw)="onWalletWithdraw($event)"></app-staking-wallet>
-        </div>
+  <div class="row">
+    <div class="jumbotron page-header">
+      <div class="text-left">
+        <h3>Staking</h3>
       </div>
-    </section>
+    </div>
   </div>
-  <section id="content" class="light col-12 mx-auto" style="margin-top: -40px">
-    <div class="col-12" style="margin-top: 400px">
-      <div class="card card-flat">
-        <div class="card-body">
-          <app-transactions title="Staking History" [stakingOnly]="true"></app-transactions>
+  <div class="row page-content">
+    <div class="col-6">
+      <app-staking-wallet [hotWallet]="true" [balance]="stakingInfo.hotWalletBalance"
+                          [amount]="stakingInfo.hotWalletAmount"
+                          (onGetFirstUnusedAddress)="onWalletGetFirstUnusedAddress($event)"></app-staking-wallet>
+    </div>
+    <div class="col-6">
+      <app-staking-wallet [hotWallet]="false" [balance]="stakingInfo.coldWalletBalance"
+                          [amount]="stakingInfo.coldWalletAmount"
+                          (onGetFirstUnusedAddress)="onWalletGetFirstUnusedAddress($event)"
+                          (onWithdraw)="onWalletWithdraw($event)"></app-staking-wallet>
+    </div>
+  </div>
+  <div class="row">
+    <div id="content" class="light col-12 mx-auto">
+      <div class="col-12">
+        <div class="card card-flat">
+          <div class="card-body">
+            <app-transactions title="Staking History" [stakingOnly]="true"></app-transactions>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </section>

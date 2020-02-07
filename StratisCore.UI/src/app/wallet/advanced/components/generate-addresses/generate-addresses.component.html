@@ -1,8 +1,13 @@
 <div class="row">
   <div class="col-12">
     <form class="form-group" [formGroup]="generateAddressesForm">
+      <div class="alert alert-info" role="alert">
+        <p class="m-0">
+          Use this tool to generate multiple addresses.
+        </p>
+      </div>
       <div class="form-group mb-50">
-        <label for="generateAddresses">Amount of generated addresses:</label>
+        <label for="generateAddresses">Number of addresses:</label>
         <input type="text" class="form-control" id="generateAddresses"
                [class.is-invalid]="formErrors.generateAddresses"
                [class.is-valid]="!formErrors.generateAddresses && generateAddressesForm.get('generateAddresses').valid"
