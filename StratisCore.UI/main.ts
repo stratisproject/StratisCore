@@ -224,7 +224,7 @@ function createWindow(): void {
     width: width,
     height: height,
     frame: true,
-    minWidth: 825,
+    minWidth: 1000,
     minHeight: 750,
     title: applicationName,
     webPreferences: {
