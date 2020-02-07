@@ -120,7 +120,6 @@
                   <div class="form-group clearfix">
                     <label for="walletPassword">Wallet Password</label>
                     <input type="password" class="form-control" [class.is-invalid]="sendFormErrors.password"
-                           [class.is-valid]="!sendFormErrors.password && sendForm.get('password').valid"
                            formControlName="password" id="walletPassword"
                            placeholder="Please enter your wallet password.">
                     <div *ngIf="sendFormErrors.password" class="invalid-feedback">{{sendFormErrors.password}}</div>
@@ -252,7 +251,6 @@
                   <div class="form-group clearfix">
                     <label for="walletPassword">Wallet Password</label>
                     <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password"
-                           [class.is-valid]="!sendToSidechainFormErrors.password && sendToSidechainForm.get('password').valid"
                            formControlName="password" id="walletPassword"
                            placeholder="Please enter your wallet password.">
                     <div *ngIf="sendToSidechainFormErrors.password"
