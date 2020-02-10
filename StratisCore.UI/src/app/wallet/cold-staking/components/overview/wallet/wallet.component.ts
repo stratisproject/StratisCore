@@ -55,7 +55,6 @@ export class ColdStakingWalletComponent implements OnInit {
     ngOnInit(): void {
         this.wallet = this.walletService.wallet();
         this.stakingInfo = this.stakingService.stakingInfo();
-        console.log(this.stakingInfo);
         this.buildStakingForm();
     }
 
