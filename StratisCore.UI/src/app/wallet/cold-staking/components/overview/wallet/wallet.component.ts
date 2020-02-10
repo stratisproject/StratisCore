@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { WalletBalance } from '@shared/services/interfaces/api.i';
+import { WalletBalance, StakingInfo } from '@shared/services/interfaces/api.i';
 import { WalletService } from '@shared/services/wallet.service';
 import { StakingService } from '@shared/services/staking-service';
 import { GlobalService } from '@shared/services/global.service';
@@ -20,6 +20,7 @@ export class ColdStakingWalletComponent implements OnInit {
     private _amount = 0;
     public wallet: Observable<WalletBalance>;
     public stakingEnabled: Observable<boolean>;
+    public stakingInfo: Observable<StakingInfo>;
     public stakingForm: FormGroup;
     balanceFormatted = '';
     amountFormatted = '';
@@ -53,6 +54,7 @@ export class ColdStakingWalletComponent implements OnInit {
 
     ngOnInit(): void {
         this.wallet = this.walletService.wallet();
+        this.stakingInfo = this.stakingService.stakingInfo();
         this.buildStakingForm();
     }
 

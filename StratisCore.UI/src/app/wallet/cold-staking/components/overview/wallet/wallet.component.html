@@ -21,6 +21,12 @@
       <div class="card-body">
         <p class="sub">{{ ((stakingService.stakingEnabled | async) ? "Active" : "Inactive") }}</p>
       </div>
+      <div *ngIf="(stakingService.stakingEnabled | async)">
+        <div class="card-header">Network weight</div>
+        <div class="card-body" *ngIf="(stakingInfo| async) as _stakingInfo">
+          <p class="sub">{{ _stakingInfo.netStakeWeight | coinNotation }} {{ globalService.coinUnit }}</p>
+        </div>
+      </div>
       <div class="card-body">
         <div *ngIf="!(stakingService.stakingEnabled | async) && !stakingService.isStarting">
           <form class="form-inline mb-3" [formGroup]="stakingForm">
