@@ -259,7 +259,7 @@
                   <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
                 </form>
                 <div>
-                  <button *ngIf="!isSending" type="button" class="btn btn-stratis-green btn-right-200"
+                  <button *ngIf="!isSending" type="button" class="btn btn-primary btn-right-200"
                           [disabled]="!sendToSidechainForm.valid || isSending || !estimatedSidechainFee"
                           (click)="send(true)">Send
                   </button>
