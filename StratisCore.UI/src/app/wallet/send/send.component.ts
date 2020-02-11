@@ -166,8 +166,8 @@ export class SendComponent implements OnInit, OnDestroy {
     this.apiError = '';
 
     const isValidForFeeEstimate = (isSideChain
-      ? form.get('destinationAddress').valid && form.get('federationAddress').valid
-      : form.get('address').valid) && form.get('amount').valid;
+      ? form.get('amount').valid && form.get('destinationAddress').valid && form.get('federationAddress').valid
+      : form.get('address').valid && form.get('amount').valid);
 
     if (isValidForFeeEstimate) {
       this.estimateFee(form, isSideChain);
