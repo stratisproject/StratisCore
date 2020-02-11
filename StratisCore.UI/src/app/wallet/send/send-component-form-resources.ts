@@ -63,7 +63,7 @@ export class SendComponentFormResources {
     return fb.group({
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       networkSelect: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      destinationAddress: ['', Validators.compose([Validators.required]), Validators.minLength(26)],
+      destinationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
         Validators.min(1),
