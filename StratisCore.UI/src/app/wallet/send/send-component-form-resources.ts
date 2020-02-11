@@ -78,7 +78,7 @@ export class SendComponentFormResources {
   ];
 
   public static stratisTestNetworks: Network[] = [
-    { name: 'CirrusTest', federationAddress: '2N1wrNv5NDayLrKuph9YDVk8Fip8Wr8F8nX', description: 'Cirrus Test Sidechain'}
+    { name: 'CirrusTest', federationAddress: 'xH1GHWVNKwdebkgiFPtQtM4qb3vrvNX2Rg', description: 'Cirrus Test Sidechain'}
   ];
 
   public static cirrusNetworks: Network[] = [
