@@ -234,7 +234,8 @@ export class SendComponent implements OnInit, OnDestroy {
         this.estimatedFee = transactionResponse.transactionFee;
         this.sendToSidechainForm.reset();
         this.sendForm.reset();
-        sendToSideChain ? this.estimatedSidechainFee = 0 : this.estimatedFee = 0;
+        this.estimatedSidechainFee = 0;
+        this.estimatedFee = 0;
         this.openConfirmationModal(transactionResponse);
         this.isSending = false;
       }).catch(error => {
