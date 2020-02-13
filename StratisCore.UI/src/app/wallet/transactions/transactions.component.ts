@@ -59,23 +59,24 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.transactions = this.walletService.walletHistory()
-      .pipe(map((historyItems => {
-        return ((null != historyItems && historyItems.length > 0))
-          ? this.stakingOnly
-            // tslint:disable-next-line:max-line-length
-            ? TransactionInfo.mapFromTransactionsHistoryItems(historyItems.filter(items => items.type === 'staked'), this.maxTransactionCount, this.addressBookService)
-            : TransactionInfo.mapFromTransactionsHistoryItems(historyItems, this.maxTransactionCount, this.addressBookService)
-          : [];
+    // this.transactions = this.walletService.walletHistory()
+    //   .pipe(map((historyItems => {
+    //     return ((null != historyItems && historyItems.length > 0))
+    //       ? this.stakingOnly
+    //         // tslint:disable-next-line:max-line-length
+    //         ? TransactionInfo.mapFromTransactionsHistoryItems(historyItems.filter(items => items.type === 'staked'), this.maxTransactionCount, this.addressBookService)
+    //         : TransactionInfo.mapFromTransactionsHistoryItems(historyItems, this.maxTransactionCount, this.addressBookService)
+    //       : [];
 
-      })), tap(items => {
-        const history = items;
-        this.last = history && history.length > 0 ? history[history.length - 1] : {} as TransactionInfo;
-      }));
+    //   })), tap(items => {
+    //     const history = items;
+    //     this.last = history && history.length > 0 ? history[history.length - 1] : {} as TransactionInfo;
+    //   }));
+    this.transactions = this.stakingOnly ? this.walletService.stakingTransactionHistory() : this.walletService.transactionHistory();
   }
 
   public onScroll(): void {
-    this.walletService.paginateHistory(40, this.last.transactionTimestamp, this.last.txOutputIndex);
+    // this.walletService.paginateHistory(40, this.last.transactionTimestamp, this.last.txOutputIndex);
     console.log('scroll');
   }
 
