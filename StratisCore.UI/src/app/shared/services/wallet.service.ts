@@ -271,9 +271,9 @@ export class WalletService extends RestApi {
     });
     const historySet = existingItems.concat(newItems);
     historySubject.next(historySet.sort((a, b) => b.timestamp - a.timestamp));
-    const mappedNewItems = this.mapFromTransactionsHistoryItems(newItems, null, this.addressBookService).sort((a, b) => b.transactionTimestamp - a.transactionTimestamp);
-    transactionSubject.next(transactionSubject.value.concat(mappedNewItems));
-    stakingTransactionSubject.next(stakingTransactionSubject.value.concat(mappedNewItems.filter(tx => tx.transactionType === "staked")));
+    const mappedNewItems = this.mapFromTransactionsHistoryItems(newItems, null, this.addressBookService);
+    transactionSubject.next(transactionSubject.value.concat(mappedNewItems).sort((a, b) => b.transactionTimestamp - a.transactionTimestamp));
+    stakingTransactionSubject.next(stakingTransactionSubject.value.concat(mappedNewItems.filter(tx => tx.transactionType === "staked")).sort((a, b) => b.transactionTimestamp - a.transactionTimestamp));
   }
 
   private mapFromTransactionsHistoryItems(
