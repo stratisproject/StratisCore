@@ -256,10 +256,10 @@ export class WalletService extends RestApi {
   // }
 
   private applyHistory(history: TransactionsHistoryItem[]): void {
-    const subject = this.getWalletHistorySubject();
+    const historySubject = this.getWalletHistorySubject();
     const transactionSubject = this.getTransactionHistorySubject();
     const stakingTransactionSubject = this.getStakingTransactionHistorySubject();
-    const existingItems = subject.value;
+    const existingItems = historySubject.value;
     const newItems = [];
     history.forEach(item => {
       const index = existingItems.findIndex(existing => existing.id === item.id);
@@ -269,10 +269,11 @@ export class WalletService extends RestApi {
         existingItems[index] = item;
       }
     });
-    const set = existingItems.concat(newItems);
-    subject.next(set.sort((a, b) => b.timestamp - a.timestamp));
-    transactionSubject.next(this.mapFromTransactionsHistoryItems(set, null, this.addressBookService));
-    stakingTransactionSubject.next(this.mapFromTransactionsHistoryItems(set.filter(tx => tx.type === "staked"), null, this.addressBookService));
+    const historySet = existingItems.concat(newItems);
+    historySubject.next(historySet.sort((a, b) => b.timestamp - a.timestamp));
+    const mappedNewItems = this.mapFromTransactionsHistoryItems(newItems, null, this.addressBookService).sort((a, b) => b.transactionTimestamp - a.transactionTimestamp);
+    transactionSubject.next(transactionSubject.value.concat(mappedNewItems));
+    stakingTransactionSubject.next(stakingTransactionSubject.value.concat(mappedNewItems.filter(tx => tx.transactionType === "staked")));
   }
 
   private mapFromTransactionsHistoryItems(
