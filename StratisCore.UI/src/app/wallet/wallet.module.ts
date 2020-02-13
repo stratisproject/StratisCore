@@ -41,6 +41,7 @@ import { AddNodeComponent } from './advanced/components/add-node/add-node.compon
 import { TransactionDetailsModalComponent } from './transaction-details-modal/transaction-details-modal.component';
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { BroadcastTransactionComponent } from './advanced/components/broadcast-t
     WalletRoutingModule,
     SmartContractsModule.forRoot(),
     TokensModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    ScrollingModule
   ],
   declarations: [
     WalletComponent,
