@@ -37,20 +37,18 @@
       </ng-container>
       </tbody>
     </table>
-  </cdk-virtual-scroll-viewport>
-  <div *ngIf="loading && _transactions.length === 0" class="page-load">
-  </div>
-
-  <div *ngIf="!loading && _transactions.length === 0">
-    <div class="d-flex align-items-center">
-      <div class="row mx-auto">
-        <div class="col-12 text-center my-4">
-          <img src="./assets/images/notransactions.svg" alt="Go to the receive page to get a receive address.">
-          <p>You currently have no transactions</p>
+    <div *ngIf="loading && _transactions.length === 0" class="page-load"></div>
+    <div *ngIf="!loading && _transactions.length === 0">
+      <div class="d-flex align-items-center">
+        <div class="row mx-auto">
+          <div class="col-12 text-center my-4">
+            <img src="./assets/images/notransactions.svg" alt="Go to the receive page to get a receive address.">
+            <p>You currently have no transactions</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </cdk-virtual-scroll-viewport>
 </div>
 
 
