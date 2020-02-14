@@ -1,8 +1,4 @@
-<div *ngIf="(transactions | async) let _transactions;"
-     infiniteScroll
-     [infiniteScrollDistance]="4"
-     [scrollWindow]="true"
-     (scrolled)="onScroll()">
+<div *ngIf="(transactions | async) let _transactions;">
   <cdk-virtual-scroll-viewport style="min-height: 500px;" itemSize="60">
     <table class="table">
       <tbody>

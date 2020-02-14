@@ -23,7 +23,6 @@ import { WalletComponent } from './wallet.component';
 import { AccountSelectedGuard } from '@shared/guards/account-selected.guard';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { WalletSelectorComponent } from './wallet-selector/wallet-selector.component';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { SnackbarModule } from 'ngx-snackbar';
 import { BlockExplorerComponent } from './block-explorer/block-explorer.component';
 import { ColdStakingServiceBase, FakeColdStakingService } from './cold-staking/cold-staking.service';
@@ -46,7 +45,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 @NgModule({
   imports: [
     SnackbarModule,
-    InfiniteScrollModule,
     SharedModule,
     WalletRoutingModule,
     SmartContractsModule.forRoot(),
