@@ -1,5 +1,5 @@
 <div *ngIf="(transactions | async) let _transactions;">
-  <cdk-virtual-scroll-viewport itemSize="60" class="min-vh-100">
+  <cdk-virtual-scroll-viewport itemSize="84" class="min-vh-100">
     <table class="table">
       <tbody>
       <ng-container *cdkVirtualFor="let _transaction of _transactions; index as i;">
