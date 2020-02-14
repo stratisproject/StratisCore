@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="(blockExplorerService.blocks | async) let _blocks;">
   <div>
     <label >
       Search
