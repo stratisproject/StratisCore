@@ -254,6 +254,10 @@ export class WalletService extends RestApi {
       if (index === -1) {
         const mapped = TransactionInfo.mapFromTransactionsHistoryItem(item, this.addressBookService);
         newItems.push(mapped);
+      } else {
+        if (item.confirmedInBlock && !existingItems[index].transactionConfirmedInBlock) {
+          existingItems[index].transactionConfirmedInBlock = item.confirmedInBlock;
+        }
       }
     });
     const set = existingItems.concat(newItems);
@@ -262,8 +266,8 @@ export class WalletService extends RestApi {
 
   public broadcastTransaction(transactionHex: string): Observable<string> {
     return this.post('wallet/send-transaction', new TransactionSending(transactionHex)).pipe(
-        catchError(err => this.handleHttpError(err))
-      );
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
   public sendTransaction(transaction: Transaction): Promise<TransactionResponse> {
