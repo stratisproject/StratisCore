@@ -256,7 +256,9 @@ export class WalletService extends RestApi {
         newItems.push(mapped);
       } else {
         if (item.confirmedInBlock && !existingItems[index].transactionConfirmedInBlock) {
-          existingItems[index].transactionConfirmedInBlock = item.confirmedInBlock;
+          existingItems.filter(existing => existing.id === item.id).forEach(existing => {
+            existing.transactionConfirmedInBlock = item.confirmedInBlock;
+          });
         }
       }
     });
