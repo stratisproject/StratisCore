@@ -1,33 +1,30 @@
-<section id="GUI" class="container-fluid">
+<section id="GUI" class="container-fluid" @fadeIn>
   <div class="row">
     <div class="col-4 left-login d-flex align-items-center" [class.left-login-green]="sidechainEnabled">
       <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
       <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
     </div>
-    <!-- /col -->
     <div class="col-8 right-login d-flex align-content-center flex-wrap createWallet">
-      <form class="col-6 mx-auto d-flex align-content-center flex-wrap" [formGroup]="createWalletForm">
-        <div class="col-12 text-center">
-          <h3 class="display-4 mb-4">Create a wallet</h3>
+      <form class="col-10 mx-auto d-flex align-content-center flex-wrap" [formGroup]="createWalletForm">
+        <div class="col-12 mx-auto">
+          <button type="button" class="btn btn-outline-secondary float-left" (click)="onBackClicked()">Cancel</button>
+          <h3 class="display-4 mb-4 text-center">Create a wallet</h3>
         </div>
         <div class="form-group col-12">
           <label for="walletName">Name</label>
           <input type="text" class="form-control" [class.is-invalid]="formErrors.walletName" [class.is-valid]="!formErrors.walletName && createWalletForm.get('walletName').valid" formControlName="walletName" id="walletName" placeholder="Enter a wallet name.">
           <div *ngIf="formErrors.walletName" class="invalid-feedback">{{ formErrors.walletName }}</div>
         </div>
-        <!-- /form-group -->
         <div class="form-group col-12">
           <label for="walletPassword">Password</label>
           <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && createWalletForm.get('walletPassword').valid" formControlName="walletPassword" id="walletPassword" placeholder="Enter a password to encrypt your wallet file." placement="right" ngbTooltip="Your password will be used to encrypt your wallet and will be required for several actions across the wallet." triggers="click:blur">
           <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
         </div>
-        <!-- /form-group -->
         <div class="form-group col-12">
           <label for="walletPasswordConfirmation">Confirm password</label>
           <input type="password" class="form-control" [class.is-invalid]="formErrors.walletPasswordConfirmation" [class.is-valid]="!formErrors.walletPasswordConfirmation && createWalletForm.get('walletPassword').valid && createWalletForm.get('walletPasswordConfirmation').valid" formControlName="walletPasswordConfirmation" id="walletPasswordConfirmation" placeholder="Re-enter the password to encrypt your wallet file.">
           <div *ngIf="formErrors.walletPasswordConfirmation" class="invalid-feedback">{{ formErrors.walletPasswordConfirmation }}</div>
         </div>
-        <!-- /form-group -->
         <div class="form-group col-12">
           <label for="walletPassphrase mr-auto">Passphrase</label><em class="text-muted ml-auto float-right">(optional)</em>
           <input type="password" class="form-control" [class.is-invalid]="formErrors.walletPassphrase" [class.is-valid]="!formErrors.walletPassphrase && createWalletForm.get('walletPassphrase').valid && createWalletForm.get('walletPassphrase').dirty" formControlName="walletPassphrase" id="walletPassphrase" placeholder="Enter an optional passphrase." placement="right" ngbTooltip="The passphrase will be combined with your secret words to generate the private seed and will be required to restore your wallet in the future if necessary." triggers="click:blur">
@@ -40,18 +37,13 @@
         </div>
         <div class="col-12">
           <div class="alert alert-danger text-center" role="alert">
-            Your passphrase will be required to recover your wallet in the future. <br><strong>Keep it safe if you choose to have one</strong>.
+            If you set a passphrase it will be required to recover your wallet in the future. <br><strong>Write it down and keep it safe if you choose to have one.</strong>
           </div>
         </div>
         <div class="modal-footer col-12">
-          <button type="button" class="btn btn-outline-light" (click)="onBackClicked()">Cancel</button>
           <button type="button" class="btn btn-primary btn-block" [class.btn-stratis-green]="sidechainEnabled" [disabled]="!createWalletForm.valid" (click)="onContinueClicked()">Create a new wallet</button>
         </div>
       </form>
-      <!-- /form -->
     </div>
-    <!-- /col-8 -->
   </div>
-  <!-- /row -->
 </section>
-<!-- /GUI-->

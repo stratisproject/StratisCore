@@ -1,0 +1,24 @@
+<div *ngIf="(blockExplorerService.blocks | async) let _blocks;">
+  <div>
+    <label >
+      Search
+      <input type="text" placeholder="Enter Transaction Id or Hash">
+    </label>
+  </div>
+  <table class="table">
+    <tbody>
+    <tr *ngFor="let _block of _blocks">
+      <th class="text-center">
+      </th>
+      <td class="text-left">{{ _block.additionalInformation.height }}</td>
+      <td class="text-left">{{ _block.additionalInformation.blockId }}</td>
+      <td class="text-left">{{_block.additionalInformation.confirmations}}      </td>
+      <td class="text-center"><span (click)="openTransactionDetailDialog(_block)"
+                                    class="lnr-transaction lnr-menu-circle"></span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div *ngIf="loading && _blocks.length === 0" class="page-load">
+  </div>
+</div>

@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angu
 @Component({
   selector: 'app-loading-modal',
   templateUrl: './loading-modal.component.html',
-  styleUrls: ['./loading-modal.component.css']
+  styleUrls: ['./loading-modal.component.scss']
 })
 export class LoadingModalComponent implements OnInit, OnDestroy {
 
@@ -15,13 +15,13 @@ export class LoadingModalComponent implements OnInit, OnDestroy {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
   }
 
-  closeClicked() {
+  closeClicked(): void {
     this.close.emit();
   }
 }

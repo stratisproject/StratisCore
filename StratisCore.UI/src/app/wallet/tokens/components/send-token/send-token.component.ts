@@ -9,7 +9,7 @@ import { SmartContractsService } from 'src/app/wallet/smart-contracts/smart-cont
 @Component({
   selector: 'app-send-token',
   templateUrl: './send-token.component.html',
-  styleUrls: ['./send-token.component.css']
+  styleUrls: ['./send-token.component.scss']
 })
 @Mixin([Disposable])
 export class SendTokenComponent implements OnInit {
@@ -48,14 +48,14 @@ export class SendTokenComponent implements OnInit {
 
   constructor(private activeModal: NgbActiveModal, private smartContractsService: SmartContractsService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.title = 'Send token ' + this.token.ticker;
     this.registerControls();
     this.contractAddress.setValue(this.token.address);
     this.contractAddress.disable();
   }
 
-  closeClicked() {
+  closeClicked(): void {
     this.activeModal.close();
   }
 
@@ -78,7 +78,7 @@ export class SendTokenComponent implements OnInit {
     };
   }
 
-  onSubmit() {
+  onSubmit(): void {
     // Hack the parameters into a format the API expects
     const result = this.createModel();
 
@@ -107,11 +107,11 @@ export class SendTokenComponent implements OnInit {
         });
   }
 
-  setTokenAmount(tokenBalance: number) {
+  setTokenAmount(tokenBalance: number): void {
     this.tokenAmount.setValue(tokenBalance);
   }
 
-  private registerControls() {
+  private registerControls(): void {
     const amountValidator = control => Number(control.value) > this.balance ? { amountError: true } : null;
     const gasPriceTooLowValidator = control => Number(control.value) < this.gasPriceMinimum ? { gasPriceTooLowError: true } : null;
     const gasPriceTooHighValidator = control => Number(control.value) > this.gasPriceMaximum ? { gasPriceTooHighError: true } : null;

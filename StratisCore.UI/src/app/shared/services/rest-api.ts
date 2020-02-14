@@ -1,21 +1,17 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GlobalService } from '@shared/services/global.service';
 import { ErrorService } from '@shared/services/error-service';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class RestApi {
   protected API_URL;
 
   constructor(
     protected globalService: GlobalService,
     protected httpClient: HttpClient,
-    protected errorService: ErrorService
-  ) {
-    this.API_URL = `http://${globalService.getDaemonIP()}:${globalService.getApiPort()}/api`;
+    protected errorService: ErrorService,
+    apiUrl?: string) {
+    this.API_URL =  apiUrl || `http://${globalService.getDaemonIP()}:${globalService.getApiPort()}/api`;
   }
 
   protected getHttpOptions(
@@ -40,14 +36,14 @@ export class RestApi {
     };
   }
 
-  public get<TResult>(path: string, params?: HttpParams, accept: string = 'application/json', contentType: string = 'application/json'): Observable<TResult> {
+  public get<TResult>(path: string, params?: HttpParams, accept = 'application/json', contentType = 'application/json'): Observable<TResult> {
     const options = this.getHttpOptions(accept, contentType, params);
-    return <Observable<TResult>>this.httpClient.get(`${this.API_URL}/${path}`, options);
+    return this.httpClient.get(`${this.API_URL}/${path}`, options) as Observable<TResult>;
   }
 
-  public delete<TResult>(path: string, params?: HttpParams, accept: string = 'application/json', contentType: string = 'application/json'): Observable<TResult> {
+  public delete<TResult>(path: string, params?: HttpParams, accept = 'application/json', contentType = 'application/json'): Observable<TResult> {
     const options = this.getHttpOptions(accept, contentType, params);
-    return <Observable<TResult>>this.httpClient.delete(`${this.API_URL}/${path}`, options);
+    return this.httpClient.delete(`${this.API_URL}/${path}`, options) as Observable<TResult>;
   }
 
   public post<TResult>(path: string, body: any, contentType?: string): Observable<TResult> {
@@ -59,11 +55,10 @@ export class RestApi {
   }
 
   protected executeHttp<TResult>(method: string, path: string, body: any, contentType?: string, params?: HttpParams): Observable<TResult> {
-    return <Observable<TResult>>this.httpClient[method]
-    (`${this.API_URL}/${path}`, body, this.getHttpOptions('application/json', contentType || 'application/json', params));
+    return this.httpClient[method](`${this.API_URL}/${path}`, body, this.getHttpOptions('application/json', contentType || 'application/json', params)) as Observable<TResult>;
   }
 
-  protected handleHttpError(error: HttpErrorResponse, silent?: boolean) {
+  protected handleHttpError(error: HttpErrorResponse, silent?: boolean): Observable<any> {
     return this.errorService.handleHttpError(error, silent);
   }
 }

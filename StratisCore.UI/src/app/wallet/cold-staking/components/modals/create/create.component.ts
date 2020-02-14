@@ -7,13 +7,13 @@ import { ColdStakingServiceBase } from '../../../cold-staking.service';
 import { ColdStakingCreateSuccessComponent } from '../create-success/create-success.component';
 import { Router } from '@angular/router';
 
-type FeeType = { id: number, display: string };
+type FeeType = { id: number; display: string };
 enum HotColdWallet { Hot = 1, Cold }
 
 @Component({
     selector: 'app-create',
     templateUrl: './create.component.html',
-    styleUrls: ['./create.component.css']
+    styleUrls: ['./create.component.scss']
 })
 export class ColdStakingCreateComponent {
     private _amount;
@@ -67,20 +67,20 @@ export class ColdStakingCreateComponent {
         return this._password;
     }
 
-    private setCanCreate() {
+    private setCanCreate(): void {
         this.canCreate = this._amountFormatted.length && this._destinationAddress.length && this.passwordValid;
     }
 
-    public createClicked() {
+    public createClicked(): void {
         this.stakingService.CreateColdstaking(this.globalService.getWalletName())
             .subscribe(success => {
                 if (success) {
                     this.opacity = .5;
                     this.modalService.open(ColdStakingCreateSuccessComponent, { backdrop: 'static' }).result
-                        .then(_ => this.activeModal.close());
+                        .then(() => this.activeModal.close());
                 }
             });
     }
 
-    closeClicked = () => this.activeModal.close();
+    closeClicked = (): void => this.activeModal.close();
 }

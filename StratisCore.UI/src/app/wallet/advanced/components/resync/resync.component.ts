@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
@@ -6,25 +6,26 @@ import { Subscription } from 'rxjs';
 
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
-import { ModalService } from '@shared/services/modal.service';
-import { WalletRescan } from '@shared/models/wallet-rescan';
 import { NodeService } from '@shared/services/node-service';
+import { WalletService } from '@shared/services/wallet.service';
+import { WalletResync } from '@shared/models/wallet-rescan';
+import { SnackbarService } from 'ngx-snackbar';
 
 @Component({
   selector: 'app-resync',
   templateUrl: './resync.component.html',
-  styleUrls: ['./resync.component.css']
+  styleUrls: ['./resync.component.scss']
 })
 export class ResyncComponent implements OnInit, OnDestroy {
-
+  @Output() rescanStarted = new EventEmitter<boolean>();
   constructor(
     private globalService: GlobalService,
+    private snackbarService: SnackbarService,
     private apiService: ApiService,
+    private walletService: WalletService,
     private nodeService: NodeService,
-    private genericModalService: ModalService,
     private fb: FormBuilder) {
   }
-
 
 
   private walletName: string;
@@ -48,14 +49,14 @@ export class ResyncComponent implements OnInit, OnDestroy {
     }
   };
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.walletName = this.globalService.getWalletName();
     this.startSubscriptions();
     this.buildRescanWalletForm();
     this.bsConfig = Object.assign({}, {showWeekNumbers: false, containerClass: 'theme-dark-blue'});
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.cancelSubscriptions();
   }
 
@@ -65,13 +66,15 @@ export class ResyncComponent implements OnInit, OnDestroy {
     });
 
     this.rescanWalletForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      .subscribe(() => this.onValueChanged());
 
     this.onValueChanged();
   }
 
-  onValueChanged(data?: any) {
-    if (!this.rescanWalletForm) { return; }
+  onValueChanged(): void {
+    if (!this.rescanWalletForm) {
+      return;
+    }
     const form = this.rescanWalletForm;
     for (const field in this.formErrors) {
       this.formErrors[field] = '';
@@ -85,30 +88,36 @@ export class ResyncComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onResyncClicked() {
+  public onResyncClicked(): void {
     const rescanDate = new Date(this.rescanWalletForm.get('walletDate').value);
     rescanDate.setDate(rescanDate.getDate() - 1);
 
-    const rescanData = new WalletRescan(
+    const rescanData = new WalletResync(
       this.walletName,
       rescanDate,
-      false,
-      true
+      false
     );
 
-    this.apiService
+    this.walletService
       .rescanWallet(rescanData)
-      .subscribe(
-        response => {
-          this.genericModalService.openModal('Resyncing', 'Your wallet is now resyncing. The time remaining depends on the size and creation time of your wallet. The wallet dashboard shows your progress.');
-        }
-      );
+      .toPromise().then(
+      () => {
+        this.rescanStarted.emit(true);
+        this.snackbarService.add({
+          msg: 'Your wallet is now re-syncing in the background, this may take a few minutes.',
+          customClass: 'notify-snack-bar',
+          action: {
+            text: null
+          }
+        });
+      }
+    );
   }
 
-  private getGeneralWalletInfo() {
+  private getGeneralWalletInfo(): void {
     this.generalWalletInfoSubscription = this.nodeService.generalInfo()
       .subscribe(
-        response =>  {
+        response => {
           const generalWalletInfoResponse = response;
           this.lastBlockSyncedHeight = generalWalletInfoResponse.lastBlockSyncedHeight;
           this.chainTip = generalWalletInfoResponse.chainTip;
@@ -120,18 +129,20 @@ export class ResyncComponent implements OnInit, OnDestroy {
             this.isSyncing = true;
           }
         },
-        error => {
+        () => {
           this.cancelSubscriptions();
         }
       )
     ;
   }
-  private cancelSubscriptions() {
+
+  private cancelSubscriptions(): void {
     if (this.generalWalletInfoSubscription) {
       this.generalWalletInfoSubscription.unsubscribe();
     }
   }
-  private startSubscriptions() {
+
+  private startSubscriptions(): void {
     this.getGeneralWalletInfo();
   }
 

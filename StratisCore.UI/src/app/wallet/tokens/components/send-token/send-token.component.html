@@ -2,7 +2,7 @@
 
   <div class="modal-header">
     <h5 class="modal-title">{{ title }}</h5>
-    <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close"
+    <button type="button" class="btn close closemodal ml-auto" data-dismiss="modal" aria-label="Close"
       (click)="closeClicked()">
       <i class="lnr lnr-cross-circle"></i>
     </button>
@@ -62,7 +62,7 @@
           title="The address to send the tokens to"
           [class.is-invalid]="recipientAddress.invalid && (recipientAddress.dirty || recipientAddress.touched)">
       </div>
-      <div class="float-right">Balance: 
+      <div class="float-right">Balance:
         <span class="btn-link no-underline">
           <strong data-toggle="tooltip" data-placement="right" [title]="token.balance + ' ' + token.ticker" (click)="setTokenAmount(token.balance)">{{ token.balance }}</strong><small> {{ token.ticker }}</small>
         </span>
@@ -98,7 +98,7 @@
     </div>
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
+      <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
       <button type="submit" data-toggle="modal" data-target="#" class="btn btn-stratis-green btn-block"
         data-dismiss="modal" [disabled]="!transactionForm.valid" ngbAutofocus>Send Tokens</button>
     </div>

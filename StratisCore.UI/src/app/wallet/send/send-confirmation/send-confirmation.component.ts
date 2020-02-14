@@ -1,12 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { GlobalService } from '@shared/services/global.service';
 import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
 
 @Component({
   selector: 'app-send-confirmation',
   templateUrl: './send-confirmation.component.html',
-  styleUrls: ['./send-confirmation.component.css']
+  styleUrls: ['./send-confirmation.component.scss']
 })
 export class SendConfirmationComponent implements OnInit {
 
@@ -15,14 +14,14 @@ export class SendConfirmationComponent implements OnInit {
   @Input() sidechainEnabled: boolean;
   @Input() opReturnAmount: number;
   @Input() hasOpReturn: boolean;
-
-  constructor(private globalService: GlobalService, public activeModal: NgbActiveModal) {
+  @Output() closeClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
+  constructor(private globalService: GlobalService) {
   }
 
   public showDetails = false;
   public coinUnit: string;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.coinUnit = this.globalService.getCoinUnit();
     this.transactionFee = new CoinNotationPipe().transform(this.transactionFee);
     if (this.hasOpReturn) {
@@ -33,7 +32,7 @@ export class SendConfirmationComponent implements OnInit {
     }
   }
 
-  toggleDetails() {
+  toggleDetails(): void {
     this.showDetails = !this.showDetails;
   }
 }

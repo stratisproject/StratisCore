@@ -1,13 +1,24 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/services/api.service';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { GlobalService } from '@shared/services/global.service';
+import { ErrorService } from '@shared/services/error-service';
+import { catchError} from 'rxjs/operators';
+import { TokenBalanceRequest } from '../tokens/models/token-balance-request';
+import { LocalExecutionResult } from '@shared/models/local-execution-result';
+import { SmartContractsServiceBase } from './smart-contracts-service.base';
+import { WalletInfo } from '@shared/models/wallet-info';
+import { CurrentAccountService } from '@shared/services/current-account.service';
+import { WalletService } from '@shared/services/wallet.service';
 
 export class SmartContractsContractItem {
   constructor(
-    public blockId: string, public type: string, public hash: string, public destinationAddress: string, public amount: number) { }
+    public blockId: string, public type: string, public hash: string, public destinationAddress: string, public amount: number) {
+  }
 }
 
-export class ContractTransactionItem {
+export interface ContractTransactionItem {
   blockHeight: number;
   type: number;
   hash: string;
@@ -17,59 +28,107 @@ export class ContractTransactionItem {
   gasFee: number;
 }
 
-export abstract class SmartContractsServiceBase {
-  GetReceipt(hash: string): Observable<string> { return of(); }
-  GetReceiptSilent(hash: string): Observable<string> { return of(); }
-  GetAddresses(walletName: string): Observable<string[]> { return of(); }
-  GetBalance(walletName: string): Observable<number> { return of(); }
-  GetAddressBalance(address: string): Observable<number> { return of(); }
-  GetAddress(walletName: string): Observable<string> { return of(); }
-  GetContracts(walletName: string): Observable<SmartContractsContractItem[]> { return of(); }
-  GetSenderAddresses(walletName: string): Observable<string[]> { return of(); }
-  GetParameterTypes(walletName: string): Observable<string[]> { return of(); }
-  GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> { return of(); }
-  PostCreate(createTransaction: any): Observable<any> { return of(); }
-  PostCall(createTransaction: any): Observable<any> { return of(); }
-}
-
 @Injectable()
-export class SmartContractsService implements SmartContractsServiceBase {
-  constructor(private apiService: ApiService) { }
+export class SmartContractsService extends ApiService implements SmartContractsServiceBase {
+  private historySubject = new BehaviorSubject<ContractTransactionItem[]>([]);
+  private currentWallet: WalletInfo;
+  private lastBalance: number = null;
+  private currentAddress: string;
+  constructor(
+    httpClient: HttpClient,
+    globalService: GlobalService,
+    walletService: WalletService,
+    currentAccountService: CurrentAccountService,
+    errorService: ErrorService) {
+    super(httpClient, globalService, errorService);
 
-  GetReceipt(hash: string): Observable<string> {
-    return this.apiService.getReceipt(hash);
+    globalService.currentWallet.subscribe((wallet) => {
+      this.currentWallet = wallet;
+    });
+
+    currentAccountService.currentAddress.subscribe(address => {
+      this.currentAddress = address;
+    });
+
+    walletService.wallet().subscribe(wallet => {
+      if (wallet && this.currentAddress && this.lastBalance !== (wallet.amountConfirmed + wallet.amountUnconfirmed)) {
+        this.lastBalance = (wallet.amountConfirmed + wallet.amountUnconfirmed);
+        this.GetHistoryFromApi(this.currentWallet.walletName, this.currentAddress);
+      }
+    });
   }
 
-  GetReceiptSilent(hash: string): Observable<string> {
-    return this.apiService.getReceiptSilent(hash);
+  public GetReceipt(hash: string, silent = false): Observable<string> {
+    const params = new HttpParams().set('txHash', hash);
+    return this.get<string>('smartcontracts/receipt', params).pipe(
+      catchError(err => this.handleHttpError(err, silent))
+    );
   }
 
-  PostCall(createTransaction: any): Observable<any> {
-    return this.apiService.postCallTransaction(createTransaction);
+  /// Setting the silent flag is not enough because the error format returned by
+  /// receipt still causes a modal to be displayed.
+  public GetReceiptSilent(hash: string): Observable<string> {
+    const params = new HttpParams().set('txHash', hash);
+    return this.get<string>('smartcontracts/receipt', params);
   }
 
-  PostCreate(createTransaction: any): Observable<any> {
-    return this.apiService.postCreateTransaction(createTransaction);
+  /// Get the active smart contract wallet address.
+  public GetAddress(walletName: string): Observable<any> {
+    const params = new HttpParams().set('walletName', walletName);
+    return this.get('smartcontractwallet/account-address', params).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
-  GetHistory(walletName: string, address: string): Observable<any> {
-    return this.apiService.getAccountHistory(walletName, address);
+  public GetAddresses(walletName: string): any {
+    const params = new HttpParams().set('walletName', walletName);
+    return this.get('smartcontractwallet/account-addresses', params).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
-  GetBalance(walletName: string): Observable<any> {
-    return this.apiService.getAccountBalance(walletName);
+  /// Get the balance of the active smart contract address.
+  public GetBalance(walletName: string): Observable<any> {
+    const params = new HttpParams().set('walletName', walletName);
+    return this.get('smartcontractwallet/account-balance', params).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
-  GetAddressBalance(address: string): Observable<any> {
-    return this.apiService.getAddressBalance(address);
+  /// Gets the transaction history of the smart contract account.
+  public GetHistory(walletName: string, address: string): Observable<ContractTransactionItem[]> {
+    return this.historySubject.asObservable();
   }
 
-  GetAddress(walletName: string): Observable<any> {
-    return this.apiService.getAccountAddress(walletName);
+  public GetHistoryFromApi(walletName: string, address: string): void {
+    const params = new HttpParams()
+      .set('walletName', walletName)
+      .set('address', address);
+    this.get<ContractTransactionItem[]>('smartcontractwallet/history', params).pipe(
+      catchError(err => this.handleHttpError(err))
+    ).toPromise().then(response => {
+      this.historySubject.next(response);
+    });
   }
 
-  GetAddresses(walletName: string): Observable<any> {
-    return this.apiService.getAccountAddresses(walletName);
+  /// Posts a contract creation transaction
+  public PostCreate(transaction: any): Observable<any> {
+    return this.post('smartcontractwallet/create', transaction).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /// Posts a contract call transaction
+  public PostCall(transaction: any): Observable<any> {
+    return this.post('smartcontractwallet/call', transaction).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  public LocalCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {
+    return this.post<LocalExecutionResult>('smartcontracts/local-call', localCall).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
   GetContracts(walletName: string): Observable<SmartContractsContractItem[]> {

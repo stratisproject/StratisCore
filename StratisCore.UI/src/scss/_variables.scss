@@ -47,7 +47,6 @@ $cyan:    #17a2b8 !default;
 $turquoise: #1FB8C1 !default;
 $hot:     #F5A623 !default;
 $cold:    #4A90E2 !default;
-$stratis-green:  #3BB0BA !default;
 
 $colors: () !default;
 $colors: map-merge((
@@ -712,7 +711,7 @@ $modal-footer-border-width:         $modal-header-border-width !default;
 $modal-header-padding:              15px !default;
 
 $modal-lg:                          800px !default;
-$modal-md:                          500px !default;
+$modal-md:                          550px !default;
 $modal-sm:                          300px !default;
 
 $modal-transition:                  transform .3s ease-out !default;

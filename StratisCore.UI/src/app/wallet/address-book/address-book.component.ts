@@ -1,63 +1,66 @@
 import { Component, OnInit } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ApiService } from '@shared/services/api.service';
-import { SendComponent } from '../send/send.component';
 import { AddNewAddressComponent } from './modals/add-new-address/add-new-address.component';
 import { AddressLabel } from '@shared/models/address-label';
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { GlobalService } from '@shared/services/global.service';
+import { SnackbarService } from 'ngx-snackbar';
+import { AddressBookService } from '@shared/services/address-book-service';
+import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
+import { Router } from '@angular/router';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'app-address-book',
   templateUrl: './address-book.component.html',
-  styleUrls: ['./address-book.component.css']
+  styleUrls: ['./address-book.component.scss'],
+  animations : Animations.fadeIn
 })
 export class AddressBookComponent implements OnInit {
   constructor(
-    private apiService: ApiService,
+    private router: Router,
+    private globalService: GlobalService,
+    private snackbarService: SnackbarService,
+    private addressBookService: AddressBookService,
     private clipboardService: ClipboardService,
     private modalService: NgbModal) {
   }
 
-  public addresses: BehaviorSubject<AddressLabel[]> = new BehaviorSubject<AddressLabel[]>(null);
+  public addresses: Observable<AddressLabel[]>;
 
   public ngOnInit(): void {
     this.getAddressBookAddresses();
   }
 
   private getAddressBookAddresses(): void {
-    this.apiService.getAddressBookAddresses()
-      .toPromise()
-      .then(
-        response => {
-          if (response.addresses[0]) {
-            this.addresses.next(response.addresses.map(address => new AddressLabel(address.label, address.address)));
-          }
-        });
-  }
-
-  public copyToClipboardClicked(address: AddressLabel): void {
-    if (this.clipboardService.copyFromContent(address.address)) {
-    }
+    this.addresses = this.addressBookService.contacts;
   }
 
   public sendClicked(address: AddressLabel): void {
-    const modalRef = this.modalService.open(SendComponent, {backdrop: 'static'});
-    modalRef.componentInstance.address = address.address;
+    this.router.navigateByUrl(`wallet/send/${address.address}`);
   }
 
   public removeClicked(address: AddressLabel): void {
-    this.apiService.removeAddressBookAddress(address.label)
-      .toPromise()
-      .then(() => {
-        const index = this.addresses.value.findIndex(i => i.address === address.address);
-        if (index > -1) {
-          this.addresses.next(Array.from(this.addresses.value.splice(index, 1)));
-        }
-      });
+    const modal = this.modalService.open(ConfirmationModalComponent, {
+      backdrop: 'static',
+    });
+
+    const instance = modal.componentInstance;
+    instance.title = 'Remove Contact';
+    instance.body = `Are you sure you want to remove the contact ${address.label}`;
+    instance.confirmSnackBarMessage = `Contact ${address.label} has been removed.`;
+
+    modal.result.then(confirmed => {
+      if (confirmed) {
+        this.addressBookService.removeAddressBookAddress(address);
+      }
+    });
   }
 
+
+
   public addNewAddressClicked(): void {
-    this.modalService.open(AddNewAddressComponent, {backdrop: 'static'});
+    const addressLabel =  this.modalService.open(AddNewAddressComponent, {backdrop: 'static'});
   }
 }

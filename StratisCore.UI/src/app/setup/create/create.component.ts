@@ -4,22 +4,23 @@ import { Router } from '@angular/router';
 
 import { GlobalService } from '@shared/services/global.service';
 import { ApiService } from '@shared/services/api.service';
-import { ModalService } from '@shared/services/modal.service';
 
 import { PasswordValidationDirective } from '@shared/directives/password-validation.directive';
 
 import { WalletCreation } from '@shared/models/wallet-creation';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'create-component',
   templateUrl: './create.component.html',
-  styleUrls: ['./create.component.css'],
+  styleUrls: ['./create.component.scss'],
+  animations : Animations.fadeIn
 })
 
 export class CreateComponent implements OnInit, OnDestroy {
-  constructor(private globalService: GlobalService, private apiService: ApiService, private genericModalService: ModalService, private router: Router, private fb: FormBuilder) {
+  constructor(private globalService: GlobalService, private apiService: ApiService, private router: Router, private fb: FormBuilder) {
     this.buildCreateForm();
   }
 
@@ -30,7 +31,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   private formValueChanges$: Subscription;
   private passphrase$: Subscription;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getNewMnemonic();
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
   }
@@ -60,7 +61,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     });
 
     this.formValueChanges$ = this.createWalletForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      .subscribe(() => this.onValueChanged());
 
     const passphrase = this.createWalletForm.get('walletPassphrase');
     const passphraseConfirmation = this.createWalletForm.get('walletPassphraseConfirmation');
@@ -72,7 +73,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.onValueChanged();
   }
 
-  onValueChanged(data?: any) {
+  onValueChanged(): void {
     if (!this.createWalletForm) { return; }
     const form = this.createWalletForm;
     for (const field in this.formErrors) {
@@ -116,11 +117,11 @@ export class CreateComponent implements OnInit, OnDestroy {
     }
   };
 
-  public onBackClicked() {
+  public onBackClicked(): void {
     this.router.navigate(["/setup"]);
   }
 
-  public onContinueClicked() {
+  public onContinueClicked(): void {
     if (this.mnemonic) {
       this.newWallet = new WalletCreation(
         this.createWalletForm.get("walletName").value,
@@ -139,7 +140,7 @@ export class CreateComponent implements OnInit, OnDestroy {
       .subscribe(mnemonic => this.mnemonic = mnemonic);
   }
 
-  private setDynamicPassphraseValidators(passphraseValue: string, controls: { passphrase: AbstractControl, passphraseConfirmation: AbstractControl }): void {
+  private setDynamicPassphraseValidators(passphraseValue: string, controls: { passphrase: AbstractControl; passphraseConfirmation: AbstractControl }): void {
     const { passphrase, passphraseConfirmation } = controls;
 
     if (passphraseValue.length) {
@@ -149,6 +150,7 @@ export class CreateComponent implements OnInit, OnDestroy {
 
       // Update form group validators to include MatachPassword and MatchPassphrase
       this.createWalletForm.setValidators([
+
         PasswordValidationDirective.MatchPassword,
         PasswordValidationDirective.MatchPassphrase
       ]);
@@ -164,7 +166,7 @@ export class CreateComponent implements OnInit, OnDestroy {
       passphraseConfirmation.setErrors(null);
       passphraseConfirmation.markAsPristine();
 
-      // clear then set MatchPassowrd validator on form
+      // clear then set MatchPassword validator on form
       this.createWalletForm.clearValidators();
       this.createWalletForm.setValidators(PasswordValidationDirective.MatchPassword);
     }

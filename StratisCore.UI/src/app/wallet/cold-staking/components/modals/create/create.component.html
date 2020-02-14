@@ -1,7 +1,7 @@
 <div [style.opacity]="opacity">
     <div class="modal-header">
         <h5 class="modal-title">Coldstake Setup</h5>
-        <button type="button" class="close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
+        <button type="button" class="btn close closemodal ml-auto" data-dismiss="modal" aria-label="Close" (click)="closeClicked()">
             <i class="lnr lnr-cross-circle"></i>
         </button>
     </div>
@@ -47,7 +47,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-light" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="closeClicked()">Cancel</button>
         <button type="button" data-toggle="modal" data-target="#modalValidation" class="btn btn-primary btn-block"
             (click)="createClicked()" data-dismiss="modal" [disabled]="!canCreate">Create</button>
     </div>

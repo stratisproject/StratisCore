@@ -7,31 +7,34 @@ import { ColdStakingServiceBase, ColdStakingInfo } from '../../cold-staking.serv
 import { ColdStakingCreateAddressComponent } from '../modals/create-address/create-address.component';
 import { ColdStakingWithdrawComponent } from '../modals/withdraw/withdraw.component';
 import { ColdStakingCreateComponent } from '../modals/create/create.component';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
-    selector: 'app-staking-scene',
-    templateUrl: './overview.component.html',
-    styleUrls: ['./overview.component.css']
+  selector: 'app-staking-scene',
+  templateUrl: './overview.component.html',
+  styleUrls: ['./overview.component.scss'],
+  animations: Animations.fadeIn
 })
 export class ColdStakingOverviewComponent implements OnInit {
 
-    constructor(private globalService: GlobalService, private stakingService: ColdStakingServiceBase, private modalService: NgbModal) { }
+  constructor(private globalService: GlobalService, private stakingService: ColdStakingServiceBase, private modalService: NgbModal) {
+  }
 
-    stakingInfo: ColdStakingInfo;
+  stakingInfo: ColdStakingInfo;
 
-    ngOnInit() {
-        this.stakingService.GetInfo(this.globalService.getWalletName()).subscribe(x => this.stakingInfo = x);
-    }
+  ngOnInit(): void {
+    this.stakingService.GetInfo(this.globalService.getWalletName()).subscribe(x => this.stakingInfo = x);
+  }
 
-    onWalletGetFirstUnusedAddress(walletComponent) {
-        this.modalService.open(ColdStakingCreateAddressComponent);
-    }
+  onWalletGetFirstUnusedAddress(walletComponent): void {
+    this.modalService.open(ColdStakingCreateAddressComponent);
+  }
 
-    onWalletWithdraw(walletComponent) {
-        this.modalService.open(ColdStakingWithdrawComponent);
-    }
+  onWalletWithdraw(walletComponent): void {
+    this.modalService.open(ColdStakingWithdrawComponent);
+  }
 
-    onSetup() {
-        this.modalService.open(ColdStakingCreateComponent);
-    }
+  onSetup(): void {
+    this.modalService.open(ColdStakingCreateComponent);
+  }
 }

@@ -1,0 +1,19 @@
+<div class="stratis-side-bar">
+  <div class="stratis-side-bar-container">
+    <img
+      class="stratis-side-bar-logo"
+      alt="Stratis logo"
+      src="./assets/images/stratis/home-stratis-logo.svg"/>
+    <ng-content select="[side-bar-top]"></ng-content>
+    <ng-container *ngFor="let sideBarItem of sideBarItems">
+      <div *ngIf="sideBarItem.visible"
+           (click)="onSelect(sideBarItem)"
+           [ngClass]="sideBarItem.getClasses()">
+        <div *ngIf="sideBarItem.visible" [ngClass]="sideBarItem.getIndicatorClasses()"></div>
+        {{sideBarItem.displayText}}
+      </div>
+    </ng-container>
+    <ng-content select="[side-bar-bottom]"></ng-content>
+  </div>
+</div>
+

@@ -1,22 +1,39 @@
-<div class="status" *ngIf="(generalInfo | async) as _generalInfo">
-  <ul class="list-inline align-self-center row">
-    <li *ngIf="!(percentSynced == '100%')" class="list-inline-item mx-1" placement="top" ngbTooltip="{{toolTip}}">
-      <i class="lnr lnr-cloud-sync text-warning"></i>
-      <small class="text-warning">{{ percentSynced }}</small>
+<div *ngIf="(walletInfo | async) as _walletInfo">
+  <div class="status-balance">
+    <div>
+      {{ (_walletInfo.amountConfirmed | coinNotation) || (0 | coinNotation) }} {{ globalService.coinUnit }}
+    </div>
+    <div class="clearfix">
+      <small>{{ (_walletInfo.amountUnconfirmed | coinNotation) || (0 | coinNotation) }} (unconfirmed)</small>
+    </div>
+  </div>
+</div>
+<div
+  class="status"
+  *ngIf="(generalInfo | async) as _generalInfo">
+  <ul class="display-flex p-0 ml-3">
+    <li
+      class="d-flex align-items-center mr-5"
+      placement="top"
+      ngbTooltip="{{toolTip}}"
+      tooltipClass="status-tooltip">
+      <i
+        class="lnr lnr-cloud"
+        style="font-size: 140%">
+      </i>
+      <small>
+        {{ percentSynced }}
+      </small>
     </li>
-    <li *ngIf="percentSynced == '100%'" class="list-inline-item mx-1" placement="top" ngbTooltip="{{toolTip}}">
-      <i class="lnr lnr-cloud-check text-success"></i>
-      <small class="text-success">{{ percentSynced }}</small>
-    </li>
-    <li class="list-inline-item mx-1" placement="top" ngbTooltip="{{ connectedNodesTooltip }}">
-      <i class="lnr lnr-earth text-black"></i>
-      <small class="text-black">{{ _generalInfo.connectedNodes }}</small>
-    </li>
-    <li *ngIf="!stakingService.stakingEnabled && !globalService.getSidechainEnabled()" class="list-inline-item mx-1" placement="top" ngbTooltip="Not staking">
-      <i class="lnr lnr-lock text-danger"></i>
-    </li>
-    <li *ngIf="stakingService.stakingEnabled && !globalService.getSidechainEnabled()" class="list-inline-item mx-1" placement="top" ngbTooltip="Staking">
-      <i class="lnr lnr-lock text-success"></i>
+    <li
+      class="d-flex align-items-center"
+      placement="top"
+      ngbTooltip="{{ connectedNodesTooltip }}"
+      tooltipClass="status-tooltip">
+      <i class="lnr lnr-earth"></i>
+      <small>
+        {{ _generalInfo.connectedNodes }}
+      </small>
     </li>
   </ul>
 </div>

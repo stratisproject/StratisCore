@@ -15,19 +15,19 @@ export class Result<T> {
         this.value = value;
     }
 
-    public static ok<T>(value: T = null) {
+    public static ok<T>(value: T = null): Result<T> {
         return new Result(ResultStatus.Success, null, value);
     }
 
-    public static fail<T>(message: string) {
+    public static fail<T>(message: string): Result<T> {
         return new Result(ResultStatus.Error, message);
     }
 
-    public get success() {
+    public get success(): boolean {
         return this.status === ResultStatus.Success;
     }
 
-    public get failure() {
+    public get failure(): boolean {
         return this.status === ResultStatus.Error;
     }
 }

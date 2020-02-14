@@ -1,39 +1,31 @@
-<section id="GUI" class="light">
-    <section id="content" class="light col-10 mx-auto">
-        <div class="text-right">
-            <button class="btn btn-link mb-2 pr-0" style="display: inline-block" (click)="addNewAddressClicked()">+ Add New Address</button>
+<section id="GUI" class="light" @fadeIn>
+  <div class="jumbotron page-header">
+    <div class="d-flex justify-content-between">
+      <div>
+        <h3>Contacts</h3>
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary"
+                (click)="addNewAddressClicked()">Add Contact
+        </button>
+      </div>
+    </div>
+  </div>
+  <section id="content" class="light page-content">
+    <div class="row">
+      <ng-template #noAddresses>
+        <div class="col-12 text-center">
+          <p>Looks like you have no addresses in your address book yet.</p>
         </div>
-        <section class="col-12">
-          <div class="row">
-            <ng-template #noAddresses>
-              <div class="col-12 text-center">
-                <p>Looks like you have no addresses in your address book yet.</p>
-              </div>
-            </ng-template>
-          </div>
-          <div *ngIf="addresses; else noAddresses">
-            <div class="row" *ngFor="let addressRow of addresses | async">
-                <div class="card Addresses col-12 my-1">
-                    <div class="card-body">
-                        <dl class="d-flex align-items-center mb-0">
-                            <dt class="col-3 mb-0">{{addressRow.label}}</dt>
-                            <dd class="col-6 mb-0">
-                                <div class="myAddress d-inline">
-                                    <code class="d-inline-block">{{addressRow.address}}</code>
-                                    <button class="btn btn-outline-secondary d-inline-block ml-2 btn-sm" title="Copy to Clipboard" (click)="copyToClipboardClicked(addressRow)" type="button">
-                                      <i class="lnr lnr-file-add"></i> copy
-                                    </button>
-                                </div>
-                            </dd>
-                            <dd class="col-3 mb-0 text-right">
-                                <button type="button" class="btn btn-outline-primary btn-sm ml-2" (click)="sendClicked(addressRow)">Send</button>
-                                <button type="button" class="btn btn-lighter btn-sm ml-2" (click)="removeClicked(addressRow)"><i class="lnr lnr-trash"></i></button>
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-          </div>
-        </section>
-    </section>
+      </ng-template>
+    </div>
+    <div *ngIf="addresses; else noAddresses">
+      <div *ngFor="let addressRow of addresses | async">
+        <app-address-book-card [address]="addressRow" [showButtons]="true" (removeClicked)="removeClicked($event)"
+                               (sendClicked)="sendClicked($event)">
+
+        </app-address-book-card>
+      </div>
+    </div>
+  </section>
 </section>

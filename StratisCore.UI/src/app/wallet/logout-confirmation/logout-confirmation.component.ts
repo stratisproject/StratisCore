@@ -4,11 +4,13 @@ import { NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
 import { StakingService } from '@shared/services/staking-service';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'app-logout-confirmation',
   templateUrl: './logout-confirmation.component.html',
-  styleUrls: ['./logout-confirmation.component.css']
+  styleUrls: ['./logout-confirmation.component.scss'],
+  animations: Animations.fadeIn
 })
 export class LogoutConfirmationComponent implements OnInit {
 
@@ -21,11 +23,11 @@ export class LogoutConfirmationComponent implements OnInit {
 
   public sidechainEnabled: boolean;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
   }
 
-  public onLogout() {
+  public onLogout(): void {
     if (!this.sidechainEnabled) {
       this.stakingService.stopStaking();
 

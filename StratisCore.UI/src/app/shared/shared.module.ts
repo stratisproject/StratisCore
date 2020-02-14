@@ -18,6 +18,10 @@ import { ApiService } from '@shared/services/api.service';
 import { SignalRService } from '@shared/services/signalr-service';
 import { WalletService } from '@shared/services/wallet.service';
 import { StakingService } from '@shared/services/staking-service';
+import { SideBarComponent } from '@shared/components/side-bar/side-bar.component';
+import { TaskBarComponent } from './components/task-bar/task-bar.component';
+import { TaskBarItemHostDirective } from '@shared/components/task-bar/task-bar-item-host-directive';
+import { TaskBarService } from '@shared/services/task-bar-service';
 
 @NgModule({
   imports: [CommonModule],
@@ -29,12 +33,17 @@ import { StakingService } from '@shared/services/staking-service';
     PasswordValidationDirective,
     GenericModalComponent,
     LoadingModalComponent,
-    ConfirmationModalComponent],
-  providers : [
+    ConfirmationModalComponent,
+    SideBarComponent,
+    TaskBarComponent,
+    TaskBarItemHostDirective
+  ],
+  providers: [
     ApiService,
     WalletService,
     SignalRService,
-    StakingService
+    StakingService,
+    TaskBarService
   ],
   exports: [
     CommonModule,
@@ -52,7 +61,11 @@ import { StakingService } from '@shared/services/staking-service';
     AutoFocusDirective,
     PasswordValidationDirective,
     LoadingModalComponent,
-    ConfirmationModalComponent],
+    ConfirmationModalComponent,
+    SideBarComponent,
+    TaskBarComponent,
+    TaskBarItemHostDirective
+  ],
   entryComponents: [
     GenericModalComponent,
     ConfirmationModalComponent]

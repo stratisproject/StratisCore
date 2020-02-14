@@ -23,8 +23,8 @@
                 <div style="display: flex; flex-direction: row">
                   {{selectedAddress}}
                   <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
-                    data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
-                    (click)="clipboardAddressClicked()">
+                          data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
+                          (click)="clipboardAddressClicked()">
                     <i class="lnr lnr-file-add"></i>
                   </button>
                 </div>
@@ -34,10 +34,10 @@
 
           <div class="col-3">
             <button type="button" class="btn btn-outline-stratis-green btn-block" data-toggle="modal"
-              data-target="#modalCalltx" (click)="callTransactionClicked()">Call Contract
+                    data-target="#modalCalltx" (click)="callTransactionClicked()">Call Contract
             </button>
             <button type="button" class="btn btn-stratis-green btn-block" data-toggle="modal"
-              data-target="#modalCreatetx" (click)="createNewTransactionClicked()">Create Contract
+                    data-target="#modalCreatetx" (click)="createNewTransactionClicked()">Create Contract
             </button>
           </div>
 
@@ -50,45 +50,45 @@
         <div class="card-body">
           <table class="table">
             <thead>
-              <tr>
-                <th scope="col">Block</th>
-                <th scope="col">Type</th>
-                <th scope="col">Hash</th>
-                <th scope="col">Address</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Transaction Fee</th>
-                <th scope="col">Gas Fee</th>
-                <th scope="col"></th>
-              </tr>
+            <tr>
+              <th scope="col">Block</th>
+              <th scope="col">Type</th>
+              <th scope="col">Hash</th>
+              <th scope="col">Address</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Transaction Fee</th>
+              <th scope="col">Gas Fee</th>
+              <th scope="col"></th>
+            </tr>
             </thead>
             <tbody>
 
-              <tr *ngFor="let item of history">
-                <th scope="row"><strong>#{{item.blockHeight}}</strong></th>
-                <td><span class="badge badge-info">{{item.type | contractType}}</span></td>
-                <td>
-                  <ng-container
-                    *ngIf="item.blockHeight && (item.type == 3 || item.type == 4); then clickableTxHash; else txHash">
-                  </ng-container>
-                  <ng-template #clickableTxHash>
-                    <a href="javascript:void(0);" (click)="txHashClicked(item)">{{item.hash}}</a>
-                  </ng-template>
-                  <ng-template #txHash>
-                    {{ item.hash }}
-                  </ng-template>
-                </td>
-                <td><code class="d-inline-block">{{item.to}}</code></td>
-                <td>
-                  <sc-balance [balance]="item.amount" [coinUnit]="coinUnit"></sc-balance>
-                </td>
-                <td>
-                  <sc-balance [balance]="item.transactionFee" [coinUnit]="coinUnit"></sc-balance>
-                </td>
-                <td>
-                  <sc-balance [balance]="item.gasFee" [coinUnit]="coinUnit"></sc-balance>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
+            <tr *ngFor="let item of history">
+              <th scope="row"><strong>#{{item.blockHeight}}</strong></th>
+              <td><span class="badge badge-info">{{item.type | contractType}}</span></td>
+              <td>
+                <ng-container
+                  *ngIf="item.blockHeight && (item.type == 3 || item.type == 4); then clickableTxHash; else txHash">
+                </ng-container>
+                <ng-template #clickableTxHash>
+                  <a href="javascript:void(0);" (click)="txHashClicked(item)">{{item.hash}}</a>
+                </ng-template>
+                <ng-template #txHash>
+                  {{ item.hash }}
+                </ng-template>
+              </td>
+              <td><code class="d-inline-block">{{item.to}}</code></td>
+              <td>
+                <sc-balance [balance]="item.amount" [coinUnit]="coinUnit"></sc-balance>
+              </td>
+              <td>
+                <sc-balance [balance]="item.transactionFee" [coinUnit]="coinUnit"></sc-balance>
+              </td>
+              <td>
+                <sc-balance [balance]="item.gasFee" [coinUnit]="coinUnit"></sc-balance>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
 
             </tbody>
           </table>
@@ -110,5 +110,5 @@
             </div> -->
 
     </section>
-
   </section>
+</section>

@@ -9,16 +9,15 @@ import { ApiService } from '@shared/services/api.service';
 import { ElectronService } from 'ngx-electron';
 import { GlobalService } from '@shared/services/global.service';
 
-import { NodeStatus } from '@shared/models/node-status';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
+  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) {
+  }
 
   private subscription: Subscription;
   private statusIntervalSubscription: Subscription;
@@ -26,23 +25,27 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly TryDelayMilliseconds = 3000;
   public sidechainEnabled;
   public apiConnected = false;
-
+  private walletFeatureNamespace = null;
   loading = true;
   loadingFailed = false;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
+    this.walletFeatureNamespace = this.sidechainEnabled
+      ? 'Stratis.Bitcoin.Features.SmartContracts.Wallet.SmartContractWalletFeature'
+      : 'Stratis.Bitcoin.Features.Wallet.WalletFeature';
+
     this.setTitle();
     this.tryStart();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.statusIntervalSubscription.unsubscribe();
   }
 
   // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
-  private tryStart() {
+  private tryStart(): void {
     let retry = 0;
     const stream$ = this.apiService.getNodeStatus(true).pipe(
       retryWhen(errors =>
@@ -58,20 +61,22 @@ export class AppComponent implements OnInit, OnDestroy {
     );
 
     this.subscription = stream$.subscribe(
-      (data: NodeStatus) => {
+      () => {
         this.apiConnected = true;
         this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
           .subscribe(
-            response =>  {
+            response => {
               const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-              if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
+              const walletFeatureResponse = response.featuresData.find(x => x.namespace === this.walletFeatureNamespace);
+              if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized'
+                && walletFeatureResponse && walletFeatureResponse.state === 'Initialized') {
                 this.loading = false;
                 this.statusIntervalSubscription.unsubscribe();
                 this.router.navigate(['login']);
               }
             }
           );
-      }, (error: any) => {
+      }, () => {
         console.log('Failed to start wallet');
         this.loading = false;
         this.loadingFailed = true;
@@ -79,15 +84,15 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  private setTitle() {
+  private setTitle(): void {
     const applicationName = this.sidechainEnabled ? 'Cirrus Core' : 'Stratis Core';
     const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
-    const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
+    const title = `${applicationName} ${this.globalService.getApplicationVersion()}-RC1${testnetSuffix}`;
 
     this.titleService.setTitle(title);
   }
 
-  public openSupport() {
+  public openSupport(): void {
     this.electronService.shell.openExternal('https://github.com/stratisproject/StratisCore/');
   }
 }

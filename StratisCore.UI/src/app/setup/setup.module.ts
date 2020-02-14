@@ -7,12 +7,14 @@ import { RecoverComponent } from './recover/recover.component';
 import { ShowMnemonicComponent } from './create/show-mnemonic/show-mnemonic.component';
 import { ConfirmMnemonicComponent } from './create/confirm-mnemonic/confirm-mnemonic.component';
 import { BsDatepickerModule } from 'ngx-bootstrap';
+import { SnackbarModule } from 'ngx-snackbar';
 
 @NgModule({
   imports: [
     SetupRoutingModule,
     SharedModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    SnackbarModule
   ],
   declarations: [
     CreateComponent,

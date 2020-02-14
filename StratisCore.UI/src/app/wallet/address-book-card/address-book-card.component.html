@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card contact-card mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-3">
+              <ngx-qrcode [qrc-value]="getQrCodeAddress(address.address)" qrc-class="aclass"
+                          qrc-errorCorrectionLevel="L"></ngx-qrcode>
+            </div>
+            <div class="col-9 mt-2">
+              <h3 class="mt-1 ml-3"> {{address.label}}</h3>
+              <h4 class="mt-1 ml-3"> {{address.address}}</h4>
+              <p class="lead ml-3">{{address.description}}</p>
+              <div class="float-left ml-3">
+              </div>
+            </div>
+            <ng-container *ngIf="showButtons">
+              <div class="col-12 text-center">
+                <div
+                  class="btn-group btn-group-toggle right"
+                  data-toggle="buttons">
+                  <label
+                    (click)="copyToClipboardClicked(address)"
+                    class="btn btn-outline-primary contact-button">
+                    <input
+                      type="radio"
+                      name="options"
+                      autocomplete="off">
+                    Copy Address
+                  </label>
+                  <label
+                    (click)="sendClicked.emit(address)"
+                    class="btn btn-outline-primary contact-button">
+                    <input
+                      type="radio"
+                      name="options"
+                      autocomplete="off">
+                    Send
+                  </label>
+                  <label
+                    (click)="removeClicked.emit(address)"
+                    class="btn btn-outline-primary contact-button">
+                    <input
+                      type="radio"
+                      name="options"
+                      autocomplete="off">
+                    Remove
+                  </label>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

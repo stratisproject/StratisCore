@@ -6,7 +6,7 @@ export class LocalCallRequest {
     gasPrice = 100;
     gasLimit = 100000;
     parameters: string[] = [];
-    constructor(tokenAddress: string, senderAddress: string, methodName: string, amount: number = 0, parameters: string[] = []) {
+    constructor(tokenAddress: string, senderAddress: string, methodName: string, amount = 0, parameters: string[] = []) {
         this.contractAddress = tokenAddress;
         this.sender = senderAddress;
         this.methodName = methodName;

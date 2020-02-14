@@ -1,41 +1,58 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormHelper } from '@shared/forms/form-helper';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { ApiService } from '@shared/services/api.service';
+import { GlobalService } from '@shared/services/global.service';
+import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
+import { NumberToStringPipe } from '@shared/pipes/number-to-string.pipe';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { Transaction } from '@shared/models/transaction';
 import { TransactionResponse } from '@shared/models/transaction-response';
 import { WalletInfoRequest } from '@shared/models/wallet-info';
-import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
-import { NumberToStringPipe } from '@shared/pipes/number-to-string.pipe';
-import { ApiService } from '@shared/services/api.service';
-import { CurrentAccountService } from '@shared/services/current-account.service';
-import { GlobalService } from '@shared/services/global.service';
-import { ModalService } from '@shared/services/modal.service';
-import { WalletService } from '@shared/services/wallet.service';
-import { Subscription } from 'rxjs';
+import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
 
 import { SendComponentFormResources } from './send-component-form-resources';
-import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
+import { FormHelper } from '@shared/forms/form-helper';
+import { TransactionResponse } from '@shared/models/transaction-response';
+import { CurrentAccountService } from '@shared/services/current-account.service';
+import { ActivatedRoute } from '@angular/router';
+import { Animations } from '@shared/animations/animations';
+import { AddressBookService } from '@shared/services/address-book-service';
+import { AddressLabel } from '@shared/models/address-label';
+import { Network } from '@shared/models/network';
+import { TaskBarService } from '@shared/services/task-bar-service';
+
+
+export interface FeeStatus {
+  estimating: boolean;
+}
 
 @Component({
   selector: 'send-component',
   templateUrl: './send.component.html',
-  styleUrls: ['./send.component.css'],
+  styleUrls: ['./send.component.scss'],
+  animations: Animations.fadeIn
 })
-
 export class SendComponent implements OnInit, OnDestroy {
   private accountsEnabled: boolean;
+  public status: BehaviorSubject<FeeStatus> = new BehaviorSubject<FeeStatus>({estimating: false});
+  public sideChain: boolean;
+  private last: FeeEstimation = null;
+  public contact: AddressLabel;
+  public testnetEnabled: boolean;
+  public networks: Network[];
 
   constructor(
+    private addressBookService: AddressBookService,
+    private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private walletService: WalletService,
     private globalService: GlobalService,
     private modalService: NgbModal,
-    private genericModalService: ModalService,
+    private taskBarService: TaskBarService,
     private currentAccountService: CurrentAccountService,
-    public activeModal: NgbActiveModal,
     private fb: FormBuilder) {
 
     this.sendForm = SendComponentFormResources.buildSendForm(fb,
@@ -44,12 +61,11 @@ export class SendComponent implements OnInit, OnDestroy {
     this.crossChainSendForm = SendComponentFormResources.buildCrossChainSendForm(fb,
       () => (this.spendableBalance - this.estimatedSidechainFee) / 100000000);
 
-    this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendValueChanged(data, false)));
+    this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(500))
+      .subscribe(data => this.validateForm(data, false)));
 
-    this.subscriptions.push(this.crossChainSendForm.valueChanges.pipe(debounceTime(300))
-      .subscribe(data => this.onSendValueChanged(data, true)));
-
+    this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(500))
+      .subscribe(data => this.validateForm(data, true)));
   }
 
   @Input() address: string;
@@ -66,6 +82,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public apiError: string;
   public firstTitle: string;
   public secondTitle: string;
+  public sendingTo: string;
 
   // The opReturnAmount is for compatibility with StratisX, opReturnAmount needs to be greater than 0 to pass the MemPool
   // Validation rules.
@@ -75,9 +92,30 @@ export class SendComponent implements OnInit, OnDestroy {
   private sendFormErrors: any = {};
   private crossChainSendFormErrors: any = {};
 
-  public ngOnInit() {
+  public ngOnInit(): void {
+
+    if (this.activatedRoute.snapshot.params['address']) {
+      this.address = this.activatedRoute.snapshot.params['address'];
+      this.getAddressBookContact();
+    }
+
+    this.testnetEnabled = this.globalService.getTestnetEnabled();
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
+    if (this.sidechainEnabled) {
+      if (this.testnetEnabled) {
+        this.networks = SendComponentFormResources.cirrusTestNetworks;
+      } else {
+        this.networks = SendComponentFormResources.cirrusNetworks;
+      }
+    } else {
+      if (this.testnetEnabled) {
+        this.networks = SendComponentFormResources.stratisTestNetworks;
+      } else {
+        this.networks = SendComponentFormResources.stratisNetworks;
+      }
+    }
 
     if (this.sidechainEnabled) {
       this.firstTitle = 'Sidechain';
@@ -86,6 +124,8 @@ export class SendComponent implements OnInit, OnDestroy {
       this.firstTitle = 'Mainchain';
       this.secondTitle = 'Sidechain';
     }
+
+
     this.getWalletBalance();
     this.coinUnit = this.globalService.getCoinUnit();
     if (this.address) {
@@ -97,33 +137,41 @@ export class SendComponent implements OnInit, OnDestroy {
       : 'Please note that sending from the mainchain to a sidechain requires 500 confirmations.';
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  private onSendValueChanged(data: any, crossChainTransfer: boolean): void {
-    const form = crossChainTransfer ? this.crossChainSendForm : this.sendForm;
+  private validateForm(data: any, isSideChain: boolean): void {
+    const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
     if (!form) {
       return;
     }
 
     FormHelper.ValidateForm(form,
-      crossChainTransfer
+      isSideChain
         ? this.crossChainSendFormErrors
         : this.sendFormErrors,
-      crossChainTransfer
-        ? SendComponentFormResources.crossChainSendValidationMessages
+      isSideChain
+        ? SendComponentFormResources.sendToSidechainValidationMessages
         : SendComponentFormResources.sendValidationMessages
     );
 
+    if (isSideChain) {
+      if (form.get('networkSelect').value && form.get('networkSelect').value !== 'customNetwork') {
+        form.patchValue({'federationAddress': form.get('networkSelect').value})
+      } else if (form.get('networkSelect').value && form.get('networkSelect').value === 'customNetwork') {
+        form.patchValue({'federationAddress': ''})
+      }
+    }
+
     this.apiError = '';
 
-    const isValidForFeeEstimate = (crossChainTransfer
-      ? form.get('destinationAddress').valid && form.get('federationAddress').valid
-      : form.get('address').valid) && form.get('amount').valid;
+    const isValidForFeeEstimate = (isSideChain
+      ? form.get('amount').valid && form.get('destinationAddress').valid && form.get('federationAddress').valid
+      : form.get('address').valid && form.get('amount').valid);
 
     if (isValidForFeeEstimate) {
-      this.estimateFee(form, crossChainTransfer);
+      this.estimateFee(form, isSideChain);
     }
   }
 
@@ -156,18 +204,28 @@ export class SendComponent implements OnInit, OnDestroy {
       true
     );
 
-    this.walletService.estimateFee(transaction).toPromise()
-      .then(response => {
-          if (crossChainTransfer) {
-            this.estimatedSidechainFee = response;
-          } else {
-            this.estimatedFee = response;
+    if (!transaction.equals(this.last)) {
+      this.last = transaction;
+      const progressDelay = setTimeout(() =>
+        this.status.next({estimating: true}), 100);
+
+      this.walletService.estimateFee(transaction).toPromise()
+        .then(response => {
+            if (isSideChain) {
+              this.estimatedSidechainFee = response;
+            } else {
+              this.estimatedFee = response;
+            }
+            clearTimeout(progressDelay);
+            this.status.next({estimating: false});
+          },
+          error => {
+            clearTimeout(progressDelay);
+            this.status.next({estimating: false});
+            this.apiError = error.error.errors[0].message;
           }
-        },
-        error => {
-          this.apiError = error.error.errors[0].message;
-        }
-      );
+        );
+    }
   }
 
   public send(crossChainTransfer?: boolean): void {
@@ -175,7 +233,10 @@ export class SendComponent implements OnInit, OnDestroy {
     this.walletService.sendTransaction(this.getTransaction(crossChainTransfer))
       .then(transactionResponse => {
         this.estimatedFee = transactionResponse.transactionFee;
-        this.activeModal.close('Close clicked');
+        this.sendToSidechainForm.reset();
+        this.sendForm.reset();
+        this.estimatedSidechainFee = 0;
+        this.estimatedFee = 0;
         this.openConfirmationModal(transactionResponse);
         this.isSending = false;
       }).catch(error => {
@@ -202,7 +263,11 @@ export class SendComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getWalletBalance() {
+  private getAddressBookContact(): void {
+    this.contact = this.addressBookService.findContactByAddress(this.address);
+  }
+
+  private getWalletBalance(): void {
     this.subscriptions.push(this.walletService.wallet()
       .subscribe(
         response => {
@@ -212,15 +277,20 @@ export class SendComponent implements OnInit, OnDestroy {
       ));
   }
 
-  private openConfirmationModal(transactionResponse: TransactionResponse) {
-    const component = this.modalService
-      .open(SendConfirmationComponent, {backdrop: 'static'})
-      .componentInstance as SendConfirmationComponent;
+  private openConfirmationModal(transactionResponse: TransactionResponse): void {
+    this.taskBarService.open(SendConfirmationComponent, {
+      transaction: transactionResponse.transaction,
+      transactionFee: this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee,
+      sidechainEnabled: this.sidechainEnabled,
+      opReturnAmount: this.opReturnAmount,
+      hasOpReturn: transactionResponse.isSideChain
+    }, {taskBarWidth: '550px'}).then(ref => {
+      ref.closeWhen(ref.instance.closeClicked);
+    });
+  }
 
-    component.transaction = transactionResponse.transaction;
-    component.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
-    component.sidechainEnabled = this.sidechainEnabled;
-    component.opReturnAmount = this.opReturnAmount;
-    component.hasOpReturn = transactionResponse.isSideChain;
+  public clearContact(): void {
+    this.contact = null;
+    this.sendForm.controls.address.setValue('');
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
@@ -9,7 +9,7 @@ import { WalletInfo } from '@shared/models/wallet-info';
 @Component({
   selector: 'app-generate-addresses',
   templateUrl: './generate-addresses.component.html',
-  styleUrls: ['./generate-addresses.component.css']
+  styleUrls: ['./generate-addresses.component.scss']
 })
 export class GenerateAddressesComponent implements OnInit {
   constructor(private apiService: ApiService, private globalService: GlobalService, private genericModalService: ModalService, private fb: FormBuilder) {
@@ -33,21 +33,21 @@ export class GenerateAddressesComponent implements OnInit {
     }
   };
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  private buildGenerateAddressesForm() {
+  private buildGenerateAddressesForm(): void {
     this.generateAddressesForm = this.fb.group({
       'generateAddresses': ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(1), Validators.max(1000)])]
     });
 
     this.generateAddressesForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      .subscribe(() => this.onValueChanged());
 
     this.onValueChanged();
   }
 
-  onValueChanged(data?: any) {
+  onValueChanged(): void {
     if (!this.generateAddressesForm) { return; }
     const form = this.generateAddressesForm;
     for (const field in this.formErrors) {
@@ -62,7 +62,7 @@ export class GenerateAddressesComponent implements OnInit {
     }
   }
 
-  public onGenerateClicked() {
+  public onGenerateClicked(): void {
     const walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.apiService.getUnusedReceiveAddresses(walletInfo, this.generateAddressesForm.get('generateAddresses').value)
       .subscribe(
@@ -72,7 +72,7 @@ export class GenerateAddressesComponent implements OnInit {
       );
   }
 
-  public onBackClicked() {
+  public onBackClicked(): void {
     this.addresses = [''];
   }
 }
