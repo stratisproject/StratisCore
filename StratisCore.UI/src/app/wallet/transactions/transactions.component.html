@@ -1,45 +1,43 @@
-<div *ngIf="(transactions | async) let _transactions;"
-     infiniteScroll
-     [infiniteScrollDistance]="4"
-     [scrollWindow]="true"
-     (scrolled)="onScroll()">
-  <table class="table">
-    <tbody>
-    <ng-container *ngFor="let _transaction of _transactions; index as i;">
-      <tr>
-        <th class="text-center">
-            <span class="bubble"
-                  [ngClass]="{
-            'bg-warning' : !_transaction.transactionConfirmedInBlock,
-            'bg-success' : _transaction.transactionConfirmedInBlock
-            }"></span></th>
+<div *ngIf="(transactions | async) let _transactions;">
+  <cdk-virtual-scroll-viewport itemSize="60" class="min-vh-100">
+    <table class="table">
+      <tbody>
+      <ng-container *cdkVirtualFor="let _transaction of _transactions; index as i;">
+        <tr>
+          <th class="text-center">
+              <span class="bubble"
+                    [ngClass]="{
+              'bg-warning' : !_transaction.transactionConfirmedInBlock,
+              'bg-success' : _transaction.transactionConfirmedInBlock
+              }"></span></th>
 
-        <td class="text-uppercase text-left">{{ _transaction.transactionType }}</td>
-        <td>
-          <span *ngIf="_transaction.contact">
-            {{_transaction.contact.label}}
-          </span>
-        </td>
-        <td class="text-left">{{_transaction.transactionType == 'sent' ? '- ' : '+ '}}
-          <strong> {{ _transaction.transactionAmount + _transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
-        </td>
-        <td class="text-left">{{ _transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-        <td class="text-center"><span (click)="toggleExpandItem(i)"
-                                      class="lnr-transaction lnr-menu-circle"></span>
-        </td>
-      </tr>
-      <tr style="border-top: none">
-        <td colspan="5">
-          <div [@collapseExpand]="state[i] || 'collapsed'">
-            <ng-container *ngIf="state[i]">
-              <transaction-details [transaction]="_transaction"></transaction-details>
-            </ng-container>
-          </div>
-        </td>
-      </tr>
-    </ng-container>
-    </tbody>
-  </table>
+          <td class="text-uppercase text-left">{{ _transaction.transactionType }}</td>
+          <td>
+            <span *ngIf="_transaction.contact">
+              {{_transaction.contact.label}}
+            </span>
+          </td>
+          <td class="text-left">{{_transaction.transactionType == 'sent' ? '- ' : '+ '}}
+            <strong> {{ _transaction.transactionAmount + _transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
+          </td>
+          <td class="text-left">{{ _transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
+          <td class="text-center"><span (click)="toggleExpandItem(i)"
+                                        class="lnr-transaction lnr-menu-circle"></span>
+          </td>
+        </tr>
+        <tr style="border-top: none">
+          <td colspan="5">
+            <div [@collapseExpand]="state[i] || 'collapsed'">
+              <ng-container *ngIf="state[i]">
+                <transaction-details [transaction]="_transaction"></transaction-details>
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+  </cdk-virtual-scroll-viewport>
   <div *ngIf="loading && _transactions.length === 0" class="page-load">
   </div>
 

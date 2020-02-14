@@ -1,11 +1,5 @@
-<div *ngIf="(blockExplorerService.blocks | async) let _blocks;"
-     infiniteScroll
-     [infiniteScrollDistance]="4"
-     [scrollWindow]="true"
-     (scrolled)="onScroll()">
-
+<div *ngIf="(blockExplorerService.blocks | async) let _blocks;">
   <div>
-
     <label >
       Search
       <input type="text" placeholder="Enter Transaction Id or Hash">
@@ -25,7 +19,6 @@
     </tr>
     </tbody>
   </table>
-
   <div *ngIf="loading && _blocks.length === 0" class="page-load">
   </div>
 </div>
