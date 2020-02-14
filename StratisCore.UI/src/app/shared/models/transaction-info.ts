@@ -21,27 +21,37 @@ export class TransactionInfo {
     public contact?: AddressLabel) {
   }
 
+  public get id(): string {
+    return this.transactionId;
+  }
+
+  public get timestamp(): number {
+    return this.transactionTimestamp;
+  }
+
   public static mapFromTransactionsHistoryItems(
     transactions: TransactionsHistoryItem[],
     maxTransactionCount?: number,
     addressBookService?: AddressBookService): TransactionInfo[] {
 
+    const toMap = maxTransactionCount ? transactions.slice(0, maxTransactionCount) : transactions;
+    return toMap.map(transaction => {
+        return this.mapFromTransactionsHistoryItem(transaction, addressBookService)
+      }
+    );
+  }
 
-    const mapped = transactions.map(transaction => {
-      const contact = addressBookService ? transaction.payments
-        .map(payment => addressBookService.findContactByAddress(payment.destinationAddress)).find(p => p != null) : null;
+  public static mapFromTransactionsHistoryItem(transaction: TransactionsHistoryItem, addressBookService?: AddressBookService): TransactionInfo {
+    const contact = addressBookService ? transaction.payments
+      .map(payment => addressBookService.findContactByAddress(payment.destinationAddress)).find(p => p != null) : null;
 
-      return new TransactionInfo(
-        transaction.type === 'send' ? 'sent' : transaction.type,
-        transaction.id,
-        transaction.amount,
-        transaction.fee || 0,
-        transaction.txOutputIndex,
-        transaction.confirmedInBlock,
-        transaction.timestamp, transaction.payments, transaction.toAddress, contact);
-    });
-
-    return maxTransactionCount ? mapped.slice(0, maxTransactionCount) : mapped;
-
+    return new TransactionInfo(
+      transaction.type === 'send' ? 'sent' : transaction.type,
+      transaction.id,
+      transaction.amount,
+      transaction.fee || 0,
+      transaction.txOutputIndex,
+      transaction.confirmedInBlock,
+      transaction.timestamp, transaction.payments, transaction.toAddress, contact);
   }
 }
