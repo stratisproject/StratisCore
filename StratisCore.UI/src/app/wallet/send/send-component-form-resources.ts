@@ -59,7 +59,7 @@ export class SendComponentFormResources {
     });
   }
 
-  public static buildCrossChainSendForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
+  public static buildSendToSidechainForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
     return fb.group({
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       networkSelect: ['', Validators.compose([Validators.required, Validators.minLength(26)])],

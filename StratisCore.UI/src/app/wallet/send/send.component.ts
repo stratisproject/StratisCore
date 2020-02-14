@@ -7,12 +7,11 @@ import { NumberToStringPipe } from '@shared/pipes/number-to-string.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FeeEstimation } from '@shared/models/fee-estimation';
 import { Transaction } from '@shared/models/transaction';
-import { TransactionResponse } from '@shared/models/transaction-response';
 import { WalletInfoRequest } from '@shared/models/wallet-info';
 import { SendConfirmationComponent } from './send-confirmation/send-confirmation.component';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
-
+import { WalletService } from '@shared/services/wallet.service';
 import { SendComponentFormResources } from './send-component-form-resources';
 import { FormHelper } from '@shared/forms/form-helper';
 import { TransactionResponse } from '@shared/models/transaction-response';
@@ -58,7 +57,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.sendForm = SendComponentFormResources.buildSendForm(fb,
       () => (this.spendableBalance - this.estimatedFee) / 100000000);
 
-    this.crossChainSendForm = SendComponentFormResources.buildCrossChainSendForm(fb,
+    this.sendToSidechainForm = SendComponentFormResources.buildSendToSidechainForm(fb,
       () => (this.spendableBalance - this.estimatedSidechainFee) / 100000000);
 
     this.subscriptions.push(this.sendForm.valueChanges.pipe(debounceTime(500))
@@ -71,7 +70,7 @@ export class SendComponent implements OnInit, OnDestroy {
   @Input() address: string;
 
   public sendForm: FormGroup;
-  public crossChainSendForm: FormGroup;
+  public sendToSidechainForm: FormGroup;
   public sidechainEnabled: boolean;
   public coinUnit: string;
   public isSending = false;
@@ -90,7 +89,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public confirmationText: string;
   private subscriptions: Subscription[] = [];
   private sendFormErrors: any = {};
-  private crossChainSendFormErrors: any = {};
+  private sendToSidechainFormErrors: any = {};
 
   public ngOnInit(): void {
 
@@ -149,7 +148,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
     FormHelper.ValidateForm(form,
       isSideChain
-        ? this.crossChainSendFormErrors
+        ? this.sendToSidechainFormErrors
         : this.sendFormErrors,
       isSideChain
         ? SendComponentFormResources.sendToSidechainValidationMessages
@@ -194,11 +193,11 @@ export class SendComponent implements OnInit, OnDestroy {
       )).toPromise();
   }
 
-  public estimateFee(form: FormGroup, crossChainTransfer: boolean): void {
+  public estimateFee(form: FormGroup, isSideChain: boolean): void {
     const transaction = new FeeEstimation(
       this.globalService.getWalletName(),
       'account 0',
-      form.get(crossChainTransfer ? 'federationAddress' : 'address').value.trim(),
+      form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
       form.get('amount').value,
       form.get('fee').value,
       true
@@ -228,9 +227,9 @@ export class SendComponent implements OnInit, OnDestroy {
     }
   }
 
-  public send(crossChainTransfer?: boolean): void {
+  public send(sendToSideChain?: boolean): void {
     this.isSending = true;
-    this.walletService.sendTransaction(this.getTransaction(crossChainTransfer))
+    this.walletService.sendTransaction(this.getTransaction(sendToSideChain))
       .then(transactionResponse => {
         this.estimatedFee = transactionResponse.transactionFee;
         this.sendToSidechainForm.reset();
@@ -245,21 +244,21 @@ export class SendComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getTransaction(crossChainTransfer?: boolean): Transaction {
-    const form = crossChainTransfer ? this.crossChainSendForm : this.sendForm;
+  private getTransaction(isSideChain?: boolean): Transaction {
+    const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
 
     return new Transaction(
       this.globalService.getWalletName(),
       'account 0',
       form.get('password').value,
-      form.get(crossChainTransfer ? 'federationAddress' : 'address').value.trim(),
+      form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
       form.get('amount').value,
       // TO DO: use coin notation
-      (crossChainTransfer ? this.estimatedSidechainFee : this.estimatedFee) / 100000000,
+      (isSideChain ? this.estimatedSidechainFee : this.estimatedFee) / 100000000,
       true,
       !this.accountsEnabled, // Shuffle Outputs
-      crossChainTransfer ? this.crossChainSendForm.get('destinationAddress').value.trim() : null,
-      crossChainTransfer ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null
+      isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
+      isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null
     );
   }
 

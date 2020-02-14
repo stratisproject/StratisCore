@@ -15,12 +15,13 @@ import {
 } from '@shared/services/interfaces/signalr-events.i';
 import { catchError, map, flatMap, tap } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { FeeEstimation } from '@shared/models/fee-estimation';
+import { RestApi } from '@shared/services/rest-api';
+import { GlobalService } from '@shared/services/global.service';
+import { ErrorService } from '@shared/services/error-service';
 import { Transaction } from '@shared/models/transaction';
-import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
 import { TransactionSending } from '@shared/models/transaction-sending';
-import { WalletInfo } from '@shared/models/wallet-info';
+import { BuildTransactionResponse, TransactionResponse } from '@shared/models/transaction-response';
+import { FeeEstimation } from '@shared/models/fee-estimation';
 import { CurrentAccountService } from '@shared/services/current-account.service';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { WalletResync } from '@shared/models/wallet-rescan';
