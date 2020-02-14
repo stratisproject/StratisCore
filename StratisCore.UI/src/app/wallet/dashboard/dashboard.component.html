@@ -1,4 +1,4 @@
-<section id="GUI" class="light" @fadeIn><!-- CONTAINER -->
+<div id="GUI" class="light" @fadeIn>
   <div class="jumbotron" id="account-header">
     <div class="text-left" *ngIf="(wallet| async) as _wallet">
       <h3>Balance</h3>
@@ -17,18 +17,18 @@
       Latest Transactions
     </h4>
   </div>
-  <div style="padding-top: 150px;">
-    <section id="content" class="col-12 mx-auto">
-      <div class="card">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-12">
-              <app-transactions>
-              </app-transactions>
-            </div>
+<div>
+<div style="padding-top: 150px;" class="min-vh-100">
+  <div id="content">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <app-transactions>
+            </app-transactions>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </div>
-</section>
+</div>
