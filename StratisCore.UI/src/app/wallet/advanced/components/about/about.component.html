@@ -45,8 +45,8 @@
           </span>
       <ng-template #directoryLink>
         <a (click)="openWalletDirectory(node.dataDirectoryPath)" href="javascript:void(0)">
-          {{ node.dataDirectoryPath }}
-        </a>
+        {{ node.dataDirectoryPath }}
+        <i class="lnr lnr-enter"></i></a>
       </ng-template>
     </div>
     <app-ext-pubkey class="col-12 blockText"></app-ext-pubkey>
