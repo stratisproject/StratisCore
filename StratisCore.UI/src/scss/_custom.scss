@@ -207,7 +207,6 @@ img {
   //CARD
   .card-staking {
     background: rgba(255, 255, 255, 0) !important;
-    border: 1px solid rgba(255, 255, 255, 0.5);
 
     .lead {
       font-size: 1.8rem;
@@ -300,6 +299,9 @@ img {
 
   ///// CARDS
   .card {
+
+    border: none;
+
     .card-header {
       text-transform: uppercase;
       font-size: $font-size-base;

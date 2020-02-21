@@ -65,6 +65,8 @@ export class SendComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(500))
       .subscribe(data => this.validateForm(data, true)));
+
+    this.subscriptions.push(this.sendToSidechainForm.get('networkSelect').valueChanges.subscribe(data => this.networkSelectChanged(data)));
   }
 
   @Input() address: string;
@@ -155,22 +157,22 @@ export class SendComponent implements OnInit, OnDestroy {
         : SendComponentFormResources.sendValidationMessages
     );
 
-    if (isSideChain) {
-      if (form.get('networkSelect').value && form.get('networkSelect').value !== 'customNetwork') {
-        form.patchValue({'federationAddress': form.get('networkSelect').value})
-      } else if (form.get('networkSelect').value && form.get('networkSelect').value === 'customNetwork') {
-        form.patchValue({'federationAddress': ''})
-      }
-    }
-
     this.apiError = '';
 
     const isValidForFeeEstimate = (isSideChain
-      ? form.get('amount').valid && form.get('destinationAddress').valid && form.get('federationAddress').valid
-      : form.get('address').valid && form.get('amount').valid);
+      ? form.get('amount').valid && form.get('destinationAddress').valid && form.get('federationAddress').valid && form.get('fee').valid
+      : form.get('address').valid && form.get('amount').valid && form.get('fee').valid);
 
     if (isValidForFeeEstimate) {
       this.estimateFee(form, isSideChain);
+    }
+  }
+
+  private networkSelectChanged(data: any): void {
+    if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value !== 'customNetwork') {
+      this.sendToSidechainForm.patchValue({'federationAddress': this.sendToSidechainForm.get('networkSelect').value})
+    } else if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value === 'customNetwork') {
+      this.sendToSidechainForm.patchValue({'federationAddress': ''})
     }
   }
 
@@ -231,11 +233,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.isSending = true;
     this.walletService.sendTransaction(this.getTransaction(sendToSideChain))
       .then(transactionResponse => {
-        this.estimatedFee = transactionResponse.transactionFee;
-        this.sendToSidechainForm.reset();
-        this.sendForm.reset();
-        this.estimatedSidechainFee = 0;
-        this.estimatedFee = 0;
+        this.resetSendForms();
         this.openConfirmationModal(transactionResponse);
         this.isSending = false;
       }).catch(error => {
@@ -260,6 +258,21 @@ export class SendComponent implements OnInit, OnDestroy {
       isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
       isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null
     );
+  }
+
+  public switchForms(isSideChain: boolean): void {
+    this.sideChain = isSideChain;
+    this.resetSendForms();
+  }
+
+  private resetSendForms(): void {
+    this.sendToSidechainForm.reset();
+    this.sendToSidechainForm.get('networkSelect').patchValue('');
+    this.sendToSidechainForm.get('fee').patchValue('medium');
+    this.sendForm.reset();
+    this.sendForm.get('fee').patchValue('medium');
+    this.estimatedSidechainFee = 0;
+    this.estimatedFee = 0;
   }
 
   private getAddressBookContact(): void {
