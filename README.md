@@ -57,7 +57,22 @@ This will compile the Angular code and spawn the Electron process.
 |`npm run package:windows`| On a Windows OS, builds your application and creates an app consumable in windows 32/64 bit systems |
 |`npm run package:mac`|  On a MAC OS, builds your application and generates a `.app` file of your application that can be run on Mac |
 
-**The application is optimised. Only the files of /dist folder are included in the executable. Distributable packages can be found in the StratisCore.UI/app-builds/ folder**
+**When packaging StratisCore, StratisBitcoinFullNode daemon needs to be independently run. Otherwise, you may publish the project to StratisCore.UI/daemon so that the StratisD daemon is self-contained in the package. This is done by running the `dotnet publish` command within StratisCore/StratisBitcoinFullNode/src/Stratis.StratisD:**
+
+```bash
+dotnet publish --runtime <RUNTIME_IDENTIFIER> --self-contained -output <OUTPUT_DIR>`
+```
+Example commands to package StratisCore for Linux environment:
+```bash
+cd /home/user/StratisCore/StratisBitcoinFullNode/src/Stratis.StratisD
+dotnet publish --runtime linux-x64 --self-contained -output /home/user//StratisCore/StratisCore.UI/daemon
+cd /home/user/StratisCore/StratisCore.UI
+npm run package:linux
+```
+
+*Refer to the RID Catalog for selecting the correct RUNTIME_IDENTIFIER for your target operating system: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
+
+**The application is optimised. Only the files of /dist and /daemon (daemon folder is present if StratisD is published) folders are included in the executable. Distributable packages can be found in the StratisCore.UI/app-builds/ folder**
 
 ## CI Build
 -----------
