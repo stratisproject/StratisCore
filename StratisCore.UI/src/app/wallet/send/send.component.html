@@ -241,14 +241,6 @@
                     </div> -->
                   </div>
                   <div class="form-group clearfix">
-                    <div>
-                      <div class="alert alert-warning py-1">An additional amount
-                        of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.
-                      </div>
-                      <div class="alert alert-warning py-1">{{ confirmationText }}</div>
-                    </div>
-                  </div>
-                  <div class="form-group clearfix">
                     <label for="walletPassword">Wallet Password</label>
                     <input type="password" class="form-control" [class.is-invalid]="sendToSidechainFormErrors.password"
                            formControlName="password" id="walletPassword"

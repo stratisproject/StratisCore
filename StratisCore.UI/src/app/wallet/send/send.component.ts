@@ -217,6 +217,7 @@ export class SendComponent implements OnInit, OnDestroy {
             } else {
               this.estimatedFee = response;
             }
+            this.last.response = response;
             clearTimeout(progressDelay);
             this.status.next({estimating: false});
           },
@@ -226,6 +227,13 @@ export class SendComponent implements OnInit, OnDestroy {
             this.apiError = error.error.errors[0].message;
           }
         );
+    } else if (transaction.equals(this.last) && !this.status.value.estimating) {
+      // Use the cached value
+      if (isSideChain) {
+        this.estimatedSidechainFee = this.last.response;
+      } else {
+        this.estimatedFee = this.last.response;
+      }
     }
   }
 
