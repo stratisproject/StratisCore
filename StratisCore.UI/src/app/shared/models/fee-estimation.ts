@@ -47,6 +47,7 @@ export class FeeEstimation {
   changeAddress: string;
   sender: string;
   shuffleOutputs: boolean;
+  response: number;
 
   public equals(feeEstimation: FeeEstimation): boolean {
     if (null == feeEstimation) {

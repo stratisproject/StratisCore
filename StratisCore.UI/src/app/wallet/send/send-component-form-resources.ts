@@ -62,7 +62,7 @@ export class SendComponentFormResources {
   public static buildSendToSidechainForm(fb: FormBuilder, balanceCalculator: () => number): FormGroup {
     return fb.group({
       federationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
-      networkSelect: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
+      networkSelect: ['', Validators.compose([Validators.required])],
       destinationAddress: ['', Validators.compose([Validators.required, Validators.minLength(26)])],
       amount: ['', Validators.compose([Validators.required,
         Validators.pattern(/^([0-9]+)?(\.[0-9]{0,8})?$/),
