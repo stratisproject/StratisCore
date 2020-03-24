@@ -5,8 +5,7 @@ import { GlobalService } from '@shared/services/global.service';
 import { ApiService } from '@shared/services/api.service';
 import { ModalService } from '@shared/services/modal.service';
 import { WalletLoad } from '@shared/models/wallet-load';
-import { ReplaySubject, Subscription } from 'rxjs';
-import { Disposable } from '../wallet/tokens/models/disposable';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +15,7 @@ import { Disposable } from '../wallet/tokens/models/disposable';
 
 export class LoginComponent implements OnInit, OnDestroy {
   private openWalletForm: FormGroup;
-  private wallets: [string];
+  private wallets: string[];
   private subscriptions: Subscription[] = [];
 
   private formErrors = {
@@ -83,13 +82,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     const subscription = this.apiService.getWalletFiles()
       .subscribe(
         response => {
-          this.wallets = response.walletsFiles;
+          this.wallets = response.walletNames;
           this.globalService.setWalletPath(response.walletsPath);
           if (this.wallets.length > 0) {
             this.hasWallet = true;
-            for (const wallet in this.wallets) {
-              this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
-            }
           } else {
             this.hasWallet = false;
           }
@@ -123,7 +119,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.apiService.loadStratisWallet(walletLoad)
       .subscribe(
         response => {
-          this.sidechainEnabled 
+          this.sidechainEnabled
             ? this.router.navigate(['address-selection'])
             : this.router.navigate(['wallet/dashboard']);
         },
