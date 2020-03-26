@@ -24,6 +24,7 @@ export class FeeEstimation {
     walletName: string,
     accountName: string,
     destinationAddress: string,
+    sideChainAddress: string,
     amount: string,
     feeType: string,
     allowUnconfirmed: boolean,
@@ -32,6 +33,7 @@ export class FeeEstimation {
   ) {
     this.walletName = walletName;
     this.accountName = accountName;
+    this.sideChainAddress = sideChainAddress;
     this.recipients = [new Recipient(destinationAddress, amount)];
     this.feeType = feeType;
     this.allowUnconfirmed = allowUnconfirmed;
@@ -39,6 +41,7 @@ export class FeeEstimation {
     this.changeAddress = changeAddress;
   }
 
+  sideChainAddress: string;
   walletName: string;
   accountName: string;
   recipients: Recipient[];
@@ -48,6 +51,7 @@ export class FeeEstimation {
   sender: string;
   shuffleOutputs: boolean;
   response: number;
+  error: string;
 
   public equals(feeEstimation: FeeEstimation): boolean {
     if (null == feeEstimation) {
@@ -56,7 +60,8 @@ export class FeeEstimation {
     if (this === feeEstimation) {
       return true;
     }
-    return this.changeAddress === feeEstimation.changeAddress
+    return this.changeAddress === feeEstimation.changeAddress &&
+      this.sideChainAddress === feeEstimation.sideChainAddress
       && this.allowUnconfirmed === feeEstimation.allowUnconfirmed
       && this.feeType === feeEstimation.feeType
       && this.accountName === feeEstimation.accountName
