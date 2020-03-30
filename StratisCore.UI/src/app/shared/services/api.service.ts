@@ -65,7 +65,7 @@ export class ApiService extends RestApi implements IApiService {
    * Gets available wallets at the default path
    */
   public getWalletFiles(): Observable<WalletFileData> {
-    return this.get<WalletFileData>('wallet/files').pipe(
+    return this.get<WalletFileData>('wallet/list-wallets').pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
