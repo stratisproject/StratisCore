@@ -1,6 +1,6 @@
 {
   "appId": "com.stratisplatform.cirrus",
-  "productName": "Cirrus Core (Hackathon Edition)",
+  "productName": "Cirrus Core (Developer Edition)",
   "publish": null,
   "directories": {
     "output": "app-builds"
