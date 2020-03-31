@@ -5,11 +5,6 @@ import { WalletInfo } from '@shared/models/wallet-info';
 import { WalletCreation } from '@shared/models/wallet-creation';
 import { WalletRecovery } from '@shared/models/wallet-recovery';
 import { WalletLoad } from '@shared/models/wallet-load';
-import { FeeEstimation } from '@shared/models/fee-estimation';
-import { SidechainFeeEstimation } from '@shared/models/sidechain-fee-estimation';
-import { Transaction } from '@shared/models/transaction';
-import { TransactionSending } from '@shared/models/transaction-sending';
-import { WalletRescan } from '@shared/models/wallet-rescan';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from '../../../wallet/tokens/models/token-balance-request';
 
@@ -28,11 +23,6 @@ export interface IApiService {
   addAddressBookAddress(data: AddressLabel): Observable<any>;
 
   removeAddressBookAddress(label: string): Observable<any>;
-
-  /**
-   * Gets available wallets at the default path
-   */
-  getWalletFiles(): Observable<any>;
 
   /** Gets the extended public key from a certain wallet */
   getExtPubkey(data: WalletInfo): Observable<any>;
@@ -79,9 +69,6 @@ export interface IApiService {
 
   /** Remove transaction */
   removeTransaction(walletName: string): Observable<any>;
-
-  /** Rescan wallet from a certain date using remove-transactions */
-  rescanWallet(data: WalletRescan): Observable<any>;
 
   /**
    * Send shutdown signal to the daemon

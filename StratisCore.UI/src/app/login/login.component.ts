@@ -6,6 +6,7 @@ import { ApiService } from '@shared/services/api.service';
 import { ModalService } from '@shared/services/modal.service';
 import { WalletLoad } from '@shared/models/wallet-load';
 import { Subscription } from 'rxjs';
+import { WalletService } from '@shared/services/wallet.service';
 
 @Component({
   selector: 'app-login',
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private globalService: GlobalService,
     private apiService: ApiService,
+    private walletService: WalletService,
     private genericModalService: ModalService,
     private router: Router,
     private fb: FormBuilder) {
@@ -79,11 +81,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private getWalletFiles(): void {
-    const subscription = this.apiService.getWalletFiles()
+    const subscription = this.walletService.getWalletNames()
       .subscribe(
         response => {
-          this.wallets = response.walletNames;
-          this.globalService.setWalletPath(response.walletsPath);
+          this.wallets = response.walletNames.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
           if (this.wallets.length > 0) {
             this.hasWallet = true;
           } else {
