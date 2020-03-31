@@ -47,27 +47,27 @@ if (testnet && !sidechain) {
   apiPortDefault = 37223;
 }
 
-let portDefault = 16179
+const portDefault = 16179;
 // Sets default arguments
 const coreargs = require('minimist')(args, {
   default: {
     daemonip: 'localhost',
     apiport: apiPortDefault,
-	port: portDefault,
-	signalrport: 38823,
-	rpcServer: 1,
-	rpcallowip: '127.0.0.0/8',
-	rpcport: 16175,
-	rpcuser: 'stratis',
-	rpcpassword: 'stratis',
+    port: portDefault,
+    signalrport: 38823,
+    rpcServer: 1,
+    rpcallowip: '0.0.0.0/0',
+    rpcport: 16175,
+    rpcuser: 'stratis',
+    rpcpassword: 'stratis',
 
-	datadir: app.getPath('appData') + '\\Cirrus Hackathon',
-	bootstrap: 1,
-	txindex: 1,
-	defaultwalletname: 'Hackathon',
-	defaultwalletpassword: 'stratis',
-	unlockwallet: 1,
-	addnode: "auto"
+    datadir: app.getPath('appData') + '\\Cirrus Hackathon',
+    bootstrap: 1,
+    txindex: 1,
+    defaultwalletname: 'Hackathon',
+    defaultwalletpassword: 'stratis',
+    unlockwallet: 1,
+    addnode: 'auto'
   },
 });
 
@@ -77,47 +77,47 @@ let apiPort;
 daemonIP = coreargs.daemonip;
 apiPort = coreargs.apiport;
 
-let port
+let port;
 port = coreargs.port;
 
-let signalrport
+let signalrport;
 signalrport = coreargs.signalrport;
 
-let rpcServer
+let rpcServer;
 rpcServer = coreargs.rpcServer;
 
-let rpcallowip
+let rpcallowip;
 rpcallowip = coreargs.rpcallowip;
 
-let rpcport
+let rpcport;
 rpcport = coreargs.rpcport;
 
-let rpcuser
+let rpcuser;
 rpcuser = coreargs.rpcuser;
 
-let rpcpassword
+let rpcpassword;
 rpcpassword = coreargs.rpcpassword;
 
-let datadir
+let datadir;
 datadir = coreargs.datadir;
-let instance = 1
+let instance = 1;
 
-let bootstrap
+let bootstrap;
 bootstrap = coreargs.bootstrap;
 
-let txindex
+let txindex;
 txindex = coreargs.txindex;
 
-let defaultwalletname
+let defaultwalletname;
 defaultwalletname = coreargs.defaultwalletname;
 
-let defaultwalletpassword
+let defaultwalletpassword;
 defaultwalletpassword = coreargs.defaultwalletpassword;
 
-let unlockwallet
+let unlockwallet;
 unlockwallet = coreargs.unlockwallet;
 
-let addnode
+let addnode;
 addnode = coreargs.addnode;
 
 
@@ -273,45 +273,45 @@ function shutdownDaemon(daemonAddr, portNumber) {
 }
 
 function findPortAndStartDaemon() {
-  var net = require('net');
-	
-  var portInUse = function(port, callback) {
-    var server = net.createServer(function(socket) {
+  const net = require('net');
+
+  const portInUse = function (port, callback) {
+    const server = net.createServer(function (socket) {
       socket.write('Echo server\r\n');
-	  socket.pipe(socket);
+      socket.pipe(socket);
     });
 
     server.listen(port, '0.0.0.0');
     server.on('error', function (e) {
       callback(true);
     });
-	
+
     server.on('listening', function (e) {
-	  server.close();
-	  callback(false);
+      server.close();
+      callback(false);
     });
   };
 
-  let portFound = false
+  const portFound = false;
 
-  portInUse(port, function(returnValue) {
+  portInUse(port, function (returnValue) {
     if (returnValue) {
-        console.log("Port " + port + " is in use.");
-		apiPort = apiPort + 1;
-        port = port + 1;
-        signalrport = signalrport + 1;
-        rpcport = rpcport + 1;
-        instance = instance + 1;
-	
-		findPortAndStartDaemon();
+      console.log('Port ' + port + ' is in use.');
+      apiPort = apiPort + 1;
+      port = port + 1;
+      signalrport = signalrport + 1;
+      rpcport = rpcport + 1;
+      instance = instance + 1;
+
+      findPortAndStartDaemon();
     } else {
-		console.log("Port " + port + " is NOT in use.");
-		startDaemon();
-	}
+      console.log('Port ' + port + ' is NOT in use.');
+      startDaemon();
+    }
   });
 }
 
-function startDaemon() { 
+function startDaemon() {
   let daemonProcess;
   const spawnDaemon = require('child_process').spawn;
 
@@ -324,41 +324,39 @@ function startDaemon() {
     daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
   }
 
-  let spawnArgs = args.filter(arg => arg.startsWith('-'))
+  const spawnArgs = args.filter(arg => arg.startsWith('-'))
     .join('&').replace(/--/g, '-').split('&');
 
-  spawnArgs.push('-apiport=' + apiPort)
-  spawnArgs.push('-port=' + port)
-  spawnArgs.push('-signalrport=' + signalrport)
-  spawnArgs.push('-server=' + rpcServer)
-  spawnArgs.push('-rpcallowip=' + rpcallowip)
-  spawnArgs.push('-rpcport=' + rpcport)
-  spawnArgs.push('-rpcuser=' + rpcuser)
-  spawnArgs.push('-rpcpassword=' + rpcpassword)
-  spawnArgs.push('-datadir=' + datadir + '_' + instance)
-  spawnArgs.push('-txindex=' + txindex)
-  spawnArgs.push('-defaultwalletname=' + defaultwalletname + '_' + instance)
-  spawnArgs.push('-defaultwalletpassword=' + defaultwalletpassword)
-  spawnArgs.push('-unlockwallet=' + unlockwallet)
-  
+  spawnArgs.push('-apiport=' + apiPort);
+  spawnArgs.push('-port=' + port);
+  spawnArgs.push('-signalrport=' + signalrport);
+  spawnArgs.push('-server=' + rpcServer);
+  spawnArgs.push('-rpcallowip=' + rpcallowip);
+  spawnArgs.push('-rpcport=' + rpcport);
+  spawnArgs.push('-rpcuser=' + rpcuser);
+  spawnArgs.push('-rpcpassword=' + rpcpassword);
+  spawnArgs.push('-datadir=' + datadir + '_' + instance);
+  spawnArgs.push('-txindex=' + txindex);
+  spawnArgs.push('-defaultwalletname=' + defaultwalletname + '_' + instance);
+  spawnArgs.push('-defaultwalletpassword=' + defaultwalletpassword);
+  spawnArgs.push('-unlockwallet=' + unlockwallet);
+
   if (instance == 1) {
-	  spawnArgs.push('-bootstrap=' + bootstrap)
-	  spawnArgs.push('-defaultwalletmnemonic=basic exotic crack drink left judge tourist giggle muscle unique horn body')
-	  spawnArgs.push('-poaminingkey=basic exotic crack drink left judge tourist giggle muscle unique horn body')
+    spawnArgs.push('-bootstrap=' + bootstrap);
   } else if (addnode == 'auto') {
-	  var i
-	  for (i = 0; i < instance-1; i++) {
-	    spawnArgs.push('-addnode=127.0.0.1:' + (portDefault + i))
-	  }
+    let i;
+    for (i = 0; i < instance - 1; i++) {
+      spawnArgs.push('-addnode=127.0.0.1:' + (portDefault + i));
+    }
   }
-  
+
   console.log('Starting daemon ' + daemonPath);
   console.log(spawnArgs);
 
   daemonProcess = spawnDaemon(daemonPath, spawnArgs, {
     detached: true
   });
-  
+
   daemonProcess.stdout.on('data', (data) => {
     writeLog(`Stratis: ${data}`);
   });
