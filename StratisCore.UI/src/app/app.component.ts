@@ -18,7 +18,8 @@ import { NodeStatus } from '@shared/models/node-status';
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) { }
+  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) {
+  }
 
   private subscription: Subscription;
   private statusIntervalSubscription: Subscription;
@@ -62,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.apiConnected = true;
         this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
           .subscribe(
-            response =>  {
+            response => {
               const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
               if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
                 this.loading = false;
@@ -80,7 +81,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setTitle() {
-    const applicationName = this.sidechainEnabled ? 'Cirrus Core (Hackathon Edition)' : 'Stratis Core';
+    debugger;
+    const applicationName = GlobalService.applicationName;
     const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
     const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
 

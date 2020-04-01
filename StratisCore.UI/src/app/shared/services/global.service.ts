@@ -7,7 +7,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class GlobalService {
+  public static applicationName: string;
+
   constructor(private electronService: ElectronService) {
+    GlobalService.applicationName = require('electron').remote.getGlobal('applicationName');
     this.setApplicationVersion();
     this.setSidechainEnabled();
     this.setTestnetEnabled();

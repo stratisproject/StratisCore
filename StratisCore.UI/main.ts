@@ -7,8 +7,15 @@ if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
 }
 
+const range = (x, y) => Array.from((function* () {
+  while (x <= y) {
+    yield x++;
+  }
+})());
+
 // Set to true if you want to build Core for sidechains
 const buildForSidechain = true;
+const edge = false;
 const daemonName = buildForSidechain ? 'Stratis.CirrusD' : 'Stratis.StratisD';
 
 let serve;
@@ -33,7 +40,8 @@ if (buildForSidechain) {
   sidechain = true;
 }
 
-const applicationName = sidechain ? 'Cirrus Core (Hackathon Edition)' : 'Stratis Core';
+global.
+global[`applicationName`] = sidechain ? `Cirrus Core Hackathon ${edge ? '(Edge Edition)' : '(Standard Edition)'}` : 'Stratis Core';
 
 // Set default API port according to network
 let apiPortDefault;
@@ -72,54 +80,8 @@ const coreargs = require('minimist')(args, {
 });
 
 // Apply arguments to override default daemon IP and port
-let daemonIP;
-let apiPort;
-daemonIP = coreargs.daemonip;
-apiPort = coreargs.apiport;
-
-let port;
-port = coreargs.port;
-
-let signalrport;
-signalrport = coreargs.signalrport;
-
-let rpcServer;
-rpcServer = coreargs.rpcServer;
-
-let rpcallowip;
-rpcallowip = coreargs.rpcallowip;
-
-let rpcport;
-rpcport = coreargs.rpcport;
-
-let rpcuser;
-rpcuser = coreargs.rpcuser;
-
-let rpcpassword;
-rpcpassword = coreargs.rpcpassword;
-
-let datadir;
-datadir = coreargs.datadir;
-let instance = 1;
-
-let bootstrap;
-bootstrap = coreargs.bootstrap;
-
-let txindex;
-txindex = coreargs.txindex;
-
-let defaultwalletname;
-defaultwalletname = coreargs.defaultwalletname;
-
-let defaultwalletpassword;
-defaultwalletpassword = coreargs.defaultwalletpassword;
-
-let unlockwallet;
-unlockwallet = coreargs.unlockwallet;
-
-let addnode;
-addnode = coreargs.addnode;
-
+const daemonIP = coreargs.daemonip;
+let apiPort = coreargs.apiport;
 
 // Prevents daemon from starting if connecting to remote daemon.
 if (daemonIP !== 'localhost') {
@@ -158,7 +120,7 @@ function createWindow() {
     frame: true,
     minWidth: 1150,
     minHeight: 650,
-    title: applicationName,
+    title: global[`applicationName`],
     webPreferences: {
       nodeIntegration: true,
     },
@@ -244,6 +206,7 @@ app.on('activate', () => {
   }
 });
 
+
 function shutdownDaemon(daemonAddr, portNumber) {
   const http = require('http');
   const body = JSON.stringify({});
@@ -273,94 +236,52 @@ function shutdownDaemon(daemonAddr, portNumber) {
 }
 
 function findPortAndStartDaemon() {
-  const net = require('net');
+  const getPort = require('get-port');
+  const portRange = range(coreargs.apiport, coreargs.apiport + 10);
+  getPort({port: portRange, host: '127.0.0.1'}).then(port => {
+    const instance = (port - coreargs.apiport) + 1;
+    const apiport = port;
+    const signalrport = coreargs.signalrport + instance;
+    const rpcport = coreargs.rpcport + instance;
 
-  const portInUse = function (port, callback) {
-    const server = net.createServer(function (socket) {
-      socket.write('Echo server\r\n');
-      socket.pipe(socket);
-    });
+    console.log(`Found port ${apiport} starting instance ${instance}`);
 
-    server.listen(port, '0.0.0.0');
-    server.on('error', function (e) {
-      callback(true);
-    });
-
-    server.on('listening', function (e) {
-      server.close();
-      callback(false);
-    });
-  };
-
-  const portFound = false;
-
-  portInUse(port, function (returnValue) {
-    if (returnValue) {
-      console.log('Port ' + port + ' is in use.');
-      apiPort = apiPort + 1;
-      port = port + 1;
-      signalrport = signalrport + 1;
-      rpcport = rpcport + 1;
-      instance = instance + 1;
-
-      findPortAndStartDaemon();
-    } else {
-      console.log('Port ' + port + ' is NOT in use.');
-      startDaemon();
-    }
+    apiPort = apiport;
+    startDaemon(instance, rpcport, signalrport, apiport, edge);
   });
 }
 
-function startDaemon() {
-  let daemonProcess;
-  const spawnDaemon = require('child_process').spawn;
+function startDaemon(instance: number, rpcport: number, signalrport: number, apiport: number, isEdge: boolean) {
+  if (isEdge && instance > 1) {
+    console.log('Only single instance of Edge is allowed to run at once.');
+    return;
+  }
+  const networkCommandArgs = 'network create Stratis-Hackathon'.split(' ');
+  const commandArgs = `run --rm --network=Stratis-Hackathon --hostname Node_${instance} --name Node_${instance} -p 127.0.0.1:${rpcport}:16175 -p 127.0.0.1:${apiport}:37223 -p 127.0.0.1:${signalrport}:38823 -e Instance=${instance} stratisgroupltd/blockchaincovid19 ${isEdge ? '-edge' : ''}`.split(' ');
+  const childProcess = require('child_process');
 
-  let daemonPath;
-  if (os.platform() === 'win32') {
-    daemonPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\' + daemonName + '.exe');
-  } else if (os.platform() === 'linux') {
-    daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
-  } else {
-    daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
+  try {
+    const createNetworkProcess = childProcess.spawnSync('docker', networkCommandArgs, {
+      detached: true,
+    });
+  } catch (e) {
+    writeLog(e);
   }
 
-  const spawnArgs = args.filter(arg => arg.startsWith('-'))
-    .join('&').replace(/--/g, '-').split('&');
+  try {
+    console.log(commandArgs);
+    const daemonProcess = childProcess.spawn('docker', commandArgs, {
+      detached: true
+    });
 
-  spawnArgs.push('-apiport=' + apiPort);
-  spawnArgs.push('-port=' + port);
-  spawnArgs.push('-signalrport=' + signalrport);
-  spawnArgs.push('-server=' + rpcServer);
-  spawnArgs.push('-rpcallowip=' + rpcallowip);
-  spawnArgs.push('-rpcport=' + rpcport);
-  spawnArgs.push('-rpcuser=' + rpcuser);
-  spawnArgs.push('-rpcpassword=' + rpcpassword);
-  spawnArgs.push('-datadir=' + datadir + '_' + instance);
-  spawnArgs.push('-txindex=' + txindex);
-  spawnArgs.push('-defaultwalletname=' + defaultwalletname + '_' + instance);
-  spawnArgs.push('-defaultwalletpassword=' + defaultwalletpassword);
-  spawnArgs.push('-unlockwallet=' + unlockwallet);
-
-  if (instance == 1) {
-    spawnArgs.push('-bootstrap=' + bootstrap);
-  } else if (addnode == 'auto') {
-    let i;
-    for (i = 0; i < instance - 1; i++) {
-      spawnArgs.push('-addnode=127.0.0.1:' + (portDefault + i));
-    }
+    daemonProcess.stdout.on('data', (data) => {
+      writeLog(`Stratis: ${data}`);
+    });
+  } catch (e) {
+    writeLog(e);
   }
-
-  console.log('Starting daemon ' + daemonPath);
-  console.log(spawnArgs);
-
-  daemonProcess = spawnDaemon(daemonPath, spawnArgs, {
-    detached: true
-  });
-
-  daemonProcess.stdout.on('data', (data) => {
-    writeLog(`Stratis: ${data}`);
-  });
 }
+
 
 function createTray() {
   // Put the app in system tray
@@ -390,7 +311,7 @@ function createTray() {
       }
     }
   ]);
-  systemTray.setToolTip(applicationName);
+  systemTray.setToolTip(global[`applicationName`]);
   systemTray.setContextMenu(contextMenu);
   systemTray.on('click', function () {
     if (!mainWindow.isVisible()) {
@@ -439,3 +360,5 @@ function createMenu() {
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
+
+
