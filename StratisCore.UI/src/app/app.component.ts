@@ -54,7 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (e[0] === 'DockerError') {
         this.zone.run(() => {
           this.startupStatus = e.length === 3 ? e[2] : null;
-          this.loadingError = `Unable to start docker. Please make sure docker is installed on your system.\n${e[1]}`;
+          this.loadingError = `${JSON.stringify(e[1])}`;
           this.loading = false;
           this.loadingFailed = true;
         });
