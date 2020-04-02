@@ -20,9 +20,7 @@ export class DockerHelper {
 
   public runNodeInstance(instance: number, rpcport: number, signalrport: number, apiport: number, isEdge: boolean, outputFunc: (output) => void): Promise<any> {
     console.log('Starting SBFN Instance');
-
     const docker = new Docker();
-
     docker.createNetwork({
       'Name': 'Stratis-Hackathon',
       'Driver': 'bridge',

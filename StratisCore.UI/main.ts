@@ -172,7 +172,6 @@ app.on('ready', () => {
       findPortAndStartDaemon();
     }
   }
-  findPortAndStartDaemon();
   createTray();
   createWindow();
   if (os.platform() === 'darwin') {
