@@ -2,8 +2,8 @@ import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
-import { DockerHelper } from './src/docker-helper';
 import { StartupStatus } from './global-vars';
+import { DockerHelper } from './docker-helper';
 
 if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
