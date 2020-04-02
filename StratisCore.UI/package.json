@@ -68,7 +68,8 @@
     "minimist": "1.2.0",
     "ngx-pagination": "4.1.0",
     "ngx-qrcode2": "0.0.9",
-    "npx": "^10.2.2"
+    "npx": "^10.2.2",
+    "text-encoding": "^0.7.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.803.0",

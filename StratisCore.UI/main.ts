@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
+import { DockerHelper } from './src/docker-helper';
 
 if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
@@ -35,13 +36,12 @@ testnet = args.some(val => val === '--testnet' || val === '-testnet');
 sidechain = args.some(val => val === '--sidechain' || val === '-sidechain');
 nodaemon = args.some(val => val === '--nodaemon' || val === '-nodaemon');
 devtools = args.some(val => val === '--devtools' || val === '-devtools');
-
+devtools = true;
 if (buildForSidechain) {
   sidechain = true;
 }
 
-global.
-global[`applicationName`] = sidechain ? `Cirrus Core Hackathon ${edge ? '(Edge Edition)' : '(Standard Edition)'}` : 'Stratis Core';
+global.global[`applicationName`] = sidechain ? `Cirrus Core Hackathon ${edge ? '(Edge Edition)' : '(Standard Edition)'}` : 'Stratis Core';
 
 // Set default API port according to network
 let apiPortDefault;
@@ -85,7 +85,7 @@ let apiPort = coreargs.apiport;
 
 // Prevents daemon from starting if connecting to remote daemon.
 if (daemonIP !== 'localhost') {
-  nodaemon = true;
+  // nodaemon = true;
 }
 
 ipcMain.on('get-port', (event, arg) => {
@@ -104,6 +104,7 @@ ipcMain.on('get-daemonip', (event, arg) => {
   event.returnValue = daemonIP;
 });
 
+
 require('electron-context-menu')({
   showInspectElement: serve
 });
@@ -111,6 +112,7 @@ require('electron-context-menu')({
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
+console.log('Creating Window');
 
 function createWindow() {
   // Create the browser window.
@@ -159,6 +161,7 @@ function createWindow() {
   // Remove menu, new from Electron 5
   mainWindow.removeMenu();
 
+
 }
 
 // This method will be called when Electron has finished
@@ -168,10 +171,12 @@ app.on('ready', () => {
   if (serve) {
     console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.');
   } else {
-    if (!nodaemon) {
-      findPortAndStartDaemon();
-    }
+
+    // if (!nodaemon) {
+    //   findPortAndStartDaemon();
+    // }
   }
+  findPortAndStartDaemon();
   createTray();
   createWindow();
   if (os.platform() === 'darwin') {
@@ -239,10 +244,11 @@ function findPortAndStartDaemon() {
   const getPort = require('get-port');
   const portRange = range(coreargs.apiport, coreargs.apiport + 10);
   getPort({port: portRange, host: '127.0.0.1'}).then(port => {
-    const instance = (port - coreargs.apiport) + 1;
+    const portIncrement = (port - coreargs.apiport);
+    const instance = (portIncrement + 1);
     const apiport = port;
-    const signalrport = coreargs.signalrport + instance;
-    const rpcport = coreargs.rpcport + instance;
+    const signalrport = coreargs.signalrport + portIncrement;
+    const rpcport = coreargs.rpcport + portIncrement;
 
     console.log(`Found port ${apiport} starting instance ${instance}`);
 
@@ -256,30 +262,71 @@ function startDaemon(instance: number, rpcport: number, signalrport: number, api
     console.log('Only single instance of Edge is allowed to run at once.');
     return;
   }
-  const networkCommandArgs = 'network create Stratis-Hackathon'.split(' ');
-  const commandArgs = `run --rm --network=Stratis-Hackathon --hostname Node_${instance} --name Node_${instance} -p 127.0.0.1:${rpcport}:16175 -p 127.0.0.1:${apiport}:37223 -p 127.0.0.1:${signalrport}:38823 -e Instance=${instance} stratisgroupltd/blockchaincovid19 ${isEdge ? '-edge' : ''}`.split(' ');
-  const childProcess = require('child_process');
 
-  try {
-    const createNetworkProcess = childProcess.spawnSync('docker', networkCommandArgs, {
-      detached: true,
-    });
-  } catch (e) {
-    writeLog(e);
-  }
+  mainWindow.webContents.send('DockerInfo', 'Detecting Docker');
+  const dockerHelper = new DockerHelper();
 
-  try {
-    console.log(commandArgs);
-    const daemonProcess = childProcess.spawn('docker', commandArgs, {
-      detached: true
+  dockerHelper.detectDocker().then(hasDocker => {
+    if (hasDocker) {
+      mainWindow.webContents.send('DockerInfo', 'Downloading Image');
+      return hasDocker;
+    }
+    throw new Error('Docker is not found, please make sure it is installed on your machine');
+  }).then(() => {
+    return dockerHelper.downloadImage('stratisgroupltd/blockchaincovid19');
+  }).then((hasImage) => {
+    if (hasImage) {
+      mainWindow.webContents.send('DockerInfo', 'Starting Node');
+      return dockerHelper.runNodeInstance(instance, rpcport, signalrport, apiport, isEdge,
+        (output) => writeLog(output)
+      );
+    }
+  }).then(() => {
+    mainWindow.webContents.send('DockerInfo', 'Node Started');
+  })
+    .catch(e => {
+      mainWindow.webContents.send('DockerError', e);
     });
 
-    daemonProcess.stdout.on('data', (data) => {
-      writeLog(`Stratis: ${data}`);
-    });
-  } catch (e) {
-    writeLog(e);
-  }
+  // const networkCommandArgs = 'network create Stratis-Hackathon'.split(' ');
+  // const commandArgs = `run --rm --network=Stratis-Hackathon --hostname Node_${instance} --name Node_${instance} -p 127.0.0.1:${rpcport}:16175 -p 127.0.0.1:${apiport}:37223 -p 127.0.0.1:${signalrport}:38823 -e Instance=${instance} stratisgroupltd/blockchaincovid19 ${isEdge ? '-edge' : ''}`.split(' ');
+  // const childProcess = require('child_process');
+  // let emitDockerOutput = true;
+  // try {
+  //   const createNetworkProcess = childProcess.spawnSync('docker', networkCommandArgs, {
+  //     detached: true,
+  //   });
+  // } catch (e) {
+  //   writeLog(e);
+  // }
+  // console.log(commandArgs);
+  // console.log('Starting Docker');
+  // const daemonProcess = childProcess.spawn('docker', commandArgs, {
+  //   detached: true
+  // });
+  //
+  // daemonProcess.on('error', (err) => {
+  //   setTimeout(() => {
+  //     if (mainWindow) {
+  //       mainWindow.webContents.send('DockerError', err);
+  //     }
+  //   }, 2000);
+  //   writeLog(err);
+  // });
+  //
+  // daemonProcess.stdout.on('data', (data) => {
+  //   writeLog(`Stratis: ${data}`);
+  //   // Detect Docker is downloading the image.
+  //   console.log(data);
+  //   if (mainWindow) {
+  //     mainWindow.webContents.send('DockerInfo', data);
+  //   }
+  //   // Detect SBFN is running
+  //   if (emitDockerOutput && data.indexOf('Stratis.Bitcoin.FullNode')) {
+  //   //  emitDockerOutput = false;
+  //   }
+  // });
+
 }
 
 

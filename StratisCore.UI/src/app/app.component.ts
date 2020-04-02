@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { retryWhen, delay, tap } from 'rxjs/operators';
 
 import { ApiService } from '@shared/services/api.service';
@@ -18,20 +18,41 @@ import { NodeStatus } from '@shared/models/node-status';
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) {
+  constructor(
+    private zone: NgZone,
+    private router: Router, private apiService: ApiService, private globalService: GlobalService, private titleService: Title, private electronService: ElectronService) {
   }
 
+  public statusSubject = new BehaviorSubject<string>('');
   private subscription: Subscription;
+  private startupSubscription: Subscription;
   private statusIntervalSubscription: Subscription;
   private readonly MaxRetryCount = 50;
   private readonly TryDelayMilliseconds = 3000;
   public sidechainEnabled;
   public apiConnected = false;
-
+  public downloadingImage = false;
+  public loadingError: string;
   loading = true;
   loadingFailed = false;
 
   ngOnInit() {
+    this.startupSubscription = this.globalService.startupStatus.subscribe((e) => {
+      if (e[0] === 'DockerInfo') {
+        this.downloadingImage = true;
+        this.zone.run(() => {
+          this.statusSubject.next(e[1]);
+        });
+      }
+      if (e[0] === 'DockerError') {
+        this.downloadingImage = true;
+        this.zone.run(() => {
+          this.loadingError = `Unable to start docker. Please make sure docker is installed on your system.\n${e[1]}`;
+          this.loading = false;
+          this.loadingFailed = true;
+        });
+      }
+    });
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.setTitle();
     this.tryStart();
@@ -43,6 +64,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
+
+
   private tryStart() {
     let retry = 0;
     const stream$ = this.apiService.getNodeStatus(true).pipe(
@@ -81,7 +104,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setTitle() {
-    debugger;
     const applicationName = GlobalService.applicationName;
     const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
     const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;

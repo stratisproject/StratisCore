@@ -182,7 +182,7 @@ export class WalletService extends RestApi {
     }
 
     const observable = this.accountsEnabled
-      ? this.get<WalletHistory>('smartcontractwallet/transaction-history', this.getWalletParams(data, extra))
+      ? this.get<WalletHistory>('smartcontractwallet/history', this.getWalletParams(data, extra))
       : this.get<WalletHistory>('wallet/history', this.getWalletParams(data, extra));
 
     return observable.pipe(
