@@ -295,6 +295,10 @@ project.lock.json
 /StratisCore.UI/dist
 /StratisCore.UI/main.js
 /StratisCore.UI/main.js.map
+/StratisCore.UI/docker-helper.js
+/StratisCore.UI/docker-helper.js.map
+/StratisCore.UI/global-vars.js
+/StratisCore.UI/global-vars.js.map
 .vscode/
 
 StratisCore.UI/.idea/.idea.StratisCore.UI.dir/.idea/
