@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { GlobalService } from '@shared/services/global.service';
-import { ModalService } from '@shared/services/modal.service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { Observable } from 'rxjs';
 import { WalletService } from '@shared/services/wallet.service';
@@ -20,13 +18,12 @@ export class HistoryComponent implements OnInit {
   @Input() public enableShowHistoryButton: boolean;
   @Input() public maxTransactionCount: number;
   @Input() public title: string;
+  private last: TransactionInfo;
 
   constructor(
-    private walletService: WalletService,
     private globalService: GlobalService,
-    private modalService: NgbModal,
-    private genericModalService: ModalService,
-    private router: Router) {
+    private router: Router,
+    private walletService: WalletService) {
   }
 
   public transactions: TransactionInfo[];
@@ -38,9 +35,6 @@ export class HistoryComponent implements OnInit {
       .pipe(
         tap((historyItems) => {
           this.transactionCount = historyItems ? historyItems.length : 0;
-        }),
-        map(historyItems => {
-          return historyItems ? TransactionInfo.mapFromTransactionsHistoryItems(historyItems) : [];
         }));
     this.coinUnit = this.globalService.getCoinUnit();
   }

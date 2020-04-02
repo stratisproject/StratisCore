@@ -106,7 +106,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private setTitle() {
     const applicationName = GlobalService.applicationName;
     const testnetSuffix = this.globalService.getTestnetEnabled() ? ' (testnet)' : '';
-    const title = `${applicationName} ${this.globalService.getApplicationVersion()}${testnetSuffix}`;
+    const title = `${applicationName} ${this.globalService.getApplicationVersion()}-RC1${testnetSuffix}`;
 
     this.titleService.setTitle(title);
   }

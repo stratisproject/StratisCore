@@ -59,7 +59,6 @@ export class ApiService extends RestApi implements IApiService {
     );
   }
 
-
   /** Gets the extended public key from a certain wallet */
   public getExtPubkey(data: WalletInfo): Observable<any> {
     return this.get('wallet/extpubkey', this.getWalletParams(data)).pipe(

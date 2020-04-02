@@ -264,6 +264,7 @@ function startDaemon(instance: number, rpcport: number, signalrport: number, api
   }
 
   mainWindow.webContents.send('DockerInfo', 'Detecting Docker');
+
   const dockerHelper = new DockerHelper();
 
   dockerHelper.detectDocker().then(hasDocker => {
@@ -287,46 +288,6 @@ function startDaemon(instance: number, rpcport: number, signalrport: number, api
     .catch(e => {
       mainWindow.webContents.send('DockerError', e);
     });
-
-  // const networkCommandArgs = 'network create Stratis-Hackathon'.split(' ');
-  // const commandArgs = `run --rm --network=Stratis-Hackathon --hostname Node_${instance} --name Node_${instance} -p 127.0.0.1:${rpcport}:16175 -p 127.0.0.1:${apiport}:37223 -p 127.0.0.1:${signalrport}:38823 -e Instance=${instance} stratisgroupltd/blockchaincovid19 ${isEdge ? '-edge' : ''}`.split(' ');
-  // const childProcess = require('child_process');
-  // let emitDockerOutput = true;
-  // try {
-  //   const createNetworkProcess = childProcess.spawnSync('docker', networkCommandArgs, {
-  //     detached: true,
-  //   });
-  // } catch (e) {
-  //   writeLog(e);
-  // }
-  // console.log(commandArgs);
-  // console.log('Starting Docker');
-  // const daemonProcess = childProcess.spawn('docker', commandArgs, {
-  //   detached: true
-  // });
-  //
-  // daemonProcess.on('error', (err) => {
-  //   setTimeout(() => {
-  //     if (mainWindow) {
-  //       mainWindow.webContents.send('DockerError', err);
-  //     }
-  //   }, 2000);
-  //   writeLog(err);
-  // });
-  //
-  // daemonProcess.stdout.on('data', (data) => {
-  //   writeLog(`Stratis: ${data}`);
-  //   // Detect Docker is downloading the image.
-  //   console.log(data);
-  //   if (mainWindow) {
-  //     mainWindow.webContents.send('DockerInfo', data);
-  //   }
-  //   // Detect SBFN is running
-  //   if (emitDockerOutput && data.indexOf('Stratis.Bitcoin.FullNode')) {
-  //   //  emitDockerOutput = false;
-  //   }
-  // });
-
 }
 
 

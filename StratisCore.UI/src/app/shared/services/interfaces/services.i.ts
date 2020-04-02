@@ -4,6 +4,7 @@ import { AddressLabel } from '@shared/models/address-label';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { WalletCreation } from '@shared/models/wallet-creation';
 import { WalletRecovery } from '@shared/models/wallet-recovery';
+import { WalletLoad } from '@shared/models/wallet-load';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from '../../../wallet/tokens/models/token-balance-request';
 

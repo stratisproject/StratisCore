@@ -4,12 +4,11 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 import { Subscription } from 'rxjs';
 
-import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { ModalService } from '@shared/services/modal.service';
+import { WalletResync } from '@shared/models/wallet-rescan';
 import { NodeService } from '@shared/services/node-service';
 import { WalletService } from '@shared/services/wallet.service';
-import { WalletResync } from "@shared/models/wallet-rescan";
 
 @Component({
   selector: 'app-resync',
@@ -20,7 +19,6 @@ export class ResyncComponent implements OnInit, OnDestroy {
 
   constructor(
     private globalService: GlobalService,
-    private apiService: ApiService,
     private walletService: WalletService,
     private nodeService: NodeService,
     private genericModalService: ModalService,
