@@ -69,7 +69,7 @@ export class SendTokenComponent implements OnInit {
       gasLimit: this.gasLimit.value,
       parameters: [
         `9#${this.recipientAddress.value}`,
-        `7#${this.tokenAmount.value}`
+        `7#${this.token.toScaledAmount(this.tokenAmount.value).toFixed()}`
       ],
       methodName: 'TransferTo',
       password: this.password.value,
@@ -107,7 +107,7 @@ export class SendTokenComponent implements OnInit {
         });
   }
 
-  setTokenAmount(tokenBalance: number) {
+  setTokenAmount(tokenBalance: string) {
     this.tokenAmount.setValue(tokenBalance);
   }
 
@@ -121,9 +121,11 @@ export class SendTokenComponent implements OnInit {
 
     const integerValidator = Validators.pattern('^[0-9][0-9]*$');
 
+    const decimalPlaceValidator = Validators.pattern('^[0-9]+(\.[0-9]{0,' + this.token.decimals + '})?$');
+
     const gasLimitValidator = (gasCallLimitMinimumValidator);
 
-    this.tokenAmount = new FormControl(0, [Validators.required, Validators.min(0), Validators.max(this.token.balance)]);
+    this.tokenAmount = new FormControl(0, [Validators.required, Validators.min(0), Validators.max(Number(this.token.balance)), decimalPlaceValidator]);
     this.feeAmount = new FormControl(0.001, [Validators.required, amountValidator, Validators.min(0)]);
     // tslint:disable-next-line:max-line-length
     this.gasPrice = new FormControl(100, [Validators.required, integerValidator, Validators.pattern('^[+]?([0-9]{0,})*[.]?([0-9]{0,2})?$'), gasPriceTooLowValidator, gasPriceTooHighValidator, Validators.min(0)]);

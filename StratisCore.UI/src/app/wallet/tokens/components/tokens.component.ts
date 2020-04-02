@@ -92,7 +92,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
     // Update requested token balances
     this.tokenBalanceRefreshRequested$
       .pipe(
-        tap(tokensToReload => tokensToReload.forEach(t => t.balance = null)),
+        tap(tokensToReload => tokensToReload.forEach(t => t.clearBalance())),
         switchMap(tokensToReload => this.updateTokenBalances(tokensToReload)),
         takeUntil(this.disposed$)
       )
@@ -119,14 +119,14 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         }),
         tap(balance => {
           if (balance === null) {
-            token.balance = null;
+            token.clearBalance();
             this.tokenLoading[token.address] = 'error';
             return;
           }
 
           this.tokenLoading[token.address] = 'loaded';
           if (balance !== token.balance) {
-            token.balance = balance;
+            token.setBalance(balance);
           }
         }));
     }));
@@ -135,7 +135,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   ngOnInit() {
     // Clear all the balances to start with
     const tokens = this.tokenService.GetSavedTokens();
-    tokens.forEach(t => t.balance = null);
+    tokens.forEach(t => t.clearBalance());
     this.tokens = tokens;
 
     // Refresh them all
@@ -221,7 +221,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
         .subscribe(
           receipt => {
             const newTokenAddress = receipt['newContractAddress'];
-            const token = new SavedToken(value.symbol, newTokenAddress, 0, value.name);
+            const token = new SavedToken(value.symbol, newTokenAddress, "0", value.name, value.decimals);
             this.tokenService.AddToken(token);
             progressModal.close('ok');
             this.tokens.push(token);

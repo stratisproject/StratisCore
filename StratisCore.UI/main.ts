@@ -2,13 +2,22 @@ import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
+import { DockerHelper } from './src/docker-helper';
+import { StartupStatus } from './global-vars';
 
 if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
 }
 
+const range = (x, y) => Array.from((function* () {
+  while (x <= y) {
+    yield x++;
+  }
+})());
+
 // Set to true if you want to build Core for sidechains
 const buildForSidechain = true;
+const edge = false;
 const daemonName = buildForSidechain ? 'Stratis.CirrusD' : 'Stratis.StratisD';
 
 let serve;
@@ -33,7 +42,7 @@ if (buildForSidechain) {
   sidechain = true;
 }
 
-const applicationName = sidechain ? 'Cirrus Core (Hackathon Edition)' : 'Stratis Core';
+global.global[`applicationName`] = sidechain ? `Cirrus Core Hackathon ${edge ? '(Edge Edition)' : '(Standard Edition)'}` : 'Stratis Core';
 
 // Set default API port according to network
 let apiPortDefault;
@@ -47,79 +56,33 @@ if (testnet && !sidechain) {
   apiPortDefault = 37223;
 }
 
-let portDefault = 16179
+const portDefault = 16179;
 // Sets default arguments
 const coreargs = require('minimist')(args, {
   default: {
     daemonip: 'localhost',
     apiport: apiPortDefault,
-	port: portDefault,
-	signalrport: 38823,
-	rpcServer: 1,
-	rpcallowip: '0.0.0.0/0',
-	rpcport: 16175,
-	rpcuser: 'stratis',
-	rpcpassword: 'stratis',
+    port: portDefault,
+    signalrport: 38823,
+    rpcServer: 1,
+    rpcallowip: '0.0.0.0/0',
+    rpcport: 16175,
+    rpcuser: 'stratis',
+    rpcpassword: 'stratis',
 
-	datadir: app.getPath('appData') + '\\Cirrus Hackathon',
-	bootstrap: 1,
-	txindex: 1,
-	defaultwalletname: 'Hackathon',
-	defaultwalletpassword: 'stratis',
-	unlockwallet: 1,
-	addnode: "auto"
+    datadir: app.getPath('appData') + '\\Cirrus Hackathon',
+    bootstrap: 1,
+    txindex: 1,
+    defaultwalletname: 'Hackathon',
+    defaultwalletpassword: 'stratis',
+    unlockwallet: 1,
+    addnode: 'auto'
   },
 });
 
 // Apply arguments to override default daemon IP and port
-let daemonIP;
-let apiPort;
-daemonIP = coreargs.daemonip;
-apiPort = coreargs.apiport;
-
-let port
-port = coreargs.port;
-
-let signalrport
-signalrport = coreargs.signalrport;
-
-let rpcServer
-rpcServer = coreargs.rpcServer;
-
-let rpcallowip
-rpcallowip = coreargs.rpcallowip;
-
-let rpcport
-rpcport = coreargs.rpcport;
-
-let rpcuser
-rpcuser = coreargs.rpcuser;
-
-let rpcpassword
-rpcpassword = coreargs.rpcpassword;
-
-let datadir
-datadir = coreargs.datadir;
-let instance = 1
-
-let bootstrap
-bootstrap = coreargs.bootstrap;
-
-let txindex
-txindex = coreargs.txindex;
-
-let defaultwalletname
-defaultwalletname = coreargs.defaultwalletname;
-
-let defaultwalletpassword
-defaultwalletpassword = coreargs.defaultwalletpassword;
-
-let unlockwallet
-unlockwallet = coreargs.unlockwallet;
-
-let addnode
-addnode = coreargs.addnode;
-
+const daemonIP = coreargs.daemonip;
+let apiPort = coreargs.apiport;
 
 // Prevents daemon from starting if connecting to remote daemon.
 if (daemonIP !== 'localhost') {
@@ -142,6 +105,7 @@ ipcMain.on('get-daemonip', (event, arg) => {
   event.returnValue = daemonIP;
 });
 
+
 require('electron-context-menu')({
   showInspectElement: serve
 });
@@ -149,6 +113,7 @@ require('electron-context-menu')({
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
+console.log('Creating Window');
 
 function createWindow() {
   // Create the browser window.
@@ -158,7 +123,7 @@ function createWindow() {
     frame: true,
     minWidth: 1150,
     minHeight: 650,
-    title: applicationName,
+    title: global[`applicationName`],
     webPreferences: {
       nodeIntegration: true,
     },
@@ -181,9 +146,7 @@ function createWindow() {
 
   // Emitted when the window is going to close.
   mainWindow.on('close', () => {
-    if (!serve && !nodaemon) {
-      shutdownDaemon(daemonIP, apiPort);
-    }
+    shutdownDaemon(daemonIP, apiPort);
   });
 
   // Emitted when the window is closed.
@@ -196,7 +159,6 @@ function createWindow() {
 
   // Remove menu, new from Electron 5
   mainWindow.removeMenu();
-
 }
 
 // This method will be called when Electron has finished
@@ -220,15 +182,11 @@ app.on('ready', () => {
 /* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', () => {
-  if (!serve && !nodaemon) {
-    shutdownDaemon(daemonIP, apiPort);
-  }
+  shutdownDaemon(daemonIP, apiPort);
 });
 
 app.on('quit', () => {
-  if (!serve && !nodaemon) {
-    shutdownDaemon(daemonIP, apiPort);
-  }
+  shutdownDaemon(daemonIP, apiPort);
 });
 
 // Quit when all windows are closed.
@@ -244,7 +202,12 @@ app.on('activate', () => {
   }
 });
 
+
 function shutdownDaemon(daemonAddr, portNumber) {
+  if (serve || nodaemon) {
+    return;
+  }
+
   const http = require('http');
   const body = JSON.stringify({});
 
@@ -273,96 +236,56 @@ function shutdownDaemon(daemonAddr, portNumber) {
 }
 
 function findPortAndStartDaemon() {
-  var net = require('net');
-	
-  var portInUse = function(port, callback) {
-    var server = net.createServer(function(socket) {
-      socket.write('Echo server\r\n');
-	  socket.pipe(socket);
-    });
+  const getPort = require('get-port');
+  const portRange = range(coreargs.apiport, coreargs.apiport + 10);
+  getPort({port: portRange, host: '127.0.0.1'}).then(port => {
+    const portIncrement = (port - coreargs.apiport);
+    const instance = (portIncrement + 1);
+    const apiport = port;
+    const signalrport = coreargs.signalrport + portIncrement;
+    const rpcport = coreargs.rpcport + portIncrement;
 
-    server.listen(port, '0.0.0.0');
-    server.on('error', function (e) {
-      callback(true);
-    });
-	
-    server.on('listening', function (e) {
-	  server.close();
-	  callback(false);
-    });
-  };
+    console.log(`Found port ${apiport} starting instance ${instance}`);
 
-  let portFound = false
-
-  portInUse(port, function(returnValue) {
-    if (returnValue) {
-        console.log("Port " + port + " is in use.");
-		apiPort = apiPort + 1;
-        port = port + 1;
-        signalrport = signalrport + 1;
-        rpcport = rpcport + 1;
-        instance = instance + 1;
-	
-		findPortAndStartDaemon();
-    } else {
-		console.log("Port " + port + " is NOT in use.");
-		startDaemon();
-	}
+    apiPort = apiport;
+    startDaemon(instance, rpcport, signalrport, apiport, edge);
   });
 }
 
-function startDaemon() { 
-  let daemonProcess;
-  const spawnDaemon = require('child_process').spawn;
-
-  let daemonPath;
-  if (os.platform() === 'win32') {
-    daemonPath = path.resolve(__dirname, '..\\..\\resources\\daemon\\' + daemonName + '.exe');
-  } else if (os.platform() === 'linux') {
-    daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
-  } else {
-    daemonPath = path.resolve(__dirname, '..//..//resources//daemon//' + daemonName);
+function startDaemon(instance: number, rpcport: number, signalrport: number, apiport: number, isEdge: boolean) {
+  if (isEdge && instance > 1) {
+    console.log('Only single instance of Edge is allowed to run at once.');
+    return;
   }
 
-  let spawnArgs = args.filter(arg => arg.startsWith('-'))
-    .join('&').replace(/--/g, '-').split('&');
+  // Wait 1 second for the UI to load so we have feedback for the user
+  setTimeout(() => {
+    mainWindow.webContents.send('DockerInfo', 'Detecting Docker');
+    const dockerHelper = new DockerHelper();
 
-  spawnArgs.push('-apiport=' + apiPort)
-  spawnArgs.push('-port=' + port)
-  spawnArgs.push('-signalrport=' + signalrport)
-  spawnArgs.push('-server=' + rpcServer)
-  spawnArgs.push('-rpcallowip=' + rpcallowip)
-  spawnArgs.push('-rpcport=' + rpcport)
-  spawnArgs.push('-rpcuser=' + rpcuser)
-  spawnArgs.push('-rpcpassword=' + rpcpassword)
-  spawnArgs.push('-datadir=' + datadir + '_' + instance)
-  spawnArgs.push('-txindex=' + txindex)
-  spawnArgs.push('-defaultwalletname=' + defaultwalletname + '_' + instance)
-  spawnArgs.push('-defaultwalletpassword=' + defaultwalletpassword)
-  spawnArgs.push('-unlockwallet=' + unlockwallet)
-  
-  if (instance == 1) {
-	  spawnArgs.push('-bootstrap=' + bootstrap)
-	  spawnArgs.push('-defaultwalletmnemonic', 'basic exotic crack drink left judge tourist giggle muscle unique horn body')
-	  spawnArgs.push('-poaminingkey', 'basic exotic crack drink left judge tourist giggle muscle unique horn body')
-  } else if (addnode == 'auto') {
-	  var i
-	  for (i = 0; i < instance-1; i++) {
-	    spawnArgs.push('-addnode=127.0.0.1:' + (portDefault + i))
-	  }
-  }
-  
-  console.log('Starting daemon ' + daemonPath);
-  console.log(spawnArgs);
-
-  daemonProcess = spawnDaemon(daemonPath, spawnArgs, {
-    detached: true
-  });
-  
-  daemonProcess.stdout.on('data', (data) => {
-    writeLog(`Stratis: ${data}`);
-  });
+    dockerHelper.detectDocker().then(hasDocker => {
+      if (!hasDocker) {
+        throw new Error('Docker is not found, please make sure it is installed on your machine');
+      }
+      return hasDocker;
+    }).then(() => {
+      mainWindow.webContents.send('DockerInfo', ['Downloading docker image', StartupStatus.Downloading]);
+      return dockerHelper.downloadImage('stratisgroupltd/blockchaincovid19');
+    }).then((hasImage) => {
+      if (hasImage) {
+        mainWindow.webContents.send('DockerInfo', ['Starting node', StartupStatus.Starting]);
+        return dockerHelper.runNodeInstance(instance, rpcport, signalrport, apiport, isEdge,
+          (output) => writeLog(output)
+        );
+      }
+    }).then(() => {
+      mainWindow.webContents.send('DockerInfo', 'Node started');
+    }).catch(e => {
+      mainWindow.webContents.send('DockerError', [e, StartupStatus.Error]);
+    });
+  }, 1000);
 }
+
 
 function createTray() {
   // Put the app in system tray
@@ -392,7 +315,7 @@ function createTray() {
       }
     }
   ]);
-  systemTray.setToolTip(applicationName);
+  systemTray.setToolTip(global[`applicationName`]);
   systemTray.setContextMenu(contextMenu);
   systemTray.on('click', function () {
     if (!mainWindow.isVisible()) {
@@ -441,3 +364,5 @@ function createMenu() {
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
+
+

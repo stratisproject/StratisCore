@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { GlobalService } from '@shared/services/global.service';
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 import { CurrentAccountService } from '@shared/services/current-account.service';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
     selector: 'app-menu',
@@ -12,7 +13,7 @@ import { CurrentAccountService } from '@shared/services/current-account.service'
 })
 export class MenuComponent implements OnInit {
   accountsEnabled: boolean;
-  constructor(private modalService: NgbModal, private globalService: GlobalService, private router: Router, private currentAccountService: CurrentAccountService) {
+  constructor(private modalService: NgbModal, private globalService: GlobalService, private router: Router, private currentAccountService: CurrentAccountService, private electron: ElectronService) {
       this.walletName = this.globalService.getWalletName();
   }
 
@@ -41,5 +42,11 @@ export class MenuComponent implements OnInit {
 
   logoutClicked() {
       this.modalService.open(LogoutConfirmationComponent, { backdrop: "static" });
+  }
+
+  openApiClicked() {
+    const url = `http://${this.globalService.getDaemonIP()}:${this.globalService.getApiPort()}/swagger/index.html`;
+
+    this.electron.shell.openExternal(url);
   }
 }

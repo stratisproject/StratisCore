@@ -59,7 +59,6 @@ export class ApiService extends RestApi implements IApiService {
     );
   }
 
-
   /** Gets the extended public key from a certain wallet */
   public getExtPubkey(data: WalletInfo): Observable<any> {
     return this.get('wallet/extpubkey', this.getWalletParams(data)).pipe(
@@ -207,7 +206,7 @@ export class ApiService extends RestApi implements IApiService {
       .set('address', address);
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.get<WalletHistory>('smartcontractwallet/history', params)),
+      switchMap(() => this.get<WalletHistory>('smartcontractwallet/transaction-history', params)),
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -247,6 +246,16 @@ export class ApiService extends RestApi implements IApiService {
 
   public localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {
     return this.post<LocalExecutionResult>('smartcontracts/local-call', localCall).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  // Returns local call data as raw text so we can parse it correctly later
+  public localCallRaw(localCall: TokenBalanceRequest): Observable<string> {
+    return this.httpClient.post(`${this.API_URL}/smartcontracts/local-call`, localCall, {
+      ...this.getHttpOptions('application/json', 'application/json'),
+      responseType: 'text'
+    }).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }

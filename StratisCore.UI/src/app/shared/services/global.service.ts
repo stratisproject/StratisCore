@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { WalletInfo } from '@shared/models/wallet-info';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -7,7 +7,17 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class GlobalService {
+  public static applicationName: string;
+
   constructor(private electronService: ElectronService) {
+    GlobalService.applicationName = require('electron').remote.getGlobal('applicationName');
+    const ipc = require('electron').ipcRenderer;
+    ipc.on('DockerError', (event, message) => {
+      this.startupStatus.emit(['DockerError'].concat(message));
+    });
+    ipc.on('DockerInfo', (event, message) => {
+      this.startupStatus.emit(['DockerInfo'].concat(message));
+    });
     this.setApplicationVersion();
     this.setSidechainEnabled();
     this.setTestnetEnabled();
@@ -30,6 +40,7 @@ export class GlobalService {
 
   public coinUnit: string;
 
+  public startupStatus = new EventEmitter<any>();
   public currentWallet: Observable<WalletInfo> = new BehaviorSubject<WalletInfo>(null);
 
 

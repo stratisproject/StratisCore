@@ -45,7 +45,11 @@ export class AddressSelectionComponent implements OnInit, OnDestroy {
         if (addresses && addresses.hasOwnProperty('addresses')) {
           if (addresses.addresses.length > 0) {
             this.addressChangedSubject.next(addresses.addresses[0].address);
-            this.addresses = addresses.addresses.filter(a => a.isChange === false || (a.amountConfirmed > 0 || a.amountUnconfirmed > 0));
+            this.addresses = addresses.addresses
+              .filter(a => a.isChange === false || (a.amountConfirmed > 0 || a.amountUnconfirmed > 0))
+              .sort((a, b) => {
+                return  b.amountConfirmed - a.amountConfirmed;
+              });
             this.selectedAddress = this.addresses[0].address;
           }
         }

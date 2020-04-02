@@ -85,8 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     const subscription = this.walletService.getWalletNames()
       .subscribe(
         response => {
-
-          this.wallets = response.walletNames;
+          this.wallets = response.walletNames.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
           if (this.wallets.length > 0) {
             this.hasWallet = true;
           } else {

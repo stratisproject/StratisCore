@@ -88,7 +88,7 @@
                   <sc-balance [balance]="item.gasFee" [coinUnit]="coinUnit"></sc-balance>
                 </td>
                 <td>
-                  <a (click)="openApiBrowser(item.to)">Browse API</a>
+                  <a *ngIf="item.to" href="javascript:void(0);" (click)="openApiBrowser(item.to)">Browse API</a>
                 </td>
               </tr>
 

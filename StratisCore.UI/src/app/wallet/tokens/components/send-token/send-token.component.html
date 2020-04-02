@@ -70,12 +70,13 @@
       <div class="form-group clearfix" data-toggle="tooltip" data-placement="right"
         title="The amount of tokens to send">
         <label for="amount">Number of Tokens To Send</label>
-        <input formControlName="tokenAmount" id="tokenAmount" type="number" step="1" class="form-control"
+        <input formControlName="tokenAmount" id="tokenAmount" type="text" class="form-control"
           placeholder="Amount" [class.is-invalid]="tokenAmount.invalid && (tokenAmount.dirty || tokenAmount.touched)"
           min="0">
         <div *ngIf="tokenAmount.errors" class="invalid-feedback">
           <p *ngIf="tokenAmount.errors['min']">The number of tokens cannot be negative</p>
           <p *ngIf="tokenAmount.errors['max']">The number of tokens exceeds your balance of {{ token.balance }} {{ token.ticker }}</p>
+          <p *ngIf="tokenAmount.errors['pattern']">The number of decimal places must be {{ token.decimals }} or less</p>
         </div>
       </div>
 

@@ -42,13 +42,16 @@ export class NodeService extends RestApi {
     super(globalService, http, errorService);
 
     globalService.currentWallet.subscribe(wallet => {
-      this.currentWallet = wallet;
-      this.updateGeneralInfoForCurrentWallet();
+      if (wallet) {
+        this.currentWallet = wallet;
+        this.updateGeneralInfoForCurrentWallet();
+      }
     });
 
     signalRService.registerOnMessageEventHandler<WalletInfoSignalREvent>(
       SignalREvents.WalletGeneralInfo, (message) => {
-        if (message.walletName === this.currentWallet.walletName) {
+        if (this.currentWallet && message.walletName === this.currentWallet.walletName) {
+          this.applyPercentSynced(message);
           this.generalInfoSubject.next(message);
         }
       });
@@ -59,7 +62,6 @@ export class NodeService extends RestApi {
     signalRService.registerOnMessageEventHandler<BlockConnectedSignalREvent>(SignalREvents.BlockConnected,
       (message) => {
         const generalInfo = this.generalInfoSubject.value;
-
         if (generalInfo.isChainSynced) {
           if (generalInfo.chainTip < message.height) {
             this.patchAndUpdateGeneralInfo({
@@ -75,17 +77,40 @@ export class NodeService extends RestApi {
     return this.generalInfoSubject.asObservable();
   }
 
-  private updateGeneralInfoForCurrentWallet(): void {
-    const params = new HttpParams().set('Name', this.currentWallet.walletName);
+  public addNode(nodeIP: string): Observable<any> {
+    const params = new HttpParams()
+      .set('endpoint', nodeIP)
+      .set('command', 'add');
 
-    this.get<GeneralInfo>('wallet/general-info', params).pipe(
-      catchError(err => this.handleHttpError(err)))
-      .toPromise().then(generalInfo => {
-      this.generalInfoSubject.next(generalInfo);
-    });
+    return this.get('connectionmanager/addnode', params).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
-  private patchAndUpdateGeneralInfo(patch: any) {
+
+  private updateGeneralInfoForCurrentWallet(): void {
+    if (this.currentWallet) {
+      const params = new HttpParams().set('Name', this.currentWallet.walletName);
+      this.get<GeneralInfo>('wallet/general-info', params).pipe(
+        catchError(err => this.handleHttpError(err)))
+        .toPromise().then(generalInfo => {
+        this.applyPercentSynced(generalInfo);
+        this.generalInfoSubject.next(generalInfo);
+      });
+    }
+  }
+
+  private applyPercentSynced(message: GeneralInfo): void {
+
+    // If ChainTip is behind wallet stop sync percent being greater than 100%.
+    let percentSynced = Math.min((message.lastBlockSyncedHeight / message.chainTip) * 100, 100);
+    if (percentSynced.toFixed(0) === '100' && message.lastBlockSyncedHeight !== message.chainTip) {
+      percentSynced = 99;
+    }
+    message.percentSynced = percentSynced;
+  }
+
+  private patchAndUpdateGeneralInfo(patch: any): void {
     const updatedGeneralInfo = {} as GeneralInfo;
 
     Object.assign(updatedGeneralInfo, this.generalInfoSubject.value);
