@@ -24,6 +24,8 @@
   },
   "include": [
     "main.ts",
+    "global-vars.ts",
+    "docker-helper.ts",
     "src/**/*"
   ],
   "exclude": [
