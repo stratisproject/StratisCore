@@ -172,6 +172,7 @@ app.on('ready', () => {
       findPortAndStartDaemon();
     }
   }
+  findPortAndStartDaemon();
   createTray();
   createWindow();
   if (os.platform() === 'darwin') {
@@ -257,15 +258,15 @@ function startDaemon(instance: number, rpcport: number, signalrport: number, api
     console.log('Only single instance of Edge is allowed to run at once.');
     return;
   }
-
+  console.log(process.env.PATH);
   // Wait 1 second for the UI to load so we have feedback for the user
   setTimeout(() => {
     mainWindow.webContents.send('DockerInfo', 'Detecting Docker');
-    const dockerHelper = new DockerHelper();
+    const dockerHelper = new DockerHelper(os.platform() === 'win32');
 
     dockerHelper.detectDocker().then(hasDocker => {
       if (!hasDocker) {
-        throw new Error('Docker is not found, please make sure it is installed on your machine');
+        throw new Error('Docker is not found, please make sure it is installed and running on your machine');
       }
       return hasDocker;
     }).then(() => {
@@ -281,9 +282,9 @@ function startDaemon(instance: number, rpcport: number, signalrport: number, api
     }).then(() => {
       mainWindow.webContents.send('DockerInfo', 'Node started');
     }).catch(e => {
-      mainWindow.webContents.send('DockerError', [e, StartupStatus.Error]);
+      mainWindow.webContents.send('DockerError', [`${e.message}\nPATH=${process.env.PATH}`, StartupStatus.Error]);
     });
-  }, 1000);
+  }, 3000);
 }
 
 
