@@ -13,10 +13,10 @@ export class GlobalService {
     GlobalService.applicationName = require('electron').remote.getGlobal('applicationName');
     const ipc = require('electron').ipcRenderer;
     ipc.on('DockerError', (event, message) => {
-      this.startupStatus.emit(['DockerError', message]);
+      this.startupStatus.emit(['DockerError'].concat(message));
     });
     ipc.on('DockerInfo', (event, message) => {
-      this.startupStatus.emit(['DockerInfo', message]);
+      this.startupStatus.emit(['DockerInfo'].concat(message));
     });
     this.setApplicationVersion();
     this.setSidechainEnabled();

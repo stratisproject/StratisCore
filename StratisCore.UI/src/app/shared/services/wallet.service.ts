@@ -2,13 +2,19 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { SignalRService } from '@shared/services/signalr-service';
 import { WalletInfo } from '@shared/models/wallet-info';
-import { Balances, TransactionsHistoryItem, WalletBalance, WalletHistory, WalletNamesData } from '@shared/services/interfaces/api.i';
+import {
+  Balances,
+  TransactionsHistoryItem,
+  WalletBalance,
+  WalletHistory,
+  WalletNamesData
+} from '@shared/services/interfaces/api.i';
 import {
   SignalREvent,
   SignalREvents,
   WalletInfoSignalREvent
 } from '@shared/services/interfaces/signalr-events.i';
-import { catchError, map, flatMap, tap, debounceTime } from 'rxjs/operators';
+import { catchError, map, flatMap, tap } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { RestApi } from '@shared/services/rest-api';
 import { GlobalService } from '@shared/services/global.service';
@@ -99,7 +105,7 @@ export class WalletService extends RestApi {
           const walletBalance = message.accountsBalances.find(acc => acc.accountName === `account ${this.currentWallet.account}`);
           this.updateWalletForCurrentAddress(walletBalance, historyRefreshed);
         }
-    });
+      });
   }
 
   public getWalletNames(): Observable<WalletNamesData> {

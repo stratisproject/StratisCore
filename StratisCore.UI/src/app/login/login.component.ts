@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getWalletFiles(): void {
+  private getWalletNames(): void {
     const subscription = this.walletService.getWalletNames()
       .subscribe(
         response => {

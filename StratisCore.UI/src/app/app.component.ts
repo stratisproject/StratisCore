@@ -10,6 +10,7 @@ import { ElectronService } from 'ngx-electron';
 import { GlobalService } from '@shared/services/global.service';
 
 import { NodeStatus } from '@shared/models/node-status';
+import { StartupStatus } from '../../global-vars';
 
 @Component({
   selector: 'app-root',
@@ -29,24 +30,30 @@ export class AppComponent implements OnInit, OnDestroy {
   private statusIntervalSubscription: Subscription;
   private readonly MaxRetryCount = 50;
   private readonly TryDelayMilliseconds = 3000;
+  private starting = false;
   public sidechainEnabled;
   public apiConnected = false;
-  public downloadingImage = false;
+  public startupStatus = null;
   public loadingError: string;
   loading = true;
   loadingFailed = false;
 
   ngOnInit() {
     this.startupSubscription = this.globalService.startupStatus.subscribe((e) => {
+      console.log(e);
       if (e[0] === 'DockerInfo') {
-        this.downloadingImage = true;
         this.zone.run(() => {
+
+          this.startupStatus = e.length === 3 ? e[2] : null;
           this.statusSubject.next(e[1]);
+          if (this.startupStatus === StartupStatus.Starting) {
+            this.tryStart();
+          }
         });
       }
       if (e[0] === 'DockerError') {
-        this.downloadingImage = true;
         this.zone.run(() => {
+          this.startupStatus = e.length === 3 ? e[2] : null;
           this.loadingError = `Unable to start docker. Please make sure docker is installed on your system.\n${e[1]}`;
           this.loading = false;
           this.loadingFailed = true;
@@ -64,43 +71,44 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
-
-
   private tryStart() {
-    let retry = 0;
-    const stream$ = this.apiService.getNodeStatus(true).pipe(
-      retryWhen(errors =>
-        errors.pipe(delay(this.TryDelayMilliseconds)).pipe(
-          tap(errorStatus => {
-            if (retry++ === this.MaxRetryCount) {
-              throw errorStatus;
-            }
-            console.log(`Retrying ${retry}...`);
-          })
-        )
-      )
-    );
+    setInterval(() => {
+      if (!this.starting && (this.startupStatus === null || this.startupStatus === StartupStatus.Starting)) {
+        let retry = 0;
+        this.starting = true;
+        const stream$ = this.apiService.getNodeStatus(true).pipe(
+          retryWhen(errors =>
+            errors.pipe(delay(this.TryDelayMilliseconds)).pipe(
+              tap(errorStatus => {
+                if (retry++ === this.MaxRetryCount) {
+                  throw errorStatus;
+                }
+                console.log(`Retrying ${retry}...`);
+              })
+            )));
 
-    this.subscription = stream$.subscribe(
-      (data: NodeStatus) => {
-        this.apiConnected = true;
-        this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
-          .subscribe(
-            response => {
-              const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
-              if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
-                this.loading = false;
-                this.statusIntervalSubscription.unsubscribe();
-                this.router.navigate(['login']);
-              }
-            }
-          );
-      }, (error: any) => {
-        console.log('Failed to start wallet');
-        this.loading = false;
-        this.loadingFailed = true;
+        this.subscription = stream$.subscribe(
+          (data: NodeStatus) => {
+            this.apiConnected = true;
+            this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
+              .subscribe(
+                response => {
+                  const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
+                  if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
+                    this.loading = false;
+                    this.statusIntervalSubscription.unsubscribe();
+                    this.router.navigate(['login']);
+                  }
+                }
+              );
+          }, (error: any) => {
+            console.log('Failed to start wallet');
+            this.loading = false;
+            this.loadingFailed = true;
+          }
+        );
       }
-    );
+    }, 3000);
   }
 
   private setTitle() {

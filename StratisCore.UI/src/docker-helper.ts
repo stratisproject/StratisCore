@@ -48,7 +48,8 @@ export class DockerHelper {
   }
 
   public downloadImage(image: string): Promise<boolean> {
-    const imageArgs = `image pull ${image}`.split(' ');
+    console.log(`Downloading Image ${image}`);
+    const imageArgs = `image pull ${image}:latest`.split(' ');
     return this.executeDockerCommand(imageArgs, (output, outputType) => {
       if (outputType === OutputType.Error) {
         return {

@@ -1,4 +1,4 @@
-import { Log } from "../../../wallet/tokens/services/logger.service";
+import { Log } from '../../../wallet/tokens/services/logger.service';
 
 export interface WalletNamesData {
   walletNames: Array<string>;
@@ -76,7 +76,16 @@ export class WalletBalance {
     if (this.currentAddress) {
       this._useAddress = true;
     } else {
-      Log.error({
+      this.currentAddress = {
+        address: address,
+        amountConfirmed: 0,
+        amountUnconfirmed: 0,
+        isChange: false,
+        isUsed: false
+      };
+
+      this.addresses.push(this.currentAddress);
+      Log.warn({
         name: 'Address not found',
         message: `The address ${address} was not found.`
       });
@@ -147,6 +156,6 @@ export interface GeneralInfo {
   isChainSynced: boolean;
   connectedNodes: number;
   accountsBalances?: WalletBalance[];
-  percentSynced? : number;
+  percentSynced?: number;
 }
 

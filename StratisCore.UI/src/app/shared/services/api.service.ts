@@ -206,7 +206,7 @@ export class ApiService extends RestApi implements IApiService {
       .set('address', address);
     return this.pollingInterval.pipe(
       startWith(0),
-      switchMap(() => this.get<WalletHistory>('smartcontractwallet/history', params)),
+      switchMap(() => this.get<WalletHistory>('smartcontractwallet/transaction-history', params)),
       catchError(err => this.handleHttpError(err))
     );
   }

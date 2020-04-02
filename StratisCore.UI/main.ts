@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
 import { DockerHelper } from './src/docker-helper';
+import { StartupStatus } from './global-vars';
 
 if (os.arch() === 'arm') {
   app.disableHardwareAcceleration();
@@ -36,7 +37,7 @@ testnet = args.some(val => val === '--testnet' || val === '-testnet');
 sidechain = args.some(val => val === '--sidechain' || val === '-sidechain');
 nodaemon = args.some(val => val === '--nodaemon' || val === '-nodaemon');
 devtools = args.some(val => val === '--devtools' || val === '-devtools');
-devtools = true;
+
 if (buildForSidechain) {
   sidechain = true;
 }
@@ -85,7 +86,7 @@ let apiPort = coreargs.apiport;
 
 // Prevents daemon from starting if connecting to remote daemon.
 if (daemonIP !== 'localhost') {
-  // nodaemon = true;
+  nodaemon = true;
 }
 
 ipcMain.on('get-port', (event, arg) => {
@@ -145,9 +146,7 @@ function createWindow() {
 
   // Emitted when the window is going to close.
   mainWindow.on('close', () => {
-    if (!serve && !nodaemon) {
-      shutdownDaemon(daemonIP, apiPort);
-    }
+    shutdownDaemon(daemonIP, apiPort);
   });
 
   // Emitted when the window is closed.
@@ -160,8 +159,6 @@ function createWindow() {
 
   // Remove menu, new from Electron 5
   mainWindow.removeMenu();
-
-
 }
 
 // This method will be called when Electron has finished
@@ -171,12 +168,10 @@ app.on('ready', () => {
   if (serve) {
     console.log('Stratis UI was started in development mode. This requires the user to be running the Stratis Full Node Daemon himself.');
   } else {
-
-    // if (!nodaemon) {
-    //   findPortAndStartDaemon();
-    // }
+    if (!nodaemon) {
+      findPortAndStartDaemon();
+    }
   }
-  findPortAndStartDaemon();
   createTray();
   createWindow();
   if (os.platform() === 'darwin') {
@@ -187,15 +182,11 @@ app.on('ready', () => {
 /* 'before-quit' is emitted when Electron receives
  * the signal to exit and wants to start closing windows */
 app.on('before-quit', () => {
-  if (!serve && !nodaemon) {
-    shutdownDaemon(daemonIP, apiPort);
-  }
+  shutdownDaemon(daemonIP, apiPort);
 });
 
 app.on('quit', () => {
-  if (!serve && !nodaemon) {
-    shutdownDaemon(daemonIP, apiPort);
-  }
+  shutdownDaemon(daemonIP, apiPort);
 });
 
 // Quit when all windows are closed.
@@ -213,6 +204,10 @@ app.on('activate', () => {
 
 
 function shutdownDaemon(daemonAddr, portNumber) {
+  if (serve || nodaemon) {
+    return;
+  }
+
   const http = require('http');
   const body = JSON.stringify({});
 
@@ -263,31 +258,32 @@ function startDaemon(instance: number, rpcport: number, signalrport: number, api
     return;
   }
 
-  mainWindow.webContents.send('DockerInfo', 'Detecting Docker');
+  // Wait 1 second for the UI to load so we have feedback for the user
+  setTimeout(() => {
+    mainWindow.webContents.send('DockerInfo', 'Detecting Docker');
+    const dockerHelper = new DockerHelper();
 
-  const dockerHelper = new DockerHelper();
-
-  dockerHelper.detectDocker().then(hasDocker => {
-    if (hasDocker) {
-      mainWindow.webContents.send('DockerInfo', 'Downloading Image');
+    dockerHelper.detectDocker().then(hasDocker => {
+      if (!hasDocker) {
+        throw new Error('Docker is not found, please make sure it is installed on your machine');
+      }
       return hasDocker;
-    }
-    throw new Error('Docker is not found, please make sure it is installed on your machine');
-  }).then(() => {
-    return dockerHelper.downloadImage('stratisgroupltd/blockchaincovid19');
-  }).then((hasImage) => {
-    if (hasImage) {
-      mainWindow.webContents.send('DockerInfo', 'Starting Node');
-      return dockerHelper.runNodeInstance(instance, rpcport, signalrport, apiport, isEdge,
-        (output) => writeLog(output)
-      );
-    }
-  }).then(() => {
-    mainWindow.webContents.send('DockerInfo', 'Node Started');
-  })
-    .catch(e => {
-      mainWindow.webContents.send('DockerError', e);
+    }).then(() => {
+      mainWindow.webContents.send('DockerInfo', ['Downloading docker image', StartupStatus.Downloading]);
+      return dockerHelper.downloadImage('stratisgroupltd/blockchaincovid19');
+    }).then((hasImage) => {
+      if (hasImage) {
+        mainWindow.webContents.send('DockerInfo', ['Starting node', StartupStatus.Starting]);
+        return dockerHelper.runNodeInstance(instance, rpcport, signalrport, apiport, isEdge,
+          (output) => writeLog(output)
+        );
+      }
+    }).then(() => {
+      mainWindow.webContents.send('DockerInfo', 'Node started');
+    }).catch(e => {
+      mainWindow.webContents.send('DockerError', [e, StartupStatus.Error]);
     });
+  }, 1000);
 }
 
 

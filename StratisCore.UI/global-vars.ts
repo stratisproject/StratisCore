@@ -1,3 +1,5 @@
-export class GlobalVars {
-  public static applicationName: string;
+export enum StartupStatus {
+  Downloading= 'DOWNLOADING',
+  Starting = 'STARTING',
+  Error = 'ERROR'
 }
