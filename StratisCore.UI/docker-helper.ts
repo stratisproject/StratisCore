@@ -60,8 +60,8 @@ export class DockerHelper {
           }
         ],
       },
-      Hostname: `Node_${instance}`,
-      name: `Node_${instance}`
+      Hostname: `node_${instance}`,
+      name: `node_${instance}`
     }).then((container) => {
       const network = docker.getNetwork('Stratis-Hackathon');
       network.connect({Container: container.id}).then(() => {
