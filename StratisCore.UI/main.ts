@@ -263,12 +263,7 @@ function startDaemon(instance: number, rpcport: number, signalrport: number, api
     mainWindow.webContents.send('DockerInfo', 'Detecting Docker');
     const dockerHelper = new DockerHelper(os.platform() === 'win32');
 
-    dockerHelper.detectDocker().then(hasDocker => {
-      if (!hasDocker) {
-        throw new Error('Docker is not found, please make sure it is installed and running on your machine');
-      }
-      return hasDocker;
-    }).then(() => {
+    dockerHelper.detectDocker().then(() => {
       mainWindow.webContents.send('DockerInfo', ['Downloading docker image', StartupStatus.Downloading]);
       return dockerHelper.downloadImage('stratisgroupltd/blockchaincovid19');
     }).then((hasImage) => {
@@ -279,7 +274,7 @@ function startDaemon(instance: number, rpcport: number, signalrport: number, api
         );
       }
     }).then(() => {
-      mainWindow.webContents.send('DockerInfo', 'Node started');
+      mainWindow.webContents.send('DockerInfo', 'Node started', StartupStatus.Started);
     }).catch(e => {
       mainWindow.webContents.send('DockerError', [`${e.message}\nPATH=${process.env.PATH}`, StartupStatus.Error]);
     });
