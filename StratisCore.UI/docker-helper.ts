@@ -65,7 +65,11 @@ export class DockerHelper {
     }).then((container) => {
       const network = docker.getNetwork('Stratis-Hackathon');
       network.connect({Container: container.id}).then(() => {
-          return container.start();
+          return container.start().then(() => {
+            container.attach({stream: true, stdout: true, stderr: true}, (err, stream) => {
+              container.modem.demuxStream(stream, process.stdout, process.stderr);
+            });
+          });
         }
       );
     });
