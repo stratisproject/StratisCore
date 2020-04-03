@@ -46,7 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
           this.startupStatus = e.length === 3 ? e[2] : null;
           this.statusSubject.next(e[1]);
-          if (this.startupStatus === StartupStatus.Starting) {
+          if (this.startupStatus === StartupStatus.Starting || this.startupStatus === StartupStatus.Started) {
             this.tryStart();
           }
         });
@@ -72,10 +72,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // Attempts to initialise the wallet by contacting the daemon.  Will try to do this MaxRetryCount times.
   private tryStart() {
-    setInterval(() => {
-      if (!this.starting && (this.startupStatus === null || this.startupStatus === StartupStatus.Starting)) {
+    if (this.starting) {
+      return;
+    }
+    this.starting = true;
+
+    setTimeout(() => {
+      if (this.startupStatus === null || this.startupStatus === StartupStatus.Starting || this.startupStatus === StartupStatus.Started) {
         let retry = 0;
-        this.starting = true;
         const stream$ = this.apiService.getNodeStatus(true).pipe(
           retryWhen(errors =>
             errors.pipe(delay(this.TryDelayMilliseconds)).pipe(

@@ -1,18 +1,4 @@
-import { TextDecoder } from 'text-encoding';
-import * as childProcess from 'child_process';
 import * as Docker from 'dockerode';
-
-export enum HandleAs {
-  None,
-  Resolve,
-  Reject
-}
-
-export enum OutputType {
-  Std,
-  Error,
-  Exit
-}
 
 export class DockerHelper {
   constructor(private isWindows?: boolean) {
@@ -21,41 +7,62 @@ export class DockerHelper {
   public runNodeInstance(instance: number, rpcport: number, signalrport: number, apiport: number, isEdge: boolean, outputFunc: (output) => void): Promise<any> {
     console.log('Starting SBFN Instance');
     const docker = new Docker();
-    docker.createNetwork({
-      'Name': 'Stratis-Hackathon',
-      'Driver': 'bridge',
-      'Internal': false,
-      'IPAM': {
-        'Config': [{
-          'Subnet': '172.19.0.0/16',
-          'Gateway': '172.19.10.01'
-        }]
-      }
-    }, function (err, network) {
-      console.log(err);
-    });
+    if (null == docker.getNetwork('Stratis-Hackathon')) {
+      docker.createNetwork({
+        'Name': 'Stratis-Hackathon',
+        'Driver': 'bridge',
+        'Internal': false,
+        'IPAM': {
+          'Config': [{
+            'Subnet': '172.19.0.0/16',
+            'Gateway': '172.19.10.01'
+          }]
+        }
+      }, function (err, network) {
+        console.log(err);
+      });
+    }
+
+    docker.createVolume(
+      {
+        'Name': `Node${instance}`,
+        'Driver': 'local',
+        'Mountpoint': `/var/lib/docker/volumes/node${instance}/_data`,
+        'Scope': 'local'
+      }, function (err, volume) {
+        console.log(err);
+      });
 
     return docker.createContainer({
       Image: 'stratisgroupltd/blockchaincovid19',
       Env: [`Instance=${instance}`],
       Cmd: isEdge ? ['-edge'] : [],
       HostConfig: {
+
         AutoRemove: true,
         PortBindings: {
           '16175/tcp': [
-            {HostPort: `${rpcport}`}
+            {HostIp: '127.0.0.1', HostPort: `${rpcport}`}
           ],
           '37223/tcp': [
-            {HostPort: `${apiport}`}
+            {HostIp: '127.0.0.1', HostPort: `${apiport}`}
           ],
           '38823/tcp': [
-            {HostPort: `${signalrport}`}
+            {HostIp: '127.0.0.1', HostPort: `${signalrport}`}
           ]
         },
+        Mounts: [
+          {
+            Type: 'volume',
+            ReadOnly: false,
+            Target: '/root',
+            Source: `node${instance}`
+          }
+        ],
       },
       Hostname: `Node_${instance}`,
       name: `Node_${instance}`
-    }).then(function (container) {
+    }).then((container) => {
       const network = docker.getNetwork('Stratis-Hackathon');
       network.connect({Container: container.id}).then(() => {
           return container.start();
@@ -86,8 +93,6 @@ export class DockerHelper {
     const docker = new Docker();
     return docker.version().then(r => {
       return true;
-    }).catch(e => {
-      return false;
     });
   }
 }
