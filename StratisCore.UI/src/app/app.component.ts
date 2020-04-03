@@ -28,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private startupSubscription: Subscription;
   private statusIntervalSubscription: Subscription;
+  private interval: any;
   private readonly MaxRetryCount = 50;
   private readonly TryDelayMilliseconds = 3000;
   private starting = false;
@@ -66,6 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    clearInterval(this.interval);
     this.subscription.unsubscribe();
     this.statusIntervalSubscription.unsubscribe();
   }
@@ -75,11 +77,10 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.starting) {
       return;
     }
-    this.starting = true;
-
-    setTimeout(() => {
-      if (this.startupStatus === null || this.startupStatus === StartupStatus.Starting || this.startupStatus === StartupStatus.Started) {
+    this.interval = setInterval(() => {
+      if (!this.starting && this.startupStatus === null || this.startupStatus === StartupStatus.Starting || this.startupStatus === StartupStatus.Started) {
         let retry = 0;
+        this.starting = true;
         const stream$ = this.apiService.getNodeStatus(true).pipe(
           retryWhen(errors =>
             errors.pipe(delay(this.TryDelayMilliseconds)).pipe(
@@ -112,7 +113,7 @@ export class AppComponent implements OnInit, OnDestroy {
           }
         );
       }
-    }, 3000);
+    }, 5000);
   }
 
   private setTitle() {
