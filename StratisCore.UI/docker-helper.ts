@@ -56,7 +56,7 @@ export class DockerHelper {
             Type: 'volume',
             ReadOnly: false,
             Target: '/root',
-            Source: `node${instance}`
+            Source: `Node${instance}`
           }
         ],
       },
