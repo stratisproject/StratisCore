@@ -57,7 +57,7 @@ export class SignalRService extends RestApi implements ISignalRService {
         Log.warn('signalR connection abort');
         this.connection.stop();
       }
-      const uri = con.signalRUri.replace('0.0.0.0', '127.0.0.1');
+      const uri = `http://127.0.0.1:${this.globalService.getSignalRPort()}`;
       this.connection = new signalR.HubConnectionBuilder()
         .withUrl(`${uri}/${hubName}-hub`, {})
         .configureLogging(signalR.LogLevel.Information)

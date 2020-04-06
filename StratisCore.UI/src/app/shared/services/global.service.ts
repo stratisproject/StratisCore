@@ -22,6 +22,7 @@ export class GlobalService {
     this.setSidechainEnabled();
     this.setTestnetEnabled();
     this.setApiPort();
+    this.setSignalRPort();
     this.setDaemonIP();
   }
 
@@ -32,6 +33,7 @@ export class GlobalService {
   private testApiPort = 38221;
   private mainSideChainApiPort = 37223;
   private testSideChainApiPort = 38223;
+  private signalRPort = 38823;
   private apiPort: number;
   private walletPath: string;
   private currentWalletName: string;
@@ -96,6 +98,11 @@ export class GlobalService {
     }
   }
 
+  public setSignalRPort() {
+    this.signalRPort = this.electronService.ipcRenderer.sendSync('get-signalr-port');
+  }
+
+
   public getWalletPath() {
     return this.walletPath;
   }
@@ -131,6 +138,10 @@ export class GlobalService {
 
   public getDaemonIP() {
     return this.daemonIP;
+  }
+
+  public getSignalRPort() {
+    return this.signalRPort;
   }
 
   public setDaemonIP() {
