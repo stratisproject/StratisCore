@@ -83,6 +83,7 @@ const coreargs = require('minimist')(args, {
 // Apply arguments to override default daemon IP and port
 const daemonIP = coreargs.daemonip;
 let apiPort = coreargs.apiport;
+let signalRPort = coreargs.signalrport;
 
 // Prevents daemon from starting if connecting to remote daemon.
 if (daemonIP !== 'localhost') {
@@ -103,6 +104,10 @@ ipcMain.on('get-sidechain', (event, arg) => {
 
 ipcMain.on('get-daemonip', (event, arg) => {
   event.returnValue = daemonIP;
+});
+
+ipcMain.on('get-signalr-port', (event, arg) => {
+  event.returnValue = signalRPort;
 });
 
 
@@ -246,7 +251,7 @@ function findPortAndStartDaemon() {
     const rpcport = coreargs.rpcport + portIncrement;
 
     console.log(`Found port ${apiport} starting instance ${instance}`);
-
+    signalRPort = signalrport;
     apiPort = apiport;
     startDaemon(instance, rpcport, signalrport, apiport, edge);
   });
