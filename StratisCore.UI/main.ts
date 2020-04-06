@@ -42,7 +42,7 @@ if (buildForSidechain) {
   sidechain = true;
 }
 
-global.global[`applicationName`] = sidechain ? `Cirrus Core Hackathon ${edge ? '(Edge Edition)' : '(Standard Edition)'}` : 'Stratis Core';
+global.global[`applicationName`] = sidechain ? `Cirrus Core Developer Edition ${edge ? '(Edge)' : '(Standard)'}` : 'Stratis Core';
 
 // Set default API port according to network
 let apiPortDefault;
