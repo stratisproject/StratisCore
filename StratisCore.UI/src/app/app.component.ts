@@ -98,7 +98,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.statusIntervalSubscription = this.apiService.getNodeStatusInterval(true)
               .subscribe(
                 response => {
-                  const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Base.BaseFeature');
+                  const statusResponse = response.featuresData.filter(x => x.namespace === 'Stratis.Bitcoin.Features.SmartContracts.Wallet.SmartContractWalletFeature');
                   if (statusResponse.length > 0 && statusResponse[0].state === 'Initialized') {
                     this.loading = false;
                     this.statusIntervalSubscription.unsubscribe();
