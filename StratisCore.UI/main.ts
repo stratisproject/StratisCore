@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Tray } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
@@ -259,8 +259,15 @@ function findPortAndStartDaemon() {
 
 function startDaemon(instance: number, rpcport: number, signalrport: number, apiport: number, isEdge: boolean) {
   if (isEdge && instance > 1) {
-    console.log('Only single instance of Edge is allowed to run at once.');
-    return;
+    const errorMessage = 'Only a single instance of DLT is allowed to run at once.';
+    console.log(errorMessage);
+    const messageBoxOptions = {
+      type: 'error',
+      title: 'Unable to start node',
+      message: errorMessage
+    };
+    dialog.showMessageBox(messageBoxOptions);
+    throw new Error(errorMessage);
   }
   console.log(process.env.PATH);
   // Wait 1 second for the UI to load so we have feedback for the user
