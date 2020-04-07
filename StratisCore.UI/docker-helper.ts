@@ -4,7 +4,7 @@ export class DockerHelper {
   constructor(private isWindows?: boolean) {
   }
 
-  public runNodeInstance(instance: number, rpcport: number, signalrport: number, apiport: number, isEdge: boolean, outputFunc: (output) => void): Promise<any> {
+  public runNodeInstance(instance: number, rpcport: number, signalrport: number, apiport: number, isDlt: boolean, outputFunc: (output) => void): Promise<any> {
     console.log('Starting SBFN Instance');
     const docker = new Docker();
     docker.getNetwork('Stratis-Hackathon').inspect().catch(() => {
@@ -38,7 +38,7 @@ export class DockerHelper {
     return docker.createContainer({
       Image: 'stratisgroupltd/blockchaincovid19',
       Env: [`Instance=${instance}`],
-      Cmd: isEdge ? ['-edge'] : [],
+      Cmd: isDlt ? ['-dlt'] : [],
       HostConfig: {
 
         AutoRemove: true,

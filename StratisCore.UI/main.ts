@@ -17,7 +17,7 @@ const range = (x, y) => Array.from((function* () {
 
 // Set to true if you want to build Core for sidechains
 const buildForSidechain = true;
-const edge = false;
+const dlt = false;
 const daemonName = buildForSidechain ? 'Stratis.CirrusD' : 'Stratis.StratisD';
 
 let serve;
@@ -42,7 +42,7 @@ if (buildForSidechain) {
   sidechain = true;
 }
 
-global.global[`applicationName`] = sidechain ? `Cirrus Core Hackathon ${edge ? '(Edge Edition)' : '(Standard Edition)'}` : 'Stratis Core';
+global.global[`applicationName`] = sidechain ? `Cirrus Core Hackathon ${dlt ? '(DLT Edition)' : '(Standard Edition)'}` : 'Stratis Core';
 
 // Set default API port according to network
 let apiPortDefault;
@@ -253,12 +253,12 @@ function findPortAndStartDaemon() {
     console.log(`Found port ${apiport} starting instance ${instance}`);
     signalRPort = signalrport;
     apiPort = apiport;
-    startDaemon(instance, rpcport, signalrport, apiport, edge);
+    startDaemon(instance, rpcport, signalrport, apiport, dlt);
   });
 }
 
-function startDaemon(instance: number, rpcport: number, signalrport: number, apiport: number, isEdge: boolean) {
-  if (isEdge && instance > 1) {
+function startDaemon(instance: number, rpcport: number, signalrport: number, apiport: number, isDlt: boolean) {
+  if (isDlt && instance > 1) {
     const errorMessage = 'Only a single instance of DLT is allowed to run at once.';
     console.log(errorMessage);
     const messageBoxOptions = {
@@ -281,7 +281,7 @@ function startDaemon(instance: number, rpcport: number, signalrport: number, api
     }).then((hasImage) => {
       if (hasImage) {
         mainWindow.webContents.send('DockerInfo', ['Starting node', StartupStatus.Starting]);
-        return dockerHelper.runNodeInstance(instance, rpcport, signalrport, apiport, isEdge,
+        return dockerHelper.runNodeInstance(instance, rpcport, signalrport, apiport, isDlt,
           (output) => writeLog(output)
         );
       }
