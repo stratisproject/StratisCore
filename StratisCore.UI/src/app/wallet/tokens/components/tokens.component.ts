@@ -53,6 +53,7 @@ export class TokensComponent implements OnInit, OnDestroy, Disposable {
   maxTimeout = 1.5 * 60 * 1000; // wait for about 1.5 minutes
   tokens: SavedToken[] = [];
   tokenLoading: { [address: string]: string; } = {};
+  public tooltipText = "This is the token contract address. Tokens sent to this address will be lost, do not use this as your receive address."
 
   constructor(
     private tokenService: TokensService,

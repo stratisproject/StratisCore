@@ -54,9 +54,7 @@
                 <th class="text-center col-1" scope="col">Ticker</th>
                 <th class="text-left col-2" scope="col">Name</th>
                 <th class="text-left col-2" scope="col">Balance</th>
-                <th class="text-left col-5" scope="col">Contract Address
-                  <span class="badge badge-info" placement="top" ngbTooltip="This address represents the token contract address. Do not use it as your receive address." tooltipClass="status-tooltip">!</span>
-                </th>
+                <th class="text-left col-5" scope="col">Contract Address</th>
                 <th class="text-right col-2" scope="col">&nbsp;</th>
               </tr>
             </thead>
@@ -68,9 +66,9 @@
                   {{ !item.hasBalance() && tokenLoading[item.address] === 'loading' ? 'Loading...' : item.balance }}
                 </td>
                 <td class="text-left col-5" scope="col">
-                  <span placement="top" ngbTooltip="This address represents the token contract address. Do not use it as your receive address." tooltipClass="status-tooltip">{{ item.address }}</span>
+                  <span placement="top" ngbTooltip="{{ tooltipText }}" tooltipClass="status-tooltip">{{ item.address }}</span>
                   <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
-                  placement="top" ngbTooltip="This address represents the token contract address. Do not use it as your receive address." tooltipClass="status-tooltip"
+                  placement="top" ngbTooltip="{{ tooltipText }}" tooltipClass="status-tooltip"
                     (click)="copyTokenAddress(item.address)"
                     *ngIf="item.address">
                     <i class="lnr lnr-file-add"></i>
