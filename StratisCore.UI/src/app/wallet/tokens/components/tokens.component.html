@@ -18,7 +18,7 @@
 
           <div class="col-5">
             <div class="card">
-              <div class="card-header">Active address</div>
+              <div class="card-header">Active receive address</div>
               <div class="card-body d-flex align-items-center">
                 <div style="display: flex; flex-direction: row">
                   {{selectedAddress}}
@@ -54,7 +54,9 @@
                 <th class="text-center col-1" scope="col">Ticker</th>
                 <th class="text-left col-2" scope="col">Name</th>
                 <th class="text-left col-2" scope="col">Balance</th>
-                <th class="text-left col-5" scope="col">Address</th>
+                <th class="text-left col-5" scope="col">Contract Address
+                  <span class="badge badge-info" placement="top" ngbTooltip="This address represents the token contract address. Do not use it as your receive address." tooltipClass="status-tooltip">!</span>
+                </th>
                 <th class="text-right col-2" scope="col">&nbsp;</th>
               </tr>
             </thead>
@@ -66,9 +68,9 @@
                   {{ !item.hasBalance() && tokenLoading[item.address] === 'loading' ? 'Loading...' : item.balance }}
                 </td>
                 <td class="text-left col-5" scope="col">
-                  {{ item.address }}
+                  <span placement="top" ngbTooltip="This address represents the token contract address. Do not use it as your receive address." tooltipClass="status-tooltip">{{ item.address }}</span>
                   <button type="button" class="btn btn-outline-secondary d-inline-block ml-2 btn-sm"
-                    data-toggle="tooltip" data-placement="top" title="" data-original-title="Copy to Clipboard"
+                  placement="top" ngbTooltip="This address represents the token contract address. Do not use it as your receive address." tooltipClass="status-tooltip"
                     (click)="copyTokenAddress(item.address)"
                     *ngIf="item.address">
                     <i class="lnr lnr-file-add"></i>
