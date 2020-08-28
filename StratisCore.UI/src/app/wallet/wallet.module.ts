@@ -41,6 +41,7 @@ import { TransactionDetailsModalComponent } from './transaction-details-modal/tr
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { SwapComponent } from './swap/swap.component';
 
 @NgModule({
   imports: [
@@ -80,7 +81,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     AddressBookCardComponent,
     AddNodeComponent,
     TransactionDetailsModalComponent,
-    BroadcastTransactionComponent
+    BroadcastTransactionComponent,
+    SwapComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -127,6 +129,10 @@ export class WalletModule {
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
+
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Swap', '/wallet/swap', ['side-bar-item-swap']
+    ));
 
     sidebarItems.setSelected({
       route : '/wallet/dashboard'

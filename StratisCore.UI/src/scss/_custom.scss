@@ -2132,6 +2132,10 @@ app-side-bar {
     .side-bar-item-advanced:before {
       content: "\e810";
     }
+
+    .side-bar-item-swap:before {
+      content: "\e862";
+    }
   }
 
 }
