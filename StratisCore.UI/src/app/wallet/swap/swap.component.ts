@@ -20,7 +20,7 @@ import { SendConfirmationComponent } from '../send/send-confirmation/send-confir
 })
 export class SwapComponent implements OnInit, OnDestroy {
 
-  constructor(private apiService: ApiService, private globalService: GlobalService, private fb: FormBuilder, private electronService: ElectronService, private walletService: WalletService, private taskBarService: TaskBarService) { 
+  constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private electronService: ElectronService, private walletService: WalletService, private taskBarService: TaskBarService) { 
     this.buildSwapForm()
   }
 
