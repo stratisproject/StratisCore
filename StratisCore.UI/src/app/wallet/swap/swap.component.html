@@ -34,7 +34,7 @@
             <div class="form-group col-12">
                 <label for="walletPassword">Wallet password</label>
                 <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && swapForm.get('walletPassword').valid" 
-                    formControlName="walletPassword" id="walletPassword" placeholder="Enter a password to encrypt your wallet file." placement="right" triggers="click:blur">
+                    formControlName="walletPassword" id="walletPassword" placeholder="Please enter your wallet password." placement="right" triggers="click:blur">
                 <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
             </div>
             <div class="modal-footer col-12">
