@@ -131,7 +131,7 @@ export class WalletModule {
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-      'Swap', '/wallet/swap', ['side-bar-item-swap']
+      'Token Swap', '/wallet/swap', ['side-bar-item-swap']
     ));
 
     sidebarItems.setSelected({

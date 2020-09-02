@@ -123,7 +123,8 @@ export class SwapComponent implements OnInit, OnDestroy {
       //   Validators.min(0.00001),
       //   (control: AbstractControl) => Validators.max(balanceCalculator())(control)])],
       // fee: ['medium', Validators.required],
-      walletPassword: ['', Validators.required]
+      walletPassword: ['', Validators.required],
+      tacAgreed: ['', Validators.required]
     });
 
     this.formValueChanges$ = this.swapForm.valueChanges
@@ -148,6 +149,7 @@ export class SwapComponent implements OnInit, OnDestroy {
   formErrors = {
     swapAddress: '',
     walletPassword: '',
+    tacAgreed: ''
   };
 
   swapValidationMessages = {
@@ -166,6 +168,9 @@ export class SwapComponent implements OnInit, OnDestroy {
     // },
     walletPassword: {
       required: 'Your password is required.'
+    },
+    tacAgreed: {
+      required: 'You need to accept our terms and conditions'
     }
   };
 
