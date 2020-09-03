@@ -42,6 +42,7 @@ import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SwapComponent } from './swap/swap.component';
+import { SwapConfirmationComponent } from './swap/swap-confirmation/swap-confirmation.component';
 
 @NgModule({
   imports: [
@@ -82,7 +83,8 @@ import { SwapComponent } from './swap/swap.component';
     AddNodeComponent,
     TransactionDetailsModalComponent,
     BroadcastTransactionComponent,
-    SwapComponent
+    SwapComponent,
+    SwapConfirmationComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -93,6 +95,7 @@ import { SwapComponent } from './swap/swap.component';
   entryComponents: [
     SendComponent,
     SendConfirmationComponent,
+    SwapConfirmationComponent,
     ReceiveComponent,
     TransactionDetailsComponent,
     LogoutConfirmationComponent,

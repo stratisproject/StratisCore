@@ -10,7 +10,8 @@ import { WalletService } from '@shared/services/wallet.service';
 import { Transaction } from '@shared/models/transaction';
 import { TaskBarService } from '@shared/services/task-bar-service';
 import { TransactionResponse } from '@shared/models/transaction-response';
-import { SendConfirmationComponent } from '../send/send-confirmation/send-confirmation.component';
+import { SwapConfirmationComponent } from './swap-confirmation/swap-confirmation.component';
+
 
 @Component({
   selector: 'app-swap',
@@ -20,18 +21,17 @@ import { SendConfirmationComponent } from '../send/send-confirmation/send-confir
 })
 export class SwapComponent implements OnInit, OnDestroy {
 
-  constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private electronService: ElectronService, private walletService: WalletService, private taskBarService: TaskBarService) { 
+  constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private electronService: ElectronService, private walletService: WalletService, private taskBarService: TaskBarService) {
     this.buildSwapForm()
   }
 
   private walletInfoRequest: WalletInfoRequest;
-  private maximumBalanceResponse;
   public maxAmount: number;
   public fee: number;
   public swapForm: FormGroup;
   private formValueChanges$: Subscription;
   private maximumBalanceSubscription: Subscription;
-  public isSending = false;
+  public isSwapping = false;
   public apiError: string;
 
   ngOnInit() {
@@ -71,19 +71,6 @@ export class SwapComponent implements OnInit, OnDestroy {
     this.electronService.shell.openExternal('https://github.com/stratisproject/StratisCore/');
   }
 
-  public swap(): void {
-    this.isSending = true;
-    this.walletService.sendTransaction(this.getTransaction())
-      .then(transactionResponse => {
-        this.resetForm();
-        this.openConfirmationModal(transactionResponse);
-        this.isSending = false;
-      }).catch(error => {
-      this.isSending = false;
-      this.apiError = error.error.errors[0].message;
-    })
-  }
-
   private getTransaction(): Transaction {
     return new Transaction(
       this.globalService.getWalletName(),
@@ -101,17 +88,16 @@ export class SwapComponent implements OnInit, OnDestroy {
 
   private resetForm() {
     this.swapForm.reset();
+    this.isSwapping = false;
   }
 
-  private openConfirmationModal(transactionResponse: TransactionResponse): void {
-    this.taskBarService.open(SendConfirmationComponent, {
-      transaction: transactionResponse.transaction,
-      transactionFee: this.fee,
-      sidechainEnabled: false,
-      opReturnAmount: 0,
-      hasOpReturn: false
+  public openSwapModal(transactionResponse: TransactionResponse): void {
+    this.isSwapping = true;
+    this.taskBarService.open(SwapConfirmationComponent, {
+      transaction: this.getTransaction()
     }, {taskBarWidth: '550px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
+      this.resetForm();
     });
   }
 

@@ -15,10 +15,10 @@
                     By completing the below fields and selecting the ‘SWAP’ button, you agree to the following <a class="text-primary" (click)="openTerms()"><u>terms and conditions</u></a>.
                 <div *ngIf="formErrors.tacAgreed" class="invalid-feedback">{{ formErrors.tacAgreed }}</div>
             </div>
-            
+
             <div class="form-group col-12">
                 <div class="row">
-                    <div class='col-3 blockLabel'>Maximum amount to swap:</div>
+                    <div class='col-3 blockLabel'>Total balance to swap:</div>
                     <div class='col-4 blockText'>{{ maxAmount | coinNotation }} {{ globalService.coinUnit }}</div>
                 </div>
                 <div class="row">
@@ -33,12 +33,12 @@
             </div>
             <div class="form-group col-12">
                 <label for="walletPassword">Wallet password</label>
-                <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && swapForm.get('walletPassword').valid" 
+                <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && swapForm.get('walletPassword').valid"
                     formControlName="walletPassword" id="walletPassword" placeholder="Please enter your wallet password." placement="right" triggers="click:blur">
                 <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
             </div>
             <div class="modal-footer col-12">
-                <button type="button" class="btn btn-primary btn-block" [disabled]="!swapForm.valid || isSending || !maxAmount || !fee" (click)="swap()">SWAP</button>
+                <button type="button" class="btn btn-primary btn-block" [disabled]="!swapForm.valid || isSwapping || !maxAmount || !fee" (click)="openSwapModal()">SWAP</button>
             </div>
             <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
         </form>
