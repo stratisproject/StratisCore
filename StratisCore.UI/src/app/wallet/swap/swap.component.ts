@@ -91,7 +91,7 @@ export class SwapComponent implements OnInit, OnDestroy {
     this.isSwapping = false;
   }
 
-  public openSwapModal(transactionResponse: TransactionResponse): void {
+  public openSwapModal(): void {
     this.isSwapping = true;
     this.taskBarService.open(SwapConfirmationComponent, {
       transaction: this.getTransaction()

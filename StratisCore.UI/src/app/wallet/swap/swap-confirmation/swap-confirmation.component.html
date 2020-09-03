@@ -30,7 +30,7 @@
         <small>{{ coinUnit }}</small></li>
     </ul>
     <ul *ngIf="!hasOpReturn" class="list-inline row">
-      <li class="list-inline-item col blockLabel">STRAX Destination Address</li>
+      <li class="list-inline-item col blockLabel">STRAX Address</li>
       <li class="list-inline-item col-8 blockText">{{ transaction.recipients[0].destinationAddress }}</li>
     </ul>
     <ul *ngIf="hasOpReturn" class="list-inline row">
@@ -90,7 +90,7 @@
           <small>{{ coinUnit }}</small></li>
       </ul>
       <ul *ngIf="!hasOpReturn" class="list-inline row">
-        <li class="list-inline-item col blockLabel">STRAX Destination Address</li>
+        <li class="list-inline-item col blockLabel">STRAX Address</li>
         <li class="list-inline-item col-8 blockText">{{ transaction.recipients[0].destinationAddress }}</li>
       </ul>
       <ul *ngIf="hasOpReturn" class="list-inline row">
