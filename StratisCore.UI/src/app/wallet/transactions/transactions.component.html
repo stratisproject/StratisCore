@@ -34,7 +34,7 @@
         </tr> -->
       </tbody>
     </table>
-    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+    <pagination-controls *ngIf="!loading && _transactions.length != 0" (pageChange)="pageChanged($event)"></pagination-controls>
     <div *ngIf="!loading && _transactions.length === 0">
       <div class="d-flex align-items-center">
         <div class="row mx-auto">
