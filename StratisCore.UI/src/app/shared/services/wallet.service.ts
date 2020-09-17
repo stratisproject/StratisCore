@@ -30,6 +30,7 @@ import { SnackbarService } from 'ngx-snackbar';
 import { NodeService } from '@shared/services/node-service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { AddressBookService } from '@shared/services/address-book-service';
+import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -272,7 +273,7 @@ export class WalletService extends RestApi {
     );
   }
 
-  public sendTransaction(transaction: Transaction): Promise<TransactionResponse> {
+  public sendTransaction(transaction: Transaction | OpreturnTransaction): Promise<TransactionResponse> {
     return this.buildAndSendTransaction(transaction).toPromise();
   }
 
@@ -283,7 +284,7 @@ export class WalletService extends RestApi {
       }), catchError(err => this.handleHttpError(err)));
   }
 
-  private buildAndSendTransaction(transaction: Transaction): Observable<TransactionResponse> {
+  private buildAndSendTransaction(transaction: Transaction | OpreturnTransaction): Observable<TransactionResponse> {
 
     if (this.accountsEnabled) {
       transaction.shuffleOutputs = !this.accountsEnabled;

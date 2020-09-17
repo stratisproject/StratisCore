@@ -11,6 +11,7 @@ import { Transaction } from '@shared/models/transaction';
 import { TaskBarService } from '@shared/services/task-bar-service';
 import { TransactionResponse } from '@shared/models/transaction-response';
 import { SwapConfirmationComponent } from './swap-confirmation/swap-confirmation.component';
+import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
 
 
 @Component({
@@ -22,7 +23,8 @@ import { SwapConfirmationComponent } from './swap-confirmation/swap-confirmation
 export class SwapComponent implements OnInit, OnDestroy {
 
   constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private electronService: ElectronService, private walletService: WalletService, private taskBarService: TaskBarService) {
-    this.buildSwapForm()
+    this.buildSwapForm();
+    this.testnetEnabled = globalService.getTestnetEnabled();
   }
 
   private walletInfoRequest: WalletInfoRequest;
@@ -33,6 +35,7 @@ export class SwapComponent implements OnInit, OnDestroy {
   private maximumBalanceSubscription: Subscription;
   public isSwapping = false;
   public apiError: string;
+  public testnetEnabled: boolean;
 
   ngOnInit() {
     this.getMaximumAmount();
@@ -71,18 +74,16 @@ export class SwapComponent implements OnInit, OnDestroy {
     this.electronService.shell.openExternal('https://github.com/stratisproject/StratisCore/');
   }
 
-  private getTransaction(): Transaction {
-    return new Transaction(
+  private getTransaction(): OpreturnTransaction {
+    return new OpreturnTransaction(
       this.globalService.getWalletName(),
       'account 0',
       this.swapForm.get('walletPassword').value,
-      this.swapForm.get('swapAddress').value.trim(),
-      (this.maxAmount / 100000000).toString(),
       this.fee / 100000000,
       true, // Allow unconfirmed
       false, // Shuffle Outputs
-      //add op return data here
-      //add op return value here
+      "SWAP " + this.swapForm.get('swapAddress').value.trim(), // OP_RETURN data
+      (this.maxAmount / 100000000).toString(),// OP_RETURN value
     );
   }
 

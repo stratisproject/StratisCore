@@ -1,9 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { GlobalService } from '@shared/services/global.service';
-import { CoinNotationPipe } from '@shared/pipes/coin-notation.pipe';
-import { Transaction } from '@shared/models/transaction';
 import { WalletService } from '@shared/services/wallet.service';
-import { timeStamp } from 'console';
+import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
 
 @Component({
   selector: 'app-swap-confirmation',
@@ -12,7 +10,7 @@ import { timeStamp } from 'console';
 })
 export class SwapConfirmationComponent implements OnInit {
 
-  @Input() transaction: Transaction;
+  @Input() transaction: OpreturnTransaction;
   @Output() closeClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private globalService: GlobalService, private walletService: WalletService) {
   }
@@ -26,7 +24,7 @@ export class SwapConfirmationComponent implements OnInit {
 
   ngOnInit(): void {
     this.coinUnit = this.globalService.getCoinUnit();
-    this.totalAmount = +this.transaction.amount + this.transaction.feeAmount;
+    this.totalAmount = +this.transaction.opReturnAmount + this.transaction.feeAmount;
   }
 
   public swap(): void {
