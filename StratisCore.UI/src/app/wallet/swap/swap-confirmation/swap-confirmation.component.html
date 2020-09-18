@@ -4,41 +4,23 @@
       <li class="list-inline-item col blockLabel">Type</li>
       <li class="list-inline-item col-8 blockText text-uppercase">Swap</li>
     </ul>
-    <ul *ngIf="!hasOpReturn" class="list-inline row">
+    <ul class="list-inline row">
       <li class="list-inline-item col blockLabel">Amount to swap</li>
       <li
-        class="list-inline-item col-8 blockText text-danger">{{ transaction.amount | number:'1.8-8' }}
-        <small>{{ coinUnit }}</small></li>
-    </ul>
-    <ul *ngIf="hasOpReturn" class="list-inline row">
-      <li class="list-inline-item col blockLabel">Amount to swap</li>
-      <li
-        class="list-inline-item col-8 blockText text-danger">{{ transaction.amount - transaction.feeAmount - transaction.opReturnAmount | number:'1.8-8' }}
+        class="list-inline-item col-8 blockText text-danger">{{ transaction.opReturnAmount | number:'1.8-8' }}
         <small>{{ coinUnit }}</small></li>
     </ul>
     <ul class="list-inline row">
       <li class="list-inline-item col blockLabel">Fee</li>
       <li class="list-inline-item col-8 blockText text-danger">{{ transaction.feeAmount }} <small>{{ coinUnit }}</small></li>
     </ul>
-    <ul *ngIf="hasOpReturn" class="list-inline row">
-      <li class="list-inline-item col blockLabel">OP_RETURN amount</li>
-      <li class="list-inline-item col-8 blockText text-danger">{{ transaction.opReturnAmount }} <small>{{ coinUnit }}</small></li>
-    </ul>
     <ul class="list-inline row">
       <li class="list-inline-item col blockLabel">Total</li>
       <li class="list-inline-item col-8 blockText text-danger">{{ totalAmount | number:'1.8-8' }}
         <small>{{ coinUnit }}</small></li>
     </ul>
-    <ul *ngIf="!hasOpReturn" class="list-inline row">
+    <ul class="list-inline row">
       <li class="list-inline-item col blockLabel">STRAX Address</li>
-      <li class="list-inline-item col-8 blockText">{{ transaction.recipients[0].destinationAddress }}</li>
-    </ul>
-    <ul *ngIf="hasOpReturn" class="list-inline row">
-      <li class="list-inline-item col blockLabel">Destination Federation</li>
-      <li class="list-inline-item col-8 blockText">{{ transaction.recipients[0].destinationAddress }}</li>
-    </ul>
-    <ul *ngIf="hasOpReturn" class="list-inline row">
-      <li class="list-inline-item col blockLabel">Destination Address</li>
       <li class="list-inline-item col-8 blockText">{{ transaction.opReturnData }}</li>
     </ul>
     <button type="button" class="btn btn-primary btn-left-200" (click)="closeClicked.emit(true)">Cancel</button>
@@ -64,41 +46,23 @@
         <li class="list-inline-item col blockLabel">Type</li>
         <li class="list-inline-item col-8 blockText text-uppercase">Swap</li>
       </ul>
-      <ul *ngIf="!hasOpReturn" class="list-inline row">
+      <ul class="list-inline row">
         <li class="list-inline-item col blockLabel">Amount swapped</li>
         <li
-          class="list-inline-item col-8 blockText text-danger">{{ transaction.amount | number:'1.8-8' }}
-          <small>{{ coinUnit }}</small></li>
-      </ul>
-      <ul *ngIf="hasOpReturn" class="list-inline row">
-        <li class="list-inline-item col blockLabel">Amount Sent</li>
-        <li
-          class="list-inline-item col-8 blockText text-danger">{{ transaction.amount - transactionFee - opReturnAmount | number:'1.8-8' }}
+          class="list-inline-item col-8 blockText text-danger">{{ transaction.opReturnAmount | number:'1.8-8' }}
           <small>{{ coinUnit }}</small></li>
       </ul>
       <ul class="list-inline row">
         <li class="list-inline-item col blockLabel">Fee</li>
         <li class="list-inline-item col-8 blockText text-danger">{{ transaction.feeAmount }} <small>{{ coinUnit }}</small></li>
       </ul>
-      <ul *ngIf="hasOpReturn" class="list-inline row">
-        <li class="list-inline-item col blockLabel">OP_RETURN amount</li>
-        <li class="list-inline-item col-8 blockText text-danger">{{ transaction.opReturnAmount }} <small>{{ coinUnit }}</small></li>
-      </ul>
       <ul class="list-inline row">
         <li class="list-inline-item col blockLabel">Total</li>
         <li class="list-inline-item col-8 blockText text-danger">{{ totalAmount | number:'1.8-8' }}
           <small>{{ coinUnit }}</small></li>
       </ul>
-      <ul *ngIf="!hasOpReturn" class="list-inline row">
+      <ul class="list-inline row">
         <li class="list-inline-item col blockLabel">STRAX Address</li>
-        <li class="list-inline-item col-8 blockText">{{ transaction.recipients[0].destinationAddress }}</li>
-      </ul>
-      <ul *ngIf="hasOpReturn" class="list-inline row">
-        <li class="list-inline-item col blockLabel">Destination Federation</li>
-        <li class="list-inline-item col-8 blockText">{{ transaction.recipients[0].destinationAddress }}</li>
-      </ul>
-      <ul *ngIf="hasOpReturn" class="list-inline row">
-        <li class="list-inline-item col blockLabel">Destination Address</li>
         <li class="list-inline-item col-8 blockText">{{ transaction.opReturnData }}</li>
       </ul>
     </div>
