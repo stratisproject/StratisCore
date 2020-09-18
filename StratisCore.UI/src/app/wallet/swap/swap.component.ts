@@ -29,6 +29,7 @@ export class SwapComponent implements OnInit, OnDestroy {
 
   private walletInfoRequest: WalletInfoRequest;
   public maxAmount: number;
+  public noBalance: boolean;
   public fee: number;
   public swapForm: FormGroup;
   private formValueChanges$: Subscription;
@@ -52,6 +53,11 @@ export class SwapComponent implements OnInit, OnDestroy {
         response => {
           this.maxAmount = response.maxSpendableAmount;
           this.fee = this.getFee(response.fee);
+          if (this.maxAmount <= 0) {
+            this.noBalance = true;
+          } else {
+            this.noBalance = false;
+          }
         },
         () => {
           this.cancelSubscriptions();
