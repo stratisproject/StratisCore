@@ -82,7 +82,7 @@ export class SwapComponent implements OnInit, OnDestroy {
       this.fee / 100000000,
       true, // Allow unconfirmed
       false, // Shuffle Outputs
-      "SWAP " + this.swapForm.get('swapAddress').value.trim(), // OP_RETURN data
+      this.swapForm.get('swapAddress').value.trim(), // OP_RETURN data
       (this.maxAmount / 100000000).toString(),// OP_RETURN value
     );
   }
