@@ -6,25 +6,14 @@
     <div *ngIf="!noBalance; else noBalanceTemplate">
       <form class="col-10 mx-auto d-flex align-content-center flex-wrap" [formGroup]="swapForm">
           <div class="form-group col-12">
-              <p>Stratis is moving to a new blockchain.</p>
-              <p>Place holder text - more info here</p>
-          </div>
-          <div class="form-group col-12">
-              <input type="checkbox" class="form control form-control-success" [class.is-invalid]="formErrors.tacAgreed" [class.is-valid]="!formErrors.tacAgreed && swapForm.get('tacAgreed').valid"
-                  formControlName="tacAgreed" id="tacAgreed">
-                  By completing the below fields and selecting the ‘SWAP’ button, you agree to the following <a class="text-primary" (click)="openTerms()"><u>terms and conditions</u></a>.
-              <div *ngIf="formErrors.tacAgreed" class="invalid-feedback">{{ formErrors.tacAgreed }}</div>
-          </div>
-
-          <div class="form-group col-12">
-              <div class="row">
-                  <div class='col-3 blockLabel'>Total balance to swap:</div>
-                  <div class='col-4 blockText'>{{ maxAmount | coinNotation }} {{ globalService.coinUnit }}</div>
-              </div>
-              <div class="row">
-                  <div class='col-3 blockLabel'>Transaction fee:</div>
-                  <div class='col-4 blockText'>{{ fee | coinNotation }} {{ globalService.coinUnit }}</div>
-              </div>
+            <div class="row">
+                <div class='col-3 blockLabel'>Total balance to swap:</div>
+                <div class='col-4 blockText'>{{ maxAmount | coinNotation }} {{ globalService.coinUnit }}</div>
+            </div>
+            <div class="row">
+                <div class='col-3 blockLabel'>Transaction fee:</div>
+                <div class='col-4 blockText'>{{ fee | coinNotation }} {{ globalService.coinUnit }}</div>
+            </div>
           </div>
           <div class="form-group col-12">
               <label for="swapAddress">STRAX address</label>
@@ -38,14 +27,28 @@
               <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
           </div>
           <div class="modal-footer col-12">
-              <button type="button" class="btn btn-primary btn-block" [disabled]="!swapForm.valid || isSwapping || !maxAmount || !fee" (click)="openSwapModal()">SWAP</button>
+            <div class="form-group col-12">
+              <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="formErrors.tacAgreed" [class.is-valid]="!formErrors.tacAgreed && swapForm.get('tacAgreed').valid"
+                formControlName="tacAgreed" id="tacAgreed">
+                By completing the above fields and selecting the ‘SWAP’ button, you agree to the following <a class="text-primary" (click)="openTerms()"><u>terms and conditions</u></a>.
+              <div *ngIf="formErrors.tacAgreed" class="invalid-feedback">{{ formErrors.tacAgreed }}</div>
+            </div>
+            <div class="form-group col-12">
+              <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="formErrors.burnAgreed" [class.is-valid]="!formErrors.burnAgreed && swapForm.get('burnAgreed').valid"
+                formControlName="burnAgreed" id="burnAgreed">
+                By completing the above fields and selecting the 'SWAP' button, you understand that your current STRAT Tokens will be irreversibly destroyed.
+              <div *ngIf="formErrors.burnAgreed" class="invalid-feedback">{{ formErrors.burnAgreed }}</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" [disabled]="!swapForm.valid || isSwapping || !maxAmount || !fee" (click)="openSwapModal()">SWAP</button>
           </div>
           <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
       </form>
     </div>
-    <ng-template #noBalanceTemplate>>
-      <div class="form-group col-12">
-        You currently have no balance to swap.
+    <ng-template #noBalanceTemplate>
+      <div class="col-10 mx-auto d-flex algin-content-center flex-wrap">
+        <div class="form-group col-12">
+          <p>You currently have no balance to swap.</p>
+        </div>
       </div>
     </ng-template>
   </div>
