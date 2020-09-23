@@ -5,8 +5,8 @@
     </div>
     <div *ngIf="hasVoted; else notVotedTemplate">
       You have successfully voted for our token swap.
-      <div *ngIf="voteResult === Yes">You choose to support our token swap.</div>
-      <div *ngIf="voteResult === No">You choose not to support our token swap.</div>
+      <div *ngIf="voteResult === 'true'">You've chosen to support our token swap.</div>
+      <div *ngIf="voteResult === 'false'">You've chosen not to support our token swap.</div>
     </div>
     <ng-template #notVotedTemplate>
       <div *ngIf="!noBalance; else noBalanceTemplate">

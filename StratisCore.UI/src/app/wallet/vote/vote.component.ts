@@ -41,6 +41,7 @@ export class VoteComponent implements OnInit, OnDestroy {
       this.voteResult = localStorage.getItem('voteResult');
     } else {
       this.hasVoted = false;
+      this.voteResult = "false";
     }
     this.getMaximumAmount();
   }
@@ -84,7 +85,8 @@ export class VoteComponent implements OnInit, OnDestroy {
         this.isVoting=false;
         this.hasVoted=true;
         localStorage.setItem('hasVoted', "true");
-        localStorage.setItem('voteResult', this.voteForm.get('vote').value)
+        localStorage.setItem('voteResult', voteToBoolean)
+        this.voteResult = localStorage.getItem('voteResult');
       }).catch(error => {
         this.isVoting = false;
         this.hasVoted=false;
