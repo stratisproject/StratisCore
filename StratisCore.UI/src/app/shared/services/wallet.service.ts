@@ -31,6 +31,7 @@ import { NodeService } from '@shared/services/node-service';
 import { TransactionInfo } from '@shared/models/transaction-info';
 import { AddressBookService } from '@shared/services/address-book-service';
 import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
+import { VoteRequest } from '@shared/models/vote-request';
 
 @Injectable({
   providedIn: 'root'
@@ -265,6 +266,12 @@ export class WalletService extends RestApi {
     });
     const set = existingItems.concat(newItems);
     subject.next(set.sort((a, b) => b.timestamp - a.timestamp));
+  }
+
+  public vote(voteRequest: VoteRequest): Observable<string> {
+    return this.post('wallet/vote', voteRequest).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
 
   public broadcastTransaction(transactionHex: string): Observable<string> {

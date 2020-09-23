@@ -43,6 +43,7 @@ import { BroadcastTransactionComponent } from './advanced/components/broadcast-t
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SwapComponent } from './swap/swap.component';
 import { SwapConfirmationComponent } from './swap/swap-confirmation/swap-confirmation.component';
+import { VoteComponent } from './vote/vote.component';
 
 @NgModule({
   imports: [
@@ -84,7 +85,8 @@ import { SwapConfirmationComponent } from './swap/swap-confirmation/swap-confirm
     TransactionDetailsModalComponent,
     BroadcastTransactionComponent,
     SwapComponent,
-    SwapConfirmationComponent
+    SwapConfirmationComponent,
+    VoteComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -134,8 +136,12 @@ export class WalletModule {
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-      'Token Swap', '/wallet/swap', ['side-bar-item-swap']
+      'Vote', '/wallet/vote', ['side-bar-item-vote']
     ));
+
+    // sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+    //   'Token Swap', '/wallet/swap', ['side-bar-item-swap']
+    // ));
 
     sidebarItems.setSelected({
       route : '/wallet/dashboard'
