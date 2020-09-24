@@ -5,10 +5,11 @@
     </div>
     <div *ngIf="(generalInfo | async) as _generalInfo">
       <div *ngIf="isSynced; else notSyncedTemplate">
-        <div *ngIf="hasVoted; else notVotedTemplate">
-          You have successfully voted for our token swap.
-          <div *ngIf="voteResult === 'true'">You've chosen to support our token swap.</div>
-          <div *ngIf="voteResult === 'false'">You've chosen not to support our token swap.</div>
+        <div *ngIf="hasVoted; else notVotedTemplate" class="text-center">
+          Thank you for participating in the STRAX Token Proposal
+          <div *ngIf="voteResult === 'true'">You have voted "Yes" in favour of the STRAX Token Proposal.</div>
+          <div *ngIf="voteResult === 'false'">You have voted "No" in opposition of the STRAX Token Proposal.</div>
+          If you would like to change your vote or have any questions or concerns, please visit the Stratis Discord Server.
         </div>
         <ng-template #notVotedTemplate>
           <div *ngIf="!noBalance; else noBalanceTemplate">
@@ -20,7 +21,8 @@
                   </div>
                 </div>
                 <div class="form-group col-12">
-                  <p>Would you like Stratis to swap over to a new blockchain?</p>
+                  <p>Do you support the STRAX Token Proposal, that includes the additional minting of 25,000,000 Tokens. More information regarding the proposal can be found <a class="text-primary" (click)="openProposal()"><u>here</u></a>.</p>
+                  <p>If you are in favour of this propsoal, please select "Yes", if you are in opposition of this proposal, please select "No"</p>
                   <select class="form control form-control-success text-left" [class.is-invalid]="formErrors.vote" [class.is-valid]="!formErrors.vote && voteForm.get('vote').valid" formControlName="vote" id="vote">
                     <option>Yes</option>
                     <option>No</option>
@@ -34,7 +36,7 @@
                     <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
                 </div>
                 <div class="modal-footer col-12">
-                  <p>Please note that issuing your vote creates a transaction. Transaction fees will be applied automatically.</p>
+                  <div class="text-center col-12">Please note that issuing your vote creates a transaction. Transaction fees will be applied automatically.</div>
                   <button type="button" class="btn btn-primary btn-block" [disabled]="!voteForm.valid || !maxAmount" (click)="vote()">VOTE</button>
                 </div>
             </form>
@@ -49,7 +51,9 @@
         </ng-template>
       </div>
       <ng-template #notSyncedTemplate>
-        The wallet needs to be completely synced before you can issue your vote.
+        <div class="text-center">
+          The wallet needs to be completely synced before you can issue your vote.
+        </div>
       </ng-template>
     </div>
   </div>

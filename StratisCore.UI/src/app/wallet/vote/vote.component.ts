@@ -9,6 +9,7 @@ import { GlobalService } from '@shared/services/global.service';
 import { GeneralInfo } from '@shared/services/interfaces/api.i';
 import { NodeService } from '@shared/services/node-service';
 import { WalletService } from '@shared/services/wallet.service';
+import { ElectronService } from 'ngx-electron';
 import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { VoteModalComponent } from './vote-modal/vote-modal.component';
@@ -36,7 +37,7 @@ export class VoteComponent implements OnInit, OnDestroy {
   public generalInfo: Observable<GeneralInfo>;
   public isSynced = false;
 
-  constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private walletService: WalletService, private modalService: NgbModal, private nodeService: NodeService) {
+  constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private walletService: WalletService, private modalService: NgbModal, private nodeService: NodeService, private electronService: ElectronService) {
     this.testnetEnabled = globalService.getTestnetEnabled();
     this.buildVoteForm();
   }
@@ -122,6 +123,10 @@ export class VoteComponent implements OnInit, OnDestroy {
         modalInstance.body = `<div class="text-center">Something went wrong while issuing your vote.<br>${this.apiError}</div>`;
         this.voteForm.reset();
     })
+  }
+
+  public openProposal(): void {
+    this.electronService.shell.openExternal('https://stratisplatform.com/news/Strax-Token-Proposal');
   }
 
   private buildVoteForm(): void {
