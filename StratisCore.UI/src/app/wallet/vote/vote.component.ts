@@ -96,27 +96,31 @@ export class VoteComponent implements OnInit, OnDestroy {
     const voteRequest = new VoteRequest(this.globalService.getWalletName(), this.voteForm.get('walletPassword').value, voteToBoolean)
 
     this.isVoting = true;
-    const modal = this.modalService.open(VoteModalComponent);
+    const modal = this.modalService.open(VoteModalComponent, {
+      backdrop: 'static',
+    });
     const modalInstance = modal.componentInstance;
     modalInstance.title="Issuing your vote";
-    modalInstance.description=`<div *ngIf="loading" class="page-load">`;
-    modalInstance.summary="Please wait while we're ussuing your vote.";
+    modalInstance.body=`<div class="text-center">Please wait while we're ussuing your vote.</div>`;
     this.walletService.vote(voteRequest).toPromise()
       .then(() => {
         this.isVoting = false;
         this.hasVoted = true;
         localStorage.setItem('hasVoted', "true");
         localStorage.setItem('voteResult', voteToBoolean);
+        modalInstance.loading = false;
         modalInstance.title = "Vote issued";
-        modalInstance.body = "You have succesfully submitted your vote.";
-        modalInstance.summary = `<button type="button" class="btn btn-primary" (click)="closeClicked()"></button>`;
+        modalInstance.body = `<div class="text-center">You have succesfully submitted your vote.</div>`;
         this.voteResult = localStorage.getItem('voteResult');
+        this.voteForm.reset();
       }).catch(error => {
         this.isVoting = false;
         this.hasVoted = false;
         this.apiError = error.error.errors[0].message;
-        modalInstance.body = `Something went wrong while issuing your vote.<br>${this.apiError}`;
-        modalInstance.summary = `<button type="button" class="btn btn-primary" (click)="closeClicked()"></button>`;
+        modalInstance.loading = false;
+        modalInstance.title = `Failed to submit your vote`
+        modalInstance.body = `<div class="text-center">Something went wrong while issuing your vote.<br>${this.apiError}</div>`;
+        this.voteForm.reset();
     })
   }
 

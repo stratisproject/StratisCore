@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-vote-modal',
@@ -8,13 +9,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class VoteModalComponent implements OnInit {
   @Input()
   loading = true;
-  voteSuccess = false;
-  voteFail = false;
+  title;
+  body;
+  footer;
 
   @Output()
   close = new EventEmitter();
 
-  constructor() { }
+  constructor(public activeModal: NgbActiveModal) { }
 
   ngOnInit(): void {
   }

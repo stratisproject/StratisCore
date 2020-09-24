@@ -37,7 +37,6 @@
                   <p>Please note that issuing your vote creates a transaction. Transaction fees will be applied automatically.</p>
                   <button type="button" class="btn btn-primary btn-block" [disabled]="!voteForm.valid || !maxAmount" (click)="vote()">VOTE</button>
                 </div>
-                <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
             </form>
           </div>
           <ng-template #noBalanceTemplate>
