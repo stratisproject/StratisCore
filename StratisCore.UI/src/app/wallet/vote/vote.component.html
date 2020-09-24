@@ -3,49 +3,56 @@
     <div class="text-left">
       <h3><strong>VOTE TO SWAP</strong></h3>
     </div>
-    <div *ngIf="hasVoted; else notVotedTemplate">
-      You have successfully voted for our token swap.
-      <div *ngIf="voteResult === 'true'">You've chosen to support our token swap.</div>
-      <div *ngIf="voteResult === 'false'">You've chosen not to support our token swap.</div>
-    </div>
-    <ng-template #notVotedTemplate>
-      <div *ngIf="!noBalance; else noBalanceTemplate">
-        <form class="col-10 mx-auto d-flex align-content-center flex-wrap" [formGroup]="voteForm">
-            <div class="form-group col-12">
-              <div class="row">
-                  <div class='col-5 blockLabel'>Total amount eligible to vote:</div>
-                  <div class='col-5 blockText'>{{ maxAmount | coinNotation }} {{ globalService.coinUnit }}</div>
+    <div *ngIf="(generalInfo | async) as _generalInfo">
+      <div *ngIf="isSynced; else notSyncedTemplate">
+        <div *ngIf="hasVoted; else notVotedTemplate">
+          You have successfully voted for our token swap.
+          <div *ngIf="voteResult === 'true'">You've chosen to support our token swap.</div>
+          <div *ngIf="voteResult === 'false'">You've chosen not to support our token swap.</div>
+        </div>
+        <ng-template #notVotedTemplate>
+          <div *ngIf="!noBalance; else noBalanceTemplate">
+            <form class="col-10 mx-auto d-flex align-content-center flex-wrap" [formGroup]="voteForm">
+                <div class="form-group col-12">
+                  <div class="row">
+                      <div class='col-5 blockLabel'>Total amount eligible to vote:</div>
+                      <div class='col-5 blockText'>{{ maxAmount | coinNotation }} {{ globalService.coinUnit }}</div>
+                  </div>
+                </div>
+                <div class="form-group col-12">
+                  <p>Would you like Stratis to swap over to a new blockchain?</p>
+                  <select class="form control form-control-success text-left" [class.is-invalid]="formErrors.vote" [class.is-valid]="!formErrors.vote && voteForm.get('vote').valid" formControlName="vote" id="vote">
+                    <option>Yes</option>
+                    <option>No</option>
+                  </select>
+                  <div *ngIf="formErrors.vote" class="invalid-feedback">{{ formErrors.vote }}</div>
+                </div>
+                <div class="form-group col-12">
+                    <label for="walletPassword">Wallet password</label>
+                    <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && voteForm.get('walletPassword').valid"
+                        formControlName="walletPassword" id="walletPassword" placeholder="Please enter your wallet password." placement="right" triggers="click:blur">
+                    <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
+                </div>
+                <div class="modal-footer col-12">
+                  <p>Please note that issuing your vote creates a transaction. Transaction fees will be applied automatically.</p>
+                  <button type="button" class="btn btn-primary btn-block" [disabled]="!voteForm.valid || !maxAmount" (click)="vote()">VOTE</button>
+                </div>
+                <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
+                <div *ngIf="isVoting" class="page-load">Please wait while we issue your vote.</div>
+            </form>
+          </div>
+          <ng-template #noBalanceTemplate>
+            <div class="col-10 mx-auto d-flex algin-content-center flex-wrap">
+              <div class="form-group col-12">
+                <p>Your balance is not high enough to issue a vote.</p>
               </div>
             </div>
-            <div class="form-group col-12">
-              <p>Would you like Stratis to swap over to a new blockchain?</p>
-              <select class="form control form-control-success text-left" [class.is-invalid]="formErrors.vote" [class.is-valid]="!formErrors.vote && voteForm.get('vote').valid" formControlName="vote" id="vote">
-                <option>Yes</option>
-                <option>No</option>
-              </select>
-              <div *ngIf="formErrors.vote" class="invalid-feedback">{{ formErrors.vote }}</div>
-            </div>
-            <div class="form-group col-12">
-                <label for="walletPassword">Wallet password</label>
-                <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && voteForm.get('walletPassword').valid"
-                    formControlName="walletPassword" id="walletPassword" placeholder="Please enter your wallet password." placement="right" triggers="click:blur">
-                <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
-            </div>
-            <div class="modal-footer col-12">
-              <p>Please note that issuing your vote creates a transaction. Transaction fees will be applied automatically.</p>
-              <button type="button" class="btn btn-primary btn-block" [disabled]="!voteForm.valid || !maxAmount" (click)="vote()">VOTE</button>
-            </div>
-            <small *ngIf="apiError" class="text-danger">{{ apiError }}</small>
-            <div *ngIf="isVoting" class="page-load">Please wait while we issue your vote.</div>
-        </form>
+          </ng-template>
+        </ng-template>
       </div>
-    </ng-template>
-    <ng-template #noBalanceTemplate>
-      <div class="col-10 mx-auto d-flex algin-content-center flex-wrap">
-        <div class="form-group col-12">
-          <p>Your balance is not high enough to issue a vote.</p>
-        </div>
-      </div>
-    </ng-template>
+      <ng-template #notSyncedTemplate>
+        The wallet needs to be completely synced before you can issue your vote.
+      </ng-template>
+    </div>
   </div>
 </section>

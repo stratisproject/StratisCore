@@ -5,9 +5,12 @@ import { VoteRequest } from '@shared/models/vote-request';
 import { WalletInfoRequest } from '@shared/models/wallet-info';
 import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
+import { GeneralInfo } from '@shared/services/interfaces/api.i';
+import { NodeService } from '@shared/services/node-service';
 import { TaskBarService } from '@shared/services/task-bar-service';
 import { WalletService } from '@shared/services/wallet.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-vote',
@@ -29,13 +32,15 @@ export class VoteComponent implements OnInit, OnDestroy {
   private formValueChanges$: Subscription;
   private maximumBalanceSubscription: Subscription;
   public apiError: string;
+  public generalInfo: Observable<GeneralInfo>;
+  public isSynced = false;
 
-  constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private walletService: WalletService, private taskBarService: TaskBarService) {
+  constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private walletService: WalletService, private taskBarService: TaskBarService, private nodeService: NodeService) {
     this.testnetEnabled = globalService.getTestnetEnabled();
     this.buildVoteForm();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (localStorage.getItem('hasVoted') === "true") {
       this.hasVoted = true;
       this.voteResult = localStorage.getItem('voteResult');
@@ -44,9 +49,19 @@ export class VoteComponent implements OnInit, OnDestroy {
       this.voteResult = "false";
     }
     this.getMaximumAmount();
+
+    this.generalInfo = this.nodeService.generalInfo()
+      .pipe(tap(
+        response => {
+          if (response.percentSynced === 100) {
+            this.isSynced = true;
+          } else {
+            this.isSynced = false;
+          }
+        }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.cancelSubscriptions();
   }
 
@@ -77,11 +92,11 @@ export class VoteComponent implements OnInit, OnDestroy {
       voteToBoolean = false;
     }
 
-    let voteRequest = new VoteRequest(this.globalService.getWalletName(), this.voteForm.get('walletPassword').value, voteToBoolean)
+    const voteRequest = new VoteRequest(this.globalService.getWalletName(), this.voteForm.get('walletPassword').value, voteToBoolean)
 
     this.isVoting = true;
     this.walletService.vote(voteRequest).toPromise()
-      .then(transactionResponse => {
+      .then(() => {
         this.isVoting=false;
         this.hasVoted=true;
         localStorage.setItem('hasVoted', "true");
