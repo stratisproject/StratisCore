@@ -44,6 +44,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SwapComponent } from './swap/swap.component';
 import { SwapConfirmationComponent } from './swap/swap-confirmation/swap-confirmation.component';
 import { VoteComponent } from './vote/vote.component';
+import { VoteModalComponent } from './vote/vote-modal/vote-modal.component';
 
 @NgModule({
   imports: [
@@ -86,7 +87,8 @@ import { VoteComponent } from './vote/vote.component';
     BroadcastTransactionComponent,
     SwapComponent,
     SwapConfirmationComponent,
-    VoteComponent
+    VoteComponent,
+    VoteModalComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -107,7 +109,8 @@ import { VoteComponent } from './vote/vote.component';
     ColdStakingWithdrawComponent,
     ColdStakingCreateComponent,
     ColdStakingCreateSuccessComponent,
-    BroadcastTransactionComponent
+    BroadcastTransactionComponent,
+    VoteModalComponent
   ]
 })
 

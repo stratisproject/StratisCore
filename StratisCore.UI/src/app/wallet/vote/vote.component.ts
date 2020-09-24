@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Animations } from '@shared/animations/animations';
 import { VoteRequest } from '@shared/models/vote-request';
 import { WalletInfoRequest } from '@shared/models/wallet-info';
@@ -7,10 +8,10 @@ import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { GeneralInfo } from '@shared/services/interfaces/api.i';
 import { NodeService } from '@shared/services/node-service';
-import { TaskBarService } from '@shared/services/task-bar-service';
 import { WalletService } from '@shared/services/wallet.service';
 import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { VoteModalComponent } from './vote-modal/vote-modal.component';
 
 @Component({
   selector: 'app-vote',
@@ -35,7 +36,7 @@ export class VoteComponent implements OnInit, OnDestroy {
   public generalInfo: Observable<GeneralInfo>;
   public isSynced = false;
 
-  constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private walletService: WalletService, private taskBarService: TaskBarService, private nodeService: NodeService) {
+  constructor(private apiService: ApiService, public globalService: GlobalService, private fb: FormBuilder, private walletService: WalletService, private modalService: NgbModal, private nodeService: NodeService) {
     this.testnetEnabled = globalService.getTestnetEnabled();
     this.buildVoteForm();
   }
@@ -95,17 +96,27 @@ export class VoteComponent implements OnInit, OnDestroy {
     const voteRequest = new VoteRequest(this.globalService.getWalletName(), this.voteForm.get('walletPassword').value, voteToBoolean)
 
     this.isVoting = true;
+    const modal = this.modalService.open(VoteModalComponent);
+    const modalInstance = modal.componentInstance;
+    modalInstance.title="Issuing your vote";
+    modalInstance.description=`<div *ngIf="loading" class="page-load">`;
+    modalInstance.summary="Please wait while we're ussuing your vote.";
     this.walletService.vote(voteRequest).toPromise()
       .then(() => {
-        this.isVoting=false;
-        this.hasVoted=true;
+        this.isVoting = false;
+        this.hasVoted = true;
         localStorage.setItem('hasVoted', "true");
-        localStorage.setItem('voteResult', voteToBoolean)
+        localStorage.setItem('voteResult', voteToBoolean);
+        modalInstance.title = "Vote issued";
+        modalInstance.body = "You have succesfully submitted your vote.";
+        modalInstance.summary = `<button type="button" class="btn btn-primary" (click)="closeClicked()"></button>`;
         this.voteResult = localStorage.getItem('voteResult');
       }).catch(error => {
         this.isVoting = false;
-        this.hasVoted=false;
+        this.hasVoted = false;
         this.apiError = error.error.errors[0].message;
+        modalInstance.body = `Something went wrong while issuing your vote.<br>${this.apiError}`;
+        modalInstance.summary = `<button type="button" class="btn btn-primary" (click)="closeClicked()"></button>`;
     })
   }
 

@@ -1,0 +1,14 @@
+<div>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <ng-content select=".title"></ng-content>
+    </h5>
+  </div>
+  <div class="modal-body">
+    <ng-content select=".description"></ng-content>
+    <ng-content select=".summary"></ng-content>
+  </div>
+  <div class="modal-footer">
+    <ng-content select=".footer"></ng-content>
+  </div>
+</div>
