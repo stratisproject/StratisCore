@@ -56,9 +56,11 @@ export class VoteComponent implements OnInit, OnDestroy {
         response => {
           if (response.percentSynced === 100) {
             this.isSynced = true;
+            this.cancelSubscriptions();
             this.getMaximumAmount();
           } else {
             this.isSynced = false;
+            this.cancelSubscriptions();
             this.getMaximumAmount();
           }
         }));
