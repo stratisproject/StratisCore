@@ -50,15 +50,16 @@ export class VoteComponent implements OnInit, OnDestroy {
       this.hasVoted = false;
       this.voteResult = "false";
     }
-    this.getMaximumAmount();
 
     this.generalInfo = this.nodeService.generalInfo()
       .pipe(tap(
         response => {
           if (response.percentSynced === 100) {
             this.isSynced = true;
+            this.getMaximumAmount();
           } else {
             this.isSynced = false;
+            this.getMaximumAmount();
           }
         }));
   }
@@ -101,8 +102,8 @@ export class VoteComponent implements OnInit, OnDestroy {
       backdrop: 'static',
     });
     const modalInstance = modal.componentInstance;
-    modalInstance.title="Issuing your vote";
-    modalInstance.body=`<div class="text-center">Please wait while we're ussuing your vote.</div>`;
+    modalInstance.title=`<div class="text-center">Issuing your vote</div>`;
+    modalInstance.body=`<div class="text-center">Your voting decision is being recorded on-chain. This may take some time to complete. Please do not close the wallet until you receive confirmation that your vote has been submitted.</div>`;
     this.walletService.vote(voteRequest).toPromise()
       .then(() => {
         this.isVoting = false;
@@ -110,7 +111,7 @@ export class VoteComponent implements OnInit, OnDestroy {
         localStorage.setItem('hasVoted', "true");
         localStorage.setItem('voteResult', voteToBoolean);
         modalInstance.loading = false;
-        modalInstance.title = "Vote issued";
+        modalInstance.title = `<div class="text-center">Vote issued</div>`;
         modalInstance.body = `<div class="text-center">You have succesfully submitted your vote.</div>`;
         this.voteResult = localStorage.getItem('voteResult');
         this.voteForm.reset();
@@ -119,7 +120,7 @@ export class VoteComponent implements OnInit, OnDestroy {
         this.hasVoted = false;
         this.apiError = error.error.errors[0].message;
         modalInstance.loading = false;
-        modalInstance.title = `Failed to submit your vote`
+        modalInstance.title = `<div class="text-center">Failed to submit your vote</div>`;
         modalInstance.body = `<div class="text-center">Something went wrong while issuing your vote.<br>${this.apiError}</div>`;
         this.voteForm.reset();
     })
