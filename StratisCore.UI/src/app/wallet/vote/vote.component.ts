@@ -113,7 +113,7 @@ export class VoteComponent implements OnInit, OnDestroy {
         localStorage.setItem('hasVoted', "true");
         localStorage.setItem('voteResult', voteToBoolean);
         modalInstance.loading = false;
-        modalInstance.title = `<div class="text-center">Vote issued</div>`;
+        modalInstance.title = `<div class="text-center">Vote submitted</div>`;
         modalInstance.body = `<div class="text-center">You have succesfully submitted your vote.</div>`;
         this.voteResult = localStorage.getItem('voteResult');
         this.voteForm.reset();
