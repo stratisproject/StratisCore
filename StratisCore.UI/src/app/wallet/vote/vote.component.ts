@@ -129,7 +129,7 @@ export class VoteComponent implements OnInit, OnDestroy {
   }
 
   public openProposal(): void {
-    this.electronService.shell.openExternal('https://stratisplatform.com/news/Strax-Token-Proposal');
+    this.electronService.shell.openExternal('https://www.stratisplatform.com/2020/09/25/introducing-strax/');
   }
 
   private buildVoteForm(): void {
