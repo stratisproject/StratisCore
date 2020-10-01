@@ -9552,6 +9552,15 @@ img {
   }
 }
 
+.createWallet {
+  /* Allows for vertical scrolling if form gets too long. */
+  overflow-y: scroll;
+  max-height: 100vh;
+  display: block !important;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
 .createWallet .bs-tooltip-right, .createWallet .tooltip.bs-tooltip-auto[x-placement^="right"] {
   width: 260px;
 }
@@ -10123,6 +10132,10 @@ bs-daterangepicker-container {
 
 .no-background {
   background: none !important;
+}
+
+.status-tooltip .arrow::before {
+  border: none;
 }
 
 @font-face {

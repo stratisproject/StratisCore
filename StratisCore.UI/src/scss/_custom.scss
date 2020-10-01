@@ -1232,4 +1232,9 @@ bs-daterangepicker-container {
   background: none!important;
 }
 
+.status-tooltip {
+  .arrow::before {
+    border: none;
+  }
+}
 

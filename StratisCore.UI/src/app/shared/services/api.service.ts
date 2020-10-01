@@ -9,12 +9,11 @@ import { WalletRecovery } from '../models/wallet-recovery';
 import { WalletLoad } from '../models/wallet-load';
 import { WalletInfo, WalletInfoRequest } from '../models/wallet-info';
 import { NodeStatus } from '../models/node-status';
-import { WalletRescan } from '../models/wallet-rescan';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
 import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 import { RestApi } from '@shared/services/rest-api';
 import { IApiService } from '@shared/services/interfaces/services.i';
-import { WalletFileData, WalletHistory } from '@shared/services/interfaces/api.i';
+import { WalletHistory } from '@shared/services/interfaces/api.i';
 import { ErrorService } from '@shared/services/error-service';
 
 @Injectable({
@@ -57,15 +56,6 @@ export class ApiService extends RestApi implements IApiService {
   public removeAddressBookAddress(label: string): Observable<any> {
     const params = new HttpParams().set('label', label);
     return this.delete('addressBook/address', params).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Gets available wallets at the default path
-   */
-  public getWalletFiles(): Observable<WalletFileData> {
-    return this.get<WalletFileData>('wallet/list-wallets').pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -168,18 +158,6 @@ export class ApiService extends RestApi implements IApiService {
       catchError(err => this.handleHttpError(err))
     );
   }
-
-  /** Rescan wallet from a certain date using remove-transactions */
-  public rescanWallet(data: WalletRescan): Observable<any> {
-    const params = new HttpParams()
-      .set('walletName', data.name)
-      .set('fromDate', data.fromDate.toDateString())
-      .set('reSync', 'true');
-    return this.delete('wallet/remove-transactions/', params).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
 
   /**
    * Send shutdown signal to the daemon
