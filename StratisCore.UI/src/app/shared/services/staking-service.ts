@@ -18,9 +18,10 @@ import { Log } from '../../wallet/tokens/services/logger.service';
 })
 export class StakingService extends RestApi {
   private stakingInfoUpdatedSubject = new BehaviorSubject<StakingInfo>(null);
+  public stakingEnabled = new BehaviorSubject<boolean>(false);
   public isStopping: boolean;
   public isStarting: boolean;
-  public stakingEnabled: boolean;
+  public canStake: boolean;
 
   constructor(
     http: HttpClient,
@@ -28,29 +29,32 @@ export class StakingService extends RestApi {
     signalRService: SignalRService,
     errorService: ErrorService) {
     super(globalService, http, errorService);
+
+    this.canStake = !globalService.getSidechainEnabled();
+
     signalRService.registerOnMessageEventHandler<StakingInfoSignalREvent>(
       SignalREvents.StakingInfo, (stakingInfo) => {
-        if (stakingInfo.enabled !== this.stakingEnabled) {
-          this.stakingEnabled = stakingInfo.enabled;
+        if (stakingInfo.enabled !== this.stakingEnabled.value) {
+          this.stakingEnabled.next(stakingInfo.enabled);
         }
         this.stakingInfoUpdatedSubject.next(stakingInfo);
       });
   }
 
-  public startStaking(walletData: any): void {
+  public startStaking(walletData: any): Promise<boolean> {
     this.isStarting = true;
     this.isStopping = false;
 
-    this.invokeStartStakingApiCall(walletData)
+    return this.invokeStartStakingApiCall(walletData)
       .toPromise().then(
       () => {
-        this.stakingEnabled = true;
+        this.stakingEnabled.next(true);
         this.isStarting = false;
         return true;
       },
       error => {
         Log.error(error);
-        this.stakingEnabled = false;
+        this.stakingEnabled.next(false);
         this.isStarting = false;
         return false;
       });
@@ -62,11 +66,11 @@ export class StakingService extends RestApi {
     return this.invokeStopStakingApiCall()
       .toPromise().then(
         () => {
-          this.stakingEnabled = false;
+          this.stakingEnabled.next(false);
           this.isStopping = false;
           return true;
         }, () => {
-          this.stakingEnabled = false;
+          this.stakingEnabled.next(false);
           this.isStopping = false;
           return false;
         });
@@ -79,7 +83,7 @@ export class StakingService extends RestApi {
   private invokeStartStakingApiCall(data: any): Observable<any> {
     return this.post('staking/startstaking', data).pipe(
       catchError(err => {
-        this.stakingEnabled = false;
+        this.stakingEnabled.next(false);
         return this.handleHttpError(err);
       })
     );

@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '@shared/services/api.service';
 import { GlobalService } from '@shared/services/global.service';
 import { WalletInfo } from '@shared/models/wallet-info';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CurrentAccountService } from '@shared/services/current-account.service';
-import { ModalService } from '@shared/services/modal.service';
 import { WalletService } from '@shared/services/wallet.service';
+import { ClipboardService } from 'ngx-clipboard';
+import { SnackbarService } from 'ngx-snackbar';
+import { Animations } from '@shared/animations/animations';
 
 @Component({
   selector: 'receive-component',
   templateUrl: './receive.component.html',
-  styleUrls: ['./receive.component.css'],
+  styleUrls: ['./receive.component.scss'],
+  animations: Animations.fadeIn
 })
 
 export class ReceiveComponent implements OnInit {
@@ -19,13 +20,12 @@ export class ReceiveComponent implements OnInit {
   constructor(
     private walletService: WalletService,
     private globalService: GlobalService,
-    public activeModal: NgbActiveModal,
-    private genericModalService: ModalService,
-    private currentAccountService: CurrentAccountService) {}
+    private currentAccountService: CurrentAccountService,
+    private clipboardService: ClipboardService,
+    private snackbarService: SnackbarService) {}
 
   public address: any = '';
   public qrString: any;
-  public copied = false;
   public showAll = false;
   public allAddresses: any;
   public usedAddresses: string[];
@@ -35,6 +35,7 @@ export class ReceiveComponent implements OnInit {
   public pageNumberUnused = 1;
   public pageNumberChange = 1;
   public sidechainEnabled: boolean;
+  public showAddressesButtonText = "Show all addresses";
 
   public ngOnInit(): void {
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
@@ -48,18 +49,24 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
-  public onCopiedClick(): void {
-    this.copied = true;
+  public copyToClipboardClicked(address): void {
+    if (this.clipboardService.copyFromContent(address)) {
+      this.snackbarService.add({
+        msg: `Address ${address} copied to clipboard`,
+        customClass: 'notify-snack-bar',
+        action: {
+          text: null
+        }
+      });
+    }
   }
 
-  public showAllAddresses(): void {
-    this.getAddresses();
-    this.showAll = true;
-  }
-
-  public showOneAddress(): void {
-    this.getUnusedReceiveAddresses();
-    this.showAll = false;
+  public toggleAllAddresses(): void {
+    this.showAll = !this.showAll;
+    if (this.showAll) {
+      this.getAddresses();
+    }
+    this.showAddressesButtonText = this.showAll ? "Hide all addresses" : "Show all addresses";
   }
 
   private getUnusedReceiveAddresses(): void {
@@ -74,17 +81,17 @@ export class ReceiveComponent implements OnInit {
       );
   }
 
-  private getAccountAddress() {
+  private getAccountAddress(): void {
     this.address = this.currentAccountService.address;
     this.setQrString(this.address);
   }
 
-  private setQrString(address: string) {
+  private setQrString(address: string): void {
     // TODO: fix this later to use the actual sidechain name instead of 'cirrus'
     this.qrString = `${this.globalService.networkName}:${address}`;
   }
 
-  private getAddresses() {
+  private getAddresses(): void {
     const walletInfo = new WalletInfo(this.globalService.getWalletName());
     this.walletService.getAllAddressesForWallet(walletInfo)
       .toPromise()

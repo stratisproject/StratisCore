@@ -1,23 +1,31 @@
 <!-- MODAL LOGOUT -->
-<div class="modal-header">
-  <h5 class="modal-title">Logout</h5>
-  <!-- button close -->
-  <button type="button" class="close closemodal ml-auto" (click)="activeModal.close('Close click')">
-    <i class="lnr lnr-cross-circle"></i>
-  </button>
-  <!-- /button close -->
-</div>
-<div class="modal-body">
-  <form>
-    <div class="form-group clearfix">
-      <p class="text-muted">Are you sure you want to log out?</p>
-      <div *ngIf="!sidechainEnabled" class="alert alert-warning text-center" role="alert">Be aware that this will also <strong>stop the staking process</strong>.</div>
-    </div>
-    <div class="modal-footer row">
-      <button type="button" class="btn btn-outline-light col" data-dismiss="modal" aria-label="Close" (click)="activeModal.close('Close click')">Cancel</button>
-      <button type="button" class="btn btn-primary ml-2 col" [class.btn-stratis-green]="sidechainEnabled" data-dismiss="modal" aria-label="Logout" (click)="onLogout()">Yes</button>
-    </div>
-    <br>
-  </form>
+<div @fadeIn>
+  <div class="modal-header">
+    <h5 class="modal-title">Logout</h5>
+    <!-- button closeWhen -->
+    <button type="button" class="btn close closemodal ml-auto" (click)="activeModal.close('Close click')">
+      <i class="lnr lnr-cross-circle"></i>
+    </button>
+    <!-- /button closeWhen -->
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group clearfix">
+        <p class="text-muted">Are you sure you want to log out?</p>
+        <div *ngIf="!sidechainEnabled" class="alert alert-warning text-center" role="alert">Be aware that this will also
+          <strong>stop the staking process</strong>.
+        </div>
+      </div>
+      <div class="modal-footer row">
+        <button type="button" class="btn btn-outline-secondary col" data-dismiss="modal" aria-label="Close"
+                (click)="activeModal.close('Close click')">Cancel
+        </button>
+        <button type="button" class="btn btn-primary ml-2 col" [class.btn-stratis-green]="sidechainEnabled"
+                data-dismiss="modal" aria-label="Logout" (click)="onLogout()">Yes
+        </button>
+      </div>
+      <br>
+    </form>
+  </div>
 </div>
 <!-- /MODAL LOGOUT -->

@@ -1,41 +1,41 @@
-<section id="GUI" class="light">
-  <!-- CONTAINER -->
-    <section id="content" class="light col-10 mx-auto">
-      <!-- CONTENT -->
-      <section class="col-12">
-        <div class="row">
-          <div class="col-3">
-            <!-- card -->
-            <div class="card">
-              <div class="card-body my-4 d-flex justify-content-center">
-                <!-- ul -->
-                <ul class="nav flex-column">
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['about']" routerLinkActive="active">About</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['extpubkey']" routerLinkActive="active">Extended Public Key</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['generate-addresses']" routerLinkActive="active">Generate Addresses</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['resync']" routerLinkActive="active">Rescan Wallet</a>
-                  </li>
-                </ul>
-                <!-- /ul -->
-              </div>
-            </div>
-            <!-- /card -->
-          </div>
-          <!-- /col -->
-          <div class="col-9">
-            <router-outlet></router-outlet>
-          </div>
-          <!-- /col -->
-        </div>
-        <!-- /row -->
-      </section>
-      <!-- /CONTENT -->
-    </section>
+<section id="GUI" class="light" @fadeIn>
+  <div class="jumbotron page-header">
+    <div class="text-left">
+      <h3><strong>About</strong></h3>
+    </div>
+    <app-about></app-about>
+    <div class="text-left mt-5 mb-3">
+      <h3><strong>Advanced Actions</strong></h3>
+    </div>
+    <div class="row">
+      <!-- <div class="col-3 blockLabel">
+        Wallet Rescan
+      </div> -->
+      <div class="blockText m-1">
+        <!-- Rebuild your wallet from the blockchain. -->
+        <button class="btn btn-outline-primary action-button" (click)="openRescan()">Rescan Wallet</button>
+      </div>
+      <!-- <div class="col-3 blockLabel">
+        Add Nodes
+      </div> -->
+      <div class="blockText m-1">
+        <!-- You can add a node by IP Address. This is useful if you are having trouble connecting to the nextwork. -->
+        <button class="btn btn-outline-primary action-button" (click)="addNode()">Add a node</button>
+      </div>
+      <!-- <div class="col-3 blockLabel">
+        Broadcast Transaction
+      </div> -->
+      <div class="blockText m-1">
+        <!-- Use this tool to broadcast a transaction. -->
+        <button class="btn btn-outline-primary action-button" (click)="broadcastTransaction()">Broadcast transaction</button>
+      </div>
+      <!-- <div class="col-3 blockLabel">
+        Generate Addresses
+      </div> -->
+      <div class="blockText m-1">
+        <!-- Use this tool to create more addresses that you can use these addresses to receive funds. -->
+        <button class="btn btn-outline-primary action-button" (click)="generateAddresses()">Generate addresses</button>
+      </div>
+    </div>
+  </div>
 </section>

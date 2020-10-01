@@ -5,10 +5,11 @@
       <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
     </div>
     <!-- /col -->
-    <div class="col-8 right-login d-flex align-content-center flex-wrap">
-      <form class="col-6 mx-auto d-flex align-content-center flex-wrap" [formGroup]="mnemonicForm">
-        <div class="col-12 text-center">
-          <h3 class="display-4 mb-4">Confirm words</h3>
+    <div class="col-8 right-login d-flex align-content-center flex-wrap createWallet">
+      <form class="col-10 mx-auto d-flex align-content-center flex-wrap" [formGroup]="mnemonicForm">
+        <div class="col-12 mx-auto">
+          <button type="button" class="btn btn-link float-left" (click)="onBackClicked()">&#8592; back</button>
+          <h3 class="display-4 mb-4 text-center">Confirm words</h3>
         </div>
         <div class="form-group col-12">
           <label for="word1">{{secretWordIndexGenerator.text1}}</label>
@@ -30,7 +31,6 @@
         <!-- /form-group -->
         <div *ngIf="matchError" class="text-danger">{{ matchError }}</div>
         <div class="modal-footer col-12">
-          <button type="button" class="btn btn-link" (click)="onBackClicked()">&#8592; back</button>
           <button *ngIf="!isCreating" type="button" class="btn btn-primary btn-block" [class.btn-stratis-green]="sidechainEnabled" [disabled]="!mnemonicForm.valid || isCreating" (click)="onConfirmClicked()">Confirm</button>
           <!-- SVG -->
           <div *ngIf="isCreating" class="Loading col-2 mx-auto unset-left">

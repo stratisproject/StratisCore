@@ -1,34 +1,48 @@
 <div *ngIf="(transactions | async) let _transactions;">
-  <div class="card">
-    <div class="card-header">{{title}}</div>
-    <div class="card-body">
-      <table class="table table-sm">
-        <tbody>
-        <tr *ngFor="let _transaction of _transactions | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
-          <th class="text-center">
+  <div *ngIf="loading && _transactions.length === 0" class="page-load"></div>
+    <table class="table">
+      <tbody>
+        <tr *ngFor="let _transaction of _transactions | paginate: paginationConfig; index as i">
+          <td class="text-center">
             <span class="bubble"
-                  [ngClass]="{
-            'bg-warning' : !_transaction.transactionConfirmedInBlock,
-            'bg-success' : _transaction.transactionConfirmedInBlock
-            }"></span></th>
-
+              [ngClass]="{
+                'bg-warning' : !_transaction.transactionConfirmedInBlock,
+                'bg-success' : _transaction.transactionConfirmedInBlock
+              }">
+            </span>
+          </td>
           <td class="text-uppercase text-left">{{ _transaction.transactionType }}</td>
+          <td>
+            <span *ngIf="_transaction.contact">
+              {{_transaction.contact.label}}
+            </span>
+          </td>
           <td class="text-left">{{_transaction.transactionType == 'sent' ? '- ' : '+ '}}
             <strong> {{ _transaction.transactionAmount + _transaction.transactionFee | coinNotation }} {{ globalService.coinUnit }}</strong>
           </td>
           <td class="text-left">{{ _transaction.transactionTimestamp * 1000 | date:'medium' }}</td>
-          <td class="text-center"><a class="link" (click)="openTransactionDetailDialog(_transaction)">details</a>
-          </td>
+          <td class="text-center"><span (click)="showTransactionDetails(_transaction)" class="lnr-transaction lnr-menu-circle"></span></td>
         </tr>
-        </tbody>
-      </table>
-      <pagination-controls *ngIf="enablePagination" (pageChange)="pageNumber = $event"></pagination-controls>
-      <div *ngIf="enableShowHistoryButton" class="text-center my-2">
-        <button type="button" class="btn btn-outline-primary"
-                [class.btn-outline-stratis-green]="globalService.getSidechainEnabled()" (click)="goToHistory()">
-          Go to History
-        </button>
+        <!-- <tr style="border-top: none">
+          <td colspan="5">
+            <div [@collapseExpand]="state[i] || 'collapsed'">
+            <ng-container *ngIf="state[i]">
+              <transaction-details [transaction]="_transaction"></transaction-details>
+            </ng-container>
+            </div>
+          </td>
+        </tr> -->
+      </tbody>
+    </table>
+    <pagination-controls *ngIf="!loading && _transactions.length != 0" (pageChange)="pageChanged($event)"></pagination-controls>
+    <div *ngIf="!loading && _transactions.length === 0">
+      <div class="d-flex align-items-center">
+        <div class="row mx-auto">
+          <div class="col-12 text-center my-4">
+            <img src="./assets/images/notransactions.svg" alt="Go to the receive page to get a receive address.">
+            <p>You currently have no transactions</p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 </div>

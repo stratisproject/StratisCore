@@ -1,20 +1,23 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-
-import { ApiService } from '@shared/services/api.service';
 import { ModalService } from '@shared/services/modal.service';
 import { AddressLabel } from '@shared/models/address-label';
+import { AddressBookService } from "@shared/services/address-book-service";
+import { Animations } from '@shared/animations/animations';
+import { SnackbarService } from 'ngx-snackbar';
 
 @Component({
   selector: 'app-add-new-address',
   templateUrl: './add-new-address.component.html',
-  styleUrls: ['./add-new-address.component.css']
+  styleUrls: ['./add-new-address.component.scss'],
+  animations : Animations.fadeIn
 })
 export class AddNewAddressComponent {
   constructor(
     private activeModel: NgbActiveModal,
-    private apiService: ApiService,
+    private snackbarService: SnackbarService,
+    private addressBookService: AddressBookService,
     private genericModalService: ModalService,
     private fb: FormBuilder) {
     this.buildAddressForm();
@@ -45,10 +48,10 @@ export class AddNewAddressComponent {
     });
 
     this.addressForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+      .subscribe(() => this.onValueChanged());
   }
 
-  public onValueChanged(data?: any): void {
+  public onValueChanged(): void {
     if (!this.addressForm) {
       return;
     }
@@ -66,11 +69,20 @@ export class AddNewAddressComponent {
   }
 
   public createClicked(): void {
-    const addressLabel = new AddressLabel(this.addressForm.get('label').value, this.addressForm.get('address').value);
-    this.apiService.addAddressBookAddress(addressLabel)
-      .subscribe(
-        response => {
+    const addressLabel = new AddressLabel(this.addressForm.get('label').value, this.addressForm.get('address').value, "");
+    this.addressBookService.addAddressBookAddress(addressLabel)
+      .then(() => {
           this.activeModel.close();
+        setTimeout(() => {
+          this.snackbarService.add({
+            msg: `Contact ${addressLabel.label} has been created.`,
+            customClass: 'notify-snack-bar',
+            action: {
+              text: null
+            }
+          });
+        },500);
+
         }
       );
   }

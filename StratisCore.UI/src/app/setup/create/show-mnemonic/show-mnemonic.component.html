@@ -4,34 +4,41 @@
       <img *ngIf="!sidechainEnabled" src="./assets/images/stratis/home-stratis-logo.svg" width="160px" height="auto">
       <img *ngIf="sidechainEnabled" src="./assets/images/cirrus/home-cirrus-logo.svg" width="160px" height="auto">
     </div>
-    <!-- /col -->
-    <div class="col-8 right-login d-flex align-content-center flex-wrap">
-      <div class="col-7 mx-auto d-flex align-content-center flex-wrap">
-        <div class="col-12 text-center">
-          <h3 class="display-4 mb-4">Secret Words</h3>
+    <div class="col-8 right-login d-flex align-content-center flex-wrap createWallet">
+      <div class="col-10 mx-auto d-flex align-content-center flex-wrap">
+        <div class="col-12 max-auto">
+          <button type="button" class="btn btn-outline-secondary float-left" (click)="onCancelClicked()">Cancel</button>
+          <h3 class="display-4 mb-4 text-center">Secret Words</h3>
         </div>
         <div class="col-12 mnemonics">
           <div class="alert alert-warning" role="alert">
             <h4 class="alert-heading">Warning!</h4>
-            <p>Please write down your secret words and password.
-            You will need <strong>both</strong> to recover your wallet in the future.</p>
+            <p>
+              Please write down your secret words and passphrase if you chose to have one.
+              You will need <strong>both</strong> to recover your wallet in the future.
+            </p>
           </div>
           <div class="row d-flex justify-content-center my-4">
             <ul class="list-inline list-unstyled col">
               <li *ngFor="let word of mnemonicArray; let i=index" class="list-inline-item">
                 <span class="badge-info badge">{{ i + 1 }}. {{ word }}</span>
               </li>
+              <li>
+                <button type="button" class="btn btn-outline-primary btn-right-100" (click)="copyToClipboard()">Copy</button>
+              </li>
             </ul>
+
           </div>
         </div>
         <div class="modal-footer col-12">
-          <button type="button" class="btn btn-outline-light" (click)="onCancelClicked()">Cancel</button>
           <button type="button" class="btn btn-primary btn-block" (click)="onContinueClicked()" [class.btn-stratis-green]="sidechainEnabled">Continue</button>
         </div>
       </div>
     </div>
-    <!-- /col-8 -->
   </div>
-  <!-- /row -->
+  <ngx-snackbar
+    [position]="'bottom-center'"
+    [max]="1"
+    [timeout]="5000">
+  </ngx-snackbar>
 </section>
-<!-- /GUI-->

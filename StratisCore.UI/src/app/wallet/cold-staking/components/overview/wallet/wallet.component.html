@@ -1,53 +1,85 @@
 <!-- HOT STAKING -->
 <div class="card card-staking" *ngIf="hotWallet">
-
-    <div class="stake-type text-right">
-        <span class="badge badge-hot ml-auto">Hot Wallet <span data-placement="top" title="{{description}}" class="lnr lnr-question-circle ml-2"></span></span>
+    <div *ngIf="(wallet| async) as _wallet">
+      <div class="stake-type text-right">
+        <span class="badge badge-hot ml-auto">Hot Wallet <span data-placement="top"
+                                                               class="lnr lnr-question-circle ml-2"></span></span>
+      </div>
+      <div class="card-header">Balance</div>
+      <div class="card-body">
+        <p class="lead">
+          <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
+          <small class="text-uppercase"> {{ globalService.coinUnit }}</small>
+        </p>
+      </div>
+      <div class="card-header">Mature for staking</div>
+      <div class="card-body">
+        <p
+          class="sub">{{ (_wallet.amountConfirmed - _wallet.awaitingMaturityIfStaking | coinNotation) || (0 | coinNotation) }} {{ globalService.coinUnit }}</p>
+      </div>
+      <div class="card-header">Staking status</div>
+      <div class="card-body">
+        <p class="sub">{{ ((stakingService.stakingEnabled | async) ? "Active" : "Inactive") }}</p>
+      </div>
+      <div *ngIf="(stakingService.stakingEnabled | async)">
+        <div class="card-header">Network weight</div>
+        <div class="card-body" *ngIf="(stakingInfo| async) as _stakingInfo">
+          <p class="sub">{{ _stakingInfo.netStakeWeight | coinNotation }} {{ globalService.coinUnit }}</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div *ngIf="!(stakingService.stakingEnabled | async) && !stakingService.isStarting">
+          <form class="form-inline mb-3" [formGroup]="stakingForm">
+            <div class="form-group">
+              <label for="inputPassword" class="sr-only">Password</label>
+              <input type="password" formControlName="walletPassword" class="form-control" id="inputPassword"
+                     placeholder="Password">
+              <button type="button" id="flipcard" class="btn btn-outline-primary ml-2"
+                      [disabled]="!stakingForm.valid || stakingService.isStarting || walletService.isSyncing || walletService.ibdMode"
+                      (click)="startStaking()">Unlock
+              </button>
+            </div>
+          </form>
+        </div>
+        <div *ngIf="(stakingService.stakingEnabled | async)">
+          <button type="button" class="btn btn-outline-secondary mb-3" [disabled]="stakingService.isStopping"
+                  (click)="stopStaking()">Stop Staking
+          </button>
+        </div>
+        <!-- <button data-toggle="modal" type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="unusedAddressClicked()">Get
+            first unused address</button> -->
+      </div>
     </div>
-
+  </div>
+  <!-- COLD STAKING -->
+  <div class="card card-staking disabledcard" *ngIf="!hotWallet">
+    <div class="stake-type text-right">
+      <span class="badge badge-cold ml-auto">Cold Wallet
+        <span data-placement="top" class="lnr lnr-question-circle ml-2"></span>
+      </span>
+    </div>
     <div class="card-header">Balance</div>
     <div class="card-body">
-        <p class="lead">
-            <strong>{{balanceFormatted}}</strong><small class="text-uppercase">.00 STRAT</small>
-        </p>
+      <p class="lead">
+        <strong>{{ 0 | coinNotation }}</strong>
+      </p>
     </div>
-
-    <div class="card-header">Mature for staking</div>
-    <div class="card-body">
-        <p class="sub">{{amountFormatted}} STRAT</p>
+    <div class="card-header">
+      <h1 class="text-center soon-text">Coming soon</h1>
     </div>
-    <div class="card-footer">
-        <button data-toggle="modal" type="button" class="btn btn-outline-primary btn-lg btn-block" (click)="unusedAddressClicked()">Get
-            first unused address</button>
-    </div>
-
-</div>
-
-<!-- COLD STAKING -->
-<div class="card card-staking" *ngIf="!hotWallet">
-
-    <div class="stake-type text-right">
-        <span class="badge badge-cold ml-auto">Cold Wallet <span data-placement="top" title="{{description}}" class="lnr lnr-question-circle ml-2"></span></span>
-    </div>
-
-    <div class="card-header">Balance</div>
-    <div class="card-body">
-        <p class="lead">
-            <strong>{{balanceFormatted}}</strong><small class="text-uppercase">.00 STRAT</small>
-        </p>
-    </div>
-
     <div class="card-header">Spendable</div>
     <div class="card-body">
-        <p class="sub">{{amountFormatted}} STRAT</p>
+      <p class="sub">{{ 0 | coinNotation}}</p>
     </div>
     <div class="card-footer">
-        <div class="row justify-content-center">
-            <button data-toggle="modal" data-target="#modalWithdraw" type="button" class="btn btn-outline-light btn-lg col-4"
-                (click)="withdrawClicked()">Withdraw</button>
-            <button type="button" class="btn btn-outline-primary btn-lg col-7 ml-2" style="min-width:220px" (click)="unusedAddressClicked()">Get
-                first unused address</button>
-        </div>
+      <div class="row justify-content-center">
+        <button [disabled]="true" type="button" class="btn btn-outline-primary col-4"
+                (click)="withdrawClicked()">Withdraw
+        </button>
+        <button [disabled]="true" type="button" class="btn btn-outline-primary col-7 ml-2"
+                (click)="unusedAddressClicked()">Get
+          first unused address
+        </button>
+      </div>
     </div>
-
-</div>
+  </div>

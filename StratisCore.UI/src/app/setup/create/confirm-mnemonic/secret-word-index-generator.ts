@@ -1,11 +1,11 @@
 export class SecretWordIndexGenerator {
   private readonly textPrefix = 'Word number ';
   constructor() {
-  const getRandom = (...taken) => {
+  const getRandom = (...taken): number => {
     const min = 0, max = 11;
-    const getRandom = () => Math.floor(Math.random() * (max - min + 1) + min);
-    var random = 0;
-    while (taken.includes(random = getRandom())) { }
+    const getRandom = (): number => Math.floor(Math.random() * (max - min + 1) + min);
+    let random = 0;
+    while (taken.includes(random = getRandom()));
     return random;
   }
 

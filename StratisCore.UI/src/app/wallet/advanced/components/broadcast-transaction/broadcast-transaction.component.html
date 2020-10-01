@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-12">
+    <div class="alert alert-info" role="alert">
+      <p class="m-0">
+          You can broadcast a prebuild transaction by entering the transaction hex in the form below.
+      </p>
+    </div>
+    <form class="col-12" [formGroup]="broadcastTransactionForm">
+    <div class="form-group col-12">
+      <label class="text-left">Transaction Hex</label>
+      <input type="text" class="form-control" id="transactionHex" name="transactionHex" formControlName="transactionHex"
+        placeholder="Transaction Hex"/>
+      <div *ngIf="formErrors.transactionHex" class="text-danger mt-2">{{ formErrors.transactionHex }}</div>
+    </div>
+    </form>
+    <div class="right">
+      <button type="button" [disabled]="!broadcastTransactionForm.valid" class="btn btn-primary btn-right-200"
+        (click)="onBroadcastTransactionClicked()">Broadcast Transaction
+      </button>
+    </div>
+  </div>
+</div>

@@ -3,18 +3,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { interval, Observable } from 'rxjs';
 import { catchError, startWith, switchMap } from 'rxjs/operators';
 import { GlobalService } from './global.service';
-import { AddressLabel } from '../models/address-label';
 import { WalletCreation } from '../models/wallet-creation';
 import { WalletRecovery } from '../models/wallet-recovery';
-import { WalletLoad } from '../models/wallet-load';
 import { WalletInfo, WalletInfoRequest } from '../models/wallet-info';
 import { NodeStatus } from '../models/node-status';
-import { WalletRescan } from '../models/wallet-rescan';
-import { LocalExecutionResult } from '@shared/models/local-execution-result';
-import { TokenBalanceRequest } from 'src/app/wallet/tokens/models/token-balance-request';
 import { RestApi } from '@shared/services/rest-api';
 import { IApiService } from '@shared/services/interfaces/services.i';
-import { WalletFileData, WalletHistory } from '@shared/services/interfaces/api.i';
 import { ErrorService } from '@shared/services/error-service';
 
 @Injectable({
@@ -41,33 +35,6 @@ export class ApiService extends RestApi implements IApiService {
       startWith(0),
       switchMap(() => this.get<NodeStatus>('node/status')),
       catchError(err => this.handleHttpError(err, silent)));
-  }
-
-  public getAddressBookAddresses(): Observable<any> {
-    return this.get('addressBook').pipe(
-      catchError(err => this.handleHttpError(err)));
-  }
-
-  public addAddressBookAddress(data: AddressLabel): Observable<any> {
-    return this.post('addressBook/address', data).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  public removeAddressBookAddress(label: string): Observable<any> {
-    const params = new HttpParams().set('label', label);
-    return this.delete('addressBook/address', params).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Gets available wallets at the default path
-   */
-  public getWalletFiles(): Observable<WalletFileData> {
-    return this.get<WalletFileData>('wallet/files').pipe(
-      catchError(err => this.handleHttpError(err))
-    );
   }
 
   /** Gets the extended public key from a certain wallet */
@@ -104,15 +71,6 @@ export class ApiService extends RestApi implements IApiService {
    */
   public recoverStratisWallet(data: WalletRecovery): Observable<any> {
     return this.post('wallet/recover/', data).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /**
-   * Load a Stratis wallet
-   */
-  public loadStratisWallet(data: WalletLoad): Observable<any> {
-    return this.post('wallet/load/', data).pipe(
       catchError(err => this.handleHttpError(err))
     );
   }
@@ -169,18 +127,6 @@ export class ApiService extends RestApi implements IApiService {
     );
   }
 
-  /** Rescan wallet from a certain date using remove-transactions */
-  public rescanWallet(data: WalletRescan): Observable<any> {
-    const params = new HttpParams()
-      .set('walletName', data.name)
-      .set('fromDate', data.fromDate.toDateString())
-      .set('reSync', 'true');
-    return this.delete('wallet/remove-transactions/', params).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-
   /**
    * Send shutdown signal to the daemon
    */
@@ -190,97 +136,6 @@ export class ApiService extends RestApi implements IApiService {
     );
   }
 
-  /*
-    * Get the active smart contract wallet address.
-    */
-  public getAccountAddress(walletName: string): Observable<any> {
-    const params = new HttpParams().set('walletName', walletName);
-    return this.get('smartcontractwallet/account-address', params).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  public getAccountAddresses(walletName: string): any {
-    const params = new HttpParams().set('walletName', walletName);
-    return this.get('smartcontractwallet/account-addresses', params).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /*
-    * Get the balance of the active smart contract address.
-    */
-  public getAccountBalance(walletName: string): Observable<any> {
-    const params = new HttpParams().set('walletName', walletName);
-    return this.get('smartcontractwallet/account-balance', params).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /*
-    * Get the balance of the active smart contract address.
-    */
-  public getAddressBalance(address: string): Observable<any> {
-    const params = new HttpParams().set('address', address);
-    return this.pollingInterval.pipe(
-      startWith(0),
-      switchMap(() => this.get('smartcontractwallet/address-balance', params)),
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /*
-    * Gets the transaction history of the smart contract account.
-    */
-  public getAccountHistory(walletName: string, address: string): Observable<WalletHistory> {
-    const params = new HttpParams()
-      .set('walletName', walletName)
-      .set('address', address);
-    return this.pollingInterval.pipe(
-      startWith(0),
-      switchMap(() => this.get<WalletHistory>('smartcontractwallet/history', params)),
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /*
-    * Posts a contract creation transaction
-    */
-  public postCreateTransaction(transaction: any): Observable<any> {
-    return this.post('smartcontractwallet/create', transaction).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  /*
-    * Posts a contract call transaction
-    */
-  public postCallTransaction(transaction: any): Observable<any> {
-    return this.post('smartcontractwallet/call', transaction).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
-
-  public getReceipt(hash: string, silent: boolean = false): any {
-    const params = new HttpParams().set('txHash', hash);
-    return this.get('smartcontracts/receipt', params).pipe(
-      catchError(err => this.handleHttpError(err, silent))
-    );
-  }
-
-  /*
-    Setting the silent flag is not enough because the error format returned by /receipt still causes a modal to be displayed.
-  */
-  public getReceiptSilent(hash: string): any {
-    const params = new HttpParams().set('txHash', hash);
-    return this.get('smartcontracts/receipt', params);
-  }
-
-  public localCall(localCall: TokenBalanceRequest): Observable<LocalExecutionResult> {
-    return this.post<LocalExecutionResult>('smartcontracts/local-call', localCall).pipe(
-      catchError(err => this.handleHttpError(err))
-    );
-  }
 
   private getWalletParams(walletInfo: WalletInfo, extra?: { [key: string]: string }): HttpParams {
     let params = new HttpParams()

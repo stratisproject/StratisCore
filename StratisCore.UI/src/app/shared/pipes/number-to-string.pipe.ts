@@ -12,7 +12,7 @@ export class NumberToStringPipe implements PipeTransform {
     }
     let numStr = String(num);
     if (Math.abs(num) < 1.0) {
-      let e = parseInt(num.toString().split('e-')[1]);
+      const e = parseInt(num.toString().split('e-')[1]);
       if (e) {
         const negative = num < 0;
         if (negative) {

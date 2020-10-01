@@ -6,6 +6,17 @@ export class Recipient {
 
   destinationAddress: string;
   amount: string;
+
+  public equals(recipient: Recipient): boolean {
+    if (null == recipient) {
+      return false;
+    }
+    if (this === recipient) {
+      return true;
+    }
+    return this.destinationAddress === recipient.destinationAddress
+      && Number.parseFloat(this.amount).toFixed(8) === Number.parseFloat(recipient.amount).toFixed(8);
+  }
 }
 
 export class FeeEstimation {
@@ -13,6 +24,7 @@ export class FeeEstimation {
     walletName: string,
     accountName: string,
     destinationAddress: string,
+    sideChainAddress: string,
     amount: string,
     feeType: string,
     allowUnconfirmed: boolean,
@@ -21,13 +33,15 @@ export class FeeEstimation {
   ) {
     this.walletName = walletName;
     this.accountName = accountName;
+    this.sideChainAddress = sideChainAddress;
     this.recipients = [new Recipient(destinationAddress, amount)];
     this.feeType = feeType;
     this.allowUnconfirmed = allowUnconfirmed;
     this.shuffleOutputs = shuffleOutputs;
-    this.changeAddress = changeAddress
+    this.changeAddress = changeAddress;
   }
 
+  sideChainAddress: string;
   walletName: string;
   accountName: string;
   recipients: Recipient[];
@@ -36,4 +50,27 @@ export class FeeEstimation {
   changeAddress: string;
   sender: string;
   shuffleOutputs: boolean;
+  response: number;
+  error: string;
+
+  public equals(feeEstimation: FeeEstimation): boolean {
+    if (null == feeEstimation) {
+      return false;
+    }
+    if (this === feeEstimation) {
+      return true;
+    }
+    return this.changeAddress === feeEstimation.changeAddress &&
+      this.sideChainAddress === feeEstimation.sideChainAddress
+      && this.allowUnconfirmed === feeEstimation.allowUnconfirmed
+      && this.feeType === feeEstimation.feeType
+      && this.accountName === feeEstimation.accountName
+      && this.walletName === feeEstimation.walletName
+      && this.recipients.length === feeEstimation.recipients.length
+      && this.recipients.every(recipient => {
+        return (feeEstimation.recipients
+          .find(r => r.destinationAddress === recipient.destinationAddress) || new Recipient(null, null))
+          .equals(recipient);
+      });
+  }
 }

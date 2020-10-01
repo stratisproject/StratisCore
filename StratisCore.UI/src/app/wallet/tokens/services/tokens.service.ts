@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { LocalExecutionResult } from '@shared/models/local-execution-result';
-import { ApiService } from '@shared/services/api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -10,13 +9,14 @@ import { SavedToken, Token } from '../models/token';
 import { TokenBalanceRequest } from '../models/token-balance-request';
 import { StorageService } from './storage.service';
 import { GlobalService } from '@shared/services/global.service';
+import { SmartContractsService } from "../../smart-contracts/smart-contracts.service";
 
 @Injectable()
 export class TokensService {
   private savedTokens = 'savedTokens';
   private defaultTokens = [];
 
-  constructor(private apiService: ApiService, private storage: StorageService, private globalService: GlobalService) {
+  constructor(private smartContractService: SmartContractsService, private storage: StorageService, private globalService: GlobalService) {
     this.savedTokens = `${globalService.getNetwork()}:savedTokens`;
 
     // Upgrade wallets using the old format
@@ -25,18 +25,17 @@ export class TokensService {
       this.UpdateTokens(oldTokens);
       this.storage.removeItem('savedTokens');
     }
-   }
+  }
 
   GetSavedTokens(): SavedToken[] {
     const savedTokens = this.storage.getItem<SavedToken[]>(this.savedTokens);
-    return savedTokens ? [...this.defaultTokens, ...savedTokens] : this.defaultTokens;
+    return savedTokens ? this.defaultTokens.concat(savedTokens) : this.defaultTokens;
   }
 
   GetAvailableTokens(): Token[] {
     return [
-      new Token('CG1', 'CXa9fNVXPfYL9rdqiR22NoAc9kZUfBAUCu', 'Cirrus Giveaway'),
-      ...this.defaultTokens
-    ];
+      new Token('CG1', 'CXa9fNVXPfYL9rdqiR22NoAc9kZUfBAUCu', 'Cirrus Giveaway')
+    ].concat(this.defaultTokens);
   }
 
   UpdateTokens(tokens: SavedToken[]): Result<SavedToken[]> {
@@ -45,11 +44,15 @@ export class TokensService {
   }
 
   AddToken(token: SavedToken): Result<SavedToken> {
-    if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
+    if (!token) {
+      return new Result(ResultStatus.Error, 'Invalid token');
+    }
     const tokens = this.GetSavedTokens();
 
     const index = tokens.map(t => t.address).indexOf(token.address);
-    if (index >= 0) { return new Result(ResultStatus.Error, 'Specified token is already saved'); }
+    if (index >= 0) {
+      return new Result(ResultStatus.Error, 'Specified token is already saved');
+    }
 
     tokens.push(token);
     this.storage.setItem(this.savedTokens, tokens);
@@ -57,10 +60,14 @@ export class TokensService {
   }
 
   RemoveToken(token: SavedToken): Result<SavedToken> {
-    if (!token) { return new Result(ResultStatus.Error, 'Invalid token'); }
+    if (!token) {
+      return new Result(ResultStatus.Error, 'Invalid token');
+    }
     const tokens = this.GetSavedTokens();
     const index = tokens.map(t => t.address).indexOf(token.address);
-    if (index < 0) { return new Result(ResultStatus.Error, 'Specified token was not found'); }
+    if (index < 0) {
+      return new Result(ResultStatus.Error, 'Specified token was not found');
+    }
     tokens.splice(index, 1);
     this.storage.setItem(this.savedTokens, tokens);
     return Result.ok(token);
@@ -73,11 +80,11 @@ export class TokensService {
   }
 
   LocalCall(request: LocalCallRequest): Observable<LocalExecutionResult> {
-    return this.apiService.localCall(request)
+    return this.smartContractService.LocalCall(request)
       .pipe(
         map(response => {
           // Temporary workaround for non-camel-cased API response
-          const anyResponse = (<any>response);
+          const anyResponse = response as any;
           const result = new LocalExecutionResult();
           result.gasConsumed = anyResponse.hasOwnProperty('GasConsumed') ? anyResponse.GasConsumed : anyResponse.gasConsumed;
           result.return = anyResponse.hasOwnProperty('Return') ? anyResponse.Return : anyResponse.return;

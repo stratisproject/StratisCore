@@ -19,5 +19,6 @@ export enum SignalREvents {
   BlockConnected = 'BlockConnected',
   TransactionReceived = 'TransactionReceived',
   WalletGeneralInfo = 'WalletGeneralInfo',
-  StakingInfo = 'StakingInfo'
+  StakingInfo = 'StakingInfo',
+  ColdStakingInfo = 'ColdStakingInfo'
 }

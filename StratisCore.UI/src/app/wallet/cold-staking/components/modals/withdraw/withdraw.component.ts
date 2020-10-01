@@ -4,12 +4,12 @@ import { GlobalService } from '@shared/services/global.service';
 
 import { ColdStakingServiceBase } from '../../../cold-staking.service';
 
-type FeeType = { id: number, display: string };
+type FeeType = { id: number; display: string };
 
 @Component({
     selector: 'app-withdraw',
     templateUrl: './withdraw.component.html',
-    styleUrls: ['./withdraw.component.css']
+    styleUrls: ['./withdraw.component.scss']
 })
 export class ColdStakingWithdrawComponent implements OnInit {
     private _amount;
@@ -60,11 +60,11 @@ export class ColdStakingWithdrawComponent implements OnInit {
         return this._password;
     }
 
-    private setCanWithdraw() {
+    private setCanWithdraw(): void {
         this.canWithdraw = this._amountFormatted.length && this._destinationAddress.length && this.passwordValid;
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.setCanWithdraw();
 
         this.stakingService.GetInfo(this.globalService.getWalletName()).subscribe(x => {
@@ -73,8 +73,8 @@ export class ColdStakingWithdrawComponent implements OnInit {
         });
     }
 
-    withdrawClicked() {
+    withdrawClicked(): void {
     }
 
-    closeClicked = () => this.activeModal.close();
+    closeClicked = (): void => this.activeModal.close();
 }

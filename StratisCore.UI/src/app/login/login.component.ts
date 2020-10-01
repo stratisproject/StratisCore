@@ -3,20 +3,22 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GlobalService } from '@shared/services/global.service';
 import { ApiService } from '@shared/services/api.service';
-import { ModalService } from '@shared/services/modal.service';
 import { WalletLoad } from '@shared/models/wallet-load';
-import { ReplaySubject, Subscription } from 'rxjs';
-import { Disposable } from '../wallet/tokens/models/disposable';
+import { Subscription } from 'rxjs';
+import { WalletService } from '@shared/services/wallet.service';
+import { SideBarItemsProvider } from '@shared/components/side-bar/side-bar-items-provider.service';
+import { AccountSidebarItem } from '../wallet/side-bar-items/account-sidebar-item';
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 
 export class LoginComponent implements OnInit, OnDestroy {
   private openWalletForm: FormGroup;
-  private wallets: [string];
+  private wallets: string[];
   private subscriptions: Subscription[] = [];
 
   private formErrors = {
@@ -32,9 +34,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private globalService: GlobalService,
     private apiService: ApiService,
-    private genericModalService: ModalService,
+    private walletService: WalletService,
     private router: Router,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private sidebarItems: SideBarItemsProvider,
+    private accountSidebarItem: AccountSidebarItem,) {
 
     this.buildDecryptForm();
   }
@@ -45,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   public ngOnInit(): void {
-    this.getWalletFiles();
+    this.getWalletNames();
     this.getCurrentNetwork();
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
   }
@@ -57,12 +61,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(this.openWalletForm.valueChanges
-      .subscribe(data => this.onValueChanged(data)));
+      .subscribe(() => this.onValueChanged()));
 
     this.onValueChanged();
   }
 
-  private onValueChanged(data?: any): void {
+  private onValueChanged(): void {
     if (!this.openWalletForm) {
       return;
     }
@@ -79,34 +83,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getWalletFiles(): void {
-    const subscription = this.apiService.getWalletFiles()
+  private getWalletNames(): void {
+    this.subscriptions.push(this.walletService.getWalletNames()
       .subscribe(
         response => {
-          this.wallets = response.walletsFiles;
-          this.globalService.setWalletPath(response.walletsPath);
+          this.wallets = response.walletNames.sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1);
           if (this.wallets.length > 0) {
             this.hasWallet = true;
-            for (const wallet in this.wallets) {
-              this.wallets[wallet] = this.wallets[wallet].slice(0, -12);
-            }
           } else {
             this.hasWallet = false;
           }
         }
-      );
-
-    this.subscriptions.push(subscription);
+      ));
   }
 
-  public onCreateClicked() {
+  public onCreateClicked(): void {
+    this.openWalletForm.patchValue({password: "", selectWallet: ""});
     this.router.navigate(['setup']);
-  }
-
-  public onEnter(): void {
-    if (this.openWalletForm.valid) {
-      this.onDecryptClicked();
-    }
   }
 
   public onDecryptClicked(): void {
@@ -120,14 +113,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private loadWallet(walletLoad: WalletLoad): void {
-    this.apiService.loadStratisWallet(walletLoad)
+    this.walletService.loadStratisWallet(walletLoad)
       .subscribe(
-        response => {
-          this.sidechainEnabled 
+        () => {
+          this.sidechainEnabled
             ? this.router.navigate(['address-selection'])
             : this.router.navigate(['wallet/dashboard']);
+            this.sidebarItems.setSelected(this.accountSidebarItem)
         },
-        error => {
+        () => {
+          this.openWalletForm.patchValue({password: ""});
           this.isDecrypting = false;
         }
       )

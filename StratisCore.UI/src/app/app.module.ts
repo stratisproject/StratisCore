@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { SetupModule } from './setup/setup.module';
 import { WalletModule } from './wallet/wallet.module';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     SharedModule,
     SetupModule,
     WalletModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgxPaginationModule
   ],
   declarations: [
     AppComponent,

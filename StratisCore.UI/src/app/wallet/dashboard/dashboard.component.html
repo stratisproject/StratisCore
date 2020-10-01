@@ -1,67 +1,34 @@
-<section id="GUI" class="light">
-  <!-- CONTAINER -->
-  <section id="content" class="col-11 mx-auto">
-    <!-- JUMBOTRON-->
-    <div class="jumbotron jumbotron-fluid">
-      <div class="col-12">
-        <div class="row d-flex align-items-center">
-          <div class="col-9 text-left" *ngIf="(wallet| async) as _wallet">
-            <h5>Balance</h5>
-            <p class="lead">
-              <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
-              <small class="text-uppercase"> {{ globalService.coinUnit }}</small>
-            </p>
-            <ul class="list-unstyled">
-              <li>
-                <strong>{{ (_wallet.amountUnconfirmed | coinNotation) || (0 | coinNotation) }}</strong>
-                <em> (unconfirmed)</em>
-              </li>
-            </ul>
-          </div>
-          <!-- /col-->
-          <div class="col text-right">
-            <p>
-              <a class="btn btn-lg btn-primary" (click)="openReceiveDialog()"
-                 [class.btn-secondary]="globalService.getSidechainEnabled()">
-                <i class="icon lnr lnr-arrow-down-circle"></i>
-                <span class="text-center text-uppercase">Receive</span>
-              </a>
-              <a class="btn btn-lg btn-primary ml-2" (click)="openSendDialog()"
-                 [class.btn-secondary]="globalService.getSidechainEnabled()">
-                <i class="icon lnr lnr-arrow-up-circle"></i>
-                <span class="text-center text-uppercase">Send</span>
-              </a>
-            </p>
-          </div>
-          <!-- /col-->
-        </div>
-        <!-- /row-->
-      </div>
-      <!-- /col-->
+<div id="GUI" class="light" @fadeIn>
+  <div class="jumbotron" id="account-header">
+    <div class="text-left" *ngIf="(wallet| async) as _wallet">
+      <h3>Balance</h3>
+      <p class="lead">
+        <strong>{{ (_wallet.amountConfirmed | coinNotation) || (0 | coinNotation) }}</strong>
+        <small class="text-uppercase"> {{ globalService.coinUnit }}</small>
+      </p>
+      <ul class="list-unstyled mb-0">
+        <li>
+          <strong>{{ (_wallet.amountUnconfirmed | coinNotation) || (0 | coinNotation) }}</strong>
+          <em> (unconfirmed)</em>
+        </li>
+      </ul>
     </div>
-    <!-- /JUMBOTRON-->
-    <div class="row">
-      <div class="col-8" *ngIf="(transactionCount | async) > 0 else noTransactions"
-           [class.col-12]="globalService.getSidechainEnabled()">
-        <app-transactions title="Latest Transactions"
-                          [maxTransactionCount]="5" [enableShowHistoryButton]="true">
-        </app-transactions>
-      </div>
-      <div class="col-4" *ngIf="!globalService.getSidechainEnabled()">
-        <app-staking></app-staking>
-      </div>
-
-      <ng-template #noTransactions>
-        <section class="col-12 text-center my-4">
-          <img src="./assets/images/notransactions.svg" alt="Click the down arrow for a receive address.">
-        </section>
-        <div class="col-12 text-center">
-          <p>Click the down arrow for a receive address.</p>
+    <h4 class="mt-4">
+      Latest Transactions
+    </h4>
+  </div>
+<div>
+<div style="padding-top: 150px;" class="min-vh-100">
+  <div id="content">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <app-transactions>
+            </app-transactions>
+          </div>
         </div>
-      </ng-template>
+      </div>
     </div>
-    <status-bar></status-bar>
-  </section>
-  <!-- /CONTAINER-->
-</section>
-<!-- /GUI-->
+  </div>
+</div>
