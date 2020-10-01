@@ -207,7 +207,6 @@ img {
   //CARD
   .card-staking {
     background: rgba(255, 255, 255, 0) !important;
-    border: 1px solid rgba(255, 255, 255, 0.5);
 
     .lead {
       font-size: 1.8rem;
@@ -300,6 +299,9 @@ img {
 
   ///// CARDS
   .card {
+
+    border: none;
+
     .card-header {
       text-transform: uppercase;
       font-size: $font-size-base;
@@ -2130,8 +2132,15 @@ app-side-bar {
     .side-bar-item-advanced:before {
       content: "\e810";
     }
-  }
 
+    .side-bar-item-swap:before {
+      content: "\e862";
+    }
+
+    .side-bar-item-vote:before {
+      content: "\e872";
+    }
+  }
 }
 
 .send-form {
@@ -2218,6 +2227,11 @@ app-task-bar {
 
 .btn-right-200 {
   float: right;
+  width: 200px;
+}
+
+.btn-left-200 {
+  float: left;
   width: 200px;
 }
 

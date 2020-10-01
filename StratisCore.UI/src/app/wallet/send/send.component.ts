@@ -65,6 +65,8 @@ export class SendComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(500))
       .subscribe(data => this.validateForm(data, true)));
+
+    this.subscriptions.push(this.sendToSidechainForm.get('networkSelect').valueChanges.subscribe(data => this.networkSelectChanged(data)));
   }
 
   @Input() address: string;
@@ -141,36 +143,41 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   private validateForm(data: any, isSideChain: boolean): void {
-    const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
-    if (!form) {
-      return;
-    }
 
-    FormHelper.ValidateForm(form,
-      isSideChain
-        ? this.sendToSidechainFormErrors
-        : this.sendFormErrors,
-      isSideChain
-        ? SendComponentFormResources.sendToSidechainValidationMessages
-        : SendComponentFormResources.sendValidationMessages
-    );
-
-    if (isSideChain) {
-      if (form.get('networkSelect').value && form.get('networkSelect').value !== 'customNetwork') {
-        form.patchValue({'federationAddress': form.get('networkSelect').value})
-      } else if (form.get('networkSelect').value && form.get('networkSelect').value === 'customNetwork') {
-        form.patchValue({'federationAddress': ''})
+    try {
+      const form = isSideChain ? this.sendToSidechainForm : this.sendForm;
+      if (!form) {
+        return;
       }
+
+      FormHelper.ValidateForm(form,
+        isSideChain
+          ? this.sendToSidechainFormErrors
+          : this.sendFormErrors,
+        isSideChain
+          ? SendComponentFormResources.sendToSidechainValidationMessages
+          : SendComponentFormResources.sendValidationMessages
+      );
+
+      this.apiError = '';
+
+      const isValidForFeeEstimate = (isSideChain
+        ? form.get('amount').valid && form.get('destinationAddress').valid && form.get('federationAddress').valid && form.get('fee').valid
+        : form.get('address').valid && form.get('amount').valid && form.get('fee').valid);
+
+      if (isValidForFeeEstimate) {
+        this.estimateFee(form, isSideChain);
+      }
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    this.apiError = '';
-
-    const isValidForFeeEstimate = (isSideChain
-      ? form.get('amount').valid && form.get('destinationAddress').valid && form.get('federationAddress').valid
-      : form.get('address').valid && form.get('amount').valid);
-
-    if (isValidForFeeEstimate) {
-      this.estimateFee(form, isSideChain);
+  private networkSelectChanged(data: any): void {
+    if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value !== 'customNetwork') {
+      this.sendToSidechainForm.patchValue({'federationAddress': this.sendToSidechainForm.get('networkSelect').value})
+    } else if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value === 'customNetwork') {
+      this.sendToSidechainForm.patchValue({'federationAddress': ''})
     }
   }
 
@@ -184,7 +191,6 @@ export class SendComponent implements OnInit, OnDestroy {
           balanceResponse = response;
         },
         error => {
-          this.apiError = error.error.errors[0].message;
         },
         () => {
           this.sendForm.patchValue({amount: +new CoinNotationPipe().transform(balanceResponse.maxSpendableAmount)});
@@ -198,10 +204,12 @@ export class SendComponent implements OnInit, OnDestroy {
       this.globalService.getWalletName(),
       'account 0',
       form.get(isSideChain ? 'federationAddress' : 'address').value.trim(),
+      isSideChain ? form.get('destinationAddress').value.trim() : '',
       form.get('amount').value,
       form.get('fee').value,
-      true
+      true,
     );
+
 
     if (!transaction.equals(this.last)) {
       this.last = transaction;
@@ -215,6 +223,7 @@ export class SendComponent implements OnInit, OnDestroy {
             } else {
               this.estimatedFee = response;
             }
+            this.last.response = response;
             clearTimeout(progressDelay);
             this.status.next({estimating: false});
           },
@@ -222,8 +231,25 @@ export class SendComponent implements OnInit, OnDestroy {
             clearTimeout(progressDelay);
             this.status.next({estimating: false});
             this.apiError = error.error.errors[0].message;
+            if (this.apiError == 'Invalid address') {
+              if (isSideChain) {
+                this.sendToSidechainFormErrors.destinationAddress = this.apiError
+              } else {
+                this.sendFormErrors.address = this.apiError;
+              }
+              this.last.error = this.apiError;
+            }
           }
         );
+    } else if (transaction.equals(this.last) && !this.status.value.estimating) {
+      // Use the cached value
+      if (isSideChain) {
+        this.estimatedSidechainFee = this.last.response;
+        this.sendToSidechainFormErrors.destinationAddress = this.last.error;
+      } else {
+        this.estimatedFee = this.last.response;
+        this.sendFormErrors.address = this.last.error
+      }
     }
   }
 
@@ -231,11 +257,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.isSending = true;
     this.walletService.sendTransaction(this.getTransaction(sendToSideChain))
       .then(transactionResponse => {
-        this.estimatedFee = transactionResponse.transactionFee;
-        this.sendToSidechainForm.reset();
-        this.sendForm.reset();
-        this.estimatedSidechainFee = 0;
-        this.estimatedFee = 0;
+        this.resetSendForms();
         this.openConfirmationModal(transactionResponse);
         this.isSending = false;
       }).catch(error => {
@@ -258,8 +280,23 @@ export class SendComponent implements OnInit, OnDestroy {
       true,
       !this.accountsEnabled, // Shuffle Outputs
       isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
-      isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null
+      isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null,
     );
+  }
+
+  public switchForms(isSideChain: boolean): void {
+    this.sideChain = isSideChain;
+    this.resetSendForms();
+  }
+
+  private resetSendForms(): void {
+    this.sendToSidechainForm.reset();
+    this.sendToSidechainForm.get('networkSelect').patchValue('');
+    this.sendToSidechainForm.get('fee').patchValue('medium');
+    this.sendForm.reset();
+    this.sendForm.get('fee').patchValue('medium');
+    this.estimatedSidechainFee = 0;
+    this.estimatedFee = 0;
   }
 
   private getAddressBookContact(): void {

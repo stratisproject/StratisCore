@@ -15,8 +15,8 @@
             type="radio"
             name="options"
             autocomplete="off"
-            (click)="sideChain = false">
-            Mainchain
+            (click)="switchForms(false)">
+          Mainchain
         </label>
         <label
           [ngClass]="{'active' : sideChain}"
@@ -25,8 +25,8 @@
             type="radio"
             name="options"
             autocomplete="off"
-            (click)="sideChain = true">
-            Sidechain
+            (click)="switchForms(true)">
+          Sidechain
         </label>
       </div>
     </div>
@@ -170,12 +170,15 @@
                     <label for="networkSelect">Select destination network</label>
                     <select class="custom-select form-control" formControlName="networkSelect">
                       <option value='' disabled selected>Select destination network...</option>
-                      <option *ngFor="let network of networks" [value]="network.federationAddress">{{ network.description }}</option>
+                      <option *ngFor="let network of networks"
+                              [value]="network.federationAddress">{{ network.description }}</option>
                       <option value="customNetwork">Custom...</option>
                     </select>
-                    <div *ngIf="sendToSidechainFormErrors.networkSelect" class="invalid-feedback">{{ sendToSidechainFormErrors.networkSelect }}</div>
+                    <div *ngIf="sendToSidechainFormErrors.networkSelect"
+                         class="invalid-feedback">{{ sendToSidechainFormErrors.networkSelect }}</div>
                   </div>
-                  <div class="form-group clearfix" *ngIf="sendToSidechainForm.get('networkSelect').value === 'customNetwork'">
+                  <div class="form-group clearfix"
+                       *ngIf="sendToSidechainForm.get('networkSelect').value === 'customNetwork'">
                     <label for="federationAddress">{{ firstTitle }} federation address</label>
                     <input type="text" class="form-control"
                            [class.is-invalid]="sendToSidechainFormErrors.federationAddress"
@@ -199,8 +202,10 @@
                     <ng-container *ngIf="status | async let _status">
                       <label>Transaction Fee</label>
                       <div *ngIf="!_status.estimating" style="height:35px">
-                        <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount and
-                          destination address and make sure you select a destination network to calculate the fee.</small>
+                        <small *ngIf="!estimatedSidechainFee" class="blockText text-danger">Please enter a valid amount
+                          and
+                          destination address and make sure you select a destination network to calculate the
+                          fee.</small>
                         <label *ngIf="estimatedSidechainFee"
                                class="blockText text-danger">{{ estimatedSidechainFee | coinNotation }} {{ coinUnit }}</label>
                       </div>
@@ -242,9 +247,6 @@
                   </div>
                   <div class="form-group clearfix">
                     <div>
-                      <div class="alert alert-warning py-1">An additional amount
-                        of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.
-                      </div>
                       <div class="alert alert-warning py-1">{{ confirmationText }}</div>
                     </div>
                   </div>

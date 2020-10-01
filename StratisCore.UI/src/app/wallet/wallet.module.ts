@@ -41,6 +41,10 @@ import { TransactionDetailsModalComponent } from './transaction-details-modal/tr
 import { AccountSidebarItem } from './side-bar-items/account-sidebar-item';
 import { BroadcastTransactionComponent } from './advanced/components/broadcast-transaction/broadcast-transaction.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { SwapComponent } from './swap/swap.component';
+import { SwapConfirmationComponent } from './swap/swap-confirmation/swap-confirmation.component';
+import { VoteComponent } from './vote/vote.component';
+import { VoteModalComponent } from './vote/vote-modal/vote-modal.component';
 
 @NgModule({
   imports: [
@@ -80,7 +84,11 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     AddressBookCardComponent,
     AddNodeComponent,
     TransactionDetailsModalComponent,
-    BroadcastTransactionComponent
+    BroadcastTransactionComponent,
+    SwapComponent,
+    SwapConfirmationComponent,
+    VoteComponent,
+    VoteModalComponent
   ],
   providers: [
     AccountSelectedGuard,
@@ -91,6 +99,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
   entryComponents: [
     SendComponent,
     SendConfirmationComponent,
+    SwapConfirmationComponent,
     ReceiveComponent,
     TransactionDetailsComponent,
     LogoutConfirmationComponent,
@@ -100,7 +109,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     ColdStakingWithdrawComponent,
     ColdStakingCreateComponent,
     ColdStakingCreateSuccessComponent,
-    BroadcastTransactionComponent
+    BroadcastTransactionComponent,
+    VoteModalComponent
   ]
 })
 
@@ -127,6 +137,14 @@ export class WalletModule {
 
     sidebarItems.registerSideBarItem(new SimpleSideBarItem(
       'Advanced', '/wallet/advanced', ['side-bar-item-advanced']));
+
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Vote', '/wallet/vote', ['side-bar-item-vote']
+    ));
+
+    // sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+    //   'Token Swap', '/wallet/swap', ['side-bar-item-swap']
+    // ));
 
     sidebarItems.setSelected({
       route : '/wallet/dashboard'
