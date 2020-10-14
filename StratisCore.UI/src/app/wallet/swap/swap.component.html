@@ -30,13 +30,19 @@
             <div class="form-group col-12">
               <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="formErrors.tacAgreed" [class.is-valid]="!formErrors.tacAgreed && swapForm.get('tacAgreed').valid"
                 formControlName="tacAgreed" id="tacAgreed">
-                By completing the above fields and selecting the ‘SWAP’ button, you agree to the following <a class="text-primary" (click)="openTerms()"><u>terms and conditions</u></a>.
+                By completing the above fields and selecting the 'SWAP' button, you agree to the following <a class="text-primary" (click)="openTerms()"><u>terms and conditions</u></a>.
               <div *ngIf="formErrors.tacAgreed" class="invalid-feedback">{{ formErrors.tacAgreed }}</div>
+            </div>
+            <div class="form-group col-12">
+              <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="formErrors.exchangeAgreed" [class.is-valid]="!formErrors.exchangeAgreed && swapForm.get('exchangeAgreed').valid"
+                formControlName="exchangeAgreed" id="exchangeAgreed">
+                By completing the above fields and selecting the 'SWAP' button, you consent to us exchanging your STRATIS Legacy Tokens for STRAX Tokens and acknowledge that you will lose your right to cancel the Token Swap.
+              <div *ngIf="formErrors.exchangeAgreed" class="invalid-feedback">{{ formErrors.exchangeAgreed }}</div>
             </div>
             <div class="form-group col-12">
               <input type="checkbox" class="form control form-control-success text-left" [class.is-invalid]="formErrors.burnAgreed" [class.is-valid]="!formErrors.burnAgreed && swapForm.get('burnAgreed').valid"
                 formControlName="burnAgreed" id="burnAgreed">
-                By completing the above fields and selecting the 'SWAP' button, you understand that your current STRAT Tokens will be irreversibly destroyed.
+                By completing the above fields and selecting the 'SWAP' button, you understand that your STRATIS Legacy Tokens will be irreversibly destroyed (burned).
               <div *ngIf="formErrors.burnAgreed" class="invalid-feedback">{{ formErrors.burnAgreed }}</div>
             </div>
             <button type="button" class="btn btn-primary btn-block" [disabled]="!swapForm.valid || isSwapping || !maxAmount || !fee" (click)="openSwapModal()">SWAP</button>

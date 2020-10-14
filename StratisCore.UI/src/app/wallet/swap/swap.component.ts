@@ -112,8 +112,9 @@ export class SwapComponent implements OnInit, OnDestroy {
     this.swapForm = this.fb.group({
       swapAddress: ['', Validators.compose([Validators.required, Validators.minLength(26), Validators.maxLength(40), Validators.pattern(this.addressRegExp)])],
       walletPassword: ['', Validators.required],
-      tacAgreed: ['', Validators.required],
-      burnAgreed: ['', Validators.required]
+      tacAgreed: ['', Validators.requiredTrue],
+      burnAgreed: ['', Validators.requiredTrue],
+      exchangeAgreed: ['', Validators.requiredTrue]
     });
 
     this.formValueChanges$ = this.swapForm.valueChanges
@@ -139,7 +140,8 @@ export class SwapComponent implements OnInit, OnDestroy {
     swapAddress: '',
     walletPassword: '',
     tacAgreed: '',
-    burnagreed: ''
+    burnAgreed: '',
+    exchangeAgreed: ''
   };
 
   swapValidationMessages = {
@@ -153,10 +155,13 @@ export class SwapComponent implements OnInit, OnDestroy {
       required: 'Your password is required.'
     },
     tacAgreed: {
-      required: 'You need to accept our terms and conditions'
+      required: 'You must agree to the terms and conditions.'
     },
     burnAgreed: {
-      required: 'You need to confirm that your Stratis will be destroyed irreversibly'
+      required: 'You must confirm that your STRATIS Legacy Tokens will be irreversibly destroyed.'
+    },
+    exchangeAgreed: {
+      required: 'You must confirm your consent for us to exchange your STRATIS Legacy Tokens and acknowledge your right to cancel will be lost.'
     }
   };
 
