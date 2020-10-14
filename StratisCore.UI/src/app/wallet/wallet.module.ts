@@ -142,9 +142,9 @@ export class WalletModule {
       'Vote', '/wallet/vote', ['side-bar-item-vote']
     ));
 
-    // sidebarItems.registerSideBarItem(new SimpleSideBarItem(
-    //   'Token Swap', '/wallet/swap', ['side-bar-item-swap']
-    // ));
+    sidebarItems.registerSideBarItem(new SimpleSideBarItem(
+      'Token Swap', '/wallet/swap', ['side-bar-item-swap']
+    ));
 
     sidebarItems.setSelected({
       route : '/wallet/dashboard'
