@@ -85,7 +85,8 @@ export class SwapComponent implements OnInit, OnDestroy {
       this.globalService.getWalletName(),
       'account 0',
       this.swapForm.get('walletPassword').value,
-      this.fee / 100000000,
+      //this.fee / 100000000,
+      "low",
       true, // Allow unconfirmed
       false, // Shuffle Outputs
       this.swapForm.get('swapAddress').value.trim(), // OP_RETURN data
@@ -101,7 +102,8 @@ export class SwapComponent implements OnInit, OnDestroy {
   public openSwapModal(): void {
     this.isSwapping = true;
     this.taskBarService.open(SwapConfirmationComponent, {
-      transaction: this.getTransaction()
+      transaction: this.getTransaction(),
+      feeAmount: this.fee / 100000000
     }, {taskBarWidth: '550px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
       this.resetForm();
