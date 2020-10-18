@@ -53,6 +53,8 @@ export class SwapComponent implements OnInit, OnDestroy {
         response => {
           this.maxAmount = response.maxSpendableAmount;
           this.fee = this.getFee(response.fee);
+          this.maxAmount = this.maxAmount + (this.fee - 10000000);
+          this.fee = 10000000;
           if (this.maxAmount <= 0) {
             this.noBalance = true;
           } else {
@@ -85,8 +87,7 @@ export class SwapComponent implements OnInit, OnDestroy {
       this.globalService.getWalletName(),
       'account 0',
       this.swapForm.get('walletPassword').value,
-      //this.fee / 100000000,
-      "low",
+      this.fee / 100000000,
       true, // Allow unconfirmed
       false, // Shuffle Outputs
       this.swapForm.get('swapAddress').value.trim(), // OP_RETURN data
@@ -102,8 +103,7 @@ export class SwapComponent implements OnInit, OnDestroy {
   public openSwapModal(): void {
     this.isSwapping = true;
     this.taskBarService.open(SwapConfirmationComponent, {
-      transaction: this.getTransaction(),
-      feeAmount: this.fee / 100000000
+      transaction: this.getTransaction()
     }, {taskBarWidth: '550px'}).then(ref => {
       ref.closeWhen(ref.instance.closeClicked);
       this.resetForm();

@@ -11,7 +11,6 @@ import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
 export class SwapConfirmationComponent implements OnInit {
 
   @Input() transaction: OpreturnTransaction;
-  @Input() feeAmount: number;
   @Output() closeClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private globalService: GlobalService, private walletService: WalletService) {
   }
@@ -25,7 +24,7 @@ export class SwapConfirmationComponent implements OnInit {
 
   ngOnInit(): void {
     this.coinUnit = this.globalService.getCoinUnit();
-    this.totalAmount = +this.transaction.opReturnAmount + this.feeAmount;
+    this.totalAmount = +this.transaction.opReturnAmount + this.transaction.feeAmount;
   }
 
   public swap(): void {
