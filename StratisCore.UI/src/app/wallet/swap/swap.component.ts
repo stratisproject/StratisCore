@@ -53,8 +53,8 @@ export class SwapComponent implements OnInit, OnDestroy {
         response => {
           this.maxAmount = response.maxSpendableAmount;
           this.fee = this.getFee(response.fee);
-          this.maxAmount = this.maxAmount + (this.fee - 10000000);
-          this.fee = 10000000;
+          this.maxAmount = this.maxAmount + (this.fee - 100000);
+          this.fee = 100000;
           if (this.maxAmount <= 0) {
             this.noBalance = true;
           } else {
