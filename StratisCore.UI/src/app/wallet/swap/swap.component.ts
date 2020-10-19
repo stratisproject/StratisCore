@@ -10,6 +10,7 @@ import { WalletService } from '@shared/services/wallet.service';
 import { TaskBarService } from '@shared/services/task-bar-service';
 import { SwapConfirmationComponent } from './swap-confirmation/swap-confirmation.component';
 import { OpreturnTransaction } from '@shared/models/opreturn-transaction';
+import { MaxBalanceRequest } from '@shared/models/max-balance';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class SwapComponent implements OnInit, OnDestroy {
     this.buildSwapForm();
   }
 
-  private walletInfoRequest: WalletInfoRequest;
+  private maxBalanceRequest: MaxBalanceRequest;
   public maxAmount: number;
   public noBalance: boolean;
   public fee: number;
@@ -38,23 +39,21 @@ export class SwapComponent implements OnInit, OnDestroy {
   public testnetEnabled: boolean;
   public addressRegExp: string;
 
-  ngOnInit() {
-    this.getMaximumAmount();
+  ngOnInit(): void {
+
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.cancelSubscriptions();
   }
 
   private getMaximumAmount(): void {
-    this.walletInfoRequest = new WalletInfoRequest(this.globalService.getWalletName(), 0, "low");
-    this.maximumBalanceSubscription = this.apiService.getMaximumBalance(this.walletInfoRequest)
+    this.maxBalanceRequest = new MaxBalanceRequest(this.globalService.getWalletName(), 0, this.swapForm.get('swapAddress').value.trim(), null, "true", "low");
+    this.maximumBalanceSubscription = this.apiService.getMaximumBalance(this.maxBalanceRequest)
       .subscribe(
         response => {
           this.maxAmount = response.maxSpendableAmount;
           this.fee = this.getFee(response.fee);
-          this.maxAmount = this.maxAmount + (this.fee - 100000);
-          this.fee = 100000;
           if (this.maxAmount <= 0) {
             this.noBalance = true;
           } else {
@@ -68,8 +67,8 @@ export class SwapComponent implements OnInit, OnDestroy {
     ;
   }
 
-  private getFee(fee: number) {
-    const minFee: number = 10000;
+  private getFee(fee: number): number {
+    const minFee = 10000;
     if (fee > minFee) {
       return fee;
     } else {
@@ -95,9 +94,13 @@ export class SwapComponent implements OnInit, OnDestroy {
     );
   }
 
-  private resetForm() {
+  private resetForm(): void {
     this.swapForm.reset();
     this.isSwapping = false;
+    this.cancelSubscriptions();
+    this.maxAmount = 0;
+    this.fee = 0;
+    this.getMaximumAmount();
   }
 
   public openSwapModal(): void {
@@ -135,6 +138,10 @@ export class SwapComponent implements OnInit, OnDestroy {
           this.formErrors[field] += messages[key] + ' ';
         }
       }
+    }
+
+    if (this.swapForm.get('swapAddress').valid) {
+      this.getMaximumAmount();
     }
   }
 
