@@ -10,6 +10,7 @@ import { NodeStatus } from '../models/node-status';
 import { RestApi } from '@shared/services/rest-api';
 import { IApiService } from '@shared/services/interfaces/services.i';
 import { ErrorService } from '@shared/services/error-service';
+import { MaxBalanceRequest } from '@shared/models/max-balance';
 
 @Injectable({
   providedIn: 'root'
@@ -97,11 +98,14 @@ export class ApiService extends RestApi implements IApiService {
   /**
    * Get the maximum sendable amount for a given fee from the API
    */
-  public getMaximumBalance(data: WalletInfoRequest): Observable<any> {
+  public getMaximumBalance(data: MaxBalanceRequest): Observable<any> {
     return this.get('wallet/maxbalance',
       this.getWalletParams(data, {
         feeType: data.feeType,
-        allowUnconfirmed: 'true'
+        allowUnconfirmed: 'true',
+        opReturnData: data.opReturnData,
+        opReturnAmount: data.opReturnAmount,
+        burnFullBalance: data.burnFullBalance
       })).pipe(
       catchError(err => this.handleHttpError(err))
     );
