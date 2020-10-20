@@ -5,11 +5,12 @@
     </div>
     <div *ngIf="(generalInfo | async) as _generalInfo">
       <div *ngIf="hasVotedCollateral; else notVotedTemplate" class="text-center">
-        Thank you for participating in masternode collateral voting process.
-        <div *ngIf="voteResultCollateral === 'CollateralA'">You have voted for the collateral to be CollateralA.</div>
-        <div *ngIf="voteResultCollateral === 'CollateralB'">You have voted for the collateral to be CollateralB.</div>
-        <div *ngIf="voteResultCollateral === 'CollateralC'">You have voted for the collateral to be CollateralC.</div>
-        <div *ngIf="voteResultCollateral === 'CollateralD'">You have voted for the collateral to be CollateralD.</div>
+        Thank you for participating in the masternode collateral voting process.
+        <div *ngIf="voteResultCollateral === 'CA'">You have voted for the collateral to be 50 000 STRAX.</div>
+        <div *ngIf="voteResultCollateral === 'CB'">You have voted for the collateral to be 75 000 STRAX.</div>
+        <div *ngIf="voteResultCollateral === 'CC'">You have voted for the collateral to be 100 000 STRAX.</div>
+        <div *ngIf="voteResultCollateral === 'CD'">You have voted for the collateral to be 150 000 STRAX.</div>
+        <div *ngIf="voteResultCollateral === 'CE'">You have voted for the collateral to be 200 000 STRAX.</div>
         If you have any questions or concerns, please visit the Stratis Discord Server.
       </div>
       <ng-template #notVotedTemplate>
@@ -24,10 +25,11 @@
             <!-- <p>Do you support the STRAX Token Proposal, that includes the additional minting of STRAX Tokens. More information regarding the proposal can be found <a class="text-primary" (click)="openProposal()"><u>here</u></a>.</p> -->
             <p>Please select the collateral amount you would like to vote for.</p>
             <select class="form control form-control-success text-left" [class.is-invalid]="formErrors.vote" [class.is-valid]="!formErrors.vote && voteForm.get('vote').valid" formControlName="vote" id="vote">
-              <option value="CollateralA">100 000 STRAX</option>
-              <option value="CollateralB">150 000 STRAX</option>
-              <option value="CollateralC">200 000 STRAX</option>
-              <option value="CollateralD">250 000 STRAX</option>
+              <option value="CA">50 000 STRAX</option>
+              <option value="CB">75 000 STRAX</option>
+              <option value="CC">100 000 STRAX</option>
+              <option value="CD">150 000 STRAX</option>
+              <option value="CE">200 000 STRAX</option>
             </select>
             <div *ngIf="formErrors.vote" class="invalid-feedback">{{ formErrors.vote }}</div>
           </div>

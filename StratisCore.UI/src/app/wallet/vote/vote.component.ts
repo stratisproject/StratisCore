@@ -105,7 +105,7 @@ export class VoteComponent implements OnInit, OnDestroy {
         this.isVoting = false;
         this.hasVotedCollateral = true;
         localStorage.setItem('hasVotedCollateral', "true");
-        localStorage.setItem('voteCollateral', voteValue);
+        localStorage.setItem('voteResultCollateral', voteValue);
         modalInstance.loading = false;
         modalInstance.title = `<div class="text-center">Vote submitted</div>`;
         modalInstance.body = `<div class="text-center">You have succesfully submitted your vote.</div>`;
