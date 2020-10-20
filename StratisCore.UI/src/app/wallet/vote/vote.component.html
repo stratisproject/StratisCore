@@ -1,13 +1,15 @@
 <section id="GUI" class="light" @fadeIn>
   <div class="jumbotron page-header">
     <div class="text-left">
-      <h3><strong>VOTE TO SWAP</strong></h3>
+      <h3><strong>Masternode collateral requirement vote</strong></h3>
     </div>
     <div *ngIf="(generalInfo | async) as _generalInfo">
-      <div *ngIf="hasVoted; else notVotedTemplate" class="text-center">
-        Thank you for participating in the STRAX Token Proposal
-        <div *ngIf="voteResult === 'true'">You have voted "Yes" in favour of the STRAX Token Proposal.</div>
-        <div *ngIf="voteResult === 'false'">You have voted "No" in opposition of the STRAX Token Proposal.</div>
+      <div *ngIf="hasVotedCollateral; else notVotedTemplate" class="text-center">
+        Thank you for participating in masternode collateral voting process.
+        <div *ngIf="voteResultCollateral === 'CollateralA'">You have voted for the collateral to be CollateralA.</div>
+        <div *ngIf="voteResultCollateral === 'CollateralB'">You have voted for the collateral to be CollateralB.</div>
+        <div *ngIf="voteResultCollateral === 'CollateralC'">You have voted for the collateral to be CollateralC.</div>
+        <div *ngIf="voteResultCollateral === 'CollateralD'">You have voted for the collateral to be CollateralD.</div>
         If you have any questions or concerns, please visit the Stratis Discord Server.
       </div>
       <ng-template #notVotedTemplate>
@@ -19,19 +21,21 @@
             </div>
           </div>
           <div class="form-group col-12">
-            <p>Do you support the STRAX Token Proposal, that includes the additional minting of STRAX Tokens. More information regarding the proposal can be found <a class="text-primary" (click)="openProposal()"><u>here</u></a>.</p>
-            <p>If you are in favour of this proposal, please select "Yes", if you are in opposition of this proposal, please select "No"</p>
+            <!-- <p>Do you support the STRAX Token Proposal, that includes the additional minting of STRAX Tokens. More information regarding the proposal can be found <a class="text-primary" (click)="openProposal()"><u>here</u></a>.</p> -->
+            <p>Please select the collateral amount you would like to vote for.</p>
             <select class="form control form-control-success text-left" [class.is-invalid]="formErrors.vote" [class.is-valid]="!formErrors.vote && voteForm.get('vote').valid" formControlName="vote" id="vote">
-              <option>Yes</option>
-              <option>No</option>
+              <option value="CollateralA">100 000 STRAX</option>
+              <option value="CollateralB">150 000 STRAX</option>
+              <option value="CollateralC">200 000 STRAX</option>
+              <option value="CollateralD">250 000 STRAX</option>
             </select>
             <div *ngIf="formErrors.vote" class="invalid-feedback">{{ formErrors.vote }}</div>
           </div>
           <div class="form-group col-12">
-              <label for="walletPassword">Wallet password</label>
-              <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && voteForm.get('walletPassword').valid"
-                  formControlName="walletPassword" id="walletPassword" placeholder="Please enter your wallet password." placement="right" triggers="click:blur">
-              <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
+            <label for="walletPassword">Wallet password</label>
+            <input type="password" class="form-control form-control-success" [class.is-invalid]="formErrors.walletPassword" [class.is-valid]="!formErrors.walletPassword && voteForm.get('walletPassword').valid"
+                formControlName="walletPassword" id="walletPassword" placeholder="Please enter your wallet password." placement="right" triggers="click:blur">
+            <div *ngIf="formErrors.walletPassword" class="invalid-feedback">{{ formErrors.walletPassword }}</div>
           </div>
           <div class="modal-footer col-12">
             <div class="text-center col-12">Please note that issuing your vote creates a transaction. Transaction fees will be applied automatically.</div>

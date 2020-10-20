@@ -1,5 +1,5 @@
 export class VoteRequest {
-  constructor(walletName: string, walletPassword: string, vote: boolean, accountName?: string) {
+  constructor(walletName: string, walletPassword: string, vote: string, accountName?: string) {
     this.walletName = walletName;
     this.walletPassword = walletPassword;
     this.vote = vote;
@@ -8,6 +8,6 @@ export class VoteRequest {
 
   walletName: string;
   walletPassword: string;
-  vote: boolean;
+  vote: string;
   accountName: string;
 }
