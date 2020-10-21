@@ -43,6 +43,8 @@ export class VoteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getMaximumAmount();
+
     if (localStorage.getItem('hasVotedCollateral') === "true") {
       this.hasVotedCollateral = true;
       this.voteResultCollateral = localStorage.getItem('voteResultCollateral');
@@ -56,12 +58,8 @@ export class VoteComponent implements OnInit, OnDestroy {
         response => {
           if (response.percentSynced === 100) {
             this.isSynced = true;
-            this.cancelSubscriptions();
-            this.getMaximumAmount();
           } else {
             this.isSynced = false;
-            this.cancelSubscriptions();
-            this.getMaximumAmount();
           }
         }));
   }
@@ -111,6 +109,8 @@ export class VoteComponent implements OnInit, OnDestroy {
         modalInstance.body = `<div class="text-center">You have succesfully submitted your vote.</div>`;
         this.voteResultCollateral = localStorage.getItem('voteResultCollateral');
         this.voteForm.reset();
+        this.cancelSubscriptions();
+        this.getMaximumAmount();
       }).catch(error => {
         this.isVoting = false;
         this.hasVotedCollateral = false;
@@ -119,6 +119,8 @@ export class VoteComponent implements OnInit, OnDestroy {
         modalInstance.title = `<div class="text-center">Failed to submit your vote</div>`;
         modalInstance.body = `<div class="text-center">Something went wrong while issuing your vote.<br>${this.apiError}</div>`;
         this.voteForm.reset();
+        this.cancelSubscriptions();
+        this.getMaximumAmount();
     })
   }
 
