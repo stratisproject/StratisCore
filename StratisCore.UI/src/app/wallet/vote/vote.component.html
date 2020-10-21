@@ -9,8 +9,8 @@
         <div *ngIf="voteResultCollateral === 'CA'">You have voted for the collateral to be 50 000 STRAX.</div>
         <div *ngIf="voteResultCollateral === 'CB'">You have voted for the collateral to be 75 000 STRAX.</div>
         <div *ngIf="voteResultCollateral === 'CC'">You have voted for the collateral to be 100 000 STRAX.</div>
-        <div *ngIf="voteResultCollateral === 'CD'">You have voted for the collateral to be 150 000 STRAX.</div>
-        <div *ngIf="voteResultCollateral === 'CE'">You have voted for the collateral to be 200 000 STRAX.</div>
+        <div *ngIf="voteResultCollateral === 'CD'">You have voted for the collateral to be 125 000 STRAX.</div>
+        <div *ngIf="voteResultCollateral === 'CE'">You have voted for the collateral to be 150 000 STRAX.</div>
         If you have any questions or concerns, please visit the Stratis Discord Server.
       </div>
       <ng-template #notVotedTemplate>
@@ -28,8 +28,8 @@
               <option value="CA">50 000 STRAX</option>
               <option value="CB">75 000 STRAX</option>
               <option value="CC">100 000 STRAX</option>
-              <option value="CD">150 000 STRAX</option>
-              <option value="CE">200 000 STRAX</option>
+              <option value="CD">125 000 STRAX</option>
+              <option value="CE">150 000 STRAX</option>
             </select>
             <div *ngIf="formErrors.vote" class="invalid-feedback">{{ formErrors.vote }}</div>
           </div>
