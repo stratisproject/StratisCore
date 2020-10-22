@@ -74,7 +74,7 @@ export class VoteComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.maxAmount = response.maxSpendableAmount;
-          if (this.maxAmount < 1) {
+          if (this.maxAmount / 100000000 < 1) {
             this.noBalance = true;
           } else {
             this.noBalance = false;
