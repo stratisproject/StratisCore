@@ -25,8 +25,8 @@ export class VoteComponent implements OnInit, OnDestroy {
   public testnetEnabled = false;
   public noBalance: boolean;
   public isVoting = false;
-  public hasVoted = false;
-  public voteResult: string;
+  public hasVotedCollateral = false;
+  public voteResultCollateral: string;
   private walletInfoRequest: WalletInfoRequest;
   public maxAmount: number;
   public fee: number;
@@ -43,12 +43,14 @@ export class VoteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem('hasVoted') === "true") {
-      this.hasVoted = true;
-      this.voteResult = localStorage.getItem('voteResult');
+    this.getMaximumAmount();
+
+    if (localStorage.getItem('hasVotedCollateral') === "true") {
+      this.hasVotedCollateral = true;
+      this.voteResultCollateral = localStorage.getItem('voteResultCollateral');
     } else {
-      this.hasVoted = false;
-      this.voteResult = "false";
+      this.hasVotedCollateral = false;
+      this.voteResultCollateral = "";
     }
 
     this.generalInfo = this.nodeService.generalInfo()
@@ -56,12 +58,8 @@ export class VoteComponent implements OnInit, OnDestroy {
         response => {
           if (response.percentSynced === 100) {
             this.isSynced = true;
-            this.cancelSubscriptions();
-            this.getMaximumAmount();
           } else {
             this.isSynced = false;
-            this.cancelSubscriptions();
-            this.getMaximumAmount();
           }
         }));
   }
@@ -90,14 +88,8 @@ export class VoteComponent implements OnInit, OnDestroy {
   }
 
   public vote(): void {
-    let voteToBoolean;
-    if (this.voteForm.get('vote').value === "Yes") {
-      voteToBoolean = true;
-    } else {
-      voteToBoolean = false;
-    }
-
-    const voteRequest = new VoteRequest(this.globalService.getWalletName(), this.voteForm.get('walletPassword').value, voteToBoolean)
+    const voteValue = this.voteForm.get('vote').value;
+    const voteRequest = new VoteRequest(this.globalService.getWalletName(), this.voteForm.get('walletPassword').value, voteValue)
 
     this.isVoting = true;
     const modal = this.modalService.open(VoteModalComponent, {
@@ -109,22 +101,26 @@ export class VoteComponent implements OnInit, OnDestroy {
     this.walletService.vote(voteRequest).toPromise()
       .then(() => {
         this.isVoting = false;
-        this.hasVoted = true;
-        localStorage.setItem('hasVoted', "true");
-        localStorage.setItem('voteResult', voteToBoolean);
+        this.hasVotedCollateral = true;
+        localStorage.setItem('hasVotedCollateral', "true");
+        localStorage.setItem('voteResultCollateral', voteValue);
         modalInstance.loading = false;
         modalInstance.title = `<div class="text-center">Vote submitted</div>`;
         modalInstance.body = `<div class="text-center">You have succesfully submitted your vote.</div>`;
-        this.voteResult = localStorage.getItem('voteResult');
+        this.voteResultCollateral = localStorage.getItem('voteResultCollateral');
         this.voteForm.reset();
+        this.cancelSubscriptions();
+        this.getMaximumAmount();
       }).catch(error => {
         this.isVoting = false;
-        this.hasVoted = false;
+        this.hasVotedCollateral = false;
         this.apiError = error.error.errors[0].message;
         modalInstance.loading = false;
         modalInstance.title = `<div class="text-center">Failed to submit your vote</div>`;
         modalInstance.body = `<div class="text-center">Something went wrong while issuing your vote.<br>${this.apiError}</div>`;
         this.voteForm.reset();
+        this.cancelSubscriptions();
+        this.getMaximumAmount();
     })
   }
 

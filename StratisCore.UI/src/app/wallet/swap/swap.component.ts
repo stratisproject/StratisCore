@@ -49,7 +49,7 @@ export class SwapComponent implements OnInit, OnDestroy {
 
   private getMaximumAmount(): void {
     this.maxBalanceRequest = new MaxBalanceRequest(this.globalService.getWalletName(), 0, this.swapForm.get('swapAddress').value.trim(), null, "true", "low");
-    this.maximumBalanceSubscription = this.apiService.getMaximumBalance(this.maxBalanceRequest)
+    this.maximumBalanceSubscription = this.apiService.getMaximumBalanceBurn(this.maxBalanceRequest)
       .subscribe(
         response => {
           this.maxAmount = response.maxSpendableAmount;

@@ -98,7 +98,7 @@ export class ApiService extends RestApi implements IApiService {
   /**
    * Get the maximum sendable amount for a given fee from the API
    */
-  public getMaximumBalance(data: MaxBalanceRequest): Observable<any> {
+  public getMaximumBalanceBurn(data: MaxBalanceRequest): Observable<any> {
     return this.get('wallet/maxbalance',
       this.getWalletParams(data, {
         feeType: data.feeType,
@@ -106,6 +106,19 @@ export class ApiService extends RestApi implements IApiService {
         opReturnData: data.opReturnData,
         opReturnAmount: data.opReturnAmount,
         burnFullBalance: data.burnFullBalance
+      })).pipe(
+      catchError(err => this.handleHttpError(err))
+    );
+  }
+
+  /**
+   * Get the maximum sendable amount for a given fee from the API
+   */
+  public getMaximumBalance(data: WalletInfoRequest): Observable<any> {
+    return this.get('wallet/maxbalance',
+      this.getWalletParams(data, {
+        feeType: data.feeType,
+        allowUnconfirmed: 'true'
       })).pipe(
       catchError(err => this.handleHttpError(err))
     );
