@@ -17,7 +17,7 @@ export class GlobalService {
     this.setDaemonIP();
   }
 
-  private applicationVersion = '2.2.0';
+  private applicationVersion = '2.2.1';
   private gitCommit = "";
   private testnet = false;
   private sidechain = false;
