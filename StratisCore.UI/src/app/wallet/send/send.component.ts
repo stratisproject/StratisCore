@@ -110,7 +110,7 @@ export class SendComponent implements OnInit, OnDestroy {
     }
 
     this.confirmationText = this.sidechainEnabled
-      ? 'Please note that sending from a sidechain to the mainchain requires 240 confirmations.'
+      ? "Amounts less than 50 Cirrus clear in 25 confirmations<br>Amounts between 50 and 1000 Cirrus clear in 80 confirmations<br>Amounts more than 1000 Cirrus clear in 500 confirmations"
       : 'Please note that sending from the mainchain to a sidechain requires 500 confirmations.';
   }
 
