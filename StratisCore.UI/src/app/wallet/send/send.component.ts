@@ -17,6 +17,7 @@ import { SendComponentFormResources } from './send-component-form-resources';
 import { FormHelper } from '@shared/forms/form-helper';
 import { TransactionResponse } from '@shared/models/transaction-response';
 import { CurrentAccountService } from "@shared/services/current-account.service";
+import { Network } from '@shared/models/network';
 
 @Component({
   selector: 'send-component',
@@ -26,6 +27,8 @@ import { CurrentAccountService } from "@shared/services/current-account.service"
 
 export class SendComponent implements OnInit, OnDestroy {
   private accountsEnabled: boolean;
+  public networks: Network[];
+  public testnetEnabled: boolean;
 
   constructor(
     private apiService: ApiService,
@@ -49,6 +52,7 @@ export class SendComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.sendToSidechainForm.valueChanges.pipe(debounceTime(300))
       .subscribe(data => this.onSendValueChanged(data, true)));
 
+    this.subscriptions.push(this.sendToSidechainForm.get('networkSelect').valueChanges.subscribe(data => this.networkSelectChanged(data)));
   }
 
   @Input() address: string;
@@ -68,15 +72,29 @@ export class SendComponent implements OnInit, OnDestroy {
 
   // The opReturnAmount is for compatibility with StratisX, opReturnAmount needs to be greater than 0 to pass the MemPool
   // Validation rules.
-  public opReturnAmount = 1;
   public confirmationText: string;
   private subscriptions: Subscription[] = [];
   private sendFormErrors: any = {};
   private sendToSidechainFormErrors: any = {};
 
   public ngOnInit() {
+    this.testnetEnabled = this.globalService.getTestnetEnabled();
     this.sidechainEnabled = this.globalService.getSidechainEnabled();
     this.accountsEnabled = this.sidechainEnabled && this.currentAccountService.hasActiveAddress();
+
+    if (this.sidechainEnabled) {
+      if (this.testnetEnabled) {
+        this.networks = SendComponentFormResources.cirrusTestNetworks;
+      } else {
+        this.networks = SendComponentFormResources.cirrusNetworks;
+      }
+    } else {
+      if (this.testnetEnabled) {
+        this.networks = SendComponentFormResources.stratisTestNetworks;
+      } else {
+        this.networks = SendComponentFormResources.stratisNetworks;
+      }
+    }
 
     if (this.sidechainEnabled) {
       this.firstTitle = 'Sidechain';
@@ -197,7 +215,9 @@ export class SendComponent implements OnInit, OnDestroy {
       true,
       !this.accountsEnabled, // Shuffle Outputs
       isSideChain ? this.sendToSidechainForm.get('destinationAddress').value.trim() : null,
-      isSideChain ? new NumberToStringPipe().transform((this.opReturnAmount / 100000000)) : null
+      null,
+      null,
+      isSideChain
     );
   }
 
@@ -219,7 +239,14 @@ export class SendComponent implements OnInit, OnDestroy {
     component.transaction = transactionResponse.transaction;
     component.transactionFee = this.estimatedFee ? this.estimatedFee : this.estimatedSidechainFee;
     component.sidechainEnabled = this.sidechainEnabled;
-    component.opReturnAmount = this.opReturnAmount;
     component.hasOpReturn = transactionResponse.isSideChain;
+  }
+
+  private networkSelectChanged(data: any): void {
+    if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value !== 'customNetwork') {
+      this.sendToSidechainForm.patchValue({'federationAddress': this.sendToSidechainForm.get('networkSelect').value})
+    } else if (this.sendToSidechainForm.get('networkSelect').value && this.sendToSidechainForm.get('networkSelect').value === 'customNetwork') {
+      this.sendToSidechainForm.patchValue({'federationAddress': ''})
+    }
   }
 }

@@ -13,21 +13,13 @@
         <li class="list-inline-item col blockLabel">Type</li>
         <li class="list-inline-item col-8 blockText text-uppercase">Sent</li>
       </ul>
-      <ul *ngIf="!hasOpReturn" class="list-inline row">
+      <ul class="list-inline row">
         <li class="list-inline-item col blockLabel">Amount Sent</li>
         <li class="list-inline-item col-8 blockText text-danger">{{ transaction.amount - transactionFee | number:'1.8-8' }} <small>{{ coinUnit }}</small></li>
-      </ul>
-      <ul *ngIf="hasOpReturn" class="list-inline row">
-        <li class="list-inline-item col blockLabel">Amount Sent</li>
-        <li class="list-inline-item col-8 blockText text-danger">{{ transaction.amount - transactionFee - opReturnAmount | number:'1.8-8' }} <small>{{ coinUnit }}</small></li>
       </ul>
       <ul class="list-inline row">
         <li class="list-inline-item col blockLabel">Fee</li>
         <li class="list-inline-item col-8 blockText text-danger">{{ transactionFee }} <small>{{ coinUnit }}</small></li>
-      </ul>
-      <ul *ngIf="hasOpReturn" class="list-inline row">
-        <li class="list-inline-item col blockLabel">OP_RETURN amount</li>
-        <li class="list-inline-item col-8 blockText text-danger">{{ opReturnAmount }} <small>{{ coinUnit }}</small></li>
       </ul>
       <ul class="list-inline row">
         <li class="list-inline-item col blockLabel">Total</li>
