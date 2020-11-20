@@ -148,8 +148,7 @@
               </div>
               <div class="form-group clearfix">
                 <div>
-                  <div class="alert alert-warning py-1">An additional amount of {{ opReturnAmount | coinNotation }} {{ coinUnit }} will be used to send this transaction.</div>
-                  <div class="alert alert-warning py-1">{{ confirmationText }}</div>
+                  <div class="alert alert-warning py-1" [innerHTML]="confirmationText"></div>
                 </div>
               </div>
               <div class="form-group clearfix">
