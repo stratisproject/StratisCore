@@ -1,7 +1,7 @@
 {
   "name": "stratis-core",
   "description": "Stratis Core Wallet",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "author": {
     "name": "Stratis Group Ltd.",
     "email": "support@stratisplatform.com"
